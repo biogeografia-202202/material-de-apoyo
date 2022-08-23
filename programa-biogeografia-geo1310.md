@@ -1,61 +1,94 @@
 # Universidad Autónoma de Santo Domingo (UASD) <br/>
 Programa de Biogeografía (GEO-131) <br/>
-8 de Febrero de 2022 (semestre 2022-01) <br/>
+23 de Agosto de 2022 (semestre 2022-02) <br/>
 *José Ramón Martínez Batlle*
 
 ## Básicos:
 
 * Correo: jmartinez19@uasd.edu.do
 
-* Lugar y horario: Zoom, Martes de 4 a 8 pm
+* Lugar y horario: FC-203, Martes de 4 a 8 pm
 
 * [Programa (hipervínculo recursivo)](programa-biogeografia-geo1310.md)
 
-* [Guía para la redacción de tu manuscrito](guia-redaccion-manuscrito.md)
-
-## Recursos informáticos de la asignatura
-
-Sitúa apropiadamente los recursos de los que dispondrás en esta asignatura, los cuales describo [aquí](guia-redaccion-manuscrito.md#ecosistema).
-
 ## Descripción
 
-La ciencia está en crisis, una crisis de reproducibilidad. Difícilmente un equipo científico reproduce el resultado que obtuvo otro. Se atribuye este déficit a que, al publicar los resultados, no se aportan ni las fuentes, ni los métodos empleados. El panorama está cambiando, pero la única forma de aumentar la reproducibilidad consiste en abrir las fuentes y utilizar métodos reproducibles que normalmente implican utilizar código abierto. La biogeografía no escapa a esta realidad, por lo que en esta asignatura intentarás contribuir a romper el círculo cerrado del conocimiento, empleando métodos para producir en abierto.
+La ciencia está en crisis, una crisis de reproducibilidad. Difícilmente un equipo científico reproduce el resultado que obtuvo otro. Se atribuye este déficit a que, al publicar los resultados, no se aportan ni las fuentes, ni los métodos empleados. El panorama está cambiando, pero la única forma de aumentar la reproducibilidad consiste en abrir las fuentes y utilizar métodos reproducibles, lo que normalmente implica utilizar código abierto. La biogeografía no escapa a esta realidad, por lo que, además de aprender los fundamentos de esta disciplina, intentarás contribuir a romper el círculo cerrado del conocimiento, empleando métodos para producir en abierto.
 
-Puedes sospechar desde ya que R estará de fondo (a fin de cuentas, este tali usa mucho R), sobre todo por tratarse de una asignatura meramente ecológica. Sin embargo, son bienvenidos todos los lenguajes de programación que quieras utilizar. Si sabes python, C o cualquier otro lenguaje con el que puedas ayudarte a responder preguntas ecológicas, puedes usarlos sin inconveniente alguno. La única condición es que tienes que publicar tu código y tus fuentes. Hay una comunidad allá fuera que explica cómo atender los típicos desafíos y los mensajes de error, y yo también podré ayudar. Además, esa misma comunidad también podría interesarse por o necesitar tus aportes.
+Puedes sospechar desde ya que habrá software y lenguajes de programación "en el fondo", sobre todo por tratarse de una asignatura meramente ecológica. Todos los lenguajes de programación que quieras utilizar son bienvenidos. Si sabes Python, R o cualquier otro lenguaje con el que puedas ayudarte a responder preguntas ecológicas, puedes usarlos sin inconveniente alguno. La única condición es que tienes que publicar tu código; si usas un software de interfaz gráfica, deberás explicar cómo lo usaste. Cuando tengas dudas, consulta al profesor pero también recuerda que hay una comunidad allá fuera que explica cómo atender los típicos desafíos y los mensajes de error.
 
-La biogeografía es la ciencia que __intenta documentar y entender los patrones espaciales de la diversidad biológica__. Modernamente estudia todos los patrones de variación geográfica (y temporal) de la diversidad biológica de elementos naturales (desde genes hasta comunidad y ecosistema) asociados a gradientes de variables tales como el área, el aislamiento, la latitud, la profundidad o la elevación. También se le suele definir como el estudio de la distribución de organismos, tanto en el presente como en el pasado.
+La biogeografía es la ciencia que __intenta documentar y entender los patrones espaciales de la diversidad biológica__. Modernamente estudia todos los patrones de variación geográfica y temporal de la diversidad biológica de elementos naturales (desde genes hasta comunidad y ecosistema) asociados a gradientes de variables tales como el área, el aislamiento, la latitud, la profundidad o la elevación. También se le suele definir como el estudio de la distribución de organismos, tanto en el presente como en el pasado.
 
 ## Resultados esperados
 
-Al finalizar la asignatura, esta afirmación debería ser cierta: aplicas y redactas métodos de ecología numérica utilizando datos de terceros o propios, especialmente utilizas código reproducible para aplicar técnicas de análisis de la biodiversidad y, quizá, algo de análisis espacial. Complementariamente, intentas aprender en cabeza ajena sobre fundamentos de biogeografía. Comprendes los principios geográficos y ecológicos de la biogeografía, así como los procesos biogeográficos y la historia de la Tierra.
+Al finalizar la asignatura, esta afirmación debería ser cierta: aplicas y redactas métodos de biogeografía, con énfasis en ecología numérica, utilizando datos de terceros o propios, especialmente utilizas código reproducible y técnicas actuales para analizar la biodiversidad y su distribución espacial. Además, comprendes los principios geográficos y ecológicos de la biogeografía, así como los procesos biogeográficos y la historia de la Tierra.
 
 ## Evaluación
 
 | Ítem                                                       | % de la  nota final |
 | ---------------------------------------------------------- | ------------------: |
-| [Manuscrito (basado en datos pre-existentes)](#manuscrito) |                 50% |
-| [Presentación oral](#presentación-oral)                    |                 20% |
-| [Asignaciones](#asignaciones)                              |                 30% |
+|-|-:|
+| [Prácticas](#prácticas) | 40% |
+| [Manuscrito (basado en datos pre-existentes)](#manuscrito) | 50% |
+| [Presentación oral](#presentación-oral) | 10% |
 
-Sí sí, lo que viste, no hay examen.
+Sí sí, lo que viste, no hay examen. Describo a continuación cada ítem.
 
-Brevemente, cada ítem a evaluar consistirá en lo siguiente (más detalles por medio de asignaciones a lo largo del curso):
+### Prácticas
+
+Aplicaciones de las siguientes técnicas a la biogeografía:
+
+1. LaTeX, R y Python: introducción a las citas, fórmulas y código reproducible.
+
+2. Biogeografía insular con R.
+
+3. QGIS, R y Python para la estadística zonal.
+
+4. Introducción a la ecología numérica con R y Python.
+
+5. Métricas de ecología del paisaje.
+
+6. Modelos de distribución de especies.
+
+7. Darwin Core.
+
+8. Hablemos de microcontroladores.
+
+Estas prácticas te ayudarán a manejar herramientas comunes en biogeografía. Necesitarás una PC en la cual deberás instalar los programas y lenguajes requeridos.
+
+Orientaré con ejemplos y soluciones de forma pública en las sesiones de clases. De esta forma, las discusiones quedarán disponibles para otras personas. Cuando necesites hacer consultas, debes plantear el problema al que te enfrentas, cómo has intentado resolverlo o qué soluciones has probado. Si se trata de alguna cuestión relacionada con programación o análisis de datos, deberás facilitar **código reproducible y mensaje de error (si lo hubiere)**. Cuando escribas tus dudas, no recurras al típico "da error", puesto que no conduce a nada. En su lugar prefiere estas expresiones *"intente este procedimiento ... , dio este error, luego intenté esta solución ... pero no consigo dar con el fallo"*.
 
 ### Manuscrito
 
-Tratará sobre un grupo de organismos, se elaborará siguiendo las fases enumeradas a continuación:
+Tratará sobre un tema de ecología numérica que elegirás, usando datos de __biodiversidad Y georreferenciados__ que representen una comunidad, los cuales pueden ser provistos por mí o aportados por ti (se excluyen los de BCI). En su elaboración, seguirás las fases enumeradas a continuación:
 
-1. Formulación del problema/pregunta(s) de investigación, siendo preceptiva la sencillez de diseño. Las preguntas de investigación a responder las diseñarás tú.
+1. Formulación del problema/pregunta de investigación, siendo preceptiva la sencillez de diseño. La pregunta de investigación a responder la diseñará tú. Necesitarás revisar bibliografía. Busca fuentes en línea, pero evita abrumarte con la enorme disponibilidad de publicaciones científicas sobre biogeografía y ecología. Prefiere las publicaciones disponibles en acceso libre, y no olvides el [Sci-Hub](https://sci-hub.se). Al mismo tiempo, necesitarás consultar bases de datos de biodiversidad en línea (algunas recomendadas abajo), de las que mostraré algunas en aula. La única condición es que contengan datos de biodiversidad georreferenciados y representativos. Resultado esperado: sección "introducción" de tu manuscrito debidamente redactada.
 
-2. Revisión bibliográfica. Busca fuentes en línea, pero evita abrumarte con la enorme disponibilidad de publicaciones científicas sobre biogeografía y ecología. Prefiere las publicaciones disponibles en acceso libre, y no olvides el [Sci-Hub](https://sci-hub.se).
+2. Selección de metodología, incluyendo técnicas cuantitativas de forma preceptiva. Resultado esperado: sección "metodología" de tu manuscrito debidamente redactada.
 
-3. Selección de metodología, incluyendo técnicas cuantitativas de forma preceptiva.
+3. Limpieza y análisis exploratorio de datos. Resultado esperado: base de datos lista para usar.
 
-4. Recogida de datos a partir de servicios en línea (guiado por el profesor), incluyendo análisis exploratorio-limpieza.
+4. Análisis de datos e interpretación. Resultado esperado: secciones "resultados" y " discusión" de tu manuscrito debidamente redactada.
 
-5. Análisis de datos.
+5. Redacción. Volver eterna y recursivamente a 5 hasta que la redacción quede "nítida". Resultado esperado: tu manuscrito terminado.
 
-6. Redacción. Volver eterna y recursivamente a 5 hasta que la redacción quede "nítida".
+Tal como escribí arriba, elegirás un tema sobre ecología numérica. Elegirás uno de entre los siguientes:
+
+1. Análisis de agrupamiento, asociación hábitats.
+
+2. Técnicas de ordenación.
+
+3. Análisis de diversidad
+
+4. Ecología espacial
+
+Algunas fuentes de datos que puedes explorar:
+
+1. GBIF.
+
+2. OBIS.
+
+3. 
 
 Los criterios de evaluación que usaré para el manuscrito son:
 
@@ -95,24 +128,6 @@ Toma en consideración lo siguiente:
 ### Presentación oral
 
 Dispondrás de 15 minutos para presentar oralmente tu trabajo al final del semestre. Valoraré el dominio que muestres sobre tu trabajo.
-
-## Escribir código/pedir ayuda
-
-En cuanto a escribir código, te adelanto que, para superar las dificultades y los desafíos inherentes de las asignaciones y el manuscrito, tendrás que:
-
-1. Contar con el profesor. No te abandonaré a tu suerte al analizar datos. No hay horario para pedirme ayuda, y pregunta lo que quieras preguntar, yo responderé cuando pueda. Intentaré darte soluciones cuando te tranques, pero con la condición de que, antes de preguntarme, intentes avanzar soluciones del problema. Lee los puntos 3 y 4 más abajo.
-
-2. Sufrir. Nadie dijo que fajarse con biogeografía/ecología mediante R fuese placentero. A diferencia de los software de pago, aquí no hay un botoncito mágico que lo resuelve todo. Cuesta esfuerzo, mucho; eso sí, es gratis, como todas las cosas buenas. Además, te obliga a la abstracción y a la resolución de problemas, algo que siempre viene bien en términos profesionales y académicos. Adelanto también que este mismo principio aplica a la redacción; escribir concisamente apoyándote en tus resultados es tarea complicada. Por lo tanto, sufre, pero con motivo.
-
-3. Pedir ayuda. Escríbeme o pide ayuda a tus compañeros y compañeras cuando te surjan dudas. Tienes varias alternativas, elige la que prefieras:
-      a. Vía el foro de la asignatura (vía más eficiente y preferida).
-      b. A mi correo: jmartinez19\@uasd.edu.do
-      c. Creando *issues* en GitHub.
-
-4. Al hilo del punto anterior, utilizar estrategias proactivas para pedir ayuda. Elimina esta expresión de tu vocabulario: "da error". Con eso nadie podrá ayudarte. Lo importante es informar qué intentaste hacer y qué error o problema te surgió. Por ello, cuando pidas ayuda, deberás ofrecer un ejemplo reproducible. En su lugar prefiere estas expresiones *"intente este procedimiento ... , dio este error, luego intenté esta solución ... pero no consigo dar con el fallo"*. Plantea tu problema con código reproducible siempre que puedas. Si envías captura de pantalla, no olvides dar contexto: tras qué surgió el error, qué intentaste para resolverlo. Otras estrategias son: consultar posibles soluciones a tu problema en foros ya existentes (como stackoverflow), probar alternativas, documentar lo que hiciste, explicar qué entiendes que pudo provocar el error. En definitiva, sólo pide ayuda cuando realmente llegues a un "tranque" y siempre intenta una solución por tu cuenta.
-
-No tendrás que preocuparte por el hardware (ya me ensucio yo las manos con esa cosa tan mundana llamada computadora), pero sí ocúpate por escribir código con sentido (y preguntar siempre que lo necesites, no lo olvides), por razonar bien tus asignaciones y, especialmente, por escribir bien tu manuscrito; escribe que se te entienda, yo pediré a monesvol para que te ilumine. Dispondrás de un servidor de RStudio de modestas prestaciones administrado por "yo mesmamente", con los paquetes requeridos en el curso ya pre-instalados. Así podrás realizar tus asignaciones sobre biogeografía y tu manuscrito sin preocuparte de instalaciones de software/paquetes.
-
 
 ## Contenido teórico
 1. Introducción e historia de la biogeografía. Brown y Lomolino (1998) capítulos 1 y 2. Okolodkov (2010) capítulos 1 y 2.
