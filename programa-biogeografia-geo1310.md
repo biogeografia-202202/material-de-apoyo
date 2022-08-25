@@ -54,6 +54,8 @@ Aplicaciones de las siguientes técnicas a la biogeografía:
 
 8. Hablemos de microcontroladores.
 
+9. ¿Campo?
+
 Estas prácticas te ayudarán a manejar herramientas comunes en biogeografía. Necesitarás una PC en la cual deberás instalar los programas y lenguajes requeridos.
 
 Orientaré con ejemplos y soluciones de forma pública en las sesiones de clases. De esta forma, las discusiones quedarán disponibles para otras personas. Cuando necesites hacer consultas, debes plantear el problema al que te enfrentas, cómo has intentado resolverlo o qué soluciones has probado. Si se trata de alguna cuestión relacionada con programación o análisis de datos, deberás facilitar **código reproducible y mensaje de error (si lo hubiere)**. Cuando escribas tus dudas, no recurras al típico "da error", puesto que no conduce a nada. En su lugar prefiere estas expresiones *"intente este procedimiento ... , dio este error, luego intenté esta solución ... pero no consigo dar con el fallo"*.
@@ -141,4 +143,5 @@ Dispondrás de 15 minutos para presentar oralmente tu trabajo al final del semes
 9. Biogeografía insular. Brown y Lomolino (1998), capítulos 13 y 14
 
 ## Referencias bibliográficas
+
 * Consulta la [Guía para la redacción de tu manuscrito](guia-redaccion-manuscrito.md)
