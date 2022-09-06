@@ -1,5 +1,5 @@
 ---
-title: "Introducción a software SIG y lenguajes de programación de código abierto (QGIS R + Python)"
+title: "Práctica 1. Introducción a software SIG y lenguajes de programación de código abierto (QGIS R + Python)"
 author: José Ramón Martínez Batlle
 date: 30-08-2022
 output: github_document
@@ -12,6 +12,10 @@ editor_options:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = T, cache=F)
 ```
+
+# Fecha de entrega
+
+- 9 de septiembre de 2022
 
 # Introducción
 
@@ -183,7 +187,7 @@ kable(d[, c("Nombre completo", 'e1')])
 
 <!-- 3. (Opcional) Si tu sistema operativo es Windows, instala una consola para administrar tu máquina sin interfaz gráfica. Windows viene con una de serie, el CMD, pero también puedes evaluar Power Shell o Cmder; esta última tiene la ventaja de que puedes usar comandos UNIX de manera natural. -->
 
-2. Crea y activa un entorno virtual. [Este vídeo hasta el minuto 3:08](https://www.youtube.com/watch?v=jY2g1erTTZI) te explica qué es un entorno virtual y te enseña cómo instalarlo y activarlo en Windows. Quizá ya tiene instalado el paquete `virtualenv` y sólo necesitas activa el entorno virtual. IMPORTANTE: activa tu entorno virtual en la carpeta de tu proyecto de trabajo, por ejemplo, aquella donde tienes los datos de la práctica. Si usas Linux, [este script](crear_activar_entorno_virtual.sh) te resultará útil para crear tu entorno virtual.
+2. Crea y activa un entorno virtual. [Este vídeo hasta el minuto 3:08](https://www.youtube.com/watch?v=jY2g1erTTZI) te explica qué es un entorno virtual y te enseña cómo instalarlo y activarlo en Windows. Quizá ya tiene instalado el paquete `virtualenv` y sólo necesitas activar el entorno virtual. IMPORTANTE: activa tu entorno virtual en la carpeta de tu proyecto de trabajo, por ejemplo, aquella donde tienes los datos de la práctica. Si usas Linux, [este script](crear_activar_entorno_virtual.sh) te resultará útil para crear tu entorno virtual.
 
 3. Instala los paquetes `geopandas` y `geoplot`. Instálalos una vez tengas tu entorno virtual activo.
 

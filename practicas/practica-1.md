@@ -1,8 +1,12 @@
-Introducción a software SIG y lenguajes de programación de código
-abierto (QGIS R + Python)
+Práctica 1. Introducción a software SIG y lenguajes de programación de
+código abierto (QGIS R + Python)
 ================
 José Ramón Martínez Batlle
 30-08-2022
+
+# Fecha de entrega
+
+-   9 de septiembre de 2022
 
 # Introducción
 
@@ -45,7 +49,7 @@ nuestro trabajo, y dependemos más de la voluntad de los proveedores.
 Asimismo, estos servicios en la nube terminan convirtiéndose en una
 cuota mensual más que se añade a nuestra factura.
 
-Mientras nos preparamos para ese “promisorio futuro”, todavía tenemos la
+Mientras nos preparamos para ese “promisorio futuro,” todavía tenemos la
 posibilidad de hacer análisis en la PC propia. Así que, ¡adelante!
 
 En esta práctica, instalarás y probarás una aplicación SIG con interfaz
@@ -69,12 +73,12 @@ Al terminar esta práctica deberías ser capaz de:
 
 -   Olaya (2020), páginas 1-28 de la versión PDF. En el [Drive de la
     asignatura](https://drive.google.com/drive/folders/1orlvmg86kad08FznStkmYaesxaTbzAQD?usp=sharing),
-    bajo el nombre “OLAYA-Sistemas-de-Informacion-Geografica.pdf”.
+    bajo el nombre “OLAYA-Sistemas-de-Informacion-Geografica.pdf.”
 
 -   QGIS Development Team (2022). En el [Drive de la
     asignatura](https://drive.google.com/drive/folders/1orlvmg86kad08FznStkmYaesxaTbzAQD?usp=sharing),
     bajo el nombre
-    “QGIS-Guia-de-usuario-version-escritorio-de-QGIS-3.22.pdf”.
+    “QGIS-Guia-de-usuario-version-escritorio-de-QGIS-3.22.pdf.”
 
 -   Wickham & Grolemund (2019). Capítulos 1 a 7. Ver vínculo en
     [Referencias](#referencias)
@@ -386,26 +390,26 @@ data/d001/7ETLK7QT.gpkg
 </tbody>
 </table>
 
-0.  Para mantener el orden de archivos, te recomiendo que crees una
-    carpeta, por ejemplo `practica1` dentro de “Mis Documentos”, donde
+1.  Para mantener el orden de archivos, te recomiendo que crees una
+    carpeta, por ejemplo `practica1` dentro de “Mis Documentos,” donde
     colocarás tu informe entregable y copiarás los datos fuente (por
     ejemplo, puedes clonar este repo completo allí). En dicha carpeta,
     también alojarás los proyectos de R y Python de los incisos
     siguientes.
 
-1.  Instala QGIS. Prefiere la versión más reciente (la 3.26 cuando
+2.  Instala QGIS. Prefiere la versión más reciente (la 3.26 cuando
     escribí esta práctica).
     [Este](https://www.youtube.com/watch?v=7aK1nT7iBlc) tutorial podría
     servirte.
 
-2.  Carga la capa vectorial asignada.
+3.  Carga la capa vectorial asignada.
 
-3.  Añade fuentes de referencia, como OpenStreetMap, GoogleSatellite,
+4.  Añade fuentes de referencia, como OpenStreetMap, GoogleSatellite,
     Bing Maps. Te será de utilidad el plugin QuickMapServices.
 
-4.  Captura la pantalla y pégala en tu informe.
+5.  Captura la pantalla y pégala en tu informe.
 
-5.  Pregunta, reflexión.
+6.  Pregunta, reflexión.
 
     1.  Sobre el proceso de instalación. Descríbelo.
 
@@ -467,7 +471,7 @@ data/d001/7ETLK7QT.gpkg
     3:08](https://www.youtube.com/watch?v=jY2g1erTTZI) te explica qué es
     un entorno virtual y te enseña cómo instalarlo y activarlo en
     Windows. Quizá ya tiene instalado el paquete `virtualenv` y sólo
-    necesitas activa el entorno virtual. IMPORTANTE: activa tu entorno
+    necesitas activar el entorno virtual. IMPORTANTE: activa tu entorno
     virtual en la carpeta de tu proyecto de trabajo, por ejemplo,
     aquella donde tienes los datos de la práctica. Si usas Linux, [este
     script](crear_activar_entorno_virtual.sh) te resultará útil para
@@ -481,7 +485,7 @@ data/d001/7ETLK7QT.gpkg
     Probablemente se abra el navegador mostrando el cuaderno de Jupyter.
     En caso contrario, dirígete a la ruta <http://localhost:8888/> y
     crea un cuaderno Jupyter mediante el botón
-    `New`\>`Python 3 (ipykernel)`. Aprende cómo crear y ejecutar tus
+    `New`&gt;`Python 3 (ipykernel)`. Aprende cómo crear y ejecutar tus
     sentencias de Python en este cuaderno. [Esta intro
     básica](https://www.youtube.com/watch?v=Xsrr15_c7JY) te podría
     ayudar y [este otro

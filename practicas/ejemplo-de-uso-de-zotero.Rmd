@@ -1,0 +1,10 @@
+---
+title: Ejemplo de uso de Zotero
+author: JR
+date: '2022-09-06'
+csl: https://raw.githubusercontent.com/citation-style-language/styles/master/apa.csl
+link-citations: true
+zotero: true
+---
+
+Testo de prueba

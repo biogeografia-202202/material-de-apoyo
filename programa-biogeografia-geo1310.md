@@ -25,7 +25,7 @@ Al finalizar la asignatura, esta afirmación debería ser cierta: aplicas y reda
 
 ## Evaluación
 
-| Ítem                                                       | % de la  nota final |
+| Ítem                                                       | % de la nota final |
 | ---------------------------------------------------------- | ------------------: |
 |-|-:|
 | [Prácticas](#prácticas) | 40% |
@@ -38,7 +38,7 @@ Sí sí, lo que viste, no hay examen. Describo a continuación cada ítem.
 
 Aplicaciones de las siguientes técnicas a la biogeografía:
 
-1. Introducción a software SIG y lenguajes de programación de código abierto (QGIS R + Python)
+1. [Introducción a software SIG y lenguajes de programación de código abierto (QGIS R + Python)](practicas/practica-1.md)
 
 2. LaTeX, R y Python: introducción a las citas, fórmulas y código reproducible con casos de uso básicos.
 
@@ -64,7 +64,29 @@ Orientaré con ejemplos y soluciones de forma pública en las sesiones de clases
 
 ### Manuscrito
 
-Tratará sobre un tema de ecología numérica que elegirás, usando datos de __biodiversidad Y georreferenciados__ que representen una comunidad, los cuales pueden ser provistos por mí o aportados por ti (se excluyen los de BCI). En su elaboración, seguirás las fases enumeradas a continuación:
+Tratará sobre un tema de ecología numérica que elegirás, usando datos de __biodiversidad Y georreferenciados__ que representen una comunidad, los cuales pueden ser provistos por mí o aportados por ti (se excluyen los de BCI).
+
+#### Temas sugeridos
+
+Tal como escribí arriba, elegirás un tema sobre ecología numérica. Elegirás uno de entre los siguientes:
+
+1. Análisis de agrupamiento, asociación hábitats.
+
+2. Técnicas de ordenación.
+
+3. Análisis de diversidad.
+
+4. Ecología espacial.
+
+Algunas fuentes de datos que puedes explorar:
+
+1. GBIF.
+
+2. OBIS.
+
+#### Fases de desarrollo
+
+En su elaboración, seguirás las fases enumeradas a continuación:
 
 1. Formulación del problema/pregunta de investigación, siendo preceptiva la sencillez de diseño. La pregunta de investigación a responder la diseñará tú. Necesitarás revisar bibliografía. Busca fuentes en línea, pero evita abrumarte con la enorme disponibilidad de publicaciones científicas sobre biogeografía y ecología. Prefiere las publicaciones disponibles en acceso libre, y no olvides el [Sci-Hub](https://sci-hub.se). Al mismo tiempo, necesitarás consultar bases de datos de biodiversidad en línea (algunas recomendadas abajo), de las que mostraré algunas en aula. La única condición es que contengan datos de biodiversidad georreferenciados y representativos. Resultado esperado: sección "introducción" de tu manuscrito debidamente redactada.
 
@@ -76,23 +98,7 @@ Tratará sobre un tema de ecología numérica que elegirás, usando datos de __b
 
 5. Redacción. Volver eterna y recursivamente a 5 hasta que la redacción quede "nítida". Resultado esperado: tu manuscrito terminado.
 
-Tal como escribí arriba, elegirás un tema sobre ecología numérica. Elegirás uno de entre los siguientes:
-
-1. Análisis de agrupamiento, asociación hábitats.
-
-2. Técnicas de ordenación.
-
-3. Análisis de diversidad
-
-4. Ecología espacial
-
-Algunas fuentes de datos que puedes explorar:
-
-1. GBIF.
-
-2. OBIS.
-
-3. 
+#### Criterios de evaluación del manuscrito
 
 Los criterios de evaluación que usaré para el manuscrito son:
 
@@ -146,4 +152,3 @@ Dispondrás de 15 minutos para presentar oralmente tu trabajo al final del semes
 
 ## Referencias bibliográficas
 
-* Consulta la [Guía para la redacción de tu manuscrito](guia-redaccion-manuscrito.md)
