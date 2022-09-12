@@ -7,4 +7,4 @@ link-citations: true
 zotero: true
 ---
 
-Testo de prueba
+Texto de prueba
