@@ -456,18 +456,22 @@ data/d001/WcsgiB44.gpkg
     comentaré a continuación. Finalmente, luego crearás un entorno
     virtual. El proceso íntegro, en Windows, es como sigue:
 
--   Descarga el instalador de Python. [Este
-    tutorial](https://phoenixnap.com/kb/how-to-install-python-3-windows)
-    te ayudará a instalar Python 3, Pip y `virtualenv`. En el asistente
-    de instalación, asegúrate de marcar la casilla
+-   Descarga el instalador de Python y ejecútalo, el cual instalará
+    Python y pip. [Esta
+    guía](https://phoenixnap.com/kb/how-to-install-python-3-windows) te
+    ayudará a localizar el ejecutable de instalación. En el asistente de
+    instalación, asegúrate de marcar la casilla
     `Add Python 3.# to PATH`.
 
--   Instala cuadernos de Jupyter. Básicamente, sólo tendrás que abrir
-    una terminal escribiendo “cmd” en el menú inicio (o buscando
-    “command prompt”), y se abrirá una terminal en
-    `C:\Users\NOMBREDEUSUARIO\` (`NOMBREDEUSUARIO` es un comodín que
-    hace referencia al nombre de usuario en tu PC). Cuando tengas la
-    terminal, escribe y ejecuta `pip install jupyter`.
+-   Verifica que las instalaciones de Python y Pip tuvieron éxito (la
+    guía explica cómo hacerlo).
+
+-   Instala el paquete para crear entornos virtuales, `virtualenv`. Para
+    ello, abre una terminal escribiendo “cmd” en el menú inicio (o
+    buscando “command prompt”) y ejecuta `pip install virtualenv`.
+
+-   Instala cuadernos de Jupyter. Para ello, ejecuta en una terminal lo
+    siguiente: `pip install jupyter`.
 
 -   Instala dependencias requeridas: GDAL, Fiona, pyproj y Rtree, en ese
     orden. [Esta entrada de
@@ -480,8 +484,10 @@ data/d001/WcsgiB44.gpkg
 
 -   Crea una carpeta para la práctica, o ve a ella si ya la tienes
     creada. Si no la tienes creada aún, muévete a la carpeta de usuario,
-    que estará en `C:\Users\NOMBREDEUSUARIO\`; puedes usar como nombre
-    `practica1` (recomendación: no uses tildes ni espacios).
+    que estará en `C:\Users\NOMBREDEUSUARIO\` (`NOMBREDEUSUARIO` es un
+    comodín que hace referencia al nombre de usuario en tu PC); por
+    ejemplo, puedes usar como nombre `practica1` (recomendación: no uses
+    tildes ni espacios).
 
 -   En dicha carpeta, abre una terminal, y crea un entorno virtual que
     tenga acceso a los paquetes instalados, ejecutando esto en la
