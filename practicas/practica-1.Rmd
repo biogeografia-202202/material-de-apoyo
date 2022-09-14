@@ -190,7 +190,7 @@ kable(d[, c("Nombre completo", 'e1')])
   
   - Crea una carpeta para la práctica, o ve a ella si ya la tienes creada. Si no la tienes creada aún, muévete a la carpeta de usuario, que estará en `C:\Users\NOMBREDEUSUARIO\`; puedes usar como nombre `practica1` (recomendación: no uses tildes ni espacios).
   
-  - En dicha carpeta, abre una terminal, y crea un entorno virtual ejecutando esto en la consola: `virtualenv NOMBREDEENTORNO` (`NOMBREDENTORNO` es un comodín, usa un nombre que haga sentido para ti, sólo que no uses espacios ni caracteres especiales, por ejemplo, `mientorno`).
+  - En dicha carpeta, abre una terminal, y crea un entorno virtual que tenga acceso a los paquetes instalados, ejecutando esto en la consola: `virtualenv --system-site-packages NOMBREDEENTORNO` (`NOMBREDENTORNO` es un comodín, usa un nombre que haga sentido para ti, sólo que no uses espacios ni caracteres especiales, por ejemplo, `mientorno`).
   
   - Activa el entorno virtual con `mientorno\Scripts\activate`.
   

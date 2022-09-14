@@ -483,8 +483,9 @@ data/d001/WcsgiB44.gpkg
     que estará en `C:\Users\NOMBREDEUSUARIO\`; puedes usar como nombre
     `practica1` (recomendación: no uses tildes ni espacios).
 
--   En dicha carpeta, abre una terminal, y crea un entorno virtual
-    ejecutando esto en la consola: `virtualenv NOMBREDEENTORNO`
+-   En dicha carpeta, abre una terminal, y crea un entorno virtual que
+    tenga acceso a los paquetes instalados, ejecutando esto en la
+    consola: `virtualenv --system-site-packages NOMBREDEENTORNO`
     (`NOMBREDENTORNO` es un comodín, usa un nombre que haga sentido para
     ti, sólo que no uses espacios ni caracteres especiales, por ejemplo,
     `mientorno`).
