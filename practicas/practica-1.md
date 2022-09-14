@@ -6,7 +6,7 @@ José Ramón Martínez Batlle
 
 # Fecha de entrega
 
--   9 de septiembre de 2022
+-   16 de septiembre de 2022
 
 # Introducción
 
@@ -387,6 +387,14 @@ Adalberto Martinez Ramos
 data/d001/7ETLK7QT.gpkg
 </td>
 </tr>
+<tr>
+<td style="text-align:left;">
+Gregorio Rivas
+</td>
+<td style="text-align:left;">
+data/d001/WcsgiB44.gpkg
+</td>
+</tr>
 </tbody>
 </table>
 
@@ -443,13 +451,48 @@ data/d001/7ETLK7QT.gpkg
     Jupyter Notebooks. “Python 3” se refiere al lenguaje como tal, Pip
     es el sistema de gestión de paquetes escritos en Python, y Jupyter
     Notebooks es un entorno interactivo basado en la web para crear
-    documentos de Jupyter.
-    [Este](https://phoenixnap.com/kb/how-to-install-python-3-windows)
-    tutorial te ayudará a instala Python 3, Pip y `virtualenv` (en el
-    asistente de instalación, asegúrate de marcar la casilla
-    `Add Python 3.# to PATH`). [Este
-    vídeo](https://www.youtube.com/watch?v=AuTkAWEa06E), del minuto 4:18
-    al 4:47, muestra cómo instalar Jupyter Notebooks.
+    documentos de Jupyter. También tendrás que instalar `geopandas` y
+    `geoplot`, pero estos últimos, necesitan unas dependencias que
+    comentaré a continuación. Finalmente, luego crearás un entorno
+    virtual. El proceso íntegro, en Windows, es como sigue:
+
+-   Descarga el instalador de Python. [Este
+    tutorial](https://phoenixnap.com/kb/how-to-install-python-3-windows)
+    te ayudará a instalar Python 3, Pip y `virtualenv`. En el asistente
+    de instalación, asegúrate de marcar la casilla
+    `Add Python 3.# to PATH`.
+
+-   Instala cuadernos de Jupyter. Básicamente, sólo tendrás que abrir
+    una terminal escribiendo “cmd” en el menú inicio (o buscando
+    “command prompt”), y se abrirá una terminal en
+    `C:\Users\NOMBREDEUSUARIO\` (`NOMBREDEUSUARIO` es un comodín que
+    hace referencia al nombre de usuario en tu PC). Cuando tengas la
+    terminal, escribe y ejecuta `pip install jupyter`.
+
+-   Instala dependencias requeridas: GDAL, Fiona, pyproj y Rtree, en ese
+    orden. [Esta entrada de
+    StackOverflow](https://stackoverflow.com/questions/56958421/pip-install-geopandas-on-windows)
+    explica cómo hacerlo.
+
+-   Si todo va bien, instala `geopandas` y `geoplot`, básicamente
+    ejecuta estas sentencias en una terminal: `pip install geopandas` y
+    `pip install geoplot`.
+
+-   Crea una carpeta para la práctica, o ve a ella si ya la tienes
+    creada. Si no la tienes creada aún, muévete a la carpeta de usuario,
+    que estará en `C:\Users\NOMBREDEUSUARIO\`; puedes usar como nombre
+    `practica1` (recomendación: no uses tildes ni espacios).
+
+-   En dicha carpeta, abre una terminal, y crea un entorno virtual
+    ejecutando esto en la consola: `virtualenv NOMBREDEENTORNO`
+    (`NOMBREDENTORNO` es un comodín, usa un nombre que haga sentido para
+    ti, sólo que no uses espacios ni caracteres especiales, por ejemplo,
+    `mientorno`).
+
+-   Activa el entorno virtual con `mientorno\Scripts\activate`.
+
+-   Activa el servidor de cuadernos jupyter escribiendo esto en la
+    terminal: `jupyter notebooks`.
 
 > Como alternativa a lo anterior, puedes instalar Anaconda, una
 > distribución completa de Python y R que facilita el cumplimiento de
@@ -467,43 +510,21 @@ data/d001/7ETLK7QT.gpkg
 <!-- 2. Instala un editor de código. Si no tienes uno, te recomiendo que investigues sobre los siguientes y elijas uno: Atom (se anunció su fin recientemente), Visual Studio Code, Sublime Text, PyCharm, Spyder. El más popular actualmente es Visual Studio Code que, aunque no es de código abierto, ofrece múltiples herramientas. -->
 <!-- 3. (Opcional) Si tu sistema operativo es Windows, instala una consola para administrar tu máquina sin interfaz gráfica. Windows viene con una de serie, el CMD, pero también puedes evaluar Power Shell o Cmder; esta última tiene la ventaja de que puedes usar comandos UNIX de manera natural. -->
 
-2.  Crea y activa un entorno virtual. [Este vídeo hasta el minuto
-    3:08](https://www.youtube.com/watch?v=jY2g1erTTZI) te explica qué es
-    un entorno virtual y te enseña cómo instalarlo y activarlo en
-    Windows. Quizá ya tiene instalado el paquete `virtualenv` y sólo
-    necesitas activar el entorno virtual. IMPORTANTE: activa tu entorno
-    virtual en la carpeta de tu proyecto de trabajo, por ejemplo,
-    aquella donde tienes los datos de la práctica. Si usas Linux, [este
-    script](crear_activar_entorno_virtual.sh) te resultará útil para
-    crear tu entorno virtual.
+2.  Localiza tu capa asignada en la carpeta correspondiente (ver capa
+    asignada arriba), descárgala y cópiala a la ruta de tu práctica. La
+    verás en el servidor jupyter.
 
-3.  Instala los paquetes `geopandas` y `geoplot`. Instálalos una vez
-    tengas tu entorno virtual activo.
+3.  Localiza y descarga [este](mapa_de_mi_capa.ipynb) cuaderno de
+    Jupyter, adaptándolo a tu capa asignada.
 
-4.  Activa Jupyter Notebooks, ejecutando la sentencia `jupyter notebook`
-    desde la consola localizada en tu carpeta de la práctica.
-    Probablemente se abra el navegador mostrando el cuaderno de Jupyter.
-    En caso contrario, dirígete a la ruta <http://localhost:8888/> y
-    crea un cuaderno Jupyter mediante el botón
-    `New`&gt;`Python 3 (ipykernel)`. Aprende cómo crear y ejecutar tus
-    sentencias de Python en este cuaderno. [Esta intro
-    básica](https://www.youtube.com/watch?v=Xsrr15_c7JY) te podría
-    ayudar y [este otro
-    vídeo](https://www.youtube.com/watch?v=6Vr9ZUntCyE) profundiza un
-    poco más.
+4.  Captura la pantalla y pégala en tu informe.
 
-5.  Carga la capa vectorial asignada con `geopandas` y represéntala con
-    `plot` y `geoplot`. Guíate de [este](mapa_de_mi_capa.ipynb) cuaderno
-    de Jupyter, adaptándolo a tu capa asignada.
-
-6.  Captura la pantalla y pégala en tu informe.
-
-7.  Describe lo que has realizado. Obviando los pasos de instalación,
+5.  Describe lo que has realizado. Obviando los pasos de instalación,
     creación y activación de entorno virtual e instalación de paquetes,
     resume los pasos necesarios para representar tu capa asignada
     (remítete a los pasos dados en el cuaderno de Jupyter).
 
-8.  Reflexiona. ¿Qué fortalezas entiendes que tiene Python?
+6.  Reflexiona. ¿Qué fortalezas entiendes que tiene Python?
 
 # Referencias
 
