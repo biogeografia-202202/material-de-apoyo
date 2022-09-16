@@ -458,42 +458,44 @@ data/d001/WcsgiB44.gpkg
 -   Instala Miniconda, visita la [web de
     Conda](https://docs.conda.io/en/latest/) y localiza el instalador.
     En septiembre de 2022, la página de descargas de distintas versiones
-    de Python3 y arquitecturas, se encuentra
-    [aquí](https://docs.conda.io/en/latest/miniconda.html) y [este es el
-    link de
+    de Python3 y arquitecturas, se encontraba
+    [aquí](https://docs.conda.io/en/latest/miniconda.html) y [este era
+    el link de
     descarga](https://repo.anaconda.com/miniconda/Miniconda3-py39_4.12.0-Windows-x86_64.exe)
-    del instalador de Miniconda-Python3 para Windows más reciente.
-    Instala sólo para ti (`Just for me`), y no olvides marcar la opción
-    `Add to path`
+    del instalador de Miniconda Python 3.9 para Windows (versión más
+    reciente). Instala sólo para ti (`Just for me`), y NO marques la
+    opción `Add to path`.
 
--   Abre una ventana de CMD, escribiendo en la barra de búsquedas `CMD`
-    o `Command Prompt`. Esta se abrirá en `C:\Users\NOMBREDEUSUARIO`,
-    donde `NOMBREDEUSUARIO` es un comodín que significa "tu nombre de
-    usuario.
+-   Abre una ventana del Anaconda Prompt, escribiendo en la barra de
+    búsquedas (estará disponible en el Menú Inicio). Esta ventana se
+    abrirá en `C:\Users\NOMBREDEUSUARIO`, donde `NOMBREDEUSUARIO` es un
+    comodín que significa “tu nombre de usuario.”
 
--   Si todo va bien, instala `geopandas` y `geoplot`, básicamente
-    ejecuta estas sentencias en el Prompt de Miniconda:
-    `conda install geopandas` y `conda install geoplot`.
+-   Crea un entorno virtual, con el nombre que desees, por ejemplo
+    `mientorno` (que no comience por números, y que no tengas caracteres
+    especiales ni espacios). Para crearlo, en el Anaconda Prompt,
+    ejecuta la sentencia `conda create --name mientorno`
 
--   Instala Jupyter desde el Prompt: `conda install jupyter`.
+-   Activa tu entorno con `conda activate mientorno`. Si todo va bien,
+    el nombre de tu entorno aparecerá entre paréntesis tal que
+    `(mientorno)` al inicio del Anaconda Prompt.
 
--   Si todo va bien, prueba que funciona, escribiendo en el CMD
-    `jupyter notebook` . Esto abrirá una ventana del navegador en la
-    ruta `http://localhost:8888`; si no se abre automáticamente, navega
-    a esa dirección.
+-   Instala Geopandas, Geoplot, Jupyterlab y todas sus dependencias
+    ejecutando, en el Anaconda Prompt, la sentencia
+    `conda install -c conda-forge python=3.9 fiona shapely rasterio pyproj pandas jupyterlab geopandas geoplot`
 
-> Como alternativa a lo anterior, puedes instalar Anaconda, una
-> distribución más completa de Conda que ofrece Python y R que facilita
-> el cumplimiento de dependencias y la instalación de paquetes (por
-> ejemplo, los paquetes de ciencia de datos y los espaciales son fáciles
-> de instalar), pero como desventaja tiene que ocupa más espacio en
-> disco que la instalación de las aplicaciones por separado. Si eliges
-> Anaconda, [este vídeo](https://www.youtube.com/watch?v=FTkUcSicRIA)
-> podría servirte.
+-   Si todo va bien, prueba que Jupyter funciona ejecutando la sentencia
+    `jupyter notebook` en el Anaconda Prompt. Esto abrirá una ventana
+    del navegador en la ruta `http://localhost:8888`; si no se abre
+    automáticamente, navega a esa dirección. En Jupyter podrás realizar
+    la práctica con comodidad.
 
-> Una última alternativa: usa Google Colab; si tienes cuenta en Google,
-> bastaría con activar dicho servicio, pero tiene como desventaja que
-> tendrías que subir los archivos que necesites en tu procesamiento.
+> Para prácticas futuras que requieran de Geopandas y Geoplot, tendrás
+> que ejecutar estas dos sentencias **en el Anaconda Prompt**:
+
+> `conda activate mientorno`
+
+> `jupyter notebook`
 
 2.  Localiza tu capa asignada en GitHub y descárgala. Asegúrate de saber
     dónde la guardaste y con qué nombre. Deberías poderla localizar en
@@ -504,11 +506,12 @@ data/d001/WcsgiB44.gpkg
     dentro de la función de lectura `gpd.read_file('')`, por ejemplo
     `gpd.read_file('Downloads/TUCAPA.gpkg')`. IMPORTANTE: Windows
     probablemente le cambie la extensión al cuaderno de Jupyter (por
-    ejemplo, quizá le añada una extensión `.txt`); si lo llegase a
-    hacer, haz visibles las extensiones de archivo y asegúrate que de
+    ejemplo, quizá le añada una extensión `.txt`). En caso de que esto
+    ocurra, haz visibles las extensiones de archivo y asegúrate que de
     que el cuaderno tiene la extensión `.ipynb`. Localiza el cuaderno
     desde Jupyter y ábrelo. Limpia las salidas mediante el menú
-    `Cell>All Output>Clear`
+    `Cell>All Output>Clear` y ejecuta las celdas, preferiblemente una a
+    una, para que tengas control del resultado.
 
 4.  Captura la pantalla y pégala en tu informe.
 
