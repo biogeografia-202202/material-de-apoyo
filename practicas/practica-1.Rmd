@@ -15,7 +15,7 @@ knitr::opts_chunk$set(echo = T, cache=F)
 
 # Fecha de entrega
 
-- 16 de septiembre de 2022
+- 18 de septiembre de 2022
 
 # Introducción
 
@@ -174,43 +174,29 @@ kable(d[, c("Nombre completo", 'e1')])
 
 5. Pregunta, reflexión. ¿Qué fortalezas entiendes que tiene R+RStudio?
 
-### 1C. Instala y prueba Python, Pip, entornos virtuales y Jupyter Notebooks
+### 1C. Instala y prueba Python mediante Conda
 
 > Capas asignadas: las mismas que en 1A. Tal como indiqué arriba, no olvides incluir el código que emplees en las respuestas.
 
-1. Instala Python 3, Pip, entornos virtuales (paquete `virtualenv`) y Jupyter Notebooks. "Python 3" se refiere al lenguaje como tal, Pip es el sistema de gestión de paquetes escritos en Python, y Jupyter Notebooks es un entorno interactivo basado en la web para crear documentos de Jupyter. También tendrás que instalar `geopandas` y `geoplot`, pero estos últimos, necesitan unas dependencias que comentaré a continuación. Finalmente, luego crearás un entorno virtual. El proceso íntegro, en Windows, es como sigue:
+1. En Windows, Conda ofrece la alternativa idónea para instalar Python3 con un único instalador. Recomiendo Miniconda, que ocupa poco espacio y garanntiza que las dependencias se satisfagan. Al finalizar, instala los paquetes requeridos para esta práctica (si usas Linux, sigue los pasos descritos en [este script](crear_activar_entorno_virtual.sh)). El proceso seguirá los siguientes pasos:
 
-  - Descarga el instalador de Python y ejecútalo, el cual instalará Python y pip. [Esta guía](https://phoenixnap.com/kb/how-to-install-python-3-windows) te ayudará a localizar el ejecutable de instalación. En el asistente de instalación, asegúrate de marcar la casilla `Add Python 3.# to PATH`.
-  
-  - Verifica que las instalaciones de Python y Pip tuvieron éxito (la guía explica cómo hacerlo).
-  
-  - Instala el paquete para crear entornos virtuales, `virtualenv`. Para ello, abre una terminal escribiendo "cmd" en el menú inicio (o buscando "command prompt") y ejecuta `pip install virtualenv`.
-  
-  - Instala cuadernos de Jupyter. Para ello, ejecuta en una terminal lo siguiente: `pip install jupyter`.
-  
-  - Instala dependencias requeridas: GDAL, Fiona, pyproj y Rtree, en ese orden. [Esta entrada de StackOverflow](https://stackoverflow.com/questions/56958421/pip-install-geopandas-on-windows) explica cómo hacerlo.
-  
-  - Si todo va bien, instala `geopandas` y `geoplot`, básicamente ejecuta estas sentencias en una terminal: `pip install geopandas` y `pip install geoplot`.
-  
-  - Crea una carpeta para la práctica, o ve a ella si ya la tienes creada. Si no la tienes creada aún, muévete a la carpeta de usuario, que estará en `C:\Users\NOMBREDEUSUARIO\` (`NOMBREDEUSUARIO` es un comodín que hace referencia al nombre de usuario en tu PC); por ejemplo, puedes usar como nombre `practica1` (recomendación: no uses tildes ni espacios).
-  
-  - En dicha carpeta, abre una terminal, y crea un entorno virtual que tenga acceso a los paquetes instalados, ejecutando esto en la consola: `virtualenv --system-site-packages NOMBREDEENTORNO` (`NOMBREDENTORNO` es un comodín, usa un nombre que haga sentido para ti, sólo que no uses espacios ni caracteres especiales, por ejemplo, `mientorno`).
-  
-  - Activa el entorno virtual con `mientorno\Scripts\activate`.
-  
-  - Activa el servidor de cuadernos jupyter escribiendo esto en la terminal: `jupyter notebooks`.
+  - Instala Miniconda, visita la [web de Conda](https://docs.conda.io/en/latest/) y localiza el instalador. En septiembre de 2022, la página de descargas de distintas versiones de Python3 y arquitecturas, se encuentra [aquí](https://docs.conda.io/en/latest/miniconda.html) y [este es el link de descarga](https://repo.anaconda.com/miniconda/Miniconda3-py39_4.12.0-Windows-x86_64.exe) del instalador de Miniconda-Python3 para Windows más reciente. Instala sólo para ti (`Just for me`), y no olvides marcar la opción `Add to path`
 
-> Como alternativa a lo anterior, puedes instalar Anaconda, una distribución completa de Python y R que facilita el cumplimiento de dependencias y la instalación de paquetes (por ejemplo, los paquetes de ciencia de datos y los espaciales son fáciles de instalar), pero como desventaja tiene que ocupa más espacio en disco que la instalación de las aplicaciones por separado. Si eliges Anaconda, [este vídeo](https://www.youtube.com/watch?v=FTkUcSicRIA) podría servirte.
+  - Abre una ventana de CMD, escribiendo en la barra de búsquedas `CMD` o `Command Prompt`. Esta se abrirá en `C:\Users\NOMBREDEUSUARIO`, donde `NOMBREDEUSUARIO` es un comodín que significa "tu nombre de usuario.
+
+  - Si todo va bien, instala `geopandas` y `geoplot`, básicamente ejecuta estas sentencias en el Prompt de Miniconda: `conda install geopandas` y `conda install geoplot`.
+  
+  - Instala Jupyter desde el Prompt: `conda install jupyter`.
+  
+  - Si todo va bien, prueba que funciona, escribiendo en el CMD `jupyter notebook` . Esto abrirá una ventana del navegador en la ruta `http://localhost:8888`; si no se abre automáticamente, navega a esa dirección.
+
+> Como alternativa a lo anterior, puedes instalar Anaconda, una distribución más completa de Conda que ofrece Python y R que facilita el cumplimiento de dependencias y la instalación de paquetes (por ejemplo, los paquetes de ciencia de datos y los espaciales son fáciles de instalar), pero como desventaja tiene que ocupa más espacio en disco que la instalación de las aplicaciones por separado. Si eliges Anaconda, [este vídeo](https://www.youtube.com/watch?v=FTkUcSicRIA) podría servirte.
 
 > Una última alternativa: usa Google Colab; si tienes cuenta en Google, bastaría con activar dicho servicio, pero tiene como desventaja que tendrías que subir los archivos que necesites en tu procesamiento.
 
-<!-- 2. Instala un editor de código. Si no tienes uno, te recomiendo que investigues sobre los siguientes y elijas uno: Atom (se anunció su fin recientemente), Visual Studio Code, Sublime Text, PyCharm, Spyder. El más popular actualmente es Visual Studio Code que, aunque no es de código abierto, ofrece múltiples herramientas. -->
+2. Localiza tu capa asignada en GitHub y descárgala. Asegúrate de saber dónde la guardaste y con qué nombre. Deberías poderla localizar en el servidor Jupyter.
 
-<!-- 3. (Opcional) Si tu sistema operativo es Windows, instala una consola para administrar tu máquina sin interfaz gráfica. Windows viene con una de serie, el CMD, pero también puedes evaluar Power Shell o Cmder; esta última tiene la ventaja de que puedes usar comandos UNIX de manera natural. -->
-
-2. Localiza tu capa asignada en la carpeta correspondiente (ver capa asignada arriba), descárgala y cópiala a la ruta de tu práctica. La verás en el servidor jupyter.
-
-3. Localiza y descarga [este](mapa_de_mi_capa.ipynb) cuaderno de Jupyter, adaptándolo a tu capa asignada.
+3. Localiza y descarga [este](mapa_de_mi_capa.ipynb) cuaderno de Jupyter, adaptándolo a tu capa asignada (la ruta deberás escribirla dentro de la función de lectura `gpd.read_file('')`, por ejemplo `gpd.read_file('Downloads/TUCAPA.gpkg')`. IMPORTANTE: Windows probablemente le cambie la extensión al cuaderno de Jupyter (por ejemplo, quizá le añada una extensión `.txt`); si lo llegase a hacer, haz visibles las extensiones de archivo y asegúrate que de que el cuaderno tiene la extensión `.ipynb`. Localiza el cuaderno desde Jupyter y ábrelo. Limpia las salidas mediante el menú `Cell>All Output>Clear`
 
 4. Captura la pantalla y pégala en tu informe.
 
