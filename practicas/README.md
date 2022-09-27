@@ -2,6 +2,8 @@
 
 1. [Introducción a software SIG y lenguajes de programación de código abierto (QGIS R + Python)](practica-1.md)
 
+2. GBIF con R y Python.
+
 2. LaTeX, R y Python: introducción a las citas, fórmulas y código reproducible con casos de uso básicos.
 
 3. Biogeografía insular con R.
