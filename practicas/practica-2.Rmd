@@ -1,0 +1,142 @@
+---
+title: "Práctica 2. Descargar y visualizar datos de GBIF con R, Python y QGIS"
+author: José Ramón Martínez Batlle
+date: 11-10-2022
+output: github_document
+bibliography: ../ref/biblio.bib
+csl: ../ref/apa.csl
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = T, cache=F)
+```
+
+# Fecha de entrega
+
+-   21 de octubre de 2022
+
+# Introducción
+
+GBIF, o "Infraestructura Mundial de Información en Biodiversidad"  [@whatis], es una organización que proporciona datos de seres vivos abiertamente a cualquier persona. En octubre de 2022, la base de datos disponía de más de 2000 millones de registros biológicos, más de 76000 conjuntos de datos, casi 2000 instituciones publicaban datos en ella y se había publicado casi 8000 artículos científicos. Indiscutiblemente, GBIF es una fuente a considerar en estudios de biodiversidad. Te propongo que en, esta asignación, aprendas formas básicas de acceder a este importante recurso.
+
+# Objetivos de aprendizaje
+
+Al terminar esta práctica deberías ser capaz de:
+
+-   Descargar registros de presencia desde GBIF usando R y Python.
+
+-   Desplegarlos en QGIS.
+
+-   Citar apropiadamente.
+
+-   Relacionarlos con el territorio dominicano.
+
+-   Construir una matriz de comunidad.
+
+# Informe
+
+Entregarás tu informe en formato PDF, el cual podrás elaborar con tu procesador de texto favorito (por ejemplo, LibreOffice Writer, LaTeX, Word) o mediante entornos de desarrollo integrado (e.g. Atom, Visual Studio Code, Jupyter Notebooks, RMarkdown-RStudio). Características del documento:
+
+-   Número máximo de páginas: 10.
+
+-   En la primera página, deberás incluir nombre, matrícula, asignatura, nombre de la práctica, fecha.
+
+-   Para evitar la proliferación de tipografías y formatos, debes usar estilos, para lo cual te recomiendo utilizar plantillas. Hay muchos recursos en la web sobre cómo usar estilos (término de búsqueda recomendado: estilos en procesadores de texto).
+
+-   Debes incluir tu código informático en las respuestas de los ejercicios donde uses lenguajes de programación (e.g. R, Python). El código debe ser incluido como texto, no como imagen.
+
+-   Realiza doble revisión de ortografía y gramática.
+
+-   Las páginas deben estar numeradas secuencialmente.
+
+-   Si aplica, incluir ilustraciones y tablas de apoyo (a ambas debes incluirles título, "*caption*"), así como lista de referencias bibliográficas.
+
+-   Puedes usar un apéndice para incluir información complementaria que no te quepa en las 10 páginas centrales.
+
+-   Podré solicitar los archivos fuente empleados para elaborar el PDF y los resultados intermedios generados en cada ejercicio.
+
+# Criterios de evaluación
+
+```{r, echo=F}
+library(kableExtra)
+criterios_eval <- data.frame(
+  Concepto = c('Redacción, que incluye organización de las ideas, gramática, ortografía', 'Presentación, que incluye uso apropiado de estilos, tablas y figuras (legibilidad, uso de *caption*), numeración de páginas'),
+  Porcentaje = c('60%', '40%')
+)
+kable(criterios_eval, format="markdown")
+```
+
+# Ejercicios
+
+## Ejercicio 1. Descarga datos de GBIF usando R
+
+¿Qué necesitarás?
+
+-   Conexión a internet.
+
+-   Una PC con R. Tendrás que instalar, si no los tienes aún, los paquetes que verás en la subsección "Paquetes" a continuación.
+
+-   Archivo `rd.gpkg`, que debes descargar desde la [carpeta `data`, subcarpeta `d002` del repo de material de apoyo](https://github.com/biogeografia-202202/material-de-apoyo/tree/master/data/d002). IMPORTANTE: toma nota de la ruta en tu PC donde guardes este archivo, porque más adelante la necesitarás.
+
+-   Cuenta en GBIF
+
+-   Cuenta en Zenodo
+
+### Paquetes
+
+```{r, eval=F}
+library(rgbif)
+library(terra)
+library(geodata)
+library(sf)
+library(dplyr)
+library(h3jsr)
+options(stringsAsFactors = FALSE)
+```
+
+### Descargar registros
+
+```{r, eval=F}
+reg_pres <- occ_data(scientificName = 'Polygonaceae',
+                   hasCoordinate = T, country = 'DO', limit = 100000)
+table(reg_pres$data$species)
+length(unique(reg_pres$data$species))
+```
+
+### Crea un subconjunto derivado en GBIF
+
+```{r, eval=F}
+conteos_conjunto <- reg_pres$data %>% count(datasetKey, sort=TRUE) 
+write.table(x = conteos_conjunto, file = "~/conteos_por_conjuntos_de_datos.txt",
+            col.names=FALSE, row.names=FALSE,sep=",")
+```
+
+El archivo `conteos_por_conjuntos_de_datos.txt` lo necesitarás para crear un registro persistente en GBIF, por lo que debes controlar dónde lo guardas en tu PC. La ruta `~/` significa "carpeta de usuario", por ejemplo `C:\Users\miusuario`. Ve a [esta ruta](https://www.gbif.org/derived-dataset/register) (necesitarás cuenta en GBIF). En el campo *Title* escribe un nombre que describa el conjunto de datos, por ejemplo, yo usé `Polygonaceae de RD hasta octubre 2022`. En el campo `URL of where derived dataset can be accessed` deberías colocar un repositorio persistente (por ejemplo, creado en Zenodo), donde alojes el conjunto de datos. De momento, escribe `https://gbif.org`, pero es importante que luego cambies dicha ruta por un DOI de Zenodo. En `Attach CSV file with dataset keys and occurrence counts`, presiona `Choose File` y sube el archivo `conteos_por_conjuntos_de_datos.txt`.
+
+### Carga la capa geográfica
+
+```{r}
+rd <- st_read('../data/d002/rd.gpkg', layer = 'pais')
+# Otras capas disponibles: regiones, provincias, municipios
+plot(rd)
+rd_4 <- polygon_to_cells(rd, res = 4, simple = FALSE)
+rd_4 <- cell_to_polygon(unlist(rd_4$h3_addresses), simple = FALSE)
+plot(rd_4, add=T)
+```
+
+::: {#hello .greeting .message style="color: red;"}
+IMPORTANTE: controla el lugar donde descargas tu archivo `rd.gpkg`, y usa dicha ruta en la sentencia `st_read`. De entrada te adelanto lo siguiente: no coincidirá con la ruta que ves arriba.
+:::
+
+
+# Python
+
+```{python, python.reticulate=F}
+
+```
+
+# Representar en QGIS
+
+# Referencias
