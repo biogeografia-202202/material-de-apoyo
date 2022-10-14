@@ -1,5 +1,5 @@
 ---
-title: "Práctica 99. Tu manuscrito."
+title: "Práctica 99. Tu manuscrito (portal de entrada)."
 author: José Ramón Martínez Batlle
 date: 05-09-2022
 output: github_document
@@ -17,13 +17,23 @@ knitr::opts_chunk$set(echo = T, cache=F)
 
 - 27 de noviembre, 2022 
 
+# Tips generales
+
+Por experiencia, sé que de nada valdría impartir un curso sobre cómo escribir un manuscrito. A escribir se aprende escribiendo (redunda sí, pero es así). Por ello, en este mensaje verás cuestiones básicas, pero también aportaré referencias complementarias con las que podrás profundizar.
+
+En tu manuscrito, deberás responder preguntas de investigación. No se trata de un examen en el que rellenas "preguntas de desarrollo"; se trata de escribir un manuscrito con las secciones habituales (e.g. Resumen, Introducción, Metodología, Resultados, Discusión, etc.), siguiendo las [normas del Anuario de Investigaciones Científicas de la UASD](docs/instrucciones-para-autores-anuario-investigaciones-cientificas-UASD.pdf).
+
+Como norma general, **nunca copies ni pegues texto, puesto que es plagio y lo penalizo con la reprobación de la asignatura. Si necesitas citar a un/a autor/a, usa tus propias palabras, pero nunca transcribas texto hacia tu manuscrito** (hay contadas excepciones a esta regla, pero ninguna aplica en tu caso).
+
+Recuerda que, para cada pregunta de investigación, te servirá redactar una hipótesis de partida. Considera una hipótesis como una posible respuesta a cada pregunta. No te esfuerces en formular "la hipótesis correcta"; formula una posible respuesta a cada pregunta de acuerdo a lo que entiendas lógico.
+
 # Contenido
 
 En la [sección Manuscrito del programa](../programa-biogeografia-geo1310.md#manuscrito) de la asignatura, expliqué una idea general de las partes que componen esta importante asignación práctica. Para producir el manuscrito, trabajarás modularmente hasta el final del semestre. Entregarás el manuscrito por partes, y puntuaré cada una, ofreciéndote la opción de mejorar tras cada entrega, para así mejorar el producto final acabado. Te asignaré cada parte a lo largo del semestre, con fecha de entrega y puntuación asignada por separado, las cuales te describo de forma general a continuación (más detalles en cada asignación particular):
 
 1. Introducción ([asignación aquí](practica-99-tu-manuscrito-1-introduccion.md)). La redactarás eligiendo un tema, revisando bibliografía y formulando problema/pregunta(s) de investigación. La introducción responde a la pregunta ***¿por qué?***
 
-2. Metodología. Esta sección se conecta con la introducción, puesto que tu problema de investigación se podrá resolver usando unos materiales y métodos predeterminados (aunque la sección se denomina "metodología", incluye tanto materiales como métodos). Para redactarla deberás tener a mano tus materiales (equipos, instrumentos, datos fuente, etc.) y conocer (aunque sea sólo de forma bibliográfica) los métodos que emplearás. Esta sección responde a la pregunta ***¿cómo?***
+2. Metodología ([asignación aquí](practica-99-tu-manuscrito-2-metodologia.md)). Esta sección se conecta con la introducción, puesto que tu problema de investigación se podrá resolver usando unos materiales y métodos predeterminados (aunque la sección se denomina "metodología", incluye tanto materiales como métodos). Para redactarla deberás tener a mano tus materiales (equipos, instrumentos, datos fuente, etc.) y conocer (aunque sea sólo de forma bibliográfica) los métodos que emplearás. Esta sección responde a la pregunta ***¿cómo?***
 
 3. Resultados. Es la parte más analítica del manuscrito y, por supuesto, está conectada con las dos anteriores. Aquí analizas tus datos y muestras lo obtenido tras aplicar los métodos, manteniéndote siempre dentro del problema que elegiste resolver. Esta sección responde a la pregunta ***¿qué?***
 
@@ -47,7 +57,7 @@ Para preparar tu manuscrito, sigue las normas para autores/as del [Anuario de In
 
 # Observaciones
 
-Toma en consideración lo siguiente:
+Reitero algunas cuestiones:
 
   * No impartiré lecciones sobre redacción ni sobre procesadores de texto, por lo que te recomiendo consultar material tanto vía web como en el economato para mejorar dichas capacidades.
 

@@ -9,6 +9,8 @@ José Ramón Martínez Batlle
 
 # Introducción
 
+(Noviolencia, 2022)
+
 GBIF, o “Infraestructura Mundial de Información en Biodiversidad” (*What
 is GBIF?*, n.d.), es una organización que proporciona datos de seres
 vivos abiertamente a cualquier persona. En octubre de 2022, la base de
@@ -102,9 +104,41 @@ documento:
 ``` r
 library(rgbif)
 library(terra)
+```
+
+    ## terra 1.6.17
+
+``` r
 library(geodata)
 library(sf)
+```
+
+    ## Linking to GEOS 3.10.2, GDAL 3.4.3, PROJ 8.2.0; sf_use_s2() is TRUE
+
+``` r
 library(dplyr)
+```
+
+    ## 
+    ## Attaching package: 'dplyr'
+
+    ## The following objects are masked from 'package:terra':
+    ## 
+    ##     intersect, union
+
+    ## The following object is masked from 'package:kableExtra':
+    ## 
+    ##     group_rows
+
+    ## The following objects are masked from 'package:stats':
+    ## 
+    ##     filter, lag
+
+    ## The following objects are masked from 'package:base':
+    ## 
+    ##     intersect, setdiff, setequal, union
+
+``` r
 library(h3jsr)
 options(stringsAsFactors = FALSE)
 ```
@@ -113,18 +147,60 @@ options(stringsAsFactors = FALSE)
 
 ``` r
 reg_pres <- occ_data(scientificName = 'Polygonaceae',
-                   hasCoordinate = T, country = 'DO', limit = 100000)
+                   hasCoordinate = T,
+                   country = 'DO',
+                   limit = 100000)
 table(reg_pres$data$species)
 length(unique(reg_pres$data$species))
 ```
 
-### Súbelos a Zenodo
+### Crea un subconjunto derivado en GBIF
 
 ``` r
 conteos_conjunto <- reg_pres$data %>% count(datasetKey, sort=TRUE) 
 write.table(x = conteos_conjunto, file = "~/conteos_por_conjuntos_de_datos.txt",
             col.names=FALSE, row.names=FALSE,sep=",")
 ```
+
+El archivo `conteos_por_conjuntos_de_datos.txt` lo necesitarás para
+crear un registro persistente en GBIF, por lo que debes controlar dónde
+lo guardas en tu PC. La ruta `~/` significa “carpeta de usuario”, por
+ejemplo `C:\Users\miusuario`. Ve a [esta
+ruta](https://www.gbif.org/derived-dataset/register) (necesitarás cuenta
+en GBIF). En el campo *Title* escribe un nombre que describa el conjunto
+de datos, por ejemplo, yo usé `Polygonaceae de RD hasta octubre 2022`.
+En el campo `URL of where derived dataset can be accessed` deberías
+colocar un repositorio persistente (por ejemplo, creado en Zenodo),
+donde alojes el conjunto de datos. De momento, escribe
+`https://gbif.org`, pero es importante que luego cambies dicha ruta por
+un DOI de Zenodo. En
+`Attach CSV file with dataset keys and occurrence counts`, presiona
+`Choose File` y sube el archivo `conteos_por_conjuntos_de_datos.txt`.
+
+### Carga la capa geográfica
+
+``` r
+rd <- st_read('../data/d002/rd.gpkg', layer = 'pais')
+```
+
+    ## Reading layer `pais' from data source 
+    ##   `/home/jr/Documentos/clases_UASD/202202/geo113_biogeografia/material-de-apoyo/data/d002/rd.gpkg' 
+    ##   using driver `GPKG'
+    ## Simple feature collection with 1 feature and 0 fields
+    ## Geometry type: MULTIPOLYGON
+    ## Dimension:     XY
+    ## Bounding box:  xmin: -72.01147 ymin: 17.47033 xmax: -68.32354 ymax: 19.93211
+    ## Geodetic CRS:  WGS 84
+
+``` r
+# Otras capas disponibles: regiones, provincias, municipios
+plot(rd)
+rd_4 <- polygon_to_cells(rd, res = 4, simple = FALSE)
+rd_4 <- cell_to_polygon(unlist(rd_4$h3_addresses), simple = FALSE)
+plot(rd_4, add=T)
+```
+
+![](practica-2_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
 
 <div id="hello" class="greeting message" style="color: red;">
 
@@ -133,11 +209,6 @@ usa dicha ruta en la sentencia `st_read`. De entrada te adelanto lo
 siguiente: no coincidirá con la ruta que ves arriba.
 
 </div>
-
-``` r
-rd <- st_read('../data/d002/rd.gpkg', layer = 'pais')
-# Otras capas disponibles: regiones, provincias, municipios
-```
 
 # Python
 
@@ -150,6 +221,13 @@ rd <- st_read('../data/d002/rd.gpkg', layer = 'pais')
 
 <div id="refs" class="references csl-bib-body hanging-indent"
 line-spacing="2">
+
+<div id="ref-noviolencia2022" class="csl-entry">
+
+Noviolencia. (2022). *Polygonaceae de RD (hasta octubre 2022)*.
+<https://doi.org/10.15468/DD.7DGUSG>
+
+</div>
 
 <div id="ref-whatis" class="csl-entry">
 

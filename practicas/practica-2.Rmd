@@ -19,7 +19,9 @@ knitr::opts_chunk$set(echo = T, cache=F)
 
 # Introducción
 
-GBIF, o "Infraestructura Mundial de Información en Biodiversidad"  [@whatis], es una organización que proporciona datos de seres vivos abiertamente a cualquier persona. En octubre de 2022, la base de datos disponía de más de 2000 millones de registros biológicos, más de 76000 conjuntos de datos, casi 2000 instituciones publicaban datos en ella y se había publicado casi 8000 artículos científicos. Indiscutiblemente, GBIF es una fuente a considerar en estudios de biodiversidad. Te propongo que en, esta asignación, aprendas formas básicas de acceder a este importante recurso.
+[@noviolencia2022]
+
+GBIF, o "Infraestructura Mundial de Información en Biodiversidad" [@whatis], es una organización que proporciona datos de seres vivos abiertamente a cualquier persona. En octubre de 2022, la base de datos disponía de más de 2000 millones de registros biológicos, más de 76000 conjuntos de datos, casi 2000 instituciones publicaban datos en ella y se había publicado casi 8000 artículos científicos. Indiscutiblemente, GBIF es una fuente a considerar en estudios de biodiversidad. Te propongo que en, esta asignación, aprendas formas básicas de acceder a este importante recurso.
 
 # Objetivos de aprendizaje
 
@@ -86,7 +88,7 @@ kable(criterios_eval, format="markdown")
 
 ### Paquetes
 
-```{r, eval=F}
+```{r}
 library(rgbif)
 library(terra)
 library(geodata)
@@ -100,7 +102,9 @@ options(stringsAsFactors = FALSE)
 
 ```{r, eval=F}
 reg_pres <- occ_data(scientificName = 'Polygonaceae',
-                   hasCoordinate = T, country = 'DO', limit = 100000)
+                   hasCoordinate = T,
+                   country = 'DO',
+                   limit = 100000)
 table(reg_pres$data$species)
 length(unique(reg_pres$data$species))
 ```
@@ -121,14 +125,27 @@ El archivo `conteos_por_conjuntos_de_datos.txt` lo necesitarás para crear un re
 rd <- st_read('../data/d002/rd.gpkg', layer = 'pais')
 # Otras capas disponibles: regiones, provincias, municipios
 plot(rd)
-rd_4 <- polygon_to_cells(rd, res = 4, simple = FALSE)
-rd_4 <- cell_to_polygon(unlist(rd_4$h3_addresses), simple = FALSE)
-plot(rd_4, add=T)
+rd_6 <- polygon_to_cells(rd, res = 6, simple = FALSE)
+rd_6 <- cell_to_polygon(unlist(rd_6$h3_addresses), simple = FALSE)
+plot(as_Spatial(rd_6), add=T)
 ```
+
 
 ::: {#hello .greeting .message style="color: red;"}
 IMPORTANTE: controla el lugar donde descargas tu archivo `rd.gpkg`, y usa dicha ruta en la sentencia `st_read`. De entrada te adelanto lo siguiente: no coincidirá con la ruta que ves arriba.
 :::
+
+
+```{r}
+reg_pres_sf <- st_as_sf(
+  x = reg_pres$data,
+  coords = c("decimalLongitude", "decimalLatitude"))
+plot(as_Spatial(reg_pres_sf), pch=16, col='green', add=T)
+```
+
+LIMPIEZA SACANDO REGISTROS
+REPRESENTACIÓN QGIS
+PYTHON
 
 
 # Python
