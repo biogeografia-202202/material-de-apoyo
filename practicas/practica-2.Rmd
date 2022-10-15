@@ -130,11 +130,9 @@ rd_6 <- cell_to_polygon(unlist(rd_6$h3_addresses), simple = FALSE)
 plot(as_Spatial(rd_6), add=T)
 ```
 
-
 ::: {#hello .greeting .message style="color: red;"}
 IMPORTANTE: controla el lugar donde descargas tu archivo `rd.gpkg`, y usa dicha ruta en la sentencia `st_read`. De entrada te adelanto lo siguiente: no coincidirá con la ruta que ves arriba.
 :::
-
 
 ```{r}
 reg_pres_sf <- st_as_sf(
@@ -143,10 +141,7 @@ reg_pres_sf <- st_as_sf(
 plot(as_Spatial(reg_pres_sf), pch=16, col='green', add=T)
 ```
 
-LIMPIEZA SACANDO REGISTROS
-REPRESENTACIÓN QGIS
-PYTHON
-
+LIMPIEZA SACANDO REGISTROS REPRESENTACIÓN QGIS PYTHON
 
 # Python
 
