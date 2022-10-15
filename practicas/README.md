@@ -2,7 +2,7 @@
 
 1. [Práctica 1. Introducción a software SIG y lenguajes de programación de código abierto (QGIS R + Python)](practica-1.md)
 
-2. [Práctica 2. Descargar y visualizar datos de GBIF con R, Python y QGIS](practica-2.md)
+2. [Práctica 2. Descargar y visualizar datos de GBIF con R y QGIS](practica-2.md)
 
 2. LaTeX, R y Python: introducción a las citas, fórmulas y código reproducible con casos de uso básicos.
 
