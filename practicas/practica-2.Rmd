@@ -168,8 +168,9 @@ Elige un tamaño que se adapte bien a tus registros de presencia. Una clave es l
 resolucion <- 5 # RECOMENDADO: menor o igual a 6
 ind_esp <- polygon_to_cells(rd_extra, res = resolucion, simple = FALSE)
 ind_esp <- cell_to_polygon(unlist(ind_esp$h3_addresses), simple = FALSE)
-plot(rd)
+plot(rd_extra)
 plot(as_Spatial(ind_esp), add = T)
+plot(rd, add=T)
 ```
 
 Obtén ahora dos cuestiones básicas de los hexágonos:
@@ -332,8 +333,8 @@ specnumber(colSums(mc))
 -   Gráfico de mosaicos de la presencia de especie por hexágonos:
 
 ```{r}
-abun_sp_q <- crear_grafico_mosaico_de_mc(mc, tam_rotulo = 3)
-abun_sp_q
+pres_aus_sp <- crear_grafico_mosaico_de_mc(mc, tam_rotulo = 4)
+pres_aus_sp
 ```
 
 ### A título informativo: diseños anidados
@@ -383,13 +384,13 @@ Existen varias manera de citar correctamente las fuentes en GBIF; te presento do
 Voy a explicarte sólamente cómo citar usando el *dataset* derivado en R. Primero es necesario crear una tabla con la que informar a GBIF qué fuentes se encuentran disponibles en la consulta que hiciste. En mi caso, busqué todas las Polygonaceae de RD que tuviesen coordenadas. GBIF consultó en su base de datos, y encontró varios registros de presencia pertenecientes a varios conjuntos.
 
 ```{r, eval=F}
-conteos_conjunto <- reg_pres %>% count(datasetKey, sort=TRUE) 
-write.table(x = conteos_conjunto, file = "~/conteos_por_conjuntos_de_datos.txt",
+conteos_conjunto <- reg_pres_sf_ok %>% count(datasetKey, sort=TRUE) 
+write.table(x = conteos_conjunto %>% st_drop_geometry(), file = "conteos_por_conjuntos_de_datos.txt",
             col.names=FALSE, row.names=FALSE, sep=",")
 ```
 
 El archivo `conteos_por_conjuntos_de_datos.txt` lo necesitarás para crear un registro persistente en GBIF, por lo que debes controlar dónde lo guardas en tu PC. La ruta `~/` significa "carpeta de usuario", por ejemplo `C:\Users\miusuario`. Ve a [esta ruta](https://www.gbif.org/derived-dataset/register) (necesitarás cuenta en GBIF). En el campo *Title* escribe un nombre que describa el conjunto de datos, por ejemplo, yo usé `Polygonaceae de RD hasta octubre 2022`. En el campo `URL of where derived dataset can be accessed` deberías colocar un repositorio persistente (por ejemplo, creado en Zenodo), donde alojes el conjunto de datos. De momento, escribe `https://gbif.org`, pero es importante que luego cambies dicha ruta por un DOI de Zenodo. En `Attach CSV file with dataset keys and occurrence counts`, presiona `Choose File` y sube el archivo `conteos_por_conjuntos_de_datos.txt`.
 
-Finalmente, descarga el BibTeX desde GBIF. Si lo alojas en Zotero, antes de usar la entrada como cita, asegúrate de editar en Zotero el campo `Autor` para que ponga "GBIF.org", y en el campo `Fecha` coloca el año de descarga. Por ejemplo, la cita de los datos derivados usados en este script de ejemplo es esta [@gbiforg2022polygonaceae]; verifica que en la lista de Referencias se construyó apropiadamente, con el campo `Autor` y `Fecha` tal como los definisite manualmente.
+Finalmente, descarga el BibTeX desde GBIF. Si lo alojas en Zotero, antes de usar la entrada como cita, asegúrate de editar en Zotero el campo `Autor` para que ponga "GBIF.org", y en el campo `Fecha` coloca el año de descarga. Por ejemplo, la cita de los datos derivados usados en este script de ejemplo es esta [@gbiforg2022polygonaceae]; verifica que en la lista de Referencias se construyó apropiadamente, con el campo `Autor` y `Fecha` tal como los definiste manualmente.
 
 # Referencias

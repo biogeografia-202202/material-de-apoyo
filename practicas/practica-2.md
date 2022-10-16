@@ -295,8 +295,9 @@ de los hexágonos (por ejemplo, el 30%) tenga al menos un registro.
 resolucion <- 5 # RECOMENDADO: menor o igual a 6
 ind_esp <- polygon_to_cells(rd_extra, res = resolucion, simple = FALSE)
 ind_esp <- cell_to_polygon(unlist(ind_esp$h3_addresses), simple = FALSE)
-plot(rd)
+plot(rd_extra)
 plot(as_Spatial(ind_esp), add = T)
+plot(rd, add=T)
 ```
 
 <img src="practica-2_files/figure-gfm/unnamed-chunk-8-1.png" width="100%" />
@@ -605,8 +606,8 @@ specnumber(colSums(mc))
 - Gráfico de mosaicos de la presencia de especie por hexágonos:
 
 ``` r
-abun_sp_q <- crear_grafico_mosaico_de_mc(mc, tam_rotulo = 3)
-abun_sp_q
+pres_aus_sp <- crear_grafico_mosaico_de_mc(mc, tam_rotulo = 4)
+pres_aus_sp
 ```
 
 <img src="practica-2_files/figure-gfm/unnamed-chunk-25-1.png" width="100%" />
@@ -670,8 +671,8 @@ consultó en su base de datos, y encontró varios registros de presencia
 pertenecientes a varios conjuntos.
 
 ``` r
-conteos_conjunto <- reg_pres %>% count(datasetKey, sort=TRUE) 
-write.table(x = conteos_conjunto, file = "~/conteos_por_conjuntos_de_datos.txt",
+conteos_conjunto <- reg_pres_sf_ok %>% count(datasetKey, sort=TRUE) 
+write.table(x = conteos_conjunto %>% st_drop_geometry(), file = "conteos_por_conjuntos_de_datos.txt",
             col.names=FALSE, row.names=FALSE, sep=",")
 ```
 
@@ -696,7 +697,7 @@ de usar la entrada como cita, asegúrate de editar en Zotero el campo
 de descarga. Por ejemplo, la cita de los datos derivados usados en este
 script de ejemplo es esta (GBIF.org, 2022a); verifica que en la lista de
 Referencias se construyó apropiadamente, con el campo `Autor` y `Fecha`
-tal como los definisite manualmente.
+tal como los definiste manualmente.
 
 # Referencias
 
