@@ -278,8 +278,16 @@ plot(rd_extra, add = T)
 
 ### Celdas H3
 
-Ahora usarás el paquete `h3jsr` para crear un índice espacial basado en
-hexágonos del estándar H3. Te recomiendo que elijas un tamaño de
+Un poco sobre H3. Es un sistema de indexación geoespacial que divide el
+mundo en celdas hexagonales. H3 es de código abierto bajo la licencia
+Apache 2. La H3 Core Library implementa el sistema de cuadrículas H3.
+Incluye funciones para convertir coordenadas de latitud y longitud a la
+celda H3 que las contiene, encontrar el centro de las celdas H3,
+encontrar la geometría de los límites de las celdas H3, encontrar los
+vecinos de las celdas H3, y más (H3, 2022).
+
+Usarás el paquete `h3jsr` para crear un índice espacial basado en
+hexágonos de la biblioteca H3. Te recomiendo que elijas un tamaño de
 hexágono apropiado, siempre evitando colapsar la PC. El tamaño de
 hexágono es inversamente proporcional a la resolución H3 (argumento
 `res`) y, por lo tanto, a mayor resolución, mayor número de hexágonos.
@@ -715,6 +723,13 @@ GBIF.org. (2022a). *Polygonaceae de RD (hasta octubre 2022)*.
 
 GBIF.org. (2022b). *What is GBIF?* Retrieved from
 <https://www.gbif.org/what-is-gbif>
+
+</div>
+
+<div id="ref-h32022introduction" class="csl-entry">
+
+H3. (2022). *Introduction \| H3*. Retrieved from
+<https://h3geo.org/docs>
 
 </div>
 
