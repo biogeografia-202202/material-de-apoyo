@@ -1,0 +1,129 @@
+---
+title: "Práctica 2. Descargar y visualizar datos de GBIF con R y QGIS"
+author: José Ramón Martínez Batlle
+date: 08-11-2022
+output: github_document
+bibliography: ../ref/biblio.bib
+csl: ../ref/apa.csl
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = T, cache = F, out.width = '100%', dpi = 300)
+```
+
+# Fecha de entrega
+
+-   17 de noviembre de 2022
+
+# Introducción
+
+Las agencias espaciales de distintos países colectan, anualmente, petabytes de información, a través de sus distintas constelaciones de satélites de observación del planeta (p. ej. Landsat, Sentinel). El modelo de datos ráster es comúnmente el elegido para almacenar estas fuentes, por lo que, para extraer información de dichas fuentes, se deben aplicar técnicas que extraigan estadísticos en alguna forma de discretización o división espacial (e.g. *spatial binning*) del territorio estudiado.
+
+La estadística zonal, denominadas también funciones zonales o regionales [@olaya2020sistemas], es una de las técnicas más usadas para resolver este tipo de problemas. En su forma generalizada, se trata de un algoritmo que se alimenta de y produce capas de información geográfica. Una de las entradas es una capa denominada "de valores", la cual es normalmente un ráster (p. ej., un DEM), y representa a la variable (p. ej., la elevación) de la cual nos interesa obtener sus estadísticos descriptivos (p. ej., media, mediana, varianza). La otra entrada es la capa de las "zonas", que representa las unidades discretas del territorio; esta puede ser ráster (celdas rectangulares) o vectorial (p. ej., hexágonos). La salida es, normalmente, una capa del mismo tipo (rater o vector) que la capa de zonas, pero donde se ha incluido el valor de el/los estadístico/s descriptivo/s.
+
+
+# Objetivos de aprendizaje
+
+Al terminar esta práctica deberías ser capaz de:
+
+- Generar estadísticos descriptivos de una capa, asignada por el profesor, con respecto al índice espacial hexagonal que elegiste para tu manuscrito.
+
+- Basándote en la estadística zonal obtenida, comparar si tu variable es significativamente diferente entre una región y otra.
+
+# Capas rásters de valor asignadas
+
+```{r}
+????????????????????????????????
+????????????????????????????????
+```
+
+# Informe
+
+Entregarás tu informe en formato PDF, el cual podrás elaborar con tu procesador de texto favorito (por ejemplo, LibreOffice Writer, LaTeX, Word) o mediante entornos de desarrollo integrado (e.g. Atom, Visual Studio Code, Jupyter Notebooks, RMarkdown-RStudio). Características del documento:
+
+-   Número máximo de páginas: 10.
+
+-   En la primera página, deberás incluir nombre, matrícula, asignatura, nombre de la práctica, fecha.
+
+-   Para evitar la proliferación de tipografías y formatos, debes usar estilos, para lo cual te recomiendo utilizar plantillas. Hay muchos recursos en la web sobre cómo usar estilos (término de búsqueda recomendado: estilos en procesadores de texto).
+
+-   Debes incluir tu código informático en las respuestas de los ejercicios donde uses lenguajes de programación (e.g. R). El código debe ser incluido como texto, no como imagen.
+
+-   Realiza doble revisión de ortografía y gramática.
+
+-   Las páginas deben estar numeradas secuencialmente.
+
+-   Si aplica, incluir ilustraciones y tablas de apoyo (a ambas debes incluirles título, "*caption*"), así como lista de referencias bibliográficas.
+
+-   Puedes usar un apéndice para incluir información complementaria que no te quepa en las 10 páginas centrales.
+
+-   Podré solicitar los archivos fuente empleados para elaborar el PDF y los resultados intermedios generados en cada ejercicio.
+
+# Criterios de evaluación
+
+```{r, echo=F}
+library(kableExtra)
+criterios_eval <- data.frame(
+  Concepto = c('Redacción, que incluye organización de las ideas, gramática, ortografía', 'Presentación, que incluye uso apropiado de estilos, tablas y figuras (legibilidad, uso de *caption*), numeración de páginas'),
+  Porcentaje = c('60%', '40%')
+)
+kable(criterios_eval, format="markdown")
+```
+
+# ¿Qué necesitarás?
+
+-   Conexión a internet.
+
+-   Una PC con R. Tendrás que instalar, si no los tienes aún, los paquetes que verás en la subsección "Paquetes" a continuación.
+
+-   Archivo de índice espacial generado en la práctica 2 (p. ej., `indice_espacial.gpkg`. Si no lo tienes a mano, puedes usar uno de los que encontrarás en la [carpeta `data`, subcarpeta `d003` del repo de material de apoyo](https://github.com/biogeografia-202202/material-de-apoyo/tree/master/data/d003). Estos archivos de apoyo los nombré de acuerdo con la siguiente convención `indice_espacial_res_x.gpkg`, donde `x` es la resolución del índice espacial H3. Por ejemplo, si usas la resolución espacial 5, tu archivo de índice se denominará `indice_espacial_res_5.gpkg`.
+
+-   Cuenta en Zenodo (recomendado).
+
+# Ejercicios
+
+## Ejercicio 1. Descargar el ráster asignado, cargarlo en R junto con la capa de índice, generar estadística zonal.
+
+Necesitarás cargar paquetes primero (esto lo hace la función `library(PAQUETE)`) y luego descargar las capas. Si al cargar un paquete apareciera un error `Error in library(PAQUETE) : there is no package called ‘PAQUETE’`, deberás entonces instalarlo mediante el menú `Tools>Install packages`.
+
+### Paquetes
+
+```{r, message=F, warning=F}
+library(stars)
+library(devtools)
+source_url('https://raw.githubusercontent.com/biogeografia-202202/material-de-apoyo/master/practicas/funciones.R')
+```
+
+### Descargar capa de valores (ráster) y cargarla a memoria
+
+El ráster que usarás como capa de valores, contiene las siguientes fuentes de información:
+
+- Elevación, a partir del modelo digital de elevaciones GTOPO30
+
+- 
+
+```{r}
+mi_raster <- read_stars('gt30w100n40.tif')
+mi_indice <- st_read('indice_espacial.gpkg')
+plot(mi_indice)
+mi_raster <- mi_raster[mi_indice]
+plot(mi_raster)
+aggregate(mi_raster, mi_indice, mean, na.rm = T) |> st_as_sf()
+```
+
+### Cargar en memoria el índice espacial
+
+```{r}
+
+```
+
+### Aplicar algoritmo de estadística zonal
+
+```{r}
+
+```
+
+
+# Referencias
