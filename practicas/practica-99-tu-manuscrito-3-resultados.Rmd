@@ -1,0 +1,212 @@
+---
+title: "Práctica 99. Resultados de tu manuscrito."
+author: José Ramón Martínez Batlle
+date: 26-11-2022
+output: github_document
+bibliography: ../ref/biblio.bib
+csl: ../ref/apa.csl
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = T, cache=F)
+```
+
+# ¿Qué contiene la sección "Resultados"?
+
+Te recomiendo releer las normas para autores/as del [Anuario de Investigaciones Científicas de la UASD](../docs/instrucciones-para-autores-anuario-investigaciones-cientificas-UASD.pdf) y adherirte a las especificaciones sobre la sección "Resultados" que allí se indican. Aunque en las referidas normas no se incluyen muchas pautas significativas, si escribieras para una revista específica, deberás considerar sus normas y recomendaciones de publicación. Además, te recomiendo que consultes la sección "Resultados" de algunos manuscritos publicados en el Anuario.
+
+En los resultados expones el contenido analítico central. Es "el qué" del manuscrito, en complemento de "el cómo" (metodología) y "el por qué" (introducción) de tu investigación. En los resultados muestras lo que encontraste luego de que colectaste (aunque en este caso, no fuiste al terreno) y analizaste, con tus métodos, los datos fuente.
+
+Algunas recomendaciones generales:
+
+- "Resultados" se supone que es la sección más corta del manuscrito, siempre que se usen apropiadamente los recursos gráficos, las tablas y la información suplementaria.
+
+- Comienza por realizar tus análisis. Necesitarás una matriz de comunidad y una ambiental. La de comunidad la habrás generado en la práctica 2; la ambiental explico cómo generarla en este mismo cuaderno (ver abajo). En general, la matriz ambiental la producirás mediante estadísticos zonales del territorio dominicano. Para aprender más sobre la fuente de estadística zonal de República Dominicana, que contiene un conjunto de más de 100 variables resumidas por celdas H3, visita [este repo](https://github.com/geofis/zonal-statistics). Debes visitar dicho repo para poder citarlo apropiadamente.
+
+- Cuando tengas análisis realizados, antes de comenzar a escribir, te recomiendo que escribas un guión de tu sección "Resultados". 
+
+- Guión en mano, redacta tu sección "Resultados", siguiendo también estos consejos:
+
+- En esta sección, se espera que presentes lo que has obtenido de manera "objetiva", evitando explicaciones, comentarios, opiniones, perspectivas o limitaciones. En teoría, tu redacción es "fría", lo cual no necesariamente significa que tenga que ser aburrida.
+
+- Esta es la sección por excelencia donde usarás *tablas y/o gráficos*. Lo más importante a tener en cuenta cuando los uses es que no debes duplicar el contenido que muestran dichos recursos en el texto. La tabla o gráfico son apoyos que te ayudarán a no entrar en densidades innecesarias dentro de los párrafos. Por lo tanto, si colocas una tabla o figura, no caigas en la tentación de describirla en párrafos de forma exhausitva. Estos recursos deben servir para apoyar el o los párrafos donde destacas los principales patrones encontrados.
+
+- *Importante también*: si insertas una tabla o gráfico, debes referirla en el texto (e.g. "ver figura X"). De nada sirve incluir una figura o una tabla si no la refieres, porque con ello estarás sugiriendo que dicho recurso era completamente prescindible.
+
+- El tiempo verbal preferido (por defecto) es el pasado, por ejemplo "..., donde se **encontró** una asociación significativa entre ... y ...". Sin embargo, hay excepciones, como por ejemplo, cuando te refieres a una tabla o una figura. Un caso típico es la expresión "tal como se muestra en la tabla 1", donde el verbo está conjugado en presente.
+
+A continuación, te pongo enlaces a referencias que considero útiles, sobre cómo redactar los resultados (algunas son generales, sobre artículos en general):
+
+-   [Breves pautas, en inglés](https://www.editage.com/insights/the-secret-to-writing-the-results-and-discussion-section-of-a-manuscript). Puedes usar el traductor [DeepL](https://www.deepl.com/translator), porque produce frases más naturales.
+
+Cinco guías, en inglés, que considero están bien elaboradas, sobre cómo redactar un artículo científico (consulta la sección sobre cómo redactar los *resultados* en cada una):
+
+-   [Demystifying the Journal Article](https://www.insidehighered.com/advice/2017/05/09/how-write-effective-journal-article-and-get-it-published-essay)
+
+-   [How to write a scientific manuscript for publication](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3626472/)
+
+-   [11 steps to structuring a science paper editors will take seriously](https://www.elsevier.com/connect/11-steps-to-structuring-a-science-paper-editors-will-take-seriously)
+
+-   [Cómo escribir un artículo científico por primera vez](https://www.sciencedirect.com/science/article/abs/pii/S1134593417300040) (necesitarás usar  [SciHub](https://sci-hub.se/) para descargarlo)
+
+- Una muy breve pero con consejos útiles: [Tips for writing the perfect IMRAD manuscript](https://www.editage.com/insights/tips-for-writing-the-perfect-imrad-manuscript)
+
+
+# Scripts de ejemplo
+
+## Análisis de agrupamiento
+
+\ldots
+
+##
+
+\ldots
+
+## Técnicas de ordenación
+
+Me basaré en los scripts que comienzan por `to_` de este [repo](https://github.com/biogeografia-master/scripts-de-analisis-BCI), los cuales explico en los vídeos de "Técnicas de ordenación" de la lista de reproducción ["Ecología Numérica con R" de mi canal](https://www.youtube.com/playlist?list=PLDcT2n8UzsCRDqjqSeqHI1wsiNOqpYmsJ).
+
+### Ordenación restringida
+
+Fijar un directorio de trabajo no es recomendable, mejor trabaja por proyecto. En cualquier caso, si no quieres o no puedes crear un proyecto, usa la sentencia que verás abajo, cambiando `TU_DIRECTORIO` por la ruta del directorio donde tengas almacenados tus datos y tus scripts.
+
+```{r}
+# setwd('TU_DIRECTORIO')
+```
+
+Cargar paquetes.
+
+```{r}
+library(vegan)
+library(sf)
+library(tidyverse)
+gh_content <- 'https://raw.githubusercontent.com/'
+gh_zonal_stats <- 'https://github.com/geofis/zonal-statistics/raw/main/out/'
+repo_analisis <- 'biogeografia-master/scripts-de-analisis-BCI/master'
+devtools::source_url(paste0(gh_content, repo_analisis, '/biodata/funciones.R'))
+source('train.R')
+```
+
+Carga tu matriz de comunidad, que habrás generado en la práctica 2.
+
+```{r}
+mc_orig <- readRDS("matriz_de_comunidad.RDS")
+umbral_raras <- 15
+mi_fam <- mc_orig[, -which(colSums(mc_orig) <= umbral_raras)]
+nombres_largos <- colnames(mi_fam)
+(colnames(mi_fam) <- make.cepnames(word(colnames(mi_fam), 1, 2)))
+(df_equivalencias <- data.frame(
+  nombre_original = nombres_largos,
+  colnames(mi_fam)))
+```
+
+Transforma la matriz de comunidad. Este paso es importante, lo explico [aquí](https://www.youtube.com/watch?v=yQ10lp0-nHc&list=PLDcT2n8UzsCRDqjqSeqHI1wsiNOqpYmsJ&index=10)
+
+```{r}
+mi_fam_t <- decostand(mi_fam, 'hellinger') #Hellinger
+# Otras transformaciones posibles con datos de presencia/ausencia
+# mi_fam_t <- decostand(mi_fam, 'normalize') #Chord
+# mi_fam_t <- decostand(log1p(mi_fam), 'normalize') #Chord
+# mi_fam_t <- decostand(mi_fam, 'chi.square') #Chi-square
+```
+
+Genera la matriz ambiental a partir del archivo de estadística zonal por celdas H3 de República Dominicana, de acuerdo con la resolución que prefieras. Para el ejemplo, usé la resolución 5, pero puedes usar/probar con otra, para lo cual, sólo tendrías que cambiar el objeto `res <- X`, donde `X` puede ser un número cualquiera entre 4 y 7.
+
+Para aprender más sobre la fuente de estadística zonal de República Dominicana, que contiene un conjunto de más de 100 variables resumidas por celdas H3, visita [este repo](https://github.com/geofis/zonal-statistics). Debes visitar dicho repo para poder citarlo apropiadamente.
+
+```{r}
+#Matriz ambiental
+res <- 5 #Resolución H3
+tmpfile <- tempfile()
+download.file(paste0(gh_zonal_stats, 'all_sources_all_variables_res_', res, '.gpkg'), tmpfile)
+za <- st_read(tmpfile, optional = T)
+za_intermedia <- za %>%
+  st_drop_geometry() %>% 
+  select(-matches(c(' base'))) %>% 
+  column_to_rownames('hex_id')
+env <- za_intermedia[match(rownames(mi_fam), rownames(za_intermedia)), ]
+all(rownames(mi_fam) == rownames(env)) #Si es TRUE, sigue adelante
+```
+
+Se puede probar con un subconunto de variables, generando una matriz ambiental que seleccione variables según el grupo al que pertenecen, con ayuda del sufijo.
+
+```{r}
+# env_selecionada <- env %>%
+#   st_drop_geometry() %>%
+#   dplyr::select(matches('^ESA '))
+# env_selecionada <- env %>%
+#   st_drop_geometry() %>%
+#   dplyr::select(matches('^G90-GEOM '))
+# env_selecionada <- env %>%
+#   st_drop_geometry() %>%
+#   dplyr::select(matches('^CH-BIO '))
+# env_selecionada <- env %>%
+#   st_drop_geometry() %>%
+#   dplyr::select(matches('^GHH '))
+# env_selecionada <- env %>%
+#   st_drop_geometry() %>%
+#   dplyr::select(matches('^GSL '))
+# env_selecionada <- env %>%
+#   st_drop_geometry() %>%
+#   dplyr::select(matches('^CGL '))
+```
+
+A continuación, el análisis de ordenación propiamente. La parte más importante es el entrenamiento: la función `train` del paquete `caret`, contenida en la función `my_train`, simplifica la selección de variables. Lo más importante: prueba con todas las variables primero, observa las variables que recomienda el modelo final (`print_my_train(mod)`) y ensaya varias combinaciones de subconjuntos de variables.
+
+```{r}
+mi_fam_t_sel <- mi_fam_t %>%
+  # select(matches('uvif|dive', ignore.case = T)) %>% #Serviría para filtrar la matriz de comunidad con esto
+  rename_all(~ paste('ESPECIE', .x))
+env_spp <- env %>% bind_cols(mi_fam_t_sel)
+spp <- paste0('`', grep('^ESPECIE', colnames(env_spp), value = T), '`', collapse = ' + ')
+my_formula <- as.formula(paste(spp, '~ .'))
+set.seed(1)
+mod <- my_train(
+  formula = my_formula, 
+  preproceso = 'scale',
+  data = env_spp %>%
+    select(matches('^GSL |^ESA |^ESPECIE ')) %>% #Sólo GSL y ESA, pero se debe explorar con todas
+    select_all())
+print_my_train(mod)
+(covar <- grep(
+  pattern = '\\(Intercept\\)',
+  x = names(coef(mod$finalModel,unlist(mod$bestTune))),
+  invert = T, value = T))
+mi_fam_t_rda <- rda(mi_fam_t_sel %>% rename_all(~ gsub('^ESPECIE ', '', .)) ~ .,
+                    env %>% select_at(all_of(gsub('\\`', '', covar))), scale = T)
+summary(mi_fam_t_rda)
+RsquareAdj(mi_fam_t_rda)$adj.r.squared
+vif.cca(mi_fam_t_rda)
+escalado <- 2
+plot(mi_fam_t_rda,
+     scaling = escalado,
+     display = c("sp", "lc", "cn"),
+     main = paste("Triplot de RDA especies ~ var. GSL + ESA, escalamiento", escalado)
+)
+mi_fam_t_rda_sc1 <- scores(mi_fam_t_rda,
+         choices = 1:2,
+         scaling = escalado,
+         display = "sp"
+  )
+text(mi_fam_t_rda, "species", col="red", cex=0.8, scaling="sp")
+arrows(0, 0,
+       mi_fam_t_rda_sc1[, 1] * 0.9,
+       mi_fam_t_rda_sc1[, 2] * 0.9,
+       length = 0,
+       lty = 1,
+       col = "red"
+)
+```
+
+## Análisis de diversidad
+
+\ldots
+
+## Ecología espacial
+
+\ldots
+
+# Referencias
+
