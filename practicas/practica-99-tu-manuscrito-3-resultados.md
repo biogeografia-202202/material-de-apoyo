@@ -121,7 +121,7 @@ por la ruta del directorio donde tengas almacenados tus datos y tus
 scripts.
 
 ``` r
-# setwd('TU_DIRECTORIO')
+# setwd('practicas/')
 ```
 
 Cargar paquetes.
@@ -158,6 +158,7 @@ library(tidyverse)
     ## ✖ dplyr::lag()    masks stats::lag()
 
 ``` r
+library(tmap)
 gh_content <- 'https://raw.githubusercontent.com/'
 gh_zonal_stats <- 'https://github.com/geofis/zonal-statistics/raw/main/out/'
 repo_analisis <- 'biogeografia-master/scripts-de-analisis-BCI/master'
@@ -167,20 +168,118 @@ devtools::source_url(paste0(gh_content, repo_analisis, '/biodata/funciones.R'))
     ## ℹ SHA-1 hash of file is b0dc507338fe6a7d927760b5a7a06b2612b753c7
 
 ``` r
-source('train.R')
+source(paste0(gh_content, 'biogeografia-202202/material-de-apoyo/master/practicas/', 'train.R'))
 ```
 
 Carga tu matriz de comunidad, que habrás generado en la práctica 2.
 
 ``` r
 mc_orig <- readRDS("matriz_de_comunidad.RDS")
-umbral_raras <- 15
-mi_fam <- mc_orig[, -which(colSums(mc_orig) <= umbral_raras)]
+nrow(mc_orig)
+```
+
+    ## [1] 149
+
+``` r
+ncol(mc_orig)
+```
+
+    ## [1] 44
+
+``` r
+names(mc_orig)
+```
+
+    ##  [1] "Coccoloba uvifera (L.) L."                         
+    ##  [2] "Antigonon leptopus Hook. & Arn."                   
+    ##  [3] "Coccoloba pubescens L."                            
+    ##  [4] "Coccoloba diversifolia Jacq."                      
+    ##  [5] "Coccoloba P.Browne"                                
+    ##  [6] "Coccoloba jimenezii Alain"                         
+    ##  [7] "Persicaria punctata (Elliott) Small"               
+    ##  [8] "Coccoloba flavescens Jacq."                        
+    ##  [9] "Leptogonum domingensis var. molle (Urb.) Brandbyge"
+    ## [10] "Leptogonum domingense Benth."                      
+    ## [11] "Leptogonum domingensis Benth."                     
+    ## [12] "Coccoloba costata Wright"                          
+    ## [13] "Coccoloba incrassata Urb."                         
+    ## [14] "Coccoloba wrightii Lindau"                         
+    ## [15] "Coccoloba picardae Urb."                           
+    ## [16] "Rumex acetosella L."                               
+    ## [17] "Rumex crispus L."                                  
+    ## [18] "Coccoloba leonardii Howard"                        
+    ## [19] "Coccoloba ceibensis O.C.Schmidt"                   
+    ## [20] "Coccoloba venosa L."                               
+    ## [21] "Coccoloba leoganensis Jacq."                       
+    ## [22] "Coccoloba microstachya Willd."                     
+    ## [23] "Coccoloba krugii Lindau"                           
+    ## [24] "Coccoloba buchii O.Schmidt"                        
+    ## [25] "Coccoloba fuertesii Urb."                          
+    ## [26] "Coccoloba nodosa Lindau"                           
+    ## [27] "Coccoloba pauciflora Urb."                         
+    ## [28] "Polygonum L."                                      
+    ## [29] "Rumex L."                                          
+    ## [30] "Persicaria pensylvanica (L.) M.Gómez"              
+    ## [31] "Persicaria hydropiperoides (Michx.) Small"         
+    ## [32] "Coccoloba samanensis O.C.Schmidt"                  
+    ## [33] "Persicaria ferruginea (Wedd.) Soják"               
+    ## [34] "Brunnichia ovata (Walter) Shinners"                
+    ## [35] "Ruprechtia C.A.Mey."                               
+    ## [36] "Coccoloba subcordata Lindau"                       
+    ## [37] "Polygonum punctatum Kit., 1864"                    
+    ## [38] "Persicaria segetum (Kunth) Small"                  
+    ## [39] "Persicaria acuminata (Kunth) M.Gómez"              
+    ## [40] "Coccoloba swartzii Meisn."                         
+    ## [41] "Persicaria lapathifolia subsp. lapathifolia"       
+    ## [42] "Persicaria glabra (Willd.) M.Gómez"                
+    ## [43] "Rumex obtusifolius L."                             
+    ## [44] "Coccoloba fawcettii O.Schmidt"
+
+``` r
+unique(word(names(mc_orig), 1, 1))
+```
+
+    ## [1] "Coccoloba"  "Antigonon"  "Persicaria" "Leptogonum" "Rumex"     
+    ## [6] "Polygonum"  "Brunnichia" "Ruprechtia"
+
+``` r
+table(word(names(mc_orig), 1, 1))
+```
+
+    ## 
+    ##  Antigonon Brunnichia  Coccoloba Leptogonum Persicaria  Polygonum      Rumex 
+    ##          1          1         24          3          8          2          4 
+    ## Ruprechtia 
+    ##          1
+
+``` r
+# ¿En cuántos hexágonos está cada especie?
+# Puede usar un único valor mínimo (inclusive) o un rango con dos números (extremos inclusive)
+en_cuantos_hex <- 15
+# en_cuantos_hex <- 10:20
+{if(length(en_cuantos_hex)==1) selector <- en_cuantos_hex:max(colSums(mc_orig)) else
+  if(length(en_cuantos_hex)==2)
+    selector <- min(en_cuantos_hex):max(en_cuantos_hex) else
+      stop('Debes indicar uno o dos valores numéricos')}
+selector
+```
+
+    ##  [1] 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39
+    ## [26] 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54
+
+``` r
+mi_fam <- mc_orig[, colSums(mc_orig) %in% selector]
+ncol(mi_fam)
+```
+
+    ## [1] 6
+
+``` r
 nombres_largos <- colnames(mi_fam)
 (colnames(mi_fam) <- make.cepnames(word(colnames(mi_fam), 1, 2)))
 ```
 
-    ## [1] "Coccuvif" "Antilept" "Coccdive" "Cocccost" "Coccwrig"
+    ## [1] "Coccuvif" "Antilept" "Coccpube" "Coccdive" "Cocccost" "Coccwrig"
 
 ``` r
 (df_equivalencias <- data.frame(
@@ -191,9 +290,10 @@ nombres_largos <- colnames(mi_fam)
     ##                   nombre_original colnames.mi_fam.
     ## 1       Coccoloba uvifera (L.) L.         Coccuvif
     ## 2 Antigonon leptopus Hook. & Arn.         Antilept
-    ## 3    Coccoloba diversifolia Jacq.         Coccdive
-    ## 4        Coccoloba costata Wright         Cocccost
-    ## 5       Coccoloba wrightii Lindau         Coccwrig
+    ## 3          Coccoloba pubescens L.         Coccpube
+    ## 4    Coccoloba diversifolia Jacq.         Coccdive
+    ## 5        Coccoloba costata Wright         Cocccost
+    ## 6       Coccoloba wrightii Lindau         Coccwrig
 
 Transforma la matriz de comunidad. Este paso es importante, lo explico
 [aquí](https://www.youtube.com/watch?v=yQ10lp0-nHc&list=PLDcT2n8UzsCRDqjqSeqHI1wsiNOqpYmsJ&index=10)
@@ -227,16 +327,91 @@ za <- st_read(tmpfile, optional = T)
 ```
 
     ## Warning in CPL_read_ogr(dsn, layer, query, as.character(options), quiet, : GDAL
-    ## Message 1: File /tmp/RtmpHC47DO/file30fb314fd55be has GPKG application_id, but
+    ## Message 1: File /tmp/RtmpQrR7fX/file37cb8843c4d5b5 has GPKG application_id, but
     ## non conformant file extension
 
     ## Reading layer `all_sources_all_variables_res_5' from data source 
-    ##   `/tmp/RtmpHC47DO/file30fb314fd55be' using driver `GPKG'
+    ##   `/tmp/RtmpQrR7fX/file37cb8843c4d5b5' using driver `GPKG'
     ## Simple feature collection with 335 features and 142 fields
     ## Geometry type: POLYGON
     ## Dimension:     XY
     ## Bounding box:  xmin: -72.13564 ymin: 17.40413 xmax: -68.20998 ymax: 20.04043
     ## Geodetic CRS:  WGS 84
+
+``` r
+za %>% st_as_sf('geom') %>%
+  pivot_longer(cols = -matches('base|hex_id|geom')) %>% 
+  tm_shape() + tm_fill(col = 'value') +
+  tm_facets(by = 'name', free.scales = T)
+```
+
+    ## Variable(s) "value" contains positive and negative values, so midpoint is set to 0. Set midpoint = NA to show the full spectrum of the color palette.
+    ## Variable(s) "value" contains positive and negative values, so midpoint is set to 0. Set midpoint = NA to show the full spectrum of the color palette.
+    ## Variable(s) "value" contains positive and negative values, so midpoint is set to 0. Set midpoint = NA to show the full spectrum of the color palette.
+    ## Variable(s) "value" contains positive and negative values, so midpoint is set to 0. Set midpoint = NA to show the full spectrum of the color palette.
+
+    ## Legend labels were too wide. The labels have been resized to 0.14, 0.14, 0.14, 0.14, 0.14. Increase legend.width (argument of tm_layout) to make the legend wider and therefore the labels larger.
+
+    ## Legend labels were too wide. The labels have been resized to 0.13, 0.13, 0.13, 0.13. Increase legend.width (argument of tm_layout) to make the legend wider and therefore the labels larger.
+
+    ## Legend labels were too wide. The labels have been resized to 0.16, 0.14, 0.14, 0.14, 0.14. Increase legend.width (argument of tm_layout) to make the legend wider and therefore the labels larger.
+
+    ## Legend labels were too wide. The labels have been resized to 0.13, 0.13, 0.13, 0.13. Increase legend.width (argument of tm_layout) to make the legend wider and therefore the labels larger.
+    ## Legend labels were too wide. The labels have been resized to 0.13, 0.13, 0.13, 0.13. Increase legend.width (argument of tm_layout) to make the legend wider and therefore the labels larger.
+    ## Legend labels were too wide. The labels have been resized to 0.13, 0.13, 0.13, 0.13. Increase legend.width (argument of tm_layout) to make the legend wider and therefore the labels larger.
+
+    ## Legend labels were too wide. The labels have been resized to 0.14, 0.14, 0.14, 0.14, 0.14. Increase legend.width (argument of tm_layout) to make the legend wider and therefore the labels larger.
+
+    ## Legend labels were too wide. The labels have been resized to 0.13, 0.13, 0.13, 0.13. Increase legend.width (argument of tm_layout) to make the legend wider and therefore the labels larger.
+    ## Legend labels were too wide. The labels have been resized to 0.13, 0.13, 0.13, 0.13. Increase legend.width (argument of tm_layout) to make the legend wider and therefore the labels larger.
+
+    ## Some legend labels were too wide. These labels have been resized to 0.13, 0.12, 0.12, 0.12, 0.12. Increase legend.width (argument of tm_layout) to make the legend wider and therefore the labels larger.
+
+    ## Some legend labels were too wide. These labels have been resized to 0.14, 0.14, 0.14, 0.13. Increase legend.width (argument of tm_layout) to make the legend wider and therefore the labels larger.
+
+    ## Some legend labels were too wide. These labels have been resized to 0.14, 0.14, 0.14, 0.14. Increase legend.width (argument of tm_layout) to make the legend wider and therefore the labels larger.
+
+    ## Some legend labels were too wide. These labels have been resized to 0.14, 0.14, 0.14, 0.14, 0.14. Increase legend.width (argument of tm_layout) to make the legend wider and therefore the labels larger.
+
+    ## Legend labels were too wide. The labels have been resized to 0.13, 0.13, 0.13, 0.13. Increase legend.width (argument of tm_layout) to make the legend wider and therefore the labels larger.
+
+    ## Some legend labels were too wide. These labels have been resized to 0.16, 0.14, 0.14, 0.14. Increase legend.width (argument of tm_layout) to make the legend wider and therefore the labels larger.
+
+    ## Some legend labels were too wide. These labels have been resized to 0.09, 0.09, 0.09, 0.09, 0.09. Increase legend.width (argument of tm_layout) to make the legend wider and therefore the labels larger.
+
+    ## Some legend labels were too wide. These labels have been resized to 0.12, 0.12, 0.12, 0.11, 0.11, 0.11. Increase legend.width (argument of tm_layout) to make the legend wider and therefore the labels larger.
+
+    ## Some legend labels were too wide. These labels have been resized to 0.13, 0.12, 0.12, 0.12, 0.12. Increase legend.width (argument of tm_layout) to make the legend wider and therefore the labels larger.
+
+    ## Some legend labels were too wide. These labels have been resized to 0.14, 0.14, 0.14, 0.14, 0.14. Increase legend.width (argument of tm_layout) to make the legend wider and therefore the labels larger.
+
+    ## Some legend labels were too wide. These labels have been resized to 0.13, 0.13, 0.13. Increase legend.width (argument of tm_layout) to make the legend wider and therefore the labels larger.
+
+    ## Some legend labels were too wide. These labels have been resized to 0.14, 0.14, 0.14, 0.13. Increase legend.width (argument of tm_layout) to make the legend wider and therefore the labels larger.
+
+    ## Some legend labels were too wide. These labels have been resized to 0.14, 0.14, 0.14, 0.14. Increase legend.width (argument of tm_layout) to make the legend wider and therefore the labels larger.
+
+    ## Some legend labels were too wide. These labels have been resized to 0.13, 0.12, 0.12, 0.12. Increase legend.width (argument of tm_layout) to make the legend wider and therefore the labels larger.
+
+    ## Some legend labels were too wide. These labels have been resized to 0.14, 0.14, 0.14, 0.13. Increase legend.width (argument of tm_layout) to make the legend wider and therefore the labels larger.
+
+    ## Some legend labels were too wide. These labels have been resized to 0.15, 0.13. Increase legend.width (argument of tm_layout) to make the legend wider and therefore the labels larger.
+
+    ## Some legend labels were too wide. These labels have been resized to 0.16, 0.14, 0.14, 0.14. Increase legend.width (argument of tm_layout) to make the legend wider and therefore the labels larger.
+
+    ## Some legend labels were too wide. These labels have been resized to 0.11, 0.11, 0.11, 0.10, 0.09, 0.09. Increase legend.width (argument of tm_layout) to make the legend wider and therefore the labels larger.
+
+    ## Legend labels were too wide. The labels have been resized to 0.15, 0.09, 0.08, 0.08. Increase legend.width (argument of tm_layout) to make the legend wider and therefore the labels larger.
+
+    ## Legend labels were too wide. The labels have been resized to 0.13, 0.13, 0.13, 0.13. Increase legend.width (argument of tm_layout) to make the legend wider and therefore the labels larger.
+
+    ## Legend labels were too wide. The labels have been resized to 0.14, 0.14, 0.14, 0.14, 0.14. Increase legend.width (argument of tm_layout) to make the legend wider and therefore the labels larger.
+
+    ## Some legend labels were too wide. These labels have been resized to 0.14, 0.14, 0.14, 0.14. Increase legend.width (argument of tm_layout) to make the legend wider and therefore the labels larger.
+
+    ## Some legend labels were too wide. These labels have been resized to 0.16, 0.14, 0.14, 0.14. Increase legend.width (argument of tm_layout) to make the legend wider and therefore the labels larger.
+
+![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
 
 ``` r
 za_intermedia <- za %>%
@@ -289,12 +464,12 @@ mi_fam_t_sel <- mi_fam_t %>%
 env_spp <- env %>% bind_cols(mi_fam_t_sel)
 spp <- paste0('`', grep('^ESPECIE', colnames(env_spp), value = T), '`', collapse = ' + ')
 my_formula <- as.formula(paste(spp, '~ .'))
-set.seed(1)
-mod <- my_train(
+set.seed(1); mod <- my_train(
   formula = my_formula, 
   preproceso = 'scale',
   data = env_spp %>%
-    select(matches('^GSL |^ESA |^ESPECIE ')) %>% #Sólo GSL y ESA, pero se debe explorar con todas
+    # select(matches('^GSL |^ESA |^ESPECIE ')) %>% #Sólo GSL y ESA, pero se debe explorar con todas
+    select(matches('^ESA |^CH-BIO |^ESPECIE ')) %>% #Sólo ESA y CH-BIO, pero se debe explorar con todas
     select_all())
 ```
 
@@ -342,109 +517,226 @@ print_my_train(mod)
 
     ## $resumen_variables
     ## Subset selection object
-    ## 23 Variables  (and intercept)
-    ##                                  Forced in Forced out
-    ## `ESA Trees`                          FALSE      FALSE
-    ## `ESA Shrubland`                      FALSE      FALSE
-    ## `ESA Grassland`                      FALSE      FALSE
-    ## `ESA Cropland`                       FALSE      FALSE
-    ## `ESA Built-up`                       FALSE      FALSE
-    ## `ESA Barren / sparse vegetation`     FALSE      FALSE
-    ## `ESA Open water`                     FALSE      FALSE
-    ## `ESA Herbaceous wetland`             FALSE      FALSE
-    ## `GSL Peak/ridge (warm)`              FALSE      FALSE
-    ## `GSL Peak/ridge`                     FALSE      FALSE
-    ## `GSL Mountain/divide`                FALSE      FALSE
-    ## `GSL Cliff`                          FALSE      FALSE
-    ## `GSL Upper slope (warm)`             FALSE      FALSE
-    ## `GSL Upper slope`                    FALSE      FALSE
-    ## `GSL Upper slope (cool)`             FALSE      FALSE
-    ## `GSL Upper slope (flat)`             FALSE      FALSE
-    ## `GSL Lower slope (warm)`             FALSE      FALSE
-    ## `GSL Lower slope`                    FALSE      FALSE
-    ## `GSL Lower slope (cool)`             FALSE      FALSE
-    ## `GSL Lower slope (flat)`             FALSE      FALSE
-    ## `GSL Valley`                         FALSE      FALSE
-    ## `ESA Mangroves`                      FALSE      FALSE
-    ## `GSL Valley (narrow)`                FALSE      FALSE
-    ## 1 subsets of each size up to 7
+    ## 28 Variables  (and intercept)
+    ##                                                                         Forced in
+    ## `ESA Trees`                                                                 FALSE
+    ## `ESA Shrubland`                                                             FALSE
+    ## `ESA Grassland`                                                             FALSE
+    ## `ESA Cropland`                                                              FALSE
+    ## `ESA Built-up`                                                              FALSE
+    ## `ESA Barren / sparse vegetation`                                            FALSE
+    ## `ESA Open water`                                                            FALSE
+    ## `ESA Herbaceous wetland`                                                    FALSE
+    ## `CH-BIO bio01 mean annual air temperature`                                  FALSE
+    ## `CH-BIO bio02 mean diurnal air temperature range`                           FALSE
+    ## `CH-BIO bio03 isothermality`                                                FALSE
+    ## `CH-BIO bio04 temperature seasonality`                                      FALSE
+    ## `CH-BIO bio05 mean daily maximum air temperature of the warmest month`      FALSE
+    ## `CH-BIO bio06 mean daily minimum air temperature of the coldest month`      FALSE
+    ## `CH-BIO bio08 mean daily mean air temperatures of the wettest quarter`      FALSE
+    ## `CH-BIO bio09 mean daily mean air temperatures of the driest quarter`       FALSE
+    ## `CH-BIO bio10 mean daily mean air temperatures of the warmest quarter`      FALSE
+    ## `CH-BIO bio11 mean daily mean air temperatures of the coldest quarter`      FALSE
+    ## `CH-BIO bio12 annual precipitation amount`                                  FALSE
+    ## `CH-BIO bio13 precipitation amount of the wettest month`                    FALSE
+    ## `CH-BIO bio14 precipitation amount of the driest month`                     FALSE
+    ## `CH-BIO bio15 precipitation seasonality`                                    FALSE
+    ## `CH-BIO bio16 mean monthly precipitation amount of the wettest quarter`     FALSE
+    ## `CH-BIO bio17 mean monthly precipitation amount of the driest quarter`      FALSE
+    ## `CH-BIO bio18 mean monthly precipitation amount of the warmest quarter`     FALSE
+    ## `CH-BIO bio19 mean monthly precipitation amount of the coldest quarter`     FALSE
+    ## `ESA Mangroves`                                                             FALSE
+    ## `CH-BIO bio07 annual range of air temperature`                              FALSE
+    ##                                                                         Forced out
+    ## `ESA Trees`                                                                  FALSE
+    ## `ESA Shrubland`                                                              FALSE
+    ## `ESA Grassland`                                                              FALSE
+    ## `ESA Cropland`                                                               FALSE
+    ## `ESA Built-up`                                                               FALSE
+    ## `ESA Barren / sparse vegetation`                                             FALSE
+    ## `ESA Open water`                                                             FALSE
+    ## `ESA Herbaceous wetland`                                                     FALSE
+    ## `CH-BIO bio01 mean annual air temperature`                                   FALSE
+    ## `CH-BIO bio02 mean diurnal air temperature range`                            FALSE
+    ## `CH-BIO bio03 isothermality`                                                 FALSE
+    ## `CH-BIO bio04 temperature seasonality`                                       FALSE
+    ## `CH-BIO bio05 mean daily maximum air temperature of the warmest month`       FALSE
+    ## `CH-BIO bio06 mean daily minimum air temperature of the coldest month`       FALSE
+    ## `CH-BIO bio08 mean daily mean air temperatures of the wettest quarter`       FALSE
+    ## `CH-BIO bio09 mean daily mean air temperatures of the driest quarter`        FALSE
+    ## `CH-BIO bio10 mean daily mean air temperatures of the warmest quarter`       FALSE
+    ## `CH-BIO bio11 mean daily mean air temperatures of the coldest quarter`       FALSE
+    ## `CH-BIO bio12 annual precipitation amount`                                   FALSE
+    ## `CH-BIO bio13 precipitation amount of the wettest month`                     FALSE
+    ## `CH-BIO bio14 precipitation amount of the driest month`                      FALSE
+    ## `CH-BIO bio15 precipitation seasonality`                                     FALSE
+    ## `CH-BIO bio16 mean monthly precipitation amount of the wettest quarter`      FALSE
+    ## `CH-BIO bio17 mean monthly precipitation amount of the driest quarter`       FALSE
+    ## `CH-BIO bio18 mean monthly precipitation amount of the warmest quarter`      FALSE
+    ## `CH-BIO bio19 mean monthly precipitation amount of the coldest quarter`      FALSE
+    ## `ESA Mangroves`                                                              FALSE
+    ## `CH-BIO bio07 annual range of air temperature`                               FALSE
+    ## 1 subsets of each size up to 6
     ## Selection Algorithm: 'sequential replacement'
     ##          `ESA Trees` `ESA Shrubland` `ESA Grassland` `ESA Cropland`
-    ## 1  ( 1 ) " "         "*"             " "             " "           
-    ## 2  ( 1 ) " "         "*"             "*"             " "           
-    ## 3  ( 1 ) " "         "*"             "*"             " "           
-    ## 4  ( 1 ) " "         "*"             "*"             "*"           
-    ## 5  ( 1 ) "*"         " "             " "             "*"           
-    ## 6  ( 1 ) "*"         "*"             " "             "*"           
-    ## 7  ( 1 ) " "         "*"             "*"             "*"           
+    ## 1  ( 1 ) " "         " "             " "             " "           
+    ## 2  ( 1 ) " "         " "             " "             " "           
+    ## 3  ( 1 ) " "         "*"             " "             " "           
+    ## 4  ( 1 ) " "         "*"             "*"             " "           
+    ## 5  ( 1 ) " "         "*"             "*"             "*"           
+    ## 6  ( 1 ) "*"         "*"             "*"             "*"           
     ##          `ESA Built-up` `ESA Barren / sparse vegetation` `ESA Open water`
     ## 1  ( 1 ) " "            " "                              " "             
-    ## 2  ( 1 ) " "            " "                              " "             
+    ## 2  ( 1 ) "*"            " "                              " "             
     ## 3  ( 1 ) "*"            " "                              " "             
     ## 4  ( 1 ) "*"            " "                              " "             
-    ## 5  ( 1 ) "*"            " "                              "*"             
-    ## 6  ( 1 ) "*"            " "                              "*"             
-    ## 7  ( 1 ) "*"            "*"                              "*"             
-    ##          `ESA Herbaceous wetland` `ESA Mangroves` `GSL Peak/ridge (warm)`
-    ## 1  ( 1 ) " "                      " "             " "                    
-    ## 2  ( 1 ) " "                      " "             " "                    
-    ## 3  ( 1 ) " "                      " "             " "                    
-    ## 4  ( 1 ) " "                      " "             " "                    
-    ## 5  ( 1 ) " "                      " "             " "                    
-    ## 6  ( 1 ) " "                      " "             " "                    
-    ## 7  ( 1 ) " "                      " "             " "                    
-    ##          `GSL Peak/ridge` `GSL Mountain/divide` `GSL Cliff`
-    ## 1  ( 1 ) " "              " "                   " "        
-    ## 2  ( 1 ) " "              " "                   " "        
-    ## 3  ( 1 ) " "              " "                   " "        
-    ## 4  ( 1 ) " "              " "                   " "        
-    ## 5  ( 1 ) " "              " "                   " "        
-    ## 6  ( 1 ) " "              " "                   " "        
-    ## 7  ( 1 ) " "              " "                   " "        
-    ##          `GSL Upper slope (warm)` `GSL Upper slope` `GSL Upper slope (cool)`
-    ## 1  ( 1 ) " "                      " "               " "                     
-    ## 2  ( 1 ) " "                      " "               " "                     
-    ## 3  ( 1 ) " "                      " "               " "                     
-    ## 4  ( 1 ) " "                      " "               " "                     
-    ## 5  ( 1 ) " "                      " "               "*"                     
-    ## 6  ( 1 ) " "                      " "               "*"                     
-    ## 7  ( 1 ) " "                      " "               "*"                     
-    ##          `GSL Upper slope (flat)` `GSL Lower slope (warm)` `GSL Lower slope`
-    ## 1  ( 1 ) " "                      " "                      " "              
-    ## 2  ( 1 ) " "                      " "                      " "              
-    ## 3  ( 1 ) " "                      " "                      " "              
-    ## 4  ( 1 ) " "                      " "                      " "              
-    ## 5  ( 1 ) " "                      " "                      " "              
-    ## 6  ( 1 ) " "                      " "                      " "              
-    ## 7  ( 1 ) " "                      " "                      " "              
-    ##          `GSL Lower slope (cool)` `GSL Lower slope (flat)` `GSL Valley`
-    ## 1  ( 1 ) " "                      " "                      " "         
-    ## 2  ( 1 ) " "                      " "                      " "         
-    ## 3  ( 1 ) " "                      " "                      " "         
-    ## 4  ( 1 ) " "                      " "                      " "         
-    ## 5  ( 1 ) " "                      " "                      " "         
-    ## 6  ( 1 ) " "                      " "                      " "         
-    ## 7  ( 1 ) " "                      " "                      " "         
-    ##          `GSL Valley (narrow)`
-    ## 1  ( 1 ) " "                  
-    ## 2  ( 1 ) " "                  
-    ## 3  ( 1 ) " "                  
-    ## 4  ( 1 ) " "                  
-    ## 5  ( 1 ) " "                  
-    ## 6  ( 1 ) " "                  
-    ## 7  ( 1 ) " "                  
+    ## 5  ( 1 ) "*"            " "                              " "             
+    ## 6  ( 1 ) "*"            "*"                              " "             
+    ##          `ESA Herbaceous wetland` `ESA Mangroves`
+    ## 1  ( 1 ) " "                      " "            
+    ## 2  ( 1 ) " "                      " "            
+    ## 3  ( 1 ) " "                      " "            
+    ## 4  ( 1 ) " "                      " "            
+    ## 5  ( 1 ) " "                      " "            
+    ## 6  ( 1 ) " "                      " "            
+    ##          `CH-BIO bio01 mean annual air temperature`
+    ## 1  ( 1 ) " "                                       
+    ## 2  ( 1 ) " "                                       
+    ## 3  ( 1 ) " "                                       
+    ## 4  ( 1 ) " "                                       
+    ## 5  ( 1 ) " "                                       
+    ## 6  ( 1 ) " "                                       
+    ##          `CH-BIO bio02 mean diurnal air temperature range`
+    ## 1  ( 1 ) "*"                                              
+    ## 2  ( 1 ) "*"                                              
+    ## 3  ( 1 ) "*"                                              
+    ## 4  ( 1 ) " "                                              
+    ## 5  ( 1 ) " "                                              
+    ## 6  ( 1 ) " "                                              
+    ##          `CH-BIO bio03 isothermality` `CH-BIO bio04 temperature seasonality`
+    ## 1  ( 1 ) " "                          " "                                   
+    ## 2  ( 1 ) " "                          " "                                   
+    ## 3  ( 1 ) " "                          " "                                   
+    ## 4  ( 1 ) " "                          " "                                   
+    ## 5  ( 1 ) " "                          " "                                   
+    ## 6  ( 1 ) " "                          " "                                   
+    ##          `CH-BIO bio05 mean daily maximum air temperature of the warmest month`
+    ## 1  ( 1 ) " "                                                                   
+    ## 2  ( 1 ) " "                                                                   
+    ## 3  ( 1 ) " "                                                                   
+    ## 4  ( 1 ) " "                                                                   
+    ## 5  ( 1 ) " "                                                                   
+    ## 6  ( 1 ) " "                                                                   
+    ##          `CH-BIO bio06 mean daily minimum air temperature of the coldest month`
+    ## 1  ( 1 ) " "                                                                   
+    ## 2  ( 1 ) " "                                                                   
+    ## 3  ( 1 ) " "                                                                   
+    ## 4  ( 1 ) "*"                                                                   
+    ## 5  ( 1 ) "*"                                                                   
+    ## 6  ( 1 ) " "                                                                   
+    ##          `CH-BIO bio07 annual range of air temperature`
+    ## 1  ( 1 ) " "                                           
+    ## 2  ( 1 ) " "                                           
+    ## 3  ( 1 ) " "                                           
+    ## 4  ( 1 ) " "                                           
+    ## 5  ( 1 ) " "                                           
+    ## 6  ( 1 ) " "                                           
+    ##          `CH-BIO bio08 mean daily mean air temperatures of the wettest quarter`
+    ## 1  ( 1 ) " "                                                                   
+    ## 2  ( 1 ) " "                                                                   
+    ## 3  ( 1 ) " "                                                                   
+    ## 4  ( 1 ) " "                                                                   
+    ## 5  ( 1 ) " "                                                                   
+    ## 6  ( 1 ) " "                                                                   
+    ##          `CH-BIO bio09 mean daily mean air temperatures of the driest quarter`
+    ## 1  ( 1 ) " "                                                                  
+    ## 2  ( 1 ) " "                                                                  
+    ## 3  ( 1 ) " "                                                                  
+    ## 4  ( 1 ) " "                                                                  
+    ## 5  ( 1 ) " "                                                                  
+    ## 6  ( 1 ) " "                                                                  
+    ##          `CH-BIO bio10 mean daily mean air temperatures of the warmest quarter`
+    ## 1  ( 1 ) " "                                                                   
+    ## 2  ( 1 ) " "                                                                   
+    ## 3  ( 1 ) " "                                                                   
+    ## 4  ( 1 ) " "                                                                   
+    ## 5  ( 1 ) " "                                                                   
+    ## 6  ( 1 ) " "                                                                   
+    ##          `CH-BIO bio11 mean daily mean air temperatures of the coldest quarter`
+    ## 1  ( 1 ) " "                                                                   
+    ## 2  ( 1 ) " "                                                                   
+    ## 3  ( 1 ) " "                                                                   
+    ## 4  ( 1 ) " "                                                                   
+    ## 5  ( 1 ) " "                                                                   
+    ## 6  ( 1 ) " "                                                                   
+    ##          `CH-BIO bio12 annual precipitation amount`
+    ## 1  ( 1 ) " "                                       
+    ## 2  ( 1 ) " "                                       
+    ## 3  ( 1 ) " "                                       
+    ## 4  ( 1 ) " "                                       
+    ## 5  ( 1 ) " "                                       
+    ## 6  ( 1 ) " "                                       
+    ##          `CH-BIO bio13 precipitation amount of the wettest month`
+    ## 1  ( 1 ) " "                                                     
+    ## 2  ( 1 ) " "                                                     
+    ## 3  ( 1 ) " "                                                     
+    ## 4  ( 1 ) " "                                                     
+    ## 5  ( 1 ) " "                                                     
+    ## 6  ( 1 ) " "                                                     
+    ##          `CH-BIO bio14 precipitation amount of the driest month`
+    ## 1  ( 1 ) " "                                                    
+    ## 2  ( 1 ) " "                                                    
+    ## 3  ( 1 ) " "                                                    
+    ## 4  ( 1 ) " "                                                    
+    ## 5  ( 1 ) " "                                                    
+    ## 6  ( 1 ) " "                                                    
+    ##          `CH-BIO bio15 precipitation seasonality`
+    ## 1  ( 1 ) " "                                     
+    ## 2  ( 1 ) " "                                     
+    ## 3  ( 1 ) " "                                     
+    ## 4  ( 1 ) " "                                     
+    ## 5  ( 1 ) " "                                     
+    ## 6  ( 1 ) " "                                     
+    ##          `CH-BIO bio16 mean monthly precipitation amount of the wettest quarter`
+    ## 1  ( 1 ) " "                                                                    
+    ## 2  ( 1 ) " "                                                                    
+    ## 3  ( 1 ) " "                                                                    
+    ## 4  ( 1 ) " "                                                                    
+    ## 5  ( 1 ) " "                                                                    
+    ## 6  ( 1 ) " "                                                                    
+    ##          `CH-BIO bio17 mean monthly precipitation amount of the driest quarter`
+    ## 1  ( 1 ) " "                                                                   
+    ## 2  ( 1 ) " "                                                                   
+    ## 3  ( 1 ) " "                                                                   
+    ## 4  ( 1 ) " "                                                                   
+    ## 5  ( 1 ) " "                                                                   
+    ## 6  ( 1 ) " "                                                                   
+    ##          `CH-BIO bio18 mean monthly precipitation amount of the warmest quarter`
+    ## 1  ( 1 ) " "                                                                    
+    ## 2  ( 1 ) " "                                                                    
+    ## 3  ( 1 ) " "                                                                    
+    ## 4  ( 1 ) " "                                                                    
+    ## 5  ( 1 ) " "                                                                    
+    ## 6  ( 1 ) " "                                                                    
+    ##          `CH-BIO bio19 mean monthly precipitation amount of the coldest quarter`
+    ## 1  ( 1 ) " "                                                                    
+    ## 2  ( 1 ) " "                                                                    
+    ## 3  ( 1 ) " "                                                                    
+    ## 4  ( 1 ) " "                                                                    
+    ## 5  ( 1 ) " "                                                                    
+    ## 6  ( 1 ) " "                                                                    
     ## 
     ## $resultados_nvmax
-    ##   nvmax      RMSE   Rsquared       MAE     RMSESD RsquaredSD       MAESD
-    ## 1     3 0.5968979 0.05541794 0.5189680 0.02219831 0.01317516 0.034164873
-    ## 2     4 0.6107064 0.10613811 0.5277418 0.03017113 0.05028613 0.005890839
-    ## 3     5 0.6239028 0.07451175 0.5378382 0.02850015 0.03695050 0.013440989
-    ## 4     6 0.5867406 0.15953882 0.5055149 0.02176047 0.07591843 0.006264871
-    ## 5     7 0.6033908 0.14975055 0.5194221 0.03894407 0.03268412 0.020346283
+    ##   nvmax      RMSE  Rsquared       MAE      RMSESD RsquaredSD       MAESD
+    ## 1     3 0.5807513 0.1173287 0.5071039 0.018815389 0.04807114 0.021826713
+    ## 2     4 0.5852752 0.1108160 0.5075534 0.005334268 0.06577334 0.013658919
+    ## 3     5 0.5682681 0.1542786 0.4812342 0.018674183 0.05648562 0.006333601
+    ## 4     6 0.5757097 0.1374158 0.4840508 0.020000723 0.03847769 0.008474150
+    ## 5     7 0.5713153 0.1563021 0.4928490 0.014168506 0.06888058 0.005817602
     ## 
     ## $mejor_ajuste
     ##   nvmax
-    ## 4     6
+    ## 3     5
 
 ``` r
 (covar <- grep(
@@ -453,9 +745,11 @@ print_my_train(mod)
   invert = T, value = T))
 ```
 
-    ## [1] "`ESA Trees`"              "`ESA Shrubland`"         
-    ## [3] "`ESA Cropland`"           "`ESA Built-up`"          
-    ## [5] "`ESA Open water`"         "`GSL Upper slope (flat)`"
+    ## [1] "`ESA Shrubland`"                                                       
+    ## [2] "`ESA Grassland`"                                                       
+    ## [3] "`ESA Cropland`"                                                        
+    ## [4] "`ESA Built-up`"                                                        
+    ## [5] "`CH-BIO bio08 mean daily mean air temperatures of the wettest quarter`"
 
 ``` r
 mi_fam_t_rda <- rda(mi_fam_t_sel %>% rename_all(~ gsub('^ESPECIE ', '', .)) ~ .,
@@ -465,381 +759,417 @@ summary(mi_fam_t_rda)
 
     ## 
     ## Call:
-    ## rda(formula = mi_fam_t_sel %>% rename_all(~gsub("^ESPECIE ",      "", .)) ~ `ESA Trees` + `ESA Shrubland` + `ESA Cropland` +      `ESA Built-up` + `ESA Open water` + `GSL Upper slope (flat)`,      data = env %>% select_at(all_of(gsub("\\`", "", covar))),      scale = T) 
+    ## rda(formula = mi_fam_t_sel %>% rename_all(~gsub("^ESPECIE ",      "", .)) ~ `ESA Shrubland` + `ESA Grassland` + `ESA Cropland` +      `ESA Built-up` + `CH-BIO bio08 mean daily mean air temperatures of the wettest quarter`,      data = env %>% select_at(all_of(gsub("\\`", "", covar))),      scale = T) 
     ## 
     ## Partitioning of correlations:
     ##               Inertia Proportion
-    ## Total          5.0000     1.0000
-    ## Constrained    0.7064     0.1413
-    ## Unconstrained  4.2936     0.8587
+    ## Total          6.0000     1.0000
+    ## Constrained    0.6102     0.1017
+    ## Unconstrained  5.3898     0.8983
     ## 
     ## Eigenvalues, and their contribution to the correlations 
     ## 
     ## Importance of components:
     ##                          RDA1    RDA2    RDA3     RDA4     RDA5    PC1    PC2
-    ## Eigenvalue            0.46220 0.13330 0.06794 0.029874 0.013071 1.1390 0.9791
-    ## Proportion Explained  0.09244 0.02666 0.01359 0.005975 0.002614 0.2278 0.1958
-    ## Cumulative Proportion 0.09244 0.11910 0.13269 0.138663 0.141277 0.3691 0.5649
-    ##                          PC3    PC4   PC5
-    ## Eigenvalue            0.8782 0.7823 0.515
-    ## Proportion Explained  0.1756 0.1565 0.103
-    ## Cumulative Proportion 0.7405 0.8970 1.000
+    ## Eigenvalue            0.37271 0.14433 0.06238 0.018377 0.012427 1.1354 1.0408
+    ## Proportion Explained  0.06212 0.02405 0.01040 0.003063 0.002071 0.1892 0.1735
+    ## Cumulative Proportion 0.06212 0.08617 0.09657 0.099632 0.101703 0.2909 0.4644
+    ##                          PC3    PC4    PC5     PC6
+    ## Eigenvalue            0.9774 0.9187 0.8328 0.48474
+    ## Proportion Explained  0.1629 0.1531 0.1388 0.08079
+    ## Cumulative Proportion 0.6273 0.7804 0.9192 1.00000
     ## 
     ## Accumulated constrained eigenvalues
     ## Importance of components:
     ##                         RDA1   RDA2    RDA3    RDA4    RDA5
-    ## Eigenvalue            0.4622 0.1333 0.06794 0.02987 0.01307
-    ## Proportion Explained  0.6543 0.1887 0.09618 0.04229 0.01850
-    ## Cumulative Proportion 0.6543 0.8430 0.93921 0.98150 1.00000
+    ## Eigenvalue            0.3727 0.1443 0.06238 0.01838 0.01243
+    ## Proportion Explained  0.6108 0.2365 0.10223 0.03012 0.02036
+    ## Cumulative Proportion 0.6108 0.8473 0.94952 0.97964 1.00000
     ## 
     ## Scaling 2 for species and site scores
     ## * Species are scaled proportional to eigenvalues
     ## * Sites are unscaled: weighted dispersion equal on all dimensions
-    ## * General scaling constant of scores:  5.215644 
+    ## * General scaling constant of scores:  5.458876 
     ## 
     ## 
     ## Species scores
     ## 
-    ##             RDA1     RDA2    RDA3     RDA4      RDA5      PC1
-    ## Coccuvif -1.2718 -0.28939  0.1373 -0.02506  0.115144 -0.01497
-    ## Antilept -0.3429  0.04016 -0.4510  0.25111  0.030133 -0.85507
-    ## Coccdive -0.2995 -0.49646 -0.1783 -0.09886 -0.184433 -1.61550
-    ## Cocccost  0.4951 -0.49203  0.2470  0.25612  0.001118 -0.44850
-    ## Coccwrig  0.6669 -0.38899 -0.2336 -0.15322  0.151422  1.62927
+    ##             RDA1    RDA2     RDA3     RDA4     RDA5     PC1
+    ## Coccuvif -1.0422 -0.1839  0.05258  0.16790 -0.03508  0.1891
+    ## Antilept -0.3580  0.1956 -0.36238 -0.03176 -0.10080 -0.7922
+    ## Coccpube -0.3098 -0.2349 -0.04542 -0.20087 -0.09595 -0.6835
+    ## Coccdive -0.3832 -0.4027 -0.13762 -0.08406  0.17466 -1.5411
+    ## Cocccost  0.1658 -0.4791  0.25099 -0.01922 -0.09803 -0.2920
+    ## Coccwrig  0.6053 -0.4448 -0.30290  0.11953 -0.03169  1.4311
     ## 
     ## 
     ## Site scores (weighted sums of species scores)
     ## 
-    ##                     RDA1     RDA2     RDA3    RDA4    RDA5        PC1
-    ## 854cf243fffffff -0.95975 -0.58533 -3.00747  2.2300 -2.2245 -6.402e-01
-    ## 854cf24bfffffff -0.98039  0.55277 -2.70999  4.1457  3.1875 -3.437e-01
-    ## 854cc2d3fffffff -0.82467 -1.12565 -0.03115 -1.9329 -3.8278 -3.702e-01
-    ## 854cd423fffffff  0.02308 -0.80071 -0.36295 -2.6727  6.5873  6.928e-01
-    ## 854cd5b7fffffff -0.82467 -1.12565 -0.03115 -1.9329 -3.8278 -4.079e-01
-    ## 854cd427fffffff -0.95975 -0.58533 -3.00747  2.2300 -2.2245 -1.092e-01
-    ## 854cd42ffffffff -0.95975 -0.58533 -3.00747  2.2300 -2.2245 -7.068e-02
-    ## 854cd58ffffffff -0.95975 -0.58533 -3.00747  2.2300 -2.2245 -7.034e-01
-    ## 854cf313fffffff -0.98039  0.55277 -2.70999  4.1457  3.1875 -3.099e-01
-    ## 854cc60ffffffff -0.91934  0.10117  1.29411 -0.7013  3.0316  1.344e-01
-    ## 854cf3cffffffff -0.05597 -1.36134  2.75015  3.4593  1.9284  6.178e-02
-    ## 854cc613fffffff -0.91934  0.10117  1.29411 -0.7013  3.0316  3.140e-01
-    ## 854cd553fffffff -0.91934  0.10117  1.29411 -0.7013  3.0316  3.760e-01
-    ## 854cf20ffffffff -0.82467 -1.12565 -0.03115 -1.9329 -3.8278 -3.666e-01
-    ## 854c8997fffffff -0.05597 -1.36134  2.75015  3.4593  1.9284 -3.846e-02
-    ## 854cd623fffffff -0.20496 -2.14820  1.45072  1.6695 -3.2525 -5.259e-01
-    ## 854cf353fffffff -0.91934  0.10117  1.29411 -0.7013  3.0316  2.084e-01
-    ## 854cd28bfffffff -0.95975 -0.58533 -3.00747  2.2300 -2.2245 -7.126e-01
-    ## 854cd51bfffffff -0.82467 -1.12565 -0.03115 -1.9329 -3.8278 -3.133e-01
-    ## 854cd0cffffffff -0.91934  0.10117  1.29411 -0.7013  3.0316  2.767e-01
-    ## 85672527fffffff -0.91934  0.10117  1.29411 -0.7013  3.0316  3.056e-01
-    ## 856725a7fffffff -0.07108 -1.07020 -1.10467 -2.2252 -8.9561 -8.308e-01
-    ## 854cd083fffffff -0.98039  0.55277 -2.70999  4.1457  3.1875 -2.734e-01
-    ## 854cf26ffffffff -0.91934  0.10117  1.29411 -0.7013  3.0316  7.042e-02
-    ## 854cd2dbfffffff  0.38813 -0.51119 -1.62487  8.4602  0.4672 -6.174e-01
-    ## 854cd513fffffff -0.91934  0.10117  1.29411 -0.7013  3.0316  3.211e-01
-    ## 854c8993fffffff -0.91934  0.10117  1.29411 -0.7013  3.0316  1.472e-01
-    ## 854c8833fffffff -0.82467 -1.12565 -0.03115 -1.9329 -3.8278 -2.635e-01
-    ## 854cf32ffffffff -0.91934  0.10117  1.29411 -0.7013  3.0316  8.207e-02
-    ## 854cd5b3fffffff -0.95975 -0.58533 -3.00747  2.2300 -2.2245 -5.258e-01
-    ## 854c890ffffffff -0.29130  1.30346 -4.89311  6.3712  0.9651 -5.636e-01
-    ## 854cf373fffffff -0.05597 -1.36134  2.75015  3.4593  1.9284 -1.639e-01
-    ## 854cd293fffffff -0.98039  0.55277 -2.70999  4.1457  3.1875 -1.596e-01
-    ## 854cc6c7fffffff -0.82467 -1.12565 -0.03115 -1.9329 -3.8278 -3.352e-01
-    ## 854cd4a7fffffff -0.82467 -1.12565 -0.03115 -1.9329 -3.8278 -5.620e-01
-    ## 854c898ffffffff  0.02308 -0.80071 -0.36295 -2.6727  6.5873  5.735e-01
-    ## 854c89c7fffffff -0.91934  0.10117  1.29411 -0.7013  3.0316  6.815e-02
-    ## 854c8913fffffff -0.91934  0.10117  1.29411 -0.7013  3.0316  9.322e-02
-    ## 854c8953fffffff -0.29130  1.30346 -4.89311  6.3712  0.9651 -5.262e-01
-    ## 854cd667fffffff -0.95975 -0.58533 -3.00747  2.2300 -2.2245 -7.122e-01
-    ## 854c882ffffffff -0.91934  0.10117  1.29411 -0.7013  3.0316  6.152e-02
-    ## 854c88affffffff -0.91934  0.10117  1.29411 -0.7013  3.0316  2.835e-01
-    ## 854cc657fffffff -0.91934  0.10117  1.29411 -0.7013  3.0316  1.862e-01
-    ## 854cc6c3fffffff -0.91934  0.10117  1.29411 -0.7013  3.0316  1.866e-01
-    ## 854c89abfffffff -0.91934  0.10117  1.29411 -0.7013  3.0316  1.252e-01
-    ## 854cf31bfffffff -0.20496 -2.14820  1.45072  1.6695 -3.2525 -6.040e-01
-    ## 854cc6cffffffff -0.91934  0.10117  1.29411 -0.7013  3.0316  2.600e-02
-    ## 854cd5cbfffffff -0.91934  0.10117  1.29411 -0.7013  3.0316  9.351e-02
-    ## 854cd2cbfffffff  0.30018  1.06332  0.39860 -0.3294 -0.8727  3.466e-03
-    ## 854cc617fffffff -0.91934  0.10117  1.29411 -0.7013  3.0316  3.013e-01
-    ## 854cf247fffffff -0.91934  0.10117  1.29411 -0.7013  3.0316  9.029e-02
-    ## 854cc66bfffffff -0.07108 -1.07020 -1.10467 -2.2252 -8.9561 -7.631e-01
-    ## 854cf333fffffff -0.91934  0.10117  1.29411 -0.7013  3.0316  2.027e-01
-    ## 854c89a3fffffff -0.82467 -1.12565 -0.03115 -1.9329 -3.8278 -1.643e-01
-    ## 854c89d7fffffff -0.91934  0.10117  1.29411 -0.7013  3.0316  7.423e-02
-    ## 854cd40bfffffff  1.01604 -1.40351  2.82869  5.4004 -0.8156 -2.406e-01
-    ## 854c883bfffffff -0.91934  0.10117  1.29411 -0.7013  3.0316  3.416e-01
-    ## 854cd59bfffffff  0.30018  1.06332  0.39860 -0.3294 -0.8727  5.108e-02
-    ## 854cf347fffffff  1.01604 -1.40351  2.82869  5.4004 -0.8156 -5.177e-02
-    ## 85672537fffffff  0.30018  1.06332  0.39860 -0.3294 -0.8727  4.906e-02
-    ## 854cd5c3fffffff  0.46717  0.04944 -4.73797  2.3282  5.1260  2.273e-01
-    ## 854cd453fffffff  1.12783 -0.61066 -1.57389 -3.2715  5.7730  8.048e-01
-    ## 854c89bbfffffff  1.12783 -0.61066 -1.57389 -3.2715  5.7730  8.865e-01
-    ## 854cd643fffffff  0.30018  1.06332  0.39860 -0.3294 -0.8727  1.182e-02
-    ## 854cd44ffffffff  0.30018  1.06332  0.39860 -0.3294 -0.8727 -2.044e-02
-    ## 854cd44bfffffff  1.12783 -0.61066 -1.57389 -3.2715  5.7730  8.514e-01
-    ## 85672597fffffff  0.30018  1.06332  0.39860 -0.3294 -0.8727  3.208e-02
-    ## 854cd653fffffff  0.30018  1.06332  0.39860 -0.3294 -0.8727  6.534e-02
-    ## 854c8927fffffff  1.12783 -0.61066 -1.57389 -3.2715  5.7730  8.501e-01
-    ## 854cd43bfffffff  1.01604 -1.40351  2.82869  5.4004 -0.8156 -2.725e-01
-    ## 854cf263fffffff  0.30018  1.06332  0.39860 -0.3294 -0.8727 -2.047e-02
-    ## 854cd583fffffff -0.07108 -1.07020 -1.10467 -2.2252 -8.9561 -7.539e-01
-    ## 854cf233fffffff  1.01604 -1.40351  2.82869  5.4004 -0.8156 -9.202e-03
-    ## 854cd6bbfffffff  0.30018  1.06332  0.39860 -0.3294 -0.8727  2.116e-02
-    ## 854cc6cbfffffff  1.12783 -0.61066 -1.57389 -3.2715  5.7730  8.196e-01
-    ## 854cd407fffffff  0.30018  1.06332  0.39860 -0.3294 -0.8727 -7.846e-05
-    ## 854cc67bfffffff  0.30018  1.06332  0.39860 -0.3294 -0.8727  2.529e-03
-    ## 854c894bfffffff  0.30018  1.06332  0.39860 -0.3294 -0.8727  2.775e-02
-    ## 854cd4cbfffffff  1.12783 -0.61066 -1.57389 -3.2715  5.7730  8.144e-01
-    ## 85672587fffffff -0.07108 -1.07020 -1.10467 -2.2252 -8.9561 -6.835e-01
-    ## 854cd0d7fffffff -0.38058 -0.27551 -4.40618  3.0681 -5.2890 -1.000e+00
-    ## 854cd42bfffffff  0.30018  1.06332  0.39860 -0.3294 -0.8727  1.169e-01
-    ## 854cd0d3fffffff  1.12783 -0.61066 -1.57389 -3.2715  5.7730  8.051e-01
-    ## 854cf303fffffff -0.07108 -1.07020 -1.10467 -2.2252 -8.9561 -5.795e-01
-    ## 854cd46bfffffff  0.54385 -2.18962  1.05396  2.3817 -6.5481 -7.455e-01
-    ## 854cd6b7fffffff  1.01604 -1.40351  2.82869  5.4004 -0.8156 -2.669e-01
-    ## 854cd687fffffff  0.30018  1.06332  0.39860 -0.3294 -0.8727  2.819e-02
-    ## 854cd0c3fffffff  0.30018  1.06332  0.39860 -0.3294 -0.8727  6.069e-02
-    ## 854cd29bfffffff  0.54385 -2.18962  1.05396  2.3817 -6.5481 -7.878e-01
-    ## 854cd253fffffff  0.30018  1.06332  0.39860 -0.3294 -0.8727  6.761e-02
-    ## 854cd4a3fffffff  0.30018  1.06332  0.39860 -0.3294 -0.8727  2.532e-02
-    ## 854cf30ffffffff  0.30018  1.06332  0.39860 -0.3294 -0.8727  2.438e-01
-    ## 854c896ffffffff  0.30018  1.06332  0.39860 -0.3294 -0.8727 -1.287e-02
-    ## 854cd693fffffff  0.30018  1.06332  0.39860 -0.3294 -0.8727 -2.480e-02
-    ## 854cd66bfffffff  0.30018  1.06332  0.39860 -0.3294 -0.8727  2.617e-02
-    ## 854c89b7fffffff  1.12783 -0.61066 -1.57389 -3.2715  5.7730  8.095e-01
-    ## 854cf36bfffffff  1.01604 -1.40351  2.82869  5.4004 -0.8156 -2.771e-01
-    ## 854cd5bbfffffff -0.07108 -1.07020 -1.10467 -2.2252 -8.9561 -5.791e-01
-    ## 854cf37bfffffff  1.01604 -1.40351  2.82869  5.4004 -0.8156 -2.933e-01
-    ## 854cd2d3fffffff  0.30018  1.06332  0.39860 -0.3294 -0.8727 -1.886e-02
-    ## 854cd243fffffff  0.30018  1.06332  0.39860 -0.3294 -0.8727  2.922e-01
-    ## 854cd093fffffff  0.30018  1.06332  0.39860 -0.3294 -0.8727  1.683e-01
-    ## 854cd457fffffff  1.39160 -1.86468  0.72217  1.6418  3.8669  4.598e-01
-    ## 854cd4dbfffffff  0.30018  1.06332  0.39860 -0.3294 -0.8727  1.223e-01
-    ## 854cc65bfffffff  0.30018  1.06332  0.39860 -0.3294 -0.8727  6.257e-02
-    ## 854cd247fffffff  0.30018  1.06332  0.39860 -0.3294 -0.8727  2.334e-01
-    ## 854cd633fffffff -0.07108 -1.07020 -1.10467 -2.2252 -8.9561 -7.560e-01
-    ## 854c89b3fffffff  0.30018  1.06332  0.39860 -0.3294 -0.8727 -1.186e-02
-    ## 854cf273fffffff  0.30018  1.06332  0.39860 -0.3294 -0.8727  2.296e-02
-    ## 854cd473fffffff  1.12783 -0.61066 -1.57389 -3.2715  5.7730  8.108e-01
-    ## 854cd63bfffffff  1.12783 -0.61066 -1.57389 -3.2715  5.7730  8.244e-01
-    ## 854c8957fffffff  0.30018  1.06332  0.39860 -0.3294 -0.8727  5.219e-02
-    ## 854c8baffffffff  0.30018  1.06332  0.39860 -0.3294 -0.8727  3.422e-02
-    ## 854c8823fffffff  0.30018  1.06332  0.39860 -0.3294 -0.8727  9.787e-02
-    ## 854cd0c7fffffff -0.91934  0.10117  1.29411 -0.7013  3.0316  2.433e-01
-    ## 854c890bfffffff -0.07108 -1.07020 -1.10467 -2.2252 -8.9561 -7.867e-01
-    ## 856725b7fffffff  0.30018  1.06332  0.39860 -0.3294 -0.8727  8.400e-02
-    ## 856725a3fffffff  1.39160 -1.86468  0.72217  1.6418  3.8669  3.942e-01
-    ## 854cd437fffffff  0.30018  1.06332  0.39860 -0.3294 -0.8727  7.104e-02
-    ## 854cd6a7fffffff  1.01604 -1.40351  2.82869  5.4004 -0.8156 -2.753e-01
-    ## 856725affffffff  0.30018  1.06332  0.39860 -0.3294 -0.8727  3.167e-03
-    ## 854cf343fffffff  1.12783 -0.61066 -1.57389 -3.2715  5.7730  9.644e-01
-    ## 854cd46ffffffff  1.12783 -0.61066 -1.57389 -3.2715  5.7730  7.946e-01
-    ## 854cd64ffffffff  0.30018  1.06332  0.39860 -0.3294 -0.8727  1.976e-01
-    ## 854cd40ffffffff  0.30018  1.06332  0.39860 -0.3294 -0.8727  1.302e-03
-    ## 854cc673fffffff -0.91934  0.10117  1.29411 -0.7013  3.0316  2.476e-02
-    ## 854cc653fffffff  0.30018  1.06332  0.39860 -0.3294 -0.8727  3.956e-02
-    ## 854cd697fffffff  1.12783 -0.61066 -1.57389 -3.2715  5.7730  8.336e-01
-    ## 854cd447fffffff  0.30018  1.06332  0.39860 -0.3294 -0.8727 -2.330e-02
-    ## 854cc6dbfffffff  0.30018  1.06332  0.39860 -0.3294 -0.8727  1.792e-01
-    ## 854cd4bbfffffff  0.30018  1.06332  0.39860 -0.3294 -0.8727  3.134e-02
-    ## 854cd21bfffffff -0.91934  0.10117  1.29411 -0.7013  3.0316  1.543e-01
-    ## 854cc603fffffff  0.30018  1.06332  0.39860 -0.3294 -0.8727  1.348e-01
-    ## 854cd443fffffff -0.07108 -1.07020 -1.10467 -2.2252 -8.9561 -8.364e-01
-    ## 856725bbfffffff  0.30018  1.06332  0.39860 -0.3294 -0.8727  5.332e-02
-    ## 854cd64bfffffff  0.30018  1.06332  0.39860 -0.3294 -0.8727  9.895e-02
-    ## 854cd08bfffffff  0.30018  1.06332  0.39860 -0.3294 -0.8727  1.296e-01
-    ## 854cd6a3fffffff  0.30018  1.06332  0.39860 -0.3294 -0.8727  1.363e-02
-    ## 854cd6affffffff -0.82467 -1.12565 -0.03115 -1.9329 -3.8278 -5.133e-01
-    ## 854cc643fffffff -0.29130  1.30346 -4.89311  6.3712  0.9651 -5.162e-01
-    ## 854cd2d7fffffff  0.30018  1.06332  0.39860 -0.3294 -0.8727 -1.574e-02
-    ## 854c899bfffffff -0.07108 -1.07020 -1.10467 -2.2252 -8.9561 -7.509e-01
-    ## 854cd0dbfffffff  0.30018  1.06332  0.39860 -0.3294 -0.8727  2.296e-01
-    ## 854cf34ffffffff  0.30018  1.06332  0.39860 -0.3294 -0.8727 -7.905e-03
-    ## 854c89cbfffffff  0.30018  1.06332  0.39860 -0.3294 -0.8727  7.534e-02
-    ## 854c895bfffffff  0.30018  1.06332  0.39860 -0.3294 -0.8727  5.721e-02
-    ## 854cd647fffffff  1.12783 -0.61066 -1.57389 -3.2715  5.7730  8.533e-01
-    ## 854cd65bfffffff  0.30018  1.06332  0.39860 -0.3294 -0.8727  4.781e-02
-    ## 854cd45bfffffff  1.12783 -0.61066 -1.57389 -3.2715  5.7730  8.185e-01
+    ##                    RDA1     RDA2     RDA3     RDA4    RDA5       PC1
+    ## 854cf243fffffff -1.2061  0.23684 -2.94059  -0.4880  1.1875 -0.668183
+    ## 854cf24bfffffff -1.2461  0.45145 -2.48306  -4.3902 -8.0915 -0.503155
+    ## 854cc2d3fffffff -0.9788 -0.77753 -0.08999   0.5962  6.3654 -0.339626
+    ## 854cd423fffffff -0.1609 -1.36793 -1.26874  -1.1320 -4.8545  0.410082
+    ## 854cd5b7fffffff -0.9788 -0.77753 -0.08999   0.5962  6.3654 -0.337481
+    ## 854cd427fffffff -1.3521 -0.39269 -2.78609  -5.3602 -2.3002 -0.243486
+    ## 854cd42ffffffff -1.3521 -0.39269 -2.78609  -5.3602 -2.3002 -0.205133
+    ## 854cd58ffffffff -1.2061  0.23684 -2.94059  -0.4880  1.1875 -0.660623
+    ## 854cf313fffffff -1.1079  1.36461 -2.72488   1.6227 -5.2329 -0.231360
+    ## 854cc60ffffffff -0.9073  0.32793  1.05115   4.0290 -0.5374  0.293071
+    ## 854cf3cffffffff -0.2636 -1.27897  3.09995   2.1459 -4.3855  0.115375
+    ## 854cc613fffffff -0.9073  0.32793  1.05115   4.0290 -0.5374  0.359934
+    ## 854cd553fffffff -0.9073  0.32793  1.05115   4.0290 -0.5374  0.424768
+    ## 854cf20ffffffff -1.1407 -1.29760 -0.33167  -5.2283  1.3784 -0.638468
+    ## 854c8997fffffff -0.2636 -1.27897  3.09995   2.1459 -4.3855  0.089789
+    ## 854cd623fffffff -0.5168 -1.92164  1.81537  -0.0608  1.8794 -0.401675
+    ## 854cf353fffffff -0.9073  0.32793  1.05115   4.0290 -0.5374  0.256645
+    ## 854cd28bfffffff -1.2061  0.23684 -2.94059  -0.4880  1.1875 -0.658866
+    ## 854cd51bfffffff -0.9788 -0.77753 -0.08999   0.5962  6.3654 -0.320686
+    ## 854cd0cffffffff -0.9073  0.32793  1.05115   4.0290 -0.5374  0.311563
+    ## 85672527fffffff -1.0278 -0.51468  0.47037  -4.1829 -4.9991 -0.066417
+    ## 856725a7fffffff -0.2010 -0.86763 -0.80599  -3.4635 10.0396 -1.010279
+    ## 854cd083fffffff -1.1079  1.36461 -2.72488   1.6227 -5.2329 -0.173265
+    ## 854cf26ffffffff -0.9073  0.32793  1.05115   4.0290 -0.5374  0.241674
+    ## 854cd2dbfffffff  0.1067  0.01778 -0.84814  -2.1256 -8.5047 -0.613854
+    ## 854cd513fffffff -0.9073  0.32793  1.05115   4.0290 -0.5374  0.384308
+    ## 854c8993fffffff -0.9073  0.32793  1.05115   4.0290 -0.5374  0.210202
+    ## 854c8833fffffff -0.9788 -0.77753 -0.08999   0.5962  6.3654 -0.323393
+    ## 854cf32ffffffff -0.9073  0.32793  1.05115   4.0290 -0.5374  0.173791
+    ## 854cd5b3fffffff -1.2061  0.23684 -2.94059  -0.4880  1.1875 -0.496504
+    ## 854c890ffffffff -0.3836  2.16182 -4.53230  -2.0118 -6.3628 -0.564578
+    ## 854cf373fffffff -0.2636 -1.27897  3.09995   2.1459 -4.3855  0.083899
+    ## 854cd293fffffff -1.1079  1.36461 -2.72488   1.6227 -5.2329 -0.141746
+    ## 854cc6c7fffffff -0.9788 -0.77753 -0.08999   0.5962  6.3654 -0.365518
+    ## 854cd4a7fffffff -1.1407 -1.29760 -0.33167  -5.2283  1.3784 -0.613434
+    ## 854c898ffffffff  0.2213 -0.86367 -1.23766   5.6131 -1.2683  0.694605
+    ## 854c89c7fffffff -0.9073  0.32793  1.05115   4.0290 -0.5374  0.167084
+    ## 854c8913fffffff -0.9073  0.32793  1.05115   4.0290 -0.5374  0.191884
+    ## 854c8953fffffff -0.3836  2.16182 -4.53230  -2.0118 -6.3628 -0.532107
+    ## 854cd667fffffff -1.2061  0.23684 -2.94059  -0.4880  1.1875 -0.614178
+    ## 854c882ffffffff -0.9073  0.32793  1.05115   4.0290 -0.5374  0.184767
+    ## 854c88affffffff -0.9073  0.32793  1.05115   4.0290 -0.5374  0.287366
+    ## 854cc657fffffff -0.9073  0.32793  1.05115   4.0290 -0.5374  0.262038
+    ## 854cc6c3fffffff -0.9073  0.32793  1.05115   4.0290 -0.5374  0.260139
+    ## 854c89abfffffff -0.9073  0.32793  1.05115   4.0290 -0.5374  0.245995
+    ## 854cf31bfffffff -0.5168 -1.92164  1.81537  -0.0608  1.8794 -0.426953
+    ## 854cc6cffffffff -0.9073  0.32793  1.05115   4.0290 -0.5374  0.208575
+    ## 854cd5cbfffffff -0.9073  0.32793  1.05115   4.0290 -0.5374  0.225330
+    ## 854cd2cbfffffff  0.4710  0.95580  0.63576  -0.4740  0.8538  0.112205
+    ## 854cc617fffffff -0.9073  0.32793  1.05115   4.0290 -0.5374  0.308132
+    ## 854cf247fffffff -0.9073  0.32793  1.05115   4.0290 -0.5374  0.184633
+    ## 854cc66bfffffff -0.2010 -0.86763 -0.80599  -3.4635 10.0396 -0.660712
+    ## 854cf333fffffff -0.9073  0.32793  1.05115   4.0290 -0.5374  0.284438
+    ## 854c89a3fffffff -0.9788 -0.77753 -0.08999   0.5962  6.3654 -0.119624
+    ## 854c89d7fffffff -0.9073  0.32793  1.05115   4.0290 -0.5374  0.223110
+    ## 854cd40bfffffff  0.8103 -1.57677  3.70526  -1.2719 -5.1644 -0.089034
+    ## 854c883bfffffff -0.9073  0.32793  1.05115   4.0290 -0.5374  0.316744
+    ## 854cd59bfffffff  0.4710  0.95580  0.63576  -0.4740  0.8538  0.114035
+    ## 854cf347fffffff  0.8103 -1.57677  3.70526  -1.2719 -5.1644  0.003910
+    ## 85672537fffffff  0.4710  0.95580  0.63576  -0.4740  0.8538  0.158744
+    ## 854cd5c3fffffff  0.5916  0.43309 -5.18575   1.3416 -5.3874  0.112142
+    ## 854cd453fffffff  1.4961 -0.98944 -2.42905   3.6315 -0.7561  0.719337
+    ## 854c89bbfffffff  1.4961 -0.98944 -2.42905   3.6315 -0.7561  0.905320
+    ## 854cd643fffffff  0.4710  0.95580  0.63576  -0.4740  0.8538 -0.094822
+    ## 854cd44ffffffff  0.4710  0.95580  0.63576  -0.4740  0.8538 -0.273289
+    ## 854cd44bfffffff  1.4961 -0.98944 -2.42905   3.6315 -0.7561  0.594581
+    ## 85672597fffffff  0.4710  0.95580  0.63576  -0.4740  0.8538 -0.100822
+    ## 854cd653fffffff  0.4710  0.95580  0.63576  -0.4740  0.8538 -0.059688
+    ## 854c8927fffffff  1.4961 -0.98944 -2.42905   3.6315 -0.7561  0.814294
+    ## 854cd43bfffffff  0.1867 -1.86151  2.34711  -7.9312 -8.2708 -0.393720
+    ## 854cf263fffffff  0.4710  0.95580  0.63576  -0.4740  0.8538  0.059038
+    ## 854cd583fffffff -0.5284 -1.36007 -0.84282  -9.4809  2.4800 -0.952023
+    ## 854cf233fffffff  0.8103 -1.57677  3.70526  -1.2719 -5.1644 -0.042334
+    ## 854cd6bbfffffff  0.4710  0.95580  0.63576  -0.4740  0.8538 -0.056949
+    ## 854cc6cbfffffff  1.4961 -0.98944 -2.42905   3.6315 -0.7561  0.931069
+    ## 854cd407fffffff -0.2704 -0.49591 -0.01352 -10.2222 -6.0322 -0.385454
+    ## 854cc67bfffffff  0.4710  0.95580  0.63576  -0.4740  0.8538  0.180721
+    ## 854c894bfffffff  0.4710  0.95580  0.63576  -0.4740  0.8538  0.143386
+    ## 854cd4cbfffffff  1.4961 -0.98944 -2.42905   3.6315 -0.7561  0.865048
+    ## 85672587fffffff -0.2010 -0.86763 -0.80599  -3.4635 10.0396 -0.721773
+    ## 854cd0d7fffffff -0.6084  0.51922 -4.03808  -3.6753  2.2462 -0.934516
+    ## 854cd42bfffffff  0.4710  0.95580  0.63576  -0.4740  0.8538  0.237929
+    ## 854cd0d3fffffff  1.4961 -0.98944 -2.42905   3.6315 -0.7561  0.912768
+    ## 854cf303fffffff -0.2010 -0.86763 -0.80599  -3.4635 10.0396 -0.701246
+    ## 854cd46bfffffff  0.2358 -2.12436  1.78675  -3.1521  3.0936 -0.718074
+    ## 854cd6b7fffffff  0.8103 -1.57677  3.70526  -1.2719 -5.1644 -0.372184
+    ## 854cd687fffffff  0.4710  0.95580  0.63576  -0.4740  0.8538 -0.100578
+    ## 854cd0c3fffffff  0.4710  0.95580  0.63576  -0.4740  0.8538  0.099964
+    ## 854cd29bfffffff  0.2358 -2.12436  1.78675  -3.1521  3.0936 -0.714513
+    ## 854cd253fffffff  0.4710  0.95580  0.63576  -0.4740  0.8538  0.086274
+    ## 854cd4a3fffffff  0.4710  0.95580  0.63576  -0.4740  0.8538  0.142241
+    ## 854cf30ffffffff  0.4710  0.95580  0.63576  -0.4740  0.8538  0.190975
+    ## 854c896ffffffff  0.4710  0.95580  0.63576  -0.4740  0.8538 -0.162163
+    ## 854cd693fffffff -0.2704 -0.49591 -0.01352 -10.2222 -6.0322 -0.796087
+    ## 854cd66bfffffff  0.4710  0.95580  0.63576  -0.4740  0.8538  0.024284
+    ## 854c89b7fffffff  1.4961 -0.98944 -2.42905   3.6315 -0.7561  0.821848
+    ## 854cf36bfffffff  0.1867 -1.86151  2.34711  -7.9312 -8.2708 -0.364857
+    ## 854cd5bbfffffff -0.5284 -1.36007 -0.84282  -9.4809  2.4800 -0.764545
+    ## 854cf37bfffffff  0.8103 -1.57677  3.70526  -1.2719 -5.1644 -0.040804
+    ## 854cd2d3fffffff  0.4710  0.95580  0.63576  -0.4740  0.8538 -0.037629
+    ## 854cd243fffffff -0.2704 -0.49591 -0.01352 -10.2222 -6.0322 -0.330687
+    ## 854cd093fffffff  0.4710  0.95580  0.63576  -0.4740  0.8538  0.321459
+    ## 854cd457fffffff  1.4358 -2.21050  0.63908   1.8649 -4.5401  0.553614
+    ## 854cd4dbfffffff  0.4710  0.95580  0.63576  -0.4740  0.8538  0.199535
+    ## 854cc65bfffffff  0.4710  0.95580  0.63576  -0.4740  0.8538  0.081474
+    ## 854cd247fffffff -0.2704 -0.49591 -0.01352 -10.2222 -6.0322 -0.288533
+    ## 854cd633fffffff -0.2010 -0.86763 -0.80599  -3.4635 10.0396 -0.861816
+    ## 854c89b3fffffff  0.4710  0.95580  0.63576  -0.4740  0.8538  0.049022
+    ## 854cf273fffffff  0.4710  0.95580  0.63576  -0.4740  0.8538  0.105922
+    ## 854cd473fffffff  1.4961 -0.98944 -2.42905   3.6315 -0.7561  0.799367
+    ## 854cd63bfffffff  1.4961 -0.98944 -2.42905   3.6315 -0.7561  0.828189
+    ## 854c8957fffffff  0.4710  0.95580  0.63576  -0.4740  0.8538  0.110013
+    ## 854c8baffffffff  0.4710  0.95580  0.63576  -0.4740  0.8538  0.063902
+    ## 854c8823fffffff  0.4710  0.95580  0.63576  -0.4740  0.8538  0.127218
+    ## 854cd0c7fffffff -0.9073  0.32793  1.05115   4.0290 -0.5374  0.324898
+    ## 854c890bfffffff -0.2010 -0.86763 -0.80599  -3.4635 10.0396 -0.760473
+    ## 856725b7fffffff  0.4710  0.95580  0.63576  -0.4740  0.8538  0.080266
+    ## 856725a3fffffff  1.4358 -2.21050  0.63908   1.8649 -4.5401  0.351959
+    ## 854cd437fffffff  0.4710  0.95580  0.63576  -0.4740  0.8538  0.125774
+    ## 854cd6a7fffffff  0.8103 -1.57677  3.70526  -1.2719 -5.1644 -0.138955
+    ## 856725affffffff  0.4710  0.95580  0.63576  -0.4740  0.8538 -0.071401
+    ## 854cf343fffffff  1.4961 -0.98944 -2.42905   3.6315 -0.7561  0.963911
+    ## 854cd46ffffffff  1.4961 -0.98944 -2.42905   3.6315 -0.7561  0.808561
+    ## 854cd64ffffffff  0.4710  0.95580  0.63576  -0.4740  0.8538  0.208824
+    ## 854cd40ffffffff  0.4710  0.95580  0.63576  -0.4740  0.8538  0.089289
+    ## 854cc673fffffff -0.9073  0.32793  1.05115   4.0290 -0.5374  0.229485
+    ## 854cc653fffffff  0.4710  0.95580  0.63576  -0.4740  0.8538  0.092822
+    ## 854cd697fffffff  1.4961 -0.98944 -2.42905   3.6315 -0.7561  0.626801
+    ## 854cd447fffffff  0.4710  0.95580  0.63576  -0.4740  0.8538  0.007205
+    ## 854cc6dbfffffff  0.4710  0.95580  0.63576  -0.4740  0.8538  0.177965
+    ## 854cd4bbfffffff  0.4710  0.95580  0.63576  -0.4740  0.8538  0.121218
+    ## 854cd21bfffffff -0.9073  0.32793  1.05115   4.0290 -0.5374  0.293860
+    ## 854cc603fffffff  0.4710  0.95580  0.63576  -0.4740  0.8538  0.250756
+    ## 854cd443fffffff -0.2010 -0.86763 -0.80599  -3.4635 10.0396 -0.994220
+    ## 856725bbfffffff  0.4710  0.95580  0.63576  -0.4740  0.8538  0.019773
+    ## 854cd64bfffffff  0.4710  0.95580  0.63576  -0.4740  0.8538  0.136221
+    ## 854cd08bfffffff  0.4710  0.95580  0.63576  -0.4740  0.8538  0.223991
+    ## 854cd6a3fffffff  0.4710  0.95580  0.63576  -0.4740  0.8538 -0.077129
+    ## 854cd6affffffff -0.9788 -0.77753 -0.08999   0.5962  6.3654 -0.380697
+    ## 854cc643fffffff -0.3836  2.16182 -4.53230  -2.0118 -6.3628 -0.540265
+    ## 854cd2d7fffffff  0.4710  0.95580  0.63576  -0.4740  0.8538  0.015789
+    ## 854c899bfffffff -0.2010 -0.86763 -0.80599  -3.4635 10.0396 -0.789770
+    ## 854cd0dbfffffff  0.4710  0.95580  0.63576  -0.4740  0.8538  0.218179
+    ## 854cf34ffffffff  0.4710  0.95580  0.63576  -0.4740  0.8538  0.173221
+    ## 854c89cbfffffff  0.4710  0.95580  0.63576  -0.4740  0.8538  0.046270
+    ## 854c895bfffffff  0.4710  0.95580  0.63576  -0.4740  0.8538  0.138088
+    ## 854cd647fffffff  1.4961 -0.98944 -2.42905   3.6315 -0.7561  0.929816
+    ## 854cd65bfffffff  0.4710  0.95580  0.63576  -0.4740  0.8538 -0.117562
+    ## 854cd45bfffffff  1.4961 -0.98944 -2.42905   3.6315 -0.7561  0.635207
     ## 
     ## 
     ## Site constraints (linear combinations of constraining variables)
     ## 
-    ##                       RDA1      RDA2      RDA3      RDA4       RDA5        PC1
-    ## 854cf243fffffff -1.237e-01 -0.345810  0.287820  0.417248 -1.920e-02 -6.402e-01
-    ## 854cf24bfffffff  1.022e-01  0.051678 -0.011594  0.316665  1.317e-01 -3.437e-01
-    ## 854cc2d3fffffff -5.336e-01 -0.429520  0.565780 -0.795599 -9.191e-02 -3.702e-01
-    ## 854cd423fffffff -2.122e-02  0.234791 -0.252261  0.369044  1.302e-01  6.928e-01
-    ## 854cd5b7fffffff -4.021e-01 -0.406730  0.448981 -0.889290 -1.136e-01 -4.079e-01
-    ## 854cd427fffffff -1.348e+00 -0.430271 -1.915735  0.911234 -1.225e+00 -1.092e-01
-    ## 854cd42ffffffff -1.245e+00 -0.715809 -1.976290  1.428340 -1.378e+00 -7.068e-02
-    ## 854cd58ffffffff -3.803e-01  0.169450 -0.196963 -0.734344  4.408e-01 -7.034e-01
-    ## 854cf313fffffff  2.233e-02 -0.250449  0.315964  0.315702  7.733e-02 -3.099e-01
-    ## 854cc60ffffffff -2.573e-01 -0.169200  0.286711 -0.500769 -6.695e-03  1.344e-01
-    ## 854cf3cffffffff -3.908e-01 -0.379696  0.528398  0.575555  1.730e-02  6.178e-02
-    ## 854cc613fffffff -8.118e-01 -0.278269  0.325754 -0.275648 -1.342e-01  3.140e-01
-    ## 854cd553fffffff -1.103e+00 -0.240445  0.021651 -0.855317 -3.314e-01  3.760e-01
-    ## 854cf20ffffffff -3.145e-01 -0.171253  0.444242  0.554828  1.186e-01 -3.666e-01
-    ## 854c8997fffffff -2.304e-02 -0.223355  0.050282  0.419504 -3.095e-02 -3.846e-02
-    ## 854cd623fffffff  1.390e-01 -0.307984  0.226667  0.102510 -1.736e-01 -5.259e-01
-    ## 854cf353fffffff -2.912e-01 -0.327974  0.517991  0.505645  6.083e-02  2.084e-01
-    ## 854cd28bfffffff  1.317e-01 -0.501997  0.332993  0.208609 -4.878e-02 -7.126e-01
-    ## 854cd51bfffffff -6.717e-01 -0.405511  0.544985 -0.488878 -9.131e-02 -3.133e-01
-    ## 854cd0cffffffff -6.593e-01  0.010883  0.572532 -0.090533 -3.137e-01  2.767e-01
-    ## 85672527fffffff -7.202e-01 -0.111097  0.686967  0.331576 -7.623e-02  3.056e-01
-    ## 856725a7fffffff  5.266e-01 -0.225693  0.106265 -0.065232 -1.693e-01 -8.308e-01
-    ## 854cd083fffffff -9.139e-02 -0.218285  0.134775  0.365141  8.565e-02 -2.734e-01
-    ## 854cf26ffffffff  2.653e-01 -0.365912 -0.197578  0.076890 -1.445e-01  7.042e-02
-    ## 854cd2dbfffffff  4.787e-01 -0.001953  0.101984 -0.048906 -2.777e-01 -6.174e-01
-    ## 854cd513fffffff -8.437e-01 -0.108798 -0.057445 -0.206534 -4.436e-02  3.211e-01
-    ## 854c8993fffffff -1.695e-01  0.017549  0.334103  0.480187  2.071e-01  1.472e-01
-    ## 854c8833fffffff -7.222e-01  0.026916  0.518001  0.381579 -1.121e-01 -2.635e-01
-    ## 854cf32ffffffff -2.493e-01  0.943262 -0.213196  0.413000  7.382e-01  8.207e-02
-    ## 854cd5b3fffffff -6.692e-01  0.006820 -0.351675 -0.070078 -5.546e-02 -5.258e-01
-    ## 854c890ffffffff  1.667e-01  0.318932  0.032563  0.309082  3.017e-01 -5.636e-01
-    ## 854cf373fffffff  2.738e-01 -0.180650 -0.087449 -0.006812  1.921e-01 -1.639e-01
-    ## 854cd293fffffff -4.284e-01 -0.462803  0.599026  0.581908 -1.253e-02 -1.596e-01
-    ## 854cc6c7fffffff -6.888e-01  0.001469  0.475523 -0.306157  1.162e-01 -3.352e-01
-    ## 854cd4a7fffffff  2.443e-01  0.080991  0.030861  0.001132  1.864e-01 -5.620e-01
-    ## 854c898ffffffff  4.355e-01 -0.634313 -0.357580 -0.299455  1.908e-01  5.735e-01
-    ## 854c89c7fffffff  6.829e-02  0.760406 -0.282486 -0.201671 -4.631e-01  6.815e-02
-    ## 854c8913fffffff -4.361e-02 -1.128943 -1.390128 -0.960135  6.794e-01  9.322e-02
-    ## 854c8953fffffff -1.524e-02  0.974285 -0.257143 -0.248567 -3.691e-01 -5.262e-01
-    ## 854cd667fffffff  3.025e-02 -0.265269 -0.441634 -0.227204  2.564e-02 -7.122e-01
-    ## 854c882ffffffff -1.698e-01  0.200792 -0.635694 -0.635389  5.418e-01  6.152e-02
-    ## 854c88affffffff -5.116e-01  0.071224  0.661215  0.543232 -4.285e-01  2.835e-01
-    ## 854cc657fffffff -4.937e-01  0.679606 -0.583059  0.259208  4.617e-01  1.862e-01
-    ## 854cc6c3fffffff -4.363e-01  0.116453  0.261588  0.209698  3.287e-01  1.866e-01
-    ## 854c89abfffffff -3.728e-02  0.028682 -0.528856  0.191480  1.047e-01  1.252e-01
-    ## 854cf31bfffffff  3.898e-01 -0.351837  0.125551  0.070715 -2.480e-03 -6.040e-01
-    ## 854cc6cffffffff  1.188e-01  0.406315 -0.010094  0.245025  3.933e-01  2.600e-02
-    ## 854cd5cbfffffff -4.022e-01  0.843360 -0.192607 -0.369851  5.195e-01  9.351e-02
-    ## 854cd2cbfffffff  5.353e-01  0.472810  0.134451 -0.338488 -1.175e+00  3.466e-03
-    ## 854cc617fffffff -8.416e-01 -0.319341  0.703408 -0.301514 -9.612e-03  3.013e-01
-    ## 854cf247fffffff -4.190e-02  0.083424  0.149369  0.110691  1.986e-01  9.029e-02
-    ## 854cc66bfffffff  2.747e-02 -0.327407  0.249575 -0.929527 -5.796e-02 -7.631e-01
-    ## 854cf333fffffff -3.650e-01 -0.221567  0.437527  0.227641  9.522e-02  2.027e-01
-    ## 854c89a3fffffff -5.008e-01 -0.521526 -1.256508  0.799999 -6.732e-01 -1.643e-01
-    ## 854c89d7fffffff -5.775e-02  0.604561  0.056992  0.487017  4.176e-01  7.423e-02
-    ## 854cd40bfffffff  3.084e-01 -0.203658 -0.158228  0.061800  2.223e-01 -2.406e-01
-    ## 854c883bfffffff -1.247e+00 -0.363260  0.837224 -1.449326 -1.369e-01  3.416e-01
-    ## 854cd59bfffffff -1.179e-01  0.612037 -0.166982 -0.008727  6.294e-01  5.108e-02
-    ## 854cf347fffffff -2.486e-01 -0.472086  0.556148  0.449014 -1.217e-03 -5.177e-02
-    ## 85672537fffffff  2.772e-01  0.475105  0.019919 -0.118285 -6.754e-01  4.906e-02
-    ## 854cd5c3fffffff -4.302e-01 -0.313705 -1.247400 -1.286728  1.387e+00  2.273e-01
-    ## 854cd453fffffff  5.056e-01 -0.385999  0.048276 -0.036308  2.317e-02  8.048e-01
-    ## 854c89bbfffffff  1.995e-01 -0.447545 -0.490517 -0.059983  2.384e-01  8.865e-01
-    ## 854cd643fffffff  2.699e-01  0.192546  0.050570  0.214743  2.505e-01  1.182e-02
-    ## 854cd44ffffffff  5.168e-01 -0.344273  0.095945 -0.022313  8.805e-03 -2.044e-02
-    ## 854cd44bfffffff  2.874e-01 -0.452600 -0.392389 -0.079268  3.300e-01  8.514e-01
-    ## 85672597fffffff  1.173e-01  0.474101 -0.007631  0.343402  4.272e-01  3.208e-02
-    ## 854cd653fffffff -7.001e-02  0.656821 -0.219252  0.407770  6.293e-01  6.534e-02
-    ## 854c8927fffffff  3.300e-01 -0.130792 -0.030299  0.166537  5.908e-02  8.501e-01
-    ## 854cd43bfffffff  4.486e-01 -0.215837  0.076172  0.046394  6.814e-02 -2.725e-01
-    ## 854cf263fffffff  5.200e-01 -0.354984  0.095647 -0.024316  4.531e-03 -2.047e-02
-    ## 854cd583fffffff -2.257e-01 -0.006179 -0.806799 -0.604915  1.054e+00 -7.539e-01
-    ## 854cf233fffffff -4.755e-01 -0.135559  0.513965  0.624611  1.408e-01 -9.202e-03
-    ## 854cd6bbfffffff  2.435e-01  0.320420  0.041220  0.221638  1.434e-01  2.116e-02
-    ## 854cc6cbfffffff  3.631e-01 -0.013681  0.071907  0.128126  1.701e-01  8.196e-01
-    ## 854cd407fffffff  4.466e-01 -0.272177  0.044745  0.052731  1.882e-02 -7.846e-05
-    ## 854cc67bfffffff  1.100e-01 -0.016177  0.067522 -1.013931  1.816e-02  2.529e-03
-    ## 854c894bfffffff  1.959e-01  0.283562  0.015813  0.251382  2.761e-01  2.775e-02
-    ## 854cd4cbfffffff  4.708e-01 -0.311460  0.055570  0.020416  1.163e-02  8.144e-01
-    ## 85672587fffffff -4.178e-02  0.640558  0.170763  0.130082 -5.745e-01 -6.835e-01
-    ## 854cd0d7fffffff  4.983e-01 -0.205708  0.060629 -0.045110 -2.498e-01 -1.000e+00
-    ## 854cd42bfffffff  1.100e-01 -0.121882 -0.294364  0.348487 -4.861e-02  1.169e-01
-    ## 854cd0d3fffffff  5.357e-01 -0.269407  0.089617 -0.078955 -2.082e-01  8.051e-01
-    ## 854cf303fffffff -3.207e-01 -0.445115  0.553672  0.509635  2.552e-03 -5.795e-01
-    ## 854cd46bfffffff  3.759e-01 -0.195315 -0.015740  0.098444  6.887e-02 -7.455e-01
-    ## 854cd6b7fffffff  4.005e-01 -0.083711  0.052089  0.062159  8.444e-02 -2.669e-01
-    ## 854cd687fffffff  1.678e-01  0.438615  0.031992  0.310748  2.959e-01  2.819e-02
-    ## 854cd0c3fffffff  2.473e-01  0.838452 -0.052644 -0.187561 -1.002e+00  6.069e-02
-    ## 854cd29bfffffff  5.666e-01 -0.437135  0.107630 -0.073363 -5.105e-02 -7.878e-01
-    ## 854cd253fffffff  1.910e-01  1.061590  0.237974 -0.884011 -1.725e+00  6.761e-02
-    ## 854cd4a3fffffff  2.494e-01  0.131342  0.008881  0.214825  2.118e-01  2.532e-02
-    ## 854cf30ffffffff -4.234e-01 -0.375572  0.532123  0.432018  9.927e-02  2.438e-01
-    ## 854c896ffffffff  4.549e-01 -0.207241  0.085674  0.036300  7.264e-02 -1.287e-02
-    ## 854cd693fffffff  5.476e-01 -0.391199  0.105177 -0.055723 -3.577e-02 -2.480e-02
-    ## 854cd66bfffffff  4.226e-01  0.665121 -0.125957 -0.432810 -1.204e+00  2.617e-02
-    ## 854c89b7fffffff  4.745e-01 -0.284259  0.073387  0.020387  3.315e-02  8.095e-01
-    ## 854cf36bfffffff  4.626e-01 -0.231919  0.087698  0.021521  6.588e-02 -2.771e-01
-    ## 854cd5bbfffffff -5.110e-01 -0.144492  0.427037  0.041907  6.601e-02 -5.791e-01
-    ## 854cf37bfffffff  5.848e-01 -0.485170  0.111186 -0.088818 -5.475e-02 -2.933e-01
-    ## 854cd2d3fffffff  5.583e-01 -0.176499  0.116553 -0.125724 -3.513e-01 -1.886e-02
-    ## 854cd243fffffff -7.259e-01  0.119647  0.692975 -0.443225 -6.189e-01  2.922e-01
-    ## 854cd093fffffff  1.025e-01 -0.400757 -0.451915  0.445123 -3.141e-01  1.683e-01
-    ## 854cd457fffffff  3.126e-01 -0.483301 -0.250674  0.055527 -8.666e-02  4.598e-01
-    ## 854cd4dbfffffff  3.454e-02 -0.285742 -0.436771 -0.064257 -4.163e-02  1.223e-01
-    ## 854cc65bfffffff -1.278e-01  0.800766 -0.149571  0.371953  6.948e-01  6.257e-02
-    ## 854cd247fffffff -5.527e-01 -0.309128  0.580109 -0.279508 -7.234e-05  2.334e-01
-    ## 854cd633fffffff  2.232e-01 -0.279833 -1.001038 -0.919132 -3.597e-01 -7.560e-01
-    ## 854c89b3fffffff  4.609e-01 -0.234870  0.082316  0.034445  6.018e-02 -1.186e-02
-    ## 854cf273fffffff  3.759e-01 -0.347969  0.146442  0.074943  4.899e-03  2.296e-02
-    ## 854cd473fffffff  4.478e-01 -0.207955  0.078790  0.047118  6.999e-02  8.108e-01
-    ## 854cd63bfffffff  5.362e-01  0.505298  0.137175 -0.263362 -1.146e+00  8.244e-01
-    ## 854c8957fffffff  1.209e-01  0.498788 -0.122085  0.046476 -4.369e-02  5.219e-02
-    ## 854c8baffffffff  1.339e-01  0.543500 -0.018884  0.278358  2.511e-01  3.422e-02
-    ## 854c8823fffffff -3.883e-01  0.814556 -0.263072 -0.913797  9.589e-02  9.787e-02
-    ## 854cd0c7fffffff -5.118e-01 -0.004811  0.076810 -0.073358 -1.892e-01  2.433e-01
-    ## 854c890bfffffff  2.925e-01  0.073800  0.024803  0.173336  6.816e-02 -7.867e-01
-    ## 856725b7fffffff  1.669e-01  1.044401  0.002374 -0.076001 -1.095e+00  8.400e-02
-    ## 856725a3fffffff  4.256e-01  0.051134  0.012319 -0.070506 -2.285e-01  3.942e-01
-    ## 854cd437fffffff -2.479e-01  0.546059 -0.236658 -0.426188  5.392e-01  7.104e-02
-    ## 854cd6a7fffffff  4.898e-01 -0.163827  0.089897 -0.031894 -1.351e-01 -2.753e-01
-    ## 856725affffffff  3.433e-01  0.043682  0.059637  0.136968  1.556e-01  3.167e-03
-    ## 854cf343fffffff -4.162e-01  0.168264 -0.014496 -0.313531  4.827e-01  9.644e-01
-    ## 854cd46ffffffff  5.594e-01 -0.436218  0.107962 -0.066267 -3.834e-02  7.946e-01
-    ## 854cd64ffffffff -2.153e-01  0.185189  0.281117  0.214693 -4.935e-01  1.976e-01
-    ## 854cd40ffffffff  3.837e-01 -0.100062  0.050095  0.105665  1.260e-01  1.302e-03
-    ## 854cc673fffffff -9.118e-02  0.307985  0.064639 -0.985640  1.272e-01  2.476e-02
-    ## 854cc653fffffff  6.111e-02  0.625333  0.015655  0.428358  4.737e-01  3.956e-02
-    ## 854cd697fffffff  2.623e-01  0.135399 -0.014961  0.170732  2.877e-01  8.336e-01
-    ## 854cd447fffffff  5.343e-01 -0.379160  0.101109 -0.039345 -4.552e-03 -2.330e-02
-    ## 854cc6dbfffffff -3.213e-01  0.096466  0.359875  0.400326  2.525e-01  1.792e-01
-    ## 854cd4bbfffffff  1.481e-01  0.385483 -0.006765  0.323411  3.822e-01  3.134e-02
-    ## 854cd21bfffffff -2.278e-01 -0.175667  0.244198  0.126184  1.876e-01  1.543e-01
-    ## 854cc603fffffff -2.550e-01  0.273197 -0.282389 -0.406016  1.966e-02  1.348e-01
-    ## 854cd443fffffff  5.408e-01 -0.437979  0.066874 -0.074669  5.296e-03 -8.364e-01
-    ## 856725bbfffffff  1.316e-01  0.874207 -0.071352  0.140887 -2.935e-01  5.332e-02
-    ## 854cd64bfffffff  9.656e-02  0.164788  0.218201  0.212441 -2.784e-01  9.895e-02
-    ## 854cd08bfffffff  6.267e-05 -0.232642 -0.264895  0.236340  1.279e-01  1.296e-01
-    ## 854cd6a3fffffff  2.997e-01  0.223902  0.048166  0.153842  6.283e-02  1.363e-02
-    ## 854cd6affffffff  2.585e-01 -0.270298 -0.346404 -0.199295 -2.310e-01 -5.133e-01
-    ## 854cc643fffffff -3.285e-01  1.152019 -0.110892  0.257544  7.535e-01 -5.162e-01
-    ## 854cd2d7fffffff  4.957e-01 -0.265089  0.091298 -0.011012 -2.423e-02 -1.574e-02
-    ## 854c899bfffffff -1.339e-02  0.477024 -0.206041  0.339156  5.564e-01 -7.509e-01
-    ## 854cd0dbfffffff -3.406e-01 -0.479363  0.164595  0.237351  4.602e-02  2.296e-01
-    ## 854cf34ffffffff  4.639e-01 -0.342269  0.124963 -0.027074  1.313e-02 -7.905e-03
-    ## 854c89cbfffffff  1.216e-01  0.272231 -0.823256 -0.771012 -5.850e-01  7.534e-02
-    ## 854c895bfffffff -6.036e-02  0.893420 -0.049453  0.227023  3.256e-01  5.721e-02
-    ## 854cd647fffffff  3.397e-01  0.013444 -0.067245  0.002168 -2.319e-01  8.533e-01
-    ## 854cd65bfffffff  2.875e-02  0.639368 -0.035461  0.433666  4.911e-01  4.781e-02
-    ## 854cd45bfffffff  4.057e-01 -0.463076 -0.207158 -0.122036  2.530e-01  8.185e-01
+    ##                       RDA1      RDA2      RDA3      RDA4      RDA5       PC1
+    ## 854cf243fffffff -0.0859144 -0.386083  0.181773 -0.068542 -0.063075 -0.668183
+    ## 854cf24bfffffff -0.0081223  0.078996  0.031198 -0.068305 -0.318820 -0.503155
+    ## 854cc2d3fffffff -0.3787752 -0.477028  0.494386  0.136983  0.111267 -0.339626
+    ## 854cd423fffffff -0.3279544  0.365418 -0.079875 -0.122855 -0.394395  0.410082
+    ## 854cd5b7fffffff -0.3837882 -0.407933  0.451755  0.110075  0.078652 -0.337481
+    ## 854cd427fffffff -1.4278472 -0.112618 -1.893520 -2.070217 -0.392994 -0.243486
+    ## 854cd42ffffffff -1.4829411 -0.381373 -1.972395 -2.226727 -0.285461 -0.205133
+    ## 854cd58ffffffff -0.3245330  0.297802 -0.181624  0.530986 -0.143941 -0.660623
+    ## 854cf313fffffff -0.1235501 -0.251376  0.313616  0.080991 -0.083322 -0.231360
+    ## 854cc60ffffffff -0.3284428 -0.174228  0.346906  0.082950 -0.040866  0.293071
+    ## 854cf3cffffffff -0.2483606 -0.426424  0.351918  0.045264  0.027208  0.115375
+    ## 854cc613fffffff -0.4735554 -0.327219  0.171901 -0.126349 -0.011651  0.359934
+    ## 854cd553fffffff -0.6182227 -0.209857 -0.132720 -0.389808 -0.094485  0.424768
+    ## 854cf20ffffffff -0.0699476 -0.239007  0.258791  0.039497 -0.114754 -0.638468
+    ## 854c8997fffffff -0.1255625 -0.209918  0.036570 -0.160110 -0.159589  0.089789
+    ## 854cd623fffffff -0.1655980 -0.322413  0.310311  0.051167  0.310330 -0.401675
+    ## 854cf353fffffff -0.1987004 -0.354227  0.374359  0.092236 -0.010103  0.256645
+    ## 854cd28bfffffff -0.1373075 -0.507972  0.351500  0.043711  0.039682 -0.658866
+    ## 854cd51bfffffff -0.4284730 -0.423412  0.409911  0.079490  0.080512 -0.320686
+    ## 854cd0cffffffff -0.3094021 -0.068784  0.456810 -0.095251  0.375523  0.311563
+    ## 85672527fffffff -0.4485983 -0.220168  0.544239  0.072352  0.238531 -0.066417
+    ## 856725a7fffffff  0.9126042 -0.403173 -0.105287 -0.330676 -0.108878 -1.010279
+    ## 854cd083fffffff -0.3212241 -0.157166  0.168141  0.101979 -0.050596 -0.173265
+    ## 854cf26ffffffff -0.0512091 -0.321895 -0.110310 -0.258208 -0.154134  0.241674
+    ## 854cd2dbfffffff  0.6155765 -0.103568  0.059302 -0.314735  0.064701 -0.613854
+    ## 854cd513fffffff -0.5729043 -0.056972 -0.169271 -0.119319 -0.109291  0.384308
+    ## 854c8993fffffff -0.0814702 -0.003363  0.259734  0.097475 -0.212459  0.210202
+    ## 854c8833fffffff -0.3718987 -0.203859  0.385549 -0.080915  0.223379 -0.323393
+    ## 854cf32ffffffff -0.1401358  1.109566 -0.157165  0.391666 -0.665530  0.173791
+    ## 854cd5b3fffffff -0.6440978  0.160817 -0.339567 -0.212907 -0.215013 -0.496504
+    ## 854c890ffffffff  0.1315721  0.354484  0.079272  0.061410 -0.431448 -0.564578
+    ## 854cf373fffffff -0.2255963 -0.114355  0.096003  0.252937 -0.065746  0.083899
+    ## 854cd293fffffff -0.3986417 -0.477115  0.457880  0.099270  0.109792 -0.141746
+    ## 854cc6c7fffffff -0.3240014 -0.099419  0.354878  0.117628 -0.099967 -0.365518
+    ## 854cd4a7fffffff -0.2173990  0.180838  0.262742  0.136995 -0.262728 -0.613434
+    ## 854c898ffffffff  0.0557128 -0.537874 -0.362743  0.556343  0.379846  0.694605
+    ## 854c89c7fffffff  0.1791866  0.800793 -0.168228 -0.161518  0.698722  0.167084
+    ## 854c8913fffffff -0.2543179 -0.829835 -1.673423  1.535111  0.999658  0.191884
+    ## 854c8953fffffff  0.1194520  1.050269 -0.115279 -0.061824  0.657547 -0.532107
+    ## 854cd667fffffff -0.3271062 -0.181294 -0.339143  0.248891  0.302514 -0.614178
+    ## 854c882ffffffff -0.1708694  0.158569 -0.634737  0.936380  0.530629  0.184767
+    ## 854c88affffffff -0.1880124 -0.042617  0.524296 -0.195066  0.548928  0.287366
+    ## 854cc657fffffff -0.3110521  0.877620 -0.585811  0.077693 -0.580470  0.262038
+    ## 854cc6c3fffffff -0.2796785 -0.078738  0.212660  0.270342 -0.068954  0.260139
+    ## 854c89abfffffff -0.1641752  0.160605 -0.509607  0.048646 -0.034902  0.245995
+    ## 854cf31bfffffff -0.1127934 -0.311304  0.292026  0.044328 -0.066286 -0.426953
+    ## 854cc6cffffffff -0.1570234  0.509262  0.166544  0.222342 -0.417451  0.208575
+    ## 854cd5cbfffffff -0.2567842  0.983806 -0.081539  0.240815 -0.620271  0.225330
+    ## 854cd2cbfffffff  0.2821395  0.450603  0.445121 -0.693789  1.039221  0.112205
+    ## 854cc617fffffff -0.3687878 -0.422627  0.466024  0.125548  0.080301  0.308132
+    ## 854cf247fffffff  0.0219547 -0.044106  0.145769  0.042956 -0.230244  0.184633
+    ## 854cc66bfffffff -0.3679692 -0.479480  0.491159  0.136112  0.108321 -0.660712
+    ## 854cf333fffffff -0.3101098 -0.261799  0.360464  0.141667 -0.012700  0.284438
+    ## 854c89a3fffffff -0.7274081 -0.314030 -1.253468 -1.161610 -0.209260 -0.119624
+    ## 854c89d7fffffff -0.2015101  0.644110  0.206177  0.178679 -0.429058  0.223110
+    ## 854cd40bfffffff -0.0277946 -0.157510 -0.073296  0.239917 -0.082241 -0.089034
+    ## 854c883bfffffff -0.3929810 -0.472987  0.510065  0.134179  0.136627  0.316744
+    ## 854cd59bfffffff -0.2076399  0.776535 -0.052188  0.489526 -0.450239  0.114035
+    ## 854cf347fffffff -0.2728102 -0.500307  0.446691  0.108054  0.086483  0.003910
+    ## 85672537fffffff  0.0098281  0.483141  0.299867 -0.419680  0.584398  0.158744
+    ## 854cd5c3fffffff -0.0936645  0.001922 -1.644707  2.036786  0.463411  0.112142
+    ## 854cd453fffffff  0.6976558 -0.510964 -0.122103 -0.135621 -0.213775  0.719337
+    ## 854c89bbfffffff -0.0377121 -0.346556 -0.528388  0.370243  0.118618  0.905320
+    ## 854cd643fffffff  0.6924350  0.094145 -0.136415 -0.102395 -0.486345 -0.094822
+    ## 854cd44ffffffff  1.4201766 -0.640502 -0.398194 -0.391766 -0.401576 -0.273289
+    ## 854cd44bfffffff  1.0447121 -0.580002 -0.912745  0.177217 -0.129196  0.594581
+    ## 85672597fffffff  0.6576550  0.408505 -0.216865 -0.008862 -0.617364 -0.100822
+    ## 854cd653fffffff  0.4369468  0.688622 -0.415296  0.255379 -0.566799 -0.059688
+    ## 854c8927fffffff  0.3637266 -0.170372 -0.082444 -0.162826 -0.312065  0.814294
+    ## 854cd43bfffffff -0.0470335 -0.167220  0.263824  0.068140 -0.149271 -0.393720
+    ## 854cf263fffffff  0.2104328 -0.373961  0.175088 -0.020790 -0.133816  0.059038
+    ## 854cd583fffffff -0.1834948  0.265241 -0.965666  1.400871  0.126541 -0.952023
+    ## 854cf233fffffff -0.1417883 -0.167684  0.282911  0.068139 -0.124758 -0.042334
+    ## 854cd6bbfffffff  0.5812287  0.247237 -0.072598 -0.148332 -0.367888 -0.056949
+    ## 854cc6cbfffffff -0.1207154  0.063382  0.283742  0.128633 -0.230912  0.931069
+    ## 854cd407fffffff -0.1210176 -0.209546  0.258209  0.037029 -0.115585 -0.385454
+    ## 854cc67bfffffff -0.2639085  0.063065  0.332424  0.133125 -0.131662  0.180721
+    ## 854c894bfffffff -0.1776595  0.390613  0.222380  0.138903 -0.356441  0.143386
+    ## 854cd4cbfffffff  0.1774229 -0.321242  0.133074 -0.039144 -0.155507  0.865048
+    ## 85672587fffffff -0.0447540  0.599604  0.335863 -0.315382  0.641612 -0.721773
+    ## 854cd0d7fffffff  0.0146120 -0.182011  0.269977 -0.134002  0.139537 -0.934516
+    ## 854cd42bfffffff -0.3469597 -0.008016 -0.113588 -0.212151 -0.223808  0.237929
+    ## 854cd0d3fffffff  0.0531847 -0.270682  0.286606 -0.090645  0.124538  0.912768
+    ## 854cf303fffffff -0.2165812 -0.481141  0.383629  0.067444  0.051834 -0.701246
+    ## 854cd46bfffffff  0.2433769 -0.210215 -0.002666 -0.051290 -0.215387 -0.718074
+    ## 854cd6b7fffffff  1.0354724 -0.275377 -0.275145 -0.240776 -0.357479 -0.372184
+    ## 854cd687fffffff  0.6979214  0.347355 -0.163541 -0.120877 -0.549206 -0.100578
+    ## 854cd0c3fffffff  0.2787674  0.786847  0.170514 -0.589338  1.040539  0.099964
+    ## 854cd29bfffffff  0.2531847 -0.471970  0.178650 -0.048006 -0.081423 -0.714513
+    ## 854cd253fffffff  0.4903893  0.964474  0.487466 -1.069661  1.523244  0.086274
+    ## 854cd4a3fffffff -0.1476365  0.223304  0.202065  0.095099 -0.313433  0.142241
+    ## 854cf30ffffffff -0.2682231 -0.442432  0.352686  0.190301  0.084777  0.190975
+    ## 854c896ffffffff  0.9940860 -0.397174 -0.215740 -0.239742 -0.369824 -0.162163
+    ## 854cd693fffffff  1.3805588 -0.681713 -0.360256 -0.393721 -0.345393 -0.796087
+    ## 854cd66bfffffff  0.5686647  0.614454  0.005157 -0.570932  1.416832  0.024284
+    ## 854c89b7fffffff  0.3240835 -0.324556  0.087043 -0.061299 -0.197922  0.821848
+    ## 854cf36bfffffff -0.1541778 -0.159895  0.331174  0.112851 -0.113800 -0.364857
+    ## 854cd5bbfffffff -0.4485592 -0.117104  0.377649  0.122845 -0.051367 -0.764545
+    ## 854cf37bfffffff -0.1236444 -0.435069  0.360884  0.073028  0.006434 -0.040804
+    ## 854cd2d3fffffff  0.6441508 -0.293493  0.071778 -0.340042  0.134876 -0.037629
+    ## 854cd243fffffff -0.1714690  0.044039  0.541303 -0.255249  0.631772 -0.330687
+    ## 854cd093fffffff -0.5205356 -0.263212 -0.234231 -0.475259 -0.122481  0.321459
+    ## 854cd457fffffff  0.0292072 -0.455384 -0.218464 -0.136939 -0.061149  0.553614
+    ## 854cd4dbfffffff -0.2245998 -0.175638 -0.371592 -0.114042 -0.108751  0.199535
+    ## 854cc65bfffffff -0.0980481  0.948650 -0.080809  0.410641 -0.590890  0.081474
+    ## 854cd247fffffff -0.4506725 -0.427174  0.525362  0.160875  0.116801 -0.288533
+    ## 854cd633fffffff  0.2749382 -0.110894 -1.158917  0.746966  1.799415 -0.861816
+    ## 854c89b3fffffff  0.2304762 -0.251377  0.141644 -0.016689 -0.199861  0.049022
+    ## 854cf273fffffff  0.0490543 -0.357025  0.230790  0.006955 -0.090930  0.105922
+    ## 854cd473fffffff  0.3925812 -0.260222  0.059127 -0.066317 -0.246960  0.799367
+    ## 854cd63bfffffff  0.5643756  0.420272  0.313615 -0.769987  0.953327  0.828189
+    ## 854c8957fffffff  0.0068291  0.586480  0.022049 -0.013597  0.066608  0.110013
+    ## 854c8baffffffff  0.0961742  0.609076  0.071900  0.089676 -0.287186  0.063902
+    ## 854c8823fffffff -0.0742521  0.315895 -0.125280  0.282978  0.586586  0.127218
+    ## 854cd0c7fffffff -0.3721750  0.054729  0.028656 -0.082418  0.184551  0.324898
+    ## 854c890bfffffff -0.0534033  0.136271  0.191571  0.009090 -0.169656 -0.760473
+    ## 856725b7fffffff  0.3769967  0.930712  0.188512 -0.710259  1.110467  0.080266
+    ## 856725a3fffffff  0.7189253 -0.051926 -0.108563 -0.247243  0.120370  0.351959
+    ## 854cd437fffffff -0.2174386  0.695442 -0.150973  0.420511 -0.423354  0.125774
+    ## 854cd6a7fffffff  0.2459734 -0.189677  0.185680 -0.115836  0.008084 -0.138955
+    ## 856725affffffff  0.6349560 -0.048566 -0.085580 -0.113465 -0.373469 -0.071401
+    ## 854cf343fffffff -0.2683499 -0.352343  0.017298  0.466918  0.137697  0.963911
+    ## 854cd46ffffffff  0.3905439 -0.502522  0.109320 -0.084082 -0.123318  0.808561
+    ## 854cd64ffffffff -0.1912676  0.112067  0.332081 -0.220429  0.617115  0.208824
+    ## 854cd40ffffffff  0.0653017 -0.068861  0.168979  0.047411 -0.230772  0.089289
+    ## 854cc673fffffff -0.1852456  0.382665  0.253989  0.155134 -0.233688  0.229485
+    ## 854cc653fffffff -0.0586823  0.725732  0.147550  0.182763 -0.566234  0.092822
+    ## 854cd697fffffff  0.9444410 -0.008005 -0.346494 -0.092374 -0.477555  0.626801
+    ## 854cd447fffffff  0.4012604 -0.443371  0.093240 -0.077102 -0.161643  0.007205
+    ## 854cc6dbfffffff -0.2689450  0.034579  0.334087  0.177185 -0.163824  0.177965
+    ## 854cd4bbfffffff -0.1330479  0.495462  0.160981  0.201241 -0.422946  0.121218
+    ## 854cd21bfffffff -0.3661463 -0.337826  0.280944  0.289259  0.133407  0.293860
+    ## 854cc603fffffff -0.4302270  0.354911 -0.080454 -0.183893 -0.360651  0.250756
+    ## 854cd443fffffff  0.8119221 -0.591683 -0.148643 -0.157723 -0.204268 -0.994220
+    ## 856725bbfffffff  0.3818600  0.877636 -0.015147 -0.270654  0.263129  0.019773
+    ## 854cd64bfffffff  0.0002508  0.166045  0.303928 -0.180356  0.220687  0.136221
+    ## 854cd08bfffffff -0.3832302 -0.130390 -0.168381  0.162029  0.002739  0.223991
+    ## 854cd6a3fffffff  0.6749221  0.128469 -0.095835 -0.194175 -0.292196 -0.077129
+    ## 854cd6affffffff -0.1917925 -0.158533 -0.187924  0.028644  0.388104 -0.380697
+    ## 854cc643fffffff -0.1112260  1.298963 -0.038360  0.338606 -0.791539 -0.540265
+    ## 854cd2d7fffffff  0.3726863 -0.317296  0.101219 -0.094838 -0.141404  0.015789
+    ## 854c899bfffffff -0.1060732  0.616255 -0.142657  0.382684 -0.399395 -0.789770
+    ## 854cd0dbfffffff -0.3852674 -0.408470  0.028722  0.411210  0.469552  0.218179
+    ## 854cf34ffffffff -0.1988537 -0.344415  0.385479  0.104639 -0.011793  0.173221
+    ## 854c89cbfffffff  0.2771632  0.361618 -0.873803  0.374861  1.732864  0.046270
+    ## 854c895bfffffff -0.2059069  1.035678  0.166041  0.193695 -0.298001  0.138088
+    ## 854cd647fffffff  0.0017797  0.047339  0.108612 -0.144089  0.164374  0.929816
+    ## 854cd65bfffffff  0.7025434  0.573012 -0.283392 -0.028129 -0.712919 -0.117562
+    ## 854cd45bfffffff  0.9133502 -0.584862 -0.588726  0.148552 -0.123056  0.635207
     ## 
     ## 
     ## Biplot scores for constraining variables
     ## 
-    ##                              RDA1       RDA2     RDA3     RDA4      RDA5 PC1
-    ## `ESA Trees`               0.85670 -0.3603426 -0.06241  0.04192  0.007533   0
-    ## `ESA Shrubland`           0.14379  0.4821048 -0.06346 -0.28657 -0.676727   0
-    ## `ESA Cropland`           -0.04722 -0.0424412 -0.59291 -0.44547  0.270958   0
-    ## `ESA Built-up`           -0.43731 -0.2125831 -0.66842  0.31748 -0.361145   0
-    ## `ESA Open water`         -0.71264 -0.2621158  0.60018  0.01432 -0.099471   0
-    ## `GSL Upper slope (flat)` -0.69370 -0.0006937  0.01821 -0.64385  0.001190   0
+    ##                                                                             RDA1
+    ## `ESA Shrubland`                                                         0.218485
+    ## `ESA Grassland`                                                         0.029281
+    ## `ESA Cropland`                                                         -0.006907
+    ## `ESA Built-up`                                                         -0.513619
+    ## `CH-BIO bio08 mean daily mean air temperatures of the wettest quarter` -0.836855
+    ##                                                                            RDA2
+    ## `ESA Shrubland`                                                         0.43076
+    ## `ESA Grassland`                                                         0.74780
+    ## `ESA Cropland`                                                          0.05313
+    ## `ESA Built-up`                                                         -0.07708
+    ## `CH-BIO bio08 mean daily mean air temperatures of the wettest quarter`  0.29785
+    ##                                                                            RDA3
+    ## `ESA Shrubland`                                                         0.03358
+    ## `ESA Grassland`                                                        -0.29055
+    ## `ESA Cropland`                                                         -0.64821
+    ## `ESA Built-up`                                                         -0.62216
+    ## `CH-BIO bio08 mean daily mean air temperatures of the wettest quarter`  0.19282
+    ##                                                                           RDA4
+    ## `ESA Shrubland`                                                        -0.2593
+    ## `ESA Grassland`                                                         0.3352
+    ## `ESA Cropland`                                                          0.6028
+    ## `ESA Built-up`                                                         -0.5770
+    ## `CH-BIO bio08 mean daily mean air temperatures of the wettest quarter`  0.1801
+    ##                                                                           RDA5
+    ## `ESA Shrubland`                                                         0.8357
+    ## `ESA Grassland`                                                        -0.4931
+    ## `ESA Cropland`                                                          0.4622
+    ## `ESA Built-up`                                                         -0.1012
+    ## `CH-BIO bio08 mean daily mean air temperatures of the wettest quarter`  0.3760
+    ##                                                                        PC1
+    ## `ESA Shrubland`                                                          0
+    ## `ESA Grassland`                                                          0
+    ## `ESA Cropland`                                                           0
+    ## `ESA Built-up`                                                           0
+    ## `CH-BIO bio08 mean daily mean air temperatures of the wettest quarter`   0
 
 ``` r
 RsquareAdj(mi_fam_t_rda)$adj.r.squared
 ```
 
-    ## [1] 0.1049934
+    ## [1] 0.07029448
 
 ``` r
 vif.cca(mi_fam_t_rda)
 ```
 
-    ##              `ESA Trees`          `ESA Shrubland`           `ESA Cropland` 
-    ##                 2.879508                 1.264297                 1.379104 
-    ##           `ESA Built-up`         `ESA Open water` `GSL Upper slope (flat)` 
-    ##                 1.155169                 2.577392                 1.457522
+    ##                                                        `ESA Shrubland` 
+    ##                                                               1.185977 
+    ##                                                        `ESA Grassland` 
+    ##                                                               1.111275 
+    ##                                                         `ESA Cropland` 
+    ##                                                               1.147192 
+    ##                                                         `ESA Built-up` 
+    ##                                                               1.046563 
+    ## `CH-BIO bio08 mean daily mean air temperatures of the wettest quarter` 
+    ##                                                               1.103396
 
 ``` r
 escalado <- 2

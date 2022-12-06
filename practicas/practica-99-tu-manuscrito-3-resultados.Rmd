@@ -56,24 +56,21 @@ Cinco guías, en inglés, que considero están bien elaboradas, sobre cómo reda
 
 # Scripts de ejemplo
 
+Una nota, a título informativo. Cada una se las siguientes secciones (e.g. "Análisis de agrupamiento", "Ordenación restringida"), es reproducible de forma autónoma, es decir, sin dependencia de líneas de código anteriores. Esto siginifica que las dependencias de una sección se resuelven dentro de ella misma, sin dependencia de líneas anteriores.
+
+Por esta razón, varias secciones comparten texto y código común, pero sólo al inicio, porque al avanzar cada una se hace propia. Notarás, por lo tanto, que el texto "se repite a sí mismo" por esta razón; la otra opción que tenía era alojar el código común en un único archivo, pero entonces esto te obligaba a navegar por archivos separados, haciendo menos didáctico este cuaderno.
+
 ## Análisis de agrupamiento
 
-\ldots
+Me basaré en los scripts que comienzan por `aa_` de este [repo](https://github.com/biogeografia-master/scripts-de-analisis-BCI), los cuales explico en los vídeos de "Análisis de agrupamiento" (del 13 al 16) de la lista de reproducción ["Ecología Numérica con R" de mi canal](https://www.youtube.com/playlist?list=PLDcT2n8UzsCRDqjqSeqHI1wsiNOqpYmsJ).
 
-##
 
-\ldots
-
-## Técnicas de ordenación
-
-Me basaré en los scripts que comienzan por `to_` de este [repo](https://github.com/biogeografia-master/scripts-de-analisis-BCI), los cuales explico en los vídeos de "Técnicas de ordenación" de la lista de reproducción ["Ecología Numérica con R" de mi canal](https://www.youtube.com/playlist?list=PLDcT2n8UzsCRDqjqSeqHI1wsiNOqpYmsJ).
-
-### Ordenación restringida
+> INICIA texto+código común entre secciones
 
 Fijar un directorio de trabajo no es recomendable, mejor trabaja por proyecto. En cualquier caso, si no quieres o no puedes crear un proyecto, usa la sentencia que verás abajo, cambiando `TU_DIRECTORIO` por la ruta del directorio donde tengas almacenados tus datos y tus scripts.
 
 ```{r}
-# setwd('TU_DIRECTORIO')
+# setwd('practicas/')
 ```
 
 Cargar paquetes.
@@ -82,19 +79,36 @@ Cargar paquetes.
 library(vegan)
 library(sf)
 library(tidyverse)
+library(tmap)
 gh_content <- 'https://raw.githubusercontent.com/'
 gh_zonal_stats <- 'https://github.com/geofis/zonal-statistics/raw/main/out/'
 repo_analisis <- 'biogeografia-master/scripts-de-analisis-BCI/master'
 devtools::source_url(paste0(gh_content, repo_analisis, '/biodata/funciones.R'))
-source('train.R')
+source(paste0(gh_content, 'biogeografia-202202/material-de-apoyo/master/practicas/', 'train.R'))
 ```
 
 Carga tu matriz de comunidad, que habrás generado en la práctica 2.
 
 ```{r}
 mc_orig <- readRDS("matriz_de_comunidad.RDS")
-umbral_raras <- 15
-mi_fam <- mc_orig[, -which(colSums(mc_orig) <= umbral_raras)]
+nrow(mc_orig)
+ncol(mc_orig)
+names(mc_orig)
+unique(word(names(mc_orig), 1, 1))
+table(word(names(mc_orig), 1, 1))
+
+# ¿En cuántos hexágonos está cada especie?
+# Puede usar un único valor mínimo (inclusive) o un rango con dos números (extremos inclusive)
+en_cuantos_hex <- 15
+# En este caso, 15 significa 15 o más (hasta el límite superior). IMPORTANTE: elige TU PROPIO umbral.
+# en_cuantos_hex <- 10:20
+{if(length(en_cuantos_hex)==1) selector <- en_cuantos_hex:max(colSums(mc_orig)) else
+  if(length(en_cuantos_hex)==2)
+    selector <- min(en_cuantos_hex):max(en_cuantos_hex) else
+      stop('Debes indicar uno o dos valores numéricos')}
+selector
+mi_fam <- mc_orig[, colSums(mc_orig) %in% selector]
+ncol(mi_fam)
 nombres_largos <- colnames(mi_fam)
 (colnames(mi_fam) <- make.cepnames(word(colnames(mi_fam), 1, 2)))
 (df_equivalencias <- data.frame(
@@ -122,6 +136,11 @@ res <- 5 #Resolución H3
 tmpfile <- tempfile()
 download.file(paste0(gh_zonal_stats, 'all_sources_all_variables_res_', res, '.gpkg'), tmpfile)
 za <- st_read(tmpfile, optional = T)
+# Las siguientes líneas están comentadas, porque producen muchos mapas. Descoméntalas y ejecútalas si quieres verlos
+za %>% st_as_sf('geom') %>%
+  pivot_longer(cols = -matches('base|hex_id|geom')) %>% 
+  tm_shape() + tm_fill(col = 'value') +
+  tm_facets(by = 'name', free.scales = T)
 za_intermedia <- za %>%
   st_drop_geometry() %>% 
   select(-matches(c(' base'))) %>% 
@@ -130,7 +149,7 @@ env <- za_intermedia[match(rownames(mi_fam), rownames(za_intermedia)), ]
 all(rownames(mi_fam) == rownames(env)) #Si es TRUE, sigue adelante
 ```
 
-Se puede probar con un subconunto de variables, generando una matriz ambiental que seleccione variables según el grupo al que pertenecen, con ayuda del sufijo.
+Se puede probar con un subconjunto de variables, generando una matriz ambiental que seleccione variables según el grupo al que pertenecen, con ayuda del sufijo.
 
 ```{r}
 # env_selecionada <- env %>%
@@ -153,6 +172,210 @@ Se puede probar con un subconunto de variables, generando una matriz ambiental q
 #   dplyr::select(matches('^CGL '))
 ```
 
+> FINALIZA texto+código común entre secciones
+
+A continuación, el **análisis de agrupamiento** propiamente. La parte más importante es generar un árbol, a partir de una matriz de distancias, que haga sentido desde el punto de vista de la comunidad y la distribución de las especies tal como se encuentran en GBIF. Primero cargaré paquetes específicos de esta técnica y generaré la matriz de distancias.
+
+```{r}
+library(broom)
+library(cluster)
+library(gclus)
+library(pvclust)
+mi_fam_d <- vegdist(mi_fam_t, "euc")
+```
+
+A continuación, generaré árboles usando distintos métodos, explicados en el [repo](https://github.com/biogeografia-master/scripts-de-analisis-BCI), y en los vídeos (13 a 16) de la lista mencionada arriba  ["Ecología Numérica con R" de mi canal](https://www.youtube.com/playlist?list=PLDcT2n8UzsCRDqjqSeqHI1wsiNOqpYmsJ).
+
+```{r}
+lista_cl <- list(
+        cl_single = hclust(mi_fam_d, method = 'single'),
+        cl_complete = hclust(mi_fam_d, method = 'complete'),
+        cl_upgma = hclust(mi_fam_d, method = 'average'),
+        cl_ward = hclust(mi_fam_d, method = 'ward.D2')
+)
+par(mfrow = c(2,2))
+invisible(map(names(lista_cl), function(x) plot(lista_cl[[x]], main = x, hang = -1, cex = 0.4)))
+par(mfrow = c(1,1))
+```
+
+A continuación, calcularé la distancia y la correlación cofenéticas. Se supone que el método con la mayor correlación cofenética explica mejor el agrupamiento de la comunidad. Consulta el vídeo y material de referencia. Normalmente, el método UPGMA obtiene la mayor correlación cofenética, pero esto se debe a que su procedimiento maximiza precisamente dicha métrica. No es recomendable conservar un único método de agrupamiento, normalmente es bueno usar al menos dos. Ward es muchas veces recomendado por basarse en procedimientos de cálculo muy distintos a los de UPGMA. Consulta referencias.
+
+```{r}
+map_df(lista_cl, function(x) {
+        coph_d <- cophenetic(x)
+        corr <- cor(mi_fam_d, coph_d)
+        return(corr)
+})
+```
+
+Ahora, calcularé las anchuras de silueta, una métrica que ayuda a determinar en cuántos grupos se organiza la comunidad. En el ejemplo, dado que muchas especies de Polygonaceae están ausentes en muchos hexágonos, es esperable que el procedimiento sugiera un número de grupos alto denominados (ver objeto impreso `n_grupos_optimos`). Considera la siguiente regla general: muchos grupos, y 6 o más se considera mucho, es un resultado poco útil; 1 grupo es un resultado sin sentido.
+
+```{r}
+anch_sil_upgma <- calcular_anchuras_siluetas(
+        mc_orig = mi_fam, 
+        distancias = mi_fam_d, 
+        cluster = lista_cl$cl_upgma)
+anch_sil_upgma
+
+anch_sil_ward <- calcular_anchuras_siluetas(
+        mc_orig = mi_fam, 
+        distancias = mi_fam_d, 
+        cluster = lista_cl$cl_ward)
+anch_sil_ward
+```
+
+Por los resultados obtenidos, luce interesante explorar dos estrategias distintas: 1) Reducir el umbral de registros de presencia de especies raras; 2) Probar métodos "aproximadamente insesgados", basados en remuestreos y permutaciones.
+
+Probaré lo segundo, pero te animo a que pruebes también 1), para lo cual, debes elegir un umbral (ya sea un valor mínimo o un rango) diferente al que inicialmente hayas elegido.
+
+```{r}
+cl_pvclust_upgma <-
+        pvclust(t(mi_fam_t),
+                method.hclust = "average",
+                method.dist = "euc",
+                iseed = 91, # Resultado reproducible
+                parallel = TRUE)
+# Añadir los valores de p
+plot(cl_pvclust_upgma, hang = -1)
+# Añadir rectángulos a los grupos significativos
+lines(cl_pvclust_upgma)
+pvrect(cl_pvclust_upgma, alpha = 0.90, border = 4)
+```
+
+Para UPGMA nos sugiere que hay más de 6 grupos, y esto se debe al gran número de hexágonos sin registros de presencia. No obstante, tratándose de registros sesgados como son los de GBIF, es esperado obtener este tipo de resultados, donde la comunidad luce muy atomizada.
+
+```{r}
+#' 
+#' #### Ward
+#' 
+cl_pvclust_ward <-
+        pvclust(t(mi_fam_norm),
+                method.hclust = "ward.D2",
+                method.dist = "euc",
+                iseed = 191, # Resultado reproducible
+                parallel = TRUE)
+# Añadir los valores de p
+plot(cl_pvclust_ward, hang = -1)
+# Añadir rectángulos a los grupos significativos
+lines(cl_pvclust_ward)
+pvrect(cl_pvclust_ward, alpha = 0.91, border = 4)
+```
+
+
+## Técnicas de ordenación
+
+Me basaré en los scripts que comienzan por `to_` de este [repo](https://github.com/biogeografia-master/scripts-de-analisis-BCI), los cuales explico en los vídeos de "Técnicas de ordenación" de la lista de reproducción ["Ecología Numérica con R" de mi canal](https://www.youtube.com/playlist?list=PLDcT2n8UzsCRDqjqSeqHI1wsiNOqpYmsJ).
+
+### Ordenación restringida
+
+> INICIA texto+código común entre secciones
+
+Fijar un directorio de trabajo no es recomendable, mejor trabaja por proyecto. En cualquier caso, si no quieres o no puedes crear un proyecto, usa la sentencia que verás abajo, cambiando `TU_DIRECTORIO` por la ruta del directorio donde tengas almacenados tus datos y tus scripts.
+
+```{r}
+# setwd('practicas/')
+```
+
+Cargar paquetes.
+
+```{r}
+library(vegan)
+library(sf)
+library(tidyverse)
+library(tmap)
+gh_content <- 'https://raw.githubusercontent.com/'
+gh_zonal_stats <- 'https://github.com/geofis/zonal-statistics/raw/main/out/'
+repo_analisis <- 'biogeografia-master/scripts-de-analisis-BCI/master'
+devtools::source_url(paste0(gh_content, repo_analisis, '/biodata/funciones.R'))
+source(paste0(gh_content, 'biogeografia-202202/material-de-apoyo/master/practicas/', 'train.R'))
+```
+
+Carga tu matriz de comunidad, que habrás generado en la práctica 2.
+
+```{r}
+mc_orig <- readRDS("matriz_de_comunidad.RDS")
+nrow(mc_orig)
+ncol(mc_orig)
+names(mc_orig)
+unique(word(names(mc_orig), 1, 1))
+table(word(names(mc_orig), 1, 1))
+
+# ¿En cuántos hexágonos está cada especie?
+# Puede usar un único valor mínimo (inclusive) o un rango con dos números (extremos inclusive)
+en_cuantos_hex <- 15
+# En este caso, 15 significa 15 o más (hasta el límite superior). IMPORTANTE: elige TU PROPIO umbral.
+# en_cuantos_hex <- 10:20
+{if(length(en_cuantos_hex)==1) selector <- en_cuantos_hex:max(colSums(mc_orig)) else
+  if(length(en_cuantos_hex)==2)
+    selector <- min(en_cuantos_hex):max(en_cuantos_hex) else
+      stop('Debes indicar uno o dos valores numéricos')}
+selector
+mi_fam <- mc_orig[, colSums(mc_orig) %in% selector]
+ncol(mi_fam)
+nombres_largos <- colnames(mi_fam)
+(colnames(mi_fam) <- make.cepnames(word(colnames(mi_fam), 1, 2)))
+(df_equivalencias <- data.frame(
+  nombre_original = nombres_largos,
+  colnames(mi_fam)))
+```
+
+Transforma la matriz de comunidad. Este paso es importante, lo explico [aquí](https://www.youtube.com/watch?v=yQ10lp0-nHc&list=PLDcT2n8UzsCRDqjqSeqHI1wsiNOqpYmsJ&index=10)
+
+```{r}
+mi_fam_t <- decostand(mi_fam, 'hellinger') #Hellinger
+# Otras transformaciones posibles con datos de presencia/ausencia
+# mi_fam_t <- decostand(mi_fam, 'normalize') #Chord
+# mi_fam_t <- decostand(log1p(mi_fam), 'normalize') #Chord
+# mi_fam_t <- decostand(mi_fam, 'chi.square') #Chi-square
+```
+
+Genera la matriz ambiental a partir del archivo de estadística zonal por celdas H3 de República Dominicana, de acuerdo con la resolución que prefieras. Para el ejemplo, usé la resolución 5, pero puedes usar/probar con otra, para lo cual, sólo tendrías que cambiar el objeto `res <- X`, donde `X` puede ser un número cualquiera entre 4 y 7.
+
+Para aprender más sobre la fuente de estadística zonal de República Dominicana, que contiene un conjunto de más de 100 variables resumidas por celdas H3, visita [este repo](https://github.com/geofis/zonal-statistics). Debes visitar dicho repo para poder citarlo apropiadamente.
+
+```{r}
+#Matriz ambiental
+res <- 5 #Resolución H3
+tmpfile <- tempfile()
+download.file(paste0(gh_zonal_stats, 'all_sources_all_variables_res_', res, '.gpkg'), tmpfile)
+za <- st_read(tmpfile, optional = T)
+za %>% st_as_sf('geom') %>%
+  pivot_longer(cols = -matches('base|hex_id|geom')) %>% 
+  tm_shape() + tm_fill(col = 'value') +
+  tm_facets(by = 'name', free.scales = T)
+za_intermedia <- za %>%
+  st_drop_geometry() %>% 
+  select(-matches(c(' base'))) %>% 
+  column_to_rownames('hex_id')
+env <- za_intermedia[match(rownames(mi_fam), rownames(za_intermedia)), ]
+all(rownames(mi_fam) == rownames(env)) #Si es TRUE, sigue adelante
+```
+
+Se puede probar con un subconjunto de variables, generando una matriz ambiental que seleccione variables según el grupo al que pertenecen, con ayuda del sufijo.
+
+```{r}
+# env_selecionada <- env %>%
+#   st_drop_geometry() %>%
+#   dplyr::select(matches('^ESA '))
+# env_selecionada <- env %>%
+#   st_drop_geometry() %>%
+#   dplyr::select(matches('^G90-GEOM '))
+# env_selecionada <- env %>%
+#   st_drop_geometry() %>%
+#   dplyr::select(matches('^CH-BIO '))
+# env_selecionada <- env %>%
+#   st_drop_geometry() %>%
+#   dplyr::select(matches('^GHH '))
+# env_selecionada <- env %>%
+#   st_drop_geometry() %>%
+#   dplyr::select(matches('^GSL '))
+# env_selecionada <- env %>%
+#   st_drop_geometry() %>%
+#   dplyr::select(matches('^CGL '))
+```
+
+> FINALIZA texto+código común entre secciones
+
 A continuación, el análisis de ordenación propiamente. La parte más importante es el entrenamiento: la función `train` del paquete `caret`, contenida en la función `my_train`, simplifica la selección de variables. Lo más importante: prueba con todas las variables primero, observa las variables que recomienda el modelo final (`print_my_train(mod)`) y ensaya varias combinaciones de subconjuntos de variables.
 
 ```{r}
@@ -162,12 +385,12 @@ mi_fam_t_sel <- mi_fam_t %>%
 env_spp <- env %>% bind_cols(mi_fam_t_sel)
 spp <- paste0('`', grep('^ESPECIE', colnames(env_spp), value = T), '`', collapse = ' + ')
 my_formula <- as.formula(paste(spp, '~ .'))
-set.seed(1)
-mod <- my_train(
+set.seed(1); mod <- my_train(
   formula = my_formula, 
   preproceso = 'scale',
   data = env_spp %>%
-    select(matches('^GSL |^ESA |^ESPECIE ')) %>% #Sólo GSL y ESA, pero se debe explorar con todas
+    # select(matches('^GSL |^ESA |^ESPECIE ')) %>% #Sólo GSL y ESA, pero se debe explorar con todas
+    select(matches('^ESA |^CH-BIO |^ESPECIE ')) %>% #Sólo ESA y CH-BIO, pero se debe explorar con todas
     select_all())
 print_my_train(mod)
 (covar <- grep(
@@ -199,6 +422,7 @@ arrows(0, 0,
        col = "red"
 )
 ```
+
 
 ## Análisis de diversidad
 
