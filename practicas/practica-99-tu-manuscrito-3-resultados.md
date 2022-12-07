@@ -23,96 +23,107 @@ terreno) y analizaste, con tus métodos, los datos fuente.
 
 Algunas recomendaciones generales:
 
-- “Resultados” se supone que es la sección más corta del manuscrito,
-  siempre que se usen apropiadamente los recursos gráficos, las tablas y
-  la información suplementaria.
+-   “Resultados” se supone que es la sección más corta del manuscrito,
+    siempre que se usen apropiadamente los recursos gráficos, las tablas
+    y la información suplementaria.
 
-- Comienza por realizar tus análisis. Necesitarás una matriz de
-  comunidad y una ambiental. La de comunidad la habrás generado en la
-  práctica 2; la ambiental explico cómo generarla en este mismo cuaderno
-  (ver abajo). En general, la matriz ambiental la producirás mediante
-  estadísticos zonales del territorio dominicano. Para aprender más
-  sobre la fuente de estadística zonal de República Dominicana, que
-  contiene un conjunto de más de 100 variables resumidas por celdas H3,
-  visita [este repo](https://github.com/geofis/zonal-statistics). Debes
-  visitar dicho repo para poder citarlo apropiadamente.
+-   Comienza por realizar tus análisis. Necesitarás una matriz de
+    comunidad y una ambiental. La de comunidad la habrás generado en la
+    práctica 2; la ambiental explico cómo generarla en este mismo
+    cuaderno (ver abajo). En general, la matriz ambiental la producirás
+    mediante estadísticos zonales del territorio dominicano. Para
+    aprender más sobre la fuente de estadística zonal de República
+    Dominicana, que contiene un conjunto de más de 100 variables
+    resumidas por celdas H3, visita [este
+    repo](https://github.com/geofis/zonal-statistics). Debes visitar
+    dicho repo para poder citarlo apropiadamente.
 
-- Cuando tengas análisis realizados, antes de comenzar a escribir, te
-  recomiendo que escribas un guión de tu sección “Resultados”.
+-   Cuando tengas análisis realizados, antes de comenzar a escribir, te
+    recomiendo que escribas un guión de tu sección “Resultados”.
 
-- Guión en mano, redacta tu sección “Resultados”, siguiendo también
-  estos consejos:
+-   Guión en mano, redacta tu sección “Resultados”, siguiendo también
+    estos consejos:
 
-- En esta sección, se espera que presentes lo que has obtenido de manera
-  “objetiva”, evitando explicaciones, comentarios, opiniones,
-  perspectivas o limitaciones. En teoría, tu redacción es “fría”, lo
-  cual no necesariamente significa que tenga que ser aburrida.
+-   En esta sección, se espera que presentes lo que has obtenido de
+    manera “objetiva”, evitando explicaciones, comentarios, opiniones,
+    perspectivas o limitaciones. En teoría, tu redacción es “fría”, lo
+    cual no necesariamente significa que tenga que ser aburrida.
 
-- Esta es la sección por excelencia donde usarás *tablas y/o gráficos*.
-  Lo más importante a tener en cuenta cuando los uses es que no debes
-  duplicar el contenido que muestran dichos recursos en el texto. La
-  tabla o gráfico son apoyos que te ayudarán a no entrar en densidades
-  innecesarias dentro de los párrafos. Por lo tanto, si colocas una
-  tabla o figura, no caigas en la tentación de describirla en párrafos
-  de forma exhausitva. Estos recursos deben servir para apoyar el o los
-  párrafos donde destacas los principales patrones encontrados.
+-   Esta es la sección por excelencia donde usarás *tablas y/o
+    gráficos*. Lo más importante a tener en cuenta cuando los uses es
+    que no debes duplicar el contenido que muestran dichos recursos en
+    el texto. La tabla o gráfico son apoyos que te ayudarán a no entrar
+    en densidades innecesarias dentro de los párrafos. Por lo tanto, si
+    colocas una tabla o figura, no caigas en la tentación de describirla
+    en párrafos de forma exhausitva. Estos recursos deben servir para
+    apoyar el o los párrafos donde destacas los principales patrones
+    encontrados.
 
-- *Importante también*: si insertas una tabla o gráfico, debes referirla
-  en el texto (e.g. “ver figura X”). De nada sirve incluir una figura o
-  una tabla si no la refieres, porque con ello estarás sugiriendo que
-  dicho recurso era completamente prescindible.
+-   *Importante también*: si insertas una tabla o gráfico, debes
+    referirla en el texto (e.g. “ver figura X”). De nada sirve incluir
+    una figura o una tabla si no la refieres, porque con ello estarás
+    sugiriendo que dicho recurso era completamente prescindible.
 
-- El tiempo verbal preferido (por defecto) es el pasado, por ejemplo “…,
-  donde se **encontró** una asociación significativa entre … y …”. Sin
-  embargo, hay excepciones, como por ejemplo, cuando te refieres a una
-  tabla o una figura. Un caso típico es la expresión “tal como se
-  muestra en la tabla 1”, donde el verbo está conjugado en presente.
+-   El tiempo verbal preferido (por defecto) es el pasado, por ejemplo
+    “…, donde se **encontró** una asociación significativa entre … y …”.
+    Sin embargo, hay excepciones, como por ejemplo, cuando te refieres a
+    una tabla o una figura. Un caso típico es la expresión “tal como se
+    muestra en la tabla 1”, donde el verbo está conjugado en presente.
 
 A continuación, te pongo enlaces a referencias que considero útiles,
 sobre cómo redactar los resultados (algunas son generales, sobre
 artículos en general):
 
-- [Breves pautas, en
-  inglés](https://www.editage.com/insights/the-secret-to-writing-the-results-and-discussion-section-of-a-manuscript).
-  Puedes usar el traductor [DeepL](https://www.deepl.com/translator),
-  porque produce frases más naturales.
+-   [Breves pautas, en
+    inglés](https://www.editage.com/insights/the-secret-to-writing-the-results-and-discussion-section-of-a-manuscript).
+    Puedes usar el traductor [DeepL](https://www.deepl.com/translator),
+    porque produce frases más naturales.
 
 Cinco guías, en inglés, que considero están bien elaboradas, sobre cómo
 redactar un artículo científico (consulta la sección sobre cómo redactar
 los *resultados* en cada una):
 
-- [Demystifying the Journal
-  Article](https://www.insidehighered.com/advice/2017/05/09/how-write-effective-journal-article-and-get-it-published-essay)
+-   [Demystifying the Journal
+    Article](https://www.insidehighered.com/advice/2017/05/09/how-write-effective-journal-article-and-get-it-published-essay)
 
-- [How to write a scientific manuscript for
-  publication](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3626472/)
+-   [How to write a scientific manuscript for
+    publication](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3626472/)
 
-- [11 steps to structuring a science paper editors will take
-  seriously](https://www.elsevier.com/connect/11-steps-to-structuring-a-science-paper-editors-will-take-seriously)
+-   [11 steps to structuring a science paper editors will take
+    seriously](https://www.elsevier.com/connect/11-steps-to-structuring-a-science-paper-editors-will-take-seriously)
 
-- [Cómo escribir un artículo científico por primera
-  vez](https://www.sciencedirect.com/science/article/abs/pii/S1134593417300040)
-  (necesitarás usar [SciHub](https://sci-hub.se/) para descargarlo)
+-   [Cómo escribir un artículo científico por primera
+    vez](https://www.sciencedirect.com/science/article/abs/pii/S1134593417300040)
+    (necesitarás usar [SciHub](https://sci-hub.se/) para descargarlo)
 
-- Una muy breve pero con consejos útiles: [Tips for writing the perfect
-  IMRAD
-  manuscript](https://www.editage.com/insights/tips-for-writing-the-perfect-imrad-manuscript)
+-   Una muy breve pero con consejos útiles: [Tips for writing the
+    perfect IMRAD
+    manuscript](https://www.editage.com/insights/tips-for-writing-the-perfect-imrad-manuscript)
 
 # Scripts de ejemplo
 
+Una nota, a título informativo. Cada una se las siguientes secciones
+(e.g. “Análisis de agrupamiento”, “Ordenación restringida”), es
+reproducible de forma autónoma, es decir, sin dependencia de líneas de
+código anteriores. Esto siginifica que las dependencias de una sección
+se resuelven dentro de ella misma, sin dependencia de líneas anteriores.
+
+Por esta razón, varias secciones comparten texto y código común, pero
+sólo al inicio, porque al avanzar cada una se hace propia. Notarás, por
+lo tanto, que el texto “se repite a sí mismo” por esta razón; la otra
+opción que tenía era alojar el código común en un único archivo, pero
+entonces esto te obligaba a navegar por archivos separados, haciendo
+menos didáctico este cuaderno.
+
 ## Análisis de agrupamiento
 
-## 
-
-## Técnicas de ordenación
-
-Me basaré en los scripts que comienzan por `to_` de este
+Me basaré en los scripts que comienzan por `aa_` de este
 [repo](https://github.com/biogeografia-master/scripts-de-analisis-BCI),
-los cuales explico en los vídeos de “Técnicas de ordenación” de la lista
-de reproducción [“Ecología Numérica con R” de mi
+los cuales explico en los vídeos de “Análisis de agrupamiento” (del 13
+al 16) de la lista de reproducción [“Ecología Numérica con R” de mi
 canal](https://www.youtube.com/playlist?list=PLDcT2n8UzsCRDqjqSeqHI1wsiNOqpYmsJ).
 
-### Ordenación restringida
+> INICIA texto+código común entre secciones
 
 Fijar un directorio de trabajo no es recomendable, mejor trabaja por
 proyecto. En cualquier caso, si no quieres o no puedes crear un
@@ -134,7 +145,7 @@ library(vegan)
 
     ## Loading required package: lattice
 
-    ## This is vegan 2.5-7
+    ## This is vegan 2.6-4
 
 ``` r
 library(sf)
@@ -146,13 +157,14 @@ library(sf)
 library(tidyverse)
 ```
 
-    ## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──
+    ## ── Attaching packages
+    ## ───────────────────────────────────────
+    ## tidyverse 1.3.2 ──
 
-    ## ✔ ggplot2 3.3.5      ✔ purrr   0.3.4 
-    ## ✔ tibble  3.1.7      ✔ dplyr   1.0.10
-    ## ✔ tidyr   1.2.1      ✔ stringr 1.4.0 
-    ## ✔ readr   2.1.3      ✔ forcats 0.5.1
-
+    ## ✔ ggplot2 3.3.6     ✔ purrr   0.3.4
+    ## ✔ tibble  3.1.8     ✔ dplyr   1.0.9
+    ## ✔ tidyr   1.2.0     ✔ stringr 1.4.0
+    ## ✔ readr   2.1.2     ✔ forcats 0.5.1
     ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
     ## ✖ dplyr::filter() masks stats::filter()
     ## ✖ dplyr::lag()    masks stats::lag()
@@ -165,7 +177,7 @@ repo_analisis <- 'biogeografia-master/scripts-de-analisis-BCI/master'
 devtools::source_url(paste0(gh_content, repo_analisis, '/biodata/funciones.R'))
 ```
 
-    ## ℹ SHA-1 hash of file is b0dc507338fe6a7d927760b5a7a06b2612b753c7
+    ## ℹ SHA-1 hash of file is "b0dc507338fe6a7d927760b5a7a06b2612b753c7"
 
 ``` r
 source(paste0(gh_content, 'biogeografia-202202/material-de-apoyo/master/practicas/', 'train.R'))
@@ -256,6 +268,564 @@ table(word(names(mc_orig), 1, 1))
 # ¿En cuántos hexágonos está cada especie?
 # Puede usar un único valor mínimo (inclusive) o un rango con dos números (extremos inclusive)
 en_cuantos_hex <- 15
+# En este caso, 15 significa 15 o más (hasta el límite superior). IMPORTANTE: elige TU PROPIO umbral.
+# en_cuantos_hex <- 10:20
+{if(length(en_cuantos_hex)==1) selector <- en_cuantos_hex:max(colSums(mc_orig)) else
+  if(length(en_cuantos_hex)==2)
+    selector <- min(en_cuantos_hex):max(en_cuantos_hex) else
+      stop('Debes indicar uno o dos valores numéricos')}
+selector
+```
+
+    ##  [1] 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39
+    ## [26] 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54
+
+``` r
+mi_fam <- mc_orig[, colSums(mc_orig) %in% selector]
+ncol(mi_fam)
+```
+
+    ## [1] 6
+
+``` r
+nombres_largos <- colnames(mi_fam)
+(colnames(mi_fam) <- make.cepnames(word(colnames(mi_fam), 1, 2)))
+```
+
+    ## [1] "Coccuvif" "Antilept" "Coccpube" "Coccdive" "Cocccost" "Coccwrig"
+
+``` r
+(df_equivalencias <- data.frame(
+  nombre_original = nombres_largos,
+  colnames(mi_fam)))
+```
+
+    ##                   nombre_original colnames.mi_fam.
+    ## 1       Coccoloba uvifera (L.) L.         Coccuvif
+    ## 2 Antigonon leptopus Hook. & Arn.         Antilept
+    ## 3          Coccoloba pubescens L.         Coccpube
+    ## 4    Coccoloba diversifolia Jacq.         Coccdive
+    ## 5        Coccoloba costata Wright         Cocccost
+    ## 6       Coccoloba wrightii Lindau         Coccwrig
+
+Transforma la matriz de comunidad. Este paso es importante, lo explico
+[aquí](https://www.youtube.com/watch?v=yQ10lp0-nHc&list=PLDcT2n8UzsCRDqjqSeqHI1wsiNOqpYmsJ&index=10)
+
+``` r
+mi_fam_t <- decostand(mi_fam, 'hellinger') #Hellinger
+# Otras transformaciones posibles con datos de presencia/ausencia
+# mi_fam_t <- decostand(mi_fam, 'normalize') #Chord
+# mi_fam_t <- decostand(log1p(mi_fam), 'normalize') #Chord
+# mi_fam_t <- decostand(mi_fam, 'chi.square') #Chi-square
+```
+
+Genera la matriz ambiental a partir del archivo de estadística zonal por
+celdas H3 de República Dominicana, de acuerdo con la resolución que
+prefieras. Para el ejemplo, usé la resolución 5, pero puedes usar/probar
+con otra, para lo cual, sólo tendrías que cambiar el objeto `res <- X`,
+donde `X` puede ser un número cualquiera entre 4 y 7.
+
+Para aprender más sobre la fuente de estadística zonal de República
+Dominicana, que contiene un conjunto de más de 100 variables resumidas
+por celdas H3, visita [este
+repo](https://github.com/geofis/zonal-statistics). Debes visitar dicho
+repo para poder citarlo apropiadamente.
+
+``` r
+#Matriz ambiental
+res <- 5 #Resolución H3
+tmpfile <- tempfile()
+download.file(paste0(gh_zonal_stats, 'all_sources_all_variables_res_', res, '.gpkg'), tmpfile)
+za <- st_read(tmpfile, optional = T)
+```
+
+    ## Reading layer `all_sources_all_variables_res_5' from data source 
+    ##   `/tmp/RtmpyPQJxY/file654b13e4133a' using driver `GPKG'
+    ## Simple feature collection with 335 features and 142 fields
+    ## Geometry type: POLYGON
+    ## Dimension:     XY
+    ## Bounding box:  xmin: -72.13564 ymin: 17.40413 xmax: -68.20998 ymax: 20.04043
+    ## Geodetic CRS:  WGS 84
+
+``` r
+# Las siguientes líneas están comentadas, porque producen muchos mapas. Descoméntalas y ejecútalas si quieres verlos
+# za %>% st_as_sf('geom') %>%
+#   pivot_longer(cols = -matches('base|hex_id|geom')) %>% 
+#   tm_shape() + tm_fill(col = 'value') +
+#   tm_facets(by = 'name', free.scales = T)
+za_intermedia <- za %>%
+  st_drop_geometry() %>% 
+  select(-matches(c(' base'))) %>% 
+  column_to_rownames('hex_id')
+env <- za_intermedia[match(rownames(mi_fam), rownames(za_intermedia)), ]
+all(rownames(mi_fam) == rownames(env)) #Si es TRUE, sigue adelante
+```
+
+    ## [1] TRUE
+
+Se puede probar con un subconjunto de variables, generando una matriz
+ambiental que seleccione variables según el grupo al que pertenecen, con
+ayuda del sufijo.
+
+``` r
+# env_selecionada <- env %>%
+#   st_drop_geometry() %>%
+#   dplyr::select(matches('^ESA '))
+# env_selecionada <- env %>%
+#   st_drop_geometry() %>%
+#   dplyr::select(matches('^G90-GEOM '))
+# env_selecionada <- env %>%
+#   st_drop_geometry() %>%
+#   dplyr::select(matches('^CH-BIO '))
+# env_selecionada <- env %>%
+#   st_drop_geometry() %>%
+#   dplyr::select(matches('^GHH '))
+# env_selecionada <- env %>%
+#   st_drop_geometry() %>%
+#   dplyr::select(matches('^GSL '))
+# env_selecionada <- env %>%
+#   st_drop_geometry() %>%
+#   dplyr::select(matches('^CGL '))
+```
+
+> FINALIZA texto+código común entre secciones
+
+A continuación, el **análisis de agrupamiento** propiamente. La parte
+más importante es generar un árbol, a partir de una matriz de
+distancias, que haga sentido desde el punto de vista de la comunidad y
+la distribución de las especies tal como se encuentran en GBIF. Primero
+cargaré paquetes específicos de esta técnica y generaré la matriz de
+distancias.
+
+``` r
+library(broom)
+library(cluster)
+library(gclus)
+```
+
+    ## Registered S3 method overwritten by 'gclus':
+    ##   method         from 
+    ##   reorder.hclust vegan
+
+``` r
+library(pvclust)
+mi_fam_d <- vegdist(mi_fam_t, "euc")
+```
+
+A continuación, generaré árboles usando distintos métodos, explicados en
+el
+[repo](https://github.com/biogeografia-master/scripts-de-analisis-BCI),
+y en los vídeos (13 a 16) de la lista mencionada arriba [“Ecología
+Numérica con R” de mi
+canal](https://www.youtube.com/playlist?list=PLDcT2n8UzsCRDqjqSeqHI1wsiNOqpYmsJ).
+
+``` r
+lista_cl <- list(
+        cl_single = hclust(mi_fam_d, method = 'single'),
+        cl_complete = hclust(mi_fam_d, method = 'complete'),
+        cl_upgma = hclust(mi_fam_d, method = 'average'),
+        cl_ward = hclust(mi_fam_d, method = 'ward.D2')
+)
+par(mfrow = c(2,2))
+invisible(map(names(lista_cl), function(x) plot(lista_cl[[x]], main = x, hang = -1, cex = 0.4)))
+```
+
+![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+
+``` r
+par(mfrow = c(1,1))
+```
+
+A continuación, calcularé la distancia y la correlación cofenéticas. Se
+supone que el método con la mayor correlación cofenética explica mejor
+el agrupamiento de la comunidad. Consulta el vídeo y material de
+referencia. Normalmente, el método UPGMA obtiene la mayor correlación
+cofenética, pero esto se debe a que su procedimiento maximiza
+precisamente dicha métrica. No es recomendable conservar un único método
+de agrupamiento, normalmente es bueno usar al menos dos. Ward es muchas
+veces recomendado por basarse en procedimientos de cálculo muy distintos
+a los de UPGMA. Consulta referencias.
+
+``` r
+map_df(lista_cl, function(x) {
+        coph_d <- cophenetic(x)
+        corr <- cor(mi_fam_d, coph_d)
+        return(corr)
+})
+```
+
+    ## # A tibble: 1 × 4
+    ##   cl_single cl_complete cl_upgma cl_ward
+    ##       <dbl>       <dbl>    <dbl>   <dbl>
+    ## 1     0.768       0.896    0.927   0.847
+
+Ahora, calcularé las anchuras de silueta, una métrica que ayuda a
+determinar en cuántos grupos se organiza la comunidad. En el ejemplo,
+dado que muchas especies de Polygonaceae están ausentes en muchos
+hexágonos, es esperable que el procedimiento sugiera un número de grupos
+alto denominados (ver objeto impreso `n_grupos_optimos`). Considera la
+siguiente regla general: muchos grupos, y 6 o más se considera mucho, es
+un resultado poco útil; 1 grupo es un resultado sin sentido.
+
+``` r
+anch_sil_upgma <- calcular_anchuras_siluetas(
+        mc_orig = mi_fam, 
+        distancias = mi_fam_d, 
+        cluster = lista_cl$cl_upgma)
+anch_sil_upgma
+```
+
+    ## $anchuras_siluetas
+    ##   [1] 0.00000000 0.36974858 0.38635062 0.38145408 0.38002441 0.51432889
+    ##   [7] 0.65775970 0.69670464 0.72816623 0.74230722 0.75306247 0.78150670
+    ##  [13] 0.79953120 0.82112520 0.82659628 0.84715923 0.85374446 0.85790181
+    ##  [19] 0.89348489 0.89652102 0.90899369 0.92702923 0.92603507 0.93227679
+    ##  [25] 0.95302013 0.93959732 0.92617450 0.89932886 0.89932886 0.89932886
+    ##  [31] 0.88590604 0.87248322 0.77181208 0.77181208 0.77181208 0.77181208
+    ##  [37] 0.77181208 0.77181208 0.77181208 0.77181208 0.77181208 0.77181208
+    ##  [43] 0.77181208 0.77181208 0.77181208 0.77181208 0.73154362 0.73154362
+    ##  [49] 0.73154362 0.73154362 0.73154362 0.40939597 0.40939597 0.40939597
+    ##  [55] 0.40939597 0.40939597 0.40939597 0.40939597 0.40939597 0.40939597
+    ##  [61] 0.40939597 0.40939597 0.40939597 0.40939597 0.40939597 0.40939597
+    ##  [67] 0.40939597 0.40939597 0.40939597 0.40939597 0.40939597 0.40939597
+    ##  [73] 0.40939597 0.40939597 0.40939597 0.40939597 0.40939597 0.40939597
+    ##  [79] 0.40939597 0.40939597 0.40939597 0.40939597 0.40939597 0.40939597
+    ##  [85] 0.40939597 0.40939597 0.40939597 0.40939597 0.40939597 0.40939597
+    ##  [91] 0.40939597 0.40939597 0.40939597 0.40939597 0.40939597 0.40939597
+    ##  [97] 0.40939597 0.40939597 0.38926174 0.38926174 0.33557047 0.33557047
+    ## [103] 0.33557047 0.33557047 0.33557047 0.33557047 0.33557047 0.32214765
+    ## [109] 0.30872483 0.28859060 0.28859060 0.11409396 0.11409396 0.11409396
+    ## [115] 0.11409396 0.11409396 0.11409396 0.11409396 0.11409396 0.11409396
+    ## [121] 0.11409396 0.11409396 0.11409396 0.11409396 0.11409396 0.11409396
+    ## [127] 0.11409396 0.11409396 0.11409396 0.11409396 0.11409396 0.11409396
+    ## [133] 0.11409396 0.11409396 0.11409396 0.11409396 0.09395973 0.09395973
+    ## [139] 0.08053691 0.03355705 0.03355705 0.03355705 0.03355705 0.03355705
+    ## [145] 0.03355705 0.00000000 0.00000000 0.00000000 0.00000000
+    ## 
+    ## $n_grupos_optimo
+    ## [1] 25
+
+``` r
+anch_sil_ward <- calcular_anchuras_siluetas(
+        mc_orig = mi_fam, 
+        distancias = mi_fam_d, 
+        cluster = lista_cl$cl_ward)
+anch_sil_ward
+```
+
+    ## $anchuras_siluetas
+    ##   [1] 0.00000000 0.33357035 0.42919166 0.51307033 0.58348070 0.62951930
+    ##   [7] 0.69432726 0.71765316 0.74276302 0.76413070 0.78270729 0.80241876
+    ##  [13] 0.82333882 0.84510721 0.86280091 0.88329564 0.90042885 0.90474006
+    ##  [19] 0.91145147 0.91140826 0.92743985 0.94197326 0.94728554 0.94728554
+    ##  [25] 0.95302013 0.93959732 0.92617450 0.89932886 0.89932886 0.89932886
+    ##  [31] 0.88590604 0.87248322 0.77181208 0.77181208 0.77181208 0.77181208
+    ##  [37] 0.77181208 0.77181208 0.77181208 0.77181208 0.77181208 0.77181208
+    ##  [43] 0.77181208 0.77181208 0.77181208 0.77181208 0.73154362 0.73154362
+    ##  [49] 0.73154362 0.73154362 0.73154362 0.40939597 0.40939597 0.40939597
+    ##  [55] 0.40939597 0.40939597 0.40939597 0.40939597 0.40939597 0.40939597
+    ##  [61] 0.40939597 0.40939597 0.40939597 0.40939597 0.40939597 0.40939597
+    ##  [67] 0.40939597 0.40939597 0.40939597 0.40939597 0.40939597 0.40939597
+    ##  [73] 0.40939597 0.40939597 0.40939597 0.40939597 0.40939597 0.40939597
+    ##  [79] 0.40939597 0.40939597 0.40939597 0.40939597 0.40939597 0.40939597
+    ##  [85] 0.40939597 0.40939597 0.40939597 0.40939597 0.40939597 0.40939597
+    ##  [91] 0.40939597 0.40939597 0.40939597 0.40939597 0.40939597 0.40939597
+    ##  [97] 0.40939597 0.40939597 0.38926174 0.38926174 0.33557047 0.33557047
+    ## [103] 0.33557047 0.33557047 0.33557047 0.33557047 0.33557047 0.32214765
+    ## [109] 0.30872483 0.28859060 0.28859060 0.11409396 0.11409396 0.11409396
+    ## [115] 0.11409396 0.11409396 0.11409396 0.11409396 0.11409396 0.11409396
+    ## [121] 0.11409396 0.11409396 0.11409396 0.11409396 0.11409396 0.11409396
+    ## [127] 0.11409396 0.11409396 0.11409396 0.11409396 0.11409396 0.11409396
+    ## [133] 0.11409396 0.11409396 0.11409396 0.11409396 0.09395973 0.09395973
+    ## [139] 0.08053691 0.03355705 0.03355705 0.03355705 0.03355705 0.03355705
+    ## [145] 0.03355705 0.00000000 0.00000000 0.00000000 0.00000000
+    ## 
+    ## $n_grupos_optimo
+    ## [1] 25
+
+Por los resultados obtenidos, luce interesante explorar dos estrategias
+distintas: 1) Reducir el umbral de registros de presencia de especies
+raras; 2) Probar métodos “aproximadamente insesgados”, basados en
+remuestreos y permutaciones.
+
+Probaré lo segundo, pero te animo a que pruebes también 1), para lo
+cual, debes elegir un umbral (ya sea un valor mínimo o un rango)
+diferente al que inicialmente hayas elegido.
+
+``` r
+cl_pvclust_upgma <-
+        pvclust(t(mi_fam_t),
+                method.hclust = "average",
+                method.dist = "euc",
+                iseed = 91, # Resultado reproducible
+                parallel = TRUE)
+```
+
+    ## Creating a temporary cluster...done:
+    ## socket cluster with 7 nodes on host 'localhost'
+    ## Multiscale bootstrap... Done.
+
+``` r
+# Añadir los valores de p
+plot(cl_pvclust_upgma, hang = -1)
+# Añadir rectángulos a los grupos significativos
+lines(cl_pvclust_upgma)
+pvrect(cl_pvclust_upgma, alpha = 0.90, border = 4)
+```
+
+![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+
+Para UPGMA nos sugiere que hay más de 6 grupos, y esto se debe al gran
+número de hexágonos sin registros de presencia. No obstante, tratándose
+de registros sesgados como son los de GBIF, es esperado obtener este
+tipo de resultados, donde la comunidad luce muy atomizada.
+
+``` r
+#' 
+#' #### Ward
+#' 
+cl_pvclust_ward <-
+        pvclust(t(mi_fam_t),
+                method.hclust = "ward.D2",
+                method.dist = "euc",
+                iseed = 191, # Resultado reproducible
+                parallel = TRUE)
+```
+
+    ## Creating a temporary cluster...done:
+    ## socket cluster with 7 nodes on host 'localhost'
+    ## Multiscale bootstrap... Done.
+
+``` r
+# Añadir los valores de p
+plot(cl_pvclust_ward, hang = -1)
+# Añadir rectángulos a los grupos significativos
+lines(cl_pvclust_ward)
+pvrect(cl_pvclust_ward, alpha = 0.91, border = 4)
+```
+
+![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+
+## Técnicas de ordenación
+
+Me basaré en los scripts que comienzan por `to_` de este
+[repo](https://github.com/biogeografia-master/scripts-de-analisis-BCI),
+los cuales explico en los vídeos de “Técnicas de ordenación” de la lista
+de reproducción [“Ecología Numérica con R” de mi
+canal](https://www.youtube.com/playlist?list=PLDcT2n8UzsCRDqjqSeqHI1wsiNOqpYmsJ).
+
+### Ordenación restringida
+
+> INICIA texto+código común entre secciones
+
+Fijar un directorio de trabajo no es recomendable, mejor trabaja por
+proyecto. En cualquier caso, si no quieres o no puedes crear un
+proyecto, usa la sentencia que verás abajo, cambiando `TU_DIRECTORIO`
+por la ruta del directorio donde tengas almacenados tus datos y tus
+scripts.
+
+``` r
+# setwd('practicas/')
+```
+
+Cargar paquetes.
+
+``` r
+library(vegan)
+library(sf)
+library(tidyverse)
+library(tmap)
+gh_content <- 'https://raw.githubusercontent.com/'
+gh_zonal_stats <- 'https://github.com/geofis/zonal-statistics/raw/main/out/'
+repo_analisis <- 'biogeografia-master/scripts-de-analisis-BCI/master'
+devtools::source_url(paste0(gh_content, repo_analisis, '/biodata/funciones.R'))
+```
+
+    ## ℹ SHA-1 hash of file is "b0dc507338fe6a7d927760b5a7a06b2612b753c7"
+
+``` r
+source(paste0(gh_content, 'biogeografia-202202/material-de-apoyo/master/practicas/', 'train.R'))
+```
+
+Carga tu matriz de comunidad, que habrás generado en la práctica 2.
+
+``` r
+mc_orig <- readRDS("matriz_de_comunidad.RDS")
+nrow(mc_orig)
+```
+
+    ## [1] 149
+
+``` r
+ncol(mc_orig)
+```
+
+    ## [1] 44
+
+``` r
+names(mc_orig)
+```
+
+    ##  [1] "Coccoloba uvifera (L.) L."                         
+    ##  [2] "Antigonon leptopus Hook. & Arn."                   
+    ##  [3] "Coccoloba pubescens L."                            
+    ##  [4] "Coccoloba diversifolia Jacq."                      
+    ##  [5] "Coccoloba P.Browne"                                
+    ##  [6] "Coccoloba jimenezii Alain"                         
+    ##  [7] "Persicaria punctata (Elliott) Small"               
+    ##  [8] "Coccoloba flavescens Jacq."                        
+    ##  [9] "Leptogonum domingensis var. molle (Urb.) Brandbyge"
+    ## [10] "Leptogonum domingense Benth."                      
+    ## [11] "Leptogonum domingensis Benth."                     
+    ## [12] "Coccoloba costata Wright"                          
+    ## [13] "Coccoloba incrassata Urb."                         
+    ## [14] "Coccoloba wrightii Lindau"                         
+    ## [15] "Coccoloba picardae Urb."                           
+    ## [16] "Rumex acetosella L."                               
+    ## [17] "Rumex crispus L."                                  
+    ## [18] "Coccoloba leonardii Howard"                        
+    ## [19] "Coccoloba ceibensis O.C.Schmidt"                   
+    ## [20] "Coccoloba venosa L."                               
+    ## [21] "Coccoloba leoganensis Jacq."                       
+    ## [22] "Coccoloba microstachya Willd."                     
+    ## [23] "Coccoloba krugii Lindau"                           
+    ## [24] "Coccoloba buchii O.Schmidt"                        
+    ## [25] "Coccoloba fuertesii Urb."                          
+    ## [26] "Coccoloba nodosa Lindau"                           
+    ## [27] "Coccoloba pauciflora Urb."                         
+    ## [28] "Polygonum L."                                      
+    ## [29] "Rumex L."                                          
+    ## [30] "Persicaria pensylvanica (L.) M.Gómez"              
+    ## [31] "Persicaria hydropiperoides (Michx.) Small"         
+    ## [32] "Coccoloba samanensis O.C.Schmidt"                  
+    ## [33] "Persicaria ferruginea (Wedd.) Soják"               
+    ## [34] "Brunnichia ovata (Walter) Shinners"                
+    ## [35] "Ruprechtia C.A.Mey."                               
+    ## [36] "Coccoloba subcordata Lindau"                       
+    ## [37] "Polygonum punctatum Kit., 1864"                    
+    ## [38] "Persicaria segetum (Kunth) Small"                  
+    ## [39] "Persicaria acuminata (Kunth) M.Gómez"              
+    ## [40] "Coccoloba swartzii Meisn."                         
+    ## [41] "Persicaria lapathifolia subsp. lapathifolia"       
+    ## [42] "Persicaria glabra (Willd.) M.Gómez"                
+    ## [43] "Rumex obtusifolius L."                             
+    ## [44] "Coccoloba fawcettii O.Schmidt"
+
+``` r
+unique(word(names(mc_orig), 1, 1))
+```
+
+    ## [1] "Coccoloba"  "Antigonon"  "Persicaria" "Leptogonum" "Rumex"     
+    ## [6] "Polygonum"  "Brunnichia" "Ruprechtia"
+
+``` r
+table(word(names(mc_orig), 1, 1))
+```
+
+    ## 
+    ##  Antigonon Brunnichia  Coccoloba Leptogonum Persicaria  Polygonum      Rumex 
+    ##          1          1         24          3          8          2          4 
+    ## Ruprechtia 
+    ##          1
+
+``` r
+sort(colSums(mc_orig))
+```
+
+    ##                                Rumex acetosella L. 
+    ##                                                  1 
+    ##               Persicaria pensylvanica (L.) M.Gómez 
+    ##                                                  1 
+    ##                 Brunnichia ovata (Walter) Shinners 
+    ##                                                  1 
+    ##                                Ruprechtia C.A.Mey. 
+    ##                                                  1 
+    ##                   Persicaria segetum (Kunth) Small 
+    ##                                                  1 
+    ##        Persicaria lapathifolia subsp. lapathifolia 
+    ##                                                  1 
+    ##                      Coccoloba fawcettii O.Schmidt 
+    ##                                                  1 
+    ##                         Coccoloba leonardii Howard 
+    ##                                                  2 
+    ##                   Coccoloba samanensis O.C.Schmidt 
+    ##                                                  2 
+    ##                Persicaria ferruginea (Wedd.) Soják 
+    ##                                                  2 
+    ##                        Coccoloba subcordata Lindau 
+    ##                                                  2 
+    ##                 Persicaria glabra (Willd.) M.Gómez 
+    ##                                                  2 
+    ##                                Coccoloba venosa L. 
+    ##                                                  3 
+    ##               Persicaria acuminata (Kunth) M.Gómez 
+    ##                                                  3 
+    ##                          Coccoloba swartzii Meisn. 
+    ##                                                  3 
+    ##                              Rumex obtusifolius L. 
+    ##                                                  3 
+    ##                          Coccoloba jimenezii Alain 
+    ##                                                  4 
+    ##                      Coccoloba microstachya Willd. 
+    ##                                                  4 
+    ##                                           Rumex L. 
+    ##                                                  4 
+    ##                     Polygonum punctatum Kit., 1864 
+    ##                                                  4 
+    ##                            Coccoloba krugii Lindau 
+    ##                                                  5 
+    ##          Persicaria hydropiperoides (Michx.) Small 
+    ##                                                  5 
+    ##                         Coccoloba flavescens Jacq. 
+    ##                                                  6 
+    ##                      Leptogonum domingensis Benth. 
+    ##                                                  6 
+    ##                                       Polygonum L. 
+    ##                                                  6 
+    ##                            Coccoloba picardae Urb. 
+    ##                                                  7 
+    ## Leptogonum domingensis var. molle (Urb.) Brandbyge 
+    ##                                                  8 
+    ##                       Leptogonum domingense Benth. 
+    ##                                                  8 
+    ##                                   Rumex crispus L. 
+    ##                                                  8 
+    ##                    Coccoloba ceibensis O.C.Schmidt 
+    ##                                                  8 
+    ##                         Coccoloba buchii O.Schmidt 
+    ##                                                  8 
+    ##                            Coccoloba nodosa Lindau 
+    ##                                                  8 
+    ##                          Coccoloba pauciflora Urb. 
+    ##                                                  8 
+    ##                           Coccoloba fuertesii Urb. 
+    ##                                                 10 
+    ##                                 Coccoloba P.Browne 
+    ##                                                 12 
+    ##                Persicaria punctata (Elliott) Small 
+    ##                                                 12 
+    ##                          Coccoloba incrassata Urb. 
+    ##                                                 13 
+    ##                        Coccoloba leoganensis Jacq. 
+    ##                                                 13 
+    ##                             Coccoloba pubescens L. 
+    ##                                                 15 
+    ##                    Antigonon leptopus Hook. & Arn. 
+    ##                                                 17 
+    ##                           Coccoloba costata Wright 
+    ##                                                 18 
+    ##                          Coccoloba wrightii Lindau 
+    ##                                                 20 
+    ##                       Coccoloba diversifolia Jacq. 
+    ##                                                 31 
+    ##                          Coccoloba uvifera (L.) L. 
+    ##                                                 54
+
+``` r
+# ¿En cuántos hexágonos está cada especie?
+# Puede usar un único valor mínimo (inclusive) o un rango con dos números (extremos inclusive)
+en_cuantos_hex <- 15
+# En este caso, 15 significa 15 o más (hasta el límite superior). IMPORTANTE: elige TU PROPIO umbral.
 # en_cuantos_hex <- 10:20
 {if(length(en_cuantos_hex)==1) selector <- en_cuantos_hex:max(colSums(mc_orig)) else
   if(length(en_cuantos_hex)==2)
@@ -327,11 +897,11 @@ za <- st_read(tmpfile, optional = T)
 ```
 
     ## Warning in CPL_read_ogr(dsn, layer, query, as.character(options), quiet, : GDAL
-    ## Message 1: File /tmp/RtmpQrR7fX/file37cb8843c4d5b5 has GPKG application_id, but
+    ## Message 1: File /tmp/RtmpyPQJxY/file654b2fcaa0a1 has GPKG application_id, but
     ## non conformant file extension
 
     ## Reading layer `all_sources_all_variables_res_5' from data source 
-    ##   `/tmp/RtmpQrR7fX/file37cb8843c4d5b5' using driver `GPKG'
+    ##   `/tmp/RtmpyPQJxY/file654b2fcaa0a1' using driver `GPKG'
     ## Simple feature collection with 335 features and 142 fields
     ## Geometry type: POLYGON
     ## Dimension:     XY
@@ -411,7 +981,7 @@ za %>% st_as_sf('geom') %>%
 
     ## Some legend labels were too wide. These labels have been resized to 0.16, 0.14, 0.14, 0.14. Increase legend.width (argument of tm_layout) to make the legend wider and therefore the labels larger.
 
-![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
 
 ``` r
 za_intermedia <- za %>%
@@ -424,7 +994,7 @@ all(rownames(mi_fam) == rownames(env)) #Si es TRUE, sigue adelante
 
     ## [1] TRUE
 
-Se puede probar con un subconunto de variables, generando una matriz
+Se puede probar con un subconjunto de variables, generando una matriz
 ambiental que seleccione variables según el grupo al que pertenecen, con
 ayuda del sufijo.
 
@@ -448,6 +1018,8 @@ ayuda del sufijo.
 #   st_drop_geometry() %>%
 #   dplyr::select(matches('^CGL '))
 ```
+
+> FINALIZA texto+código común entre secciones
 
 A continuación, el análisis de ordenación propiamente. La parte más
 importante es el entrenamiento: la función `train` del paquete `caret`,
@@ -754,6 +1326,14 @@ print_my_train(mod)
 ``` r
 mi_fam_t_rda <- rda(mi_fam_t_sel %>% rename_all(~ gsub('^ESPECIE ', '', .)) ~ .,
                     env %>% select_at(all_of(gsub('\\`', '', covar))), scale = T)
+```
+
+    ## Warning: Using `all_of()` outside of a selecting function was deprecated in tidyselect
+    ## 1.2.0.
+    ## ℹ See details at
+    ##   <https://tidyselect.r-lib.org/reference/faq-selection-context.html>
+
+``` r
 summary(mi_fam_t_rda)
 ```
 
@@ -1193,7 +1773,7 @@ arrows(0, 0,
 )
 ```
 
-![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
 
 ## Análisis de diversidad
 

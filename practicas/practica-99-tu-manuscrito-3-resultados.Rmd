@@ -130,17 +130,17 @@ Genera la matriz ambiental a partir del archivo de estadística zonal por celdas
 
 Para aprender más sobre la fuente de estadística zonal de República Dominicana, que contiene un conjunto de más de 100 variables resumidas por celdas H3, visita [este repo](https://github.com/geofis/zonal-statistics). Debes visitar dicho repo para poder citarlo apropiadamente.
 
-```{r}
+```{r, message=F, warning=F}
 #Matriz ambiental
 res <- 5 #Resolución H3
 tmpfile <- tempfile()
 download.file(paste0(gh_zonal_stats, 'all_sources_all_variables_res_', res, '.gpkg'), tmpfile)
 za <- st_read(tmpfile, optional = T)
 # Las siguientes líneas están comentadas, porque producen muchos mapas. Descoméntalas y ejecútalas si quieres verlos
-za %>% st_as_sf('geom') %>%
-  pivot_longer(cols = -matches('base|hex_id|geom')) %>% 
-  tm_shape() + tm_fill(col = 'value') +
-  tm_facets(by = 'name', free.scales = T)
+# za %>% st_as_sf('geom') %>%
+#   pivot_longer(cols = -matches('base|hex_id|geom')) %>% 
+#   tm_shape() + tm_fill(col = 'value') +
+#   tm_facets(by = 'name', free.scales = T)
 za_intermedia <- za %>%
   st_drop_geometry() %>% 
   select(-matches(c(' base'))) %>% 
@@ -249,7 +249,7 @@ Para UPGMA nos sugiere que hay más de 6 grupos, y esto se debe al gran número 
 #' #### Ward
 #' 
 cl_pvclust_ward <-
-        pvclust(t(mi_fam_norm),
+        pvclust(t(mi_fam_t),
                 method.hclust = "ward.D2",
                 method.dist = "euc",
                 iseed = 191, # Resultado reproducible
@@ -260,6 +260,8 @@ plot(cl_pvclust_ward, hang = -1)
 lines(cl_pvclust_ward)
 pvrect(cl_pvclust_ward, alpha = 0.91, border = 4)
 ```
+
+
 
 
 ## Técnicas de ordenación
@@ -299,6 +301,7 @@ ncol(mc_orig)
 names(mc_orig)
 unique(word(names(mc_orig), 1, 1))
 table(word(names(mc_orig), 1, 1))
+sort(colSums(mc_orig))
 
 # ¿En cuántos hexágonos está cada especie?
 # Puede usar un único valor mínimo (inclusive) o un rango con dos números (extremos inclusive)
