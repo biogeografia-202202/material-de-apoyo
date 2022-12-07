@@ -324,33 +324,44 @@ Apliquemos el análisis de agrupamiento a la matriz ambiental. La clave en este 
 Cargar paquetes necesarios para esta subsección.
 
 ```{r}
-library(mapview)
+# library(mapview)
 library(RColorBrewer)
+library(leaflet)
+library(leaflet.extras)
+leaflet_map_view <- . %>% setView(lat = 18.7, lng = -70.3, zoom = 8)
+```
+
+Crearé algunas paletas que usaré más adelante.
+
+```{r}
+rojo <- colorRampPalette(brewer.pal(8, "Reds"))
+rojo_inv <- colorRampPalette(rev(brewer.pal(8, "Reds")))
+colores_grupos <- brewer.pal(8, "Accent")
 ```
 
 Agrupar los hexágonos de la matriz ambiental.
 
 ```{r}
 (m_amb_upgma_k6 <- env %>%
-  select_if(is.numeric) %>%
-  mutate(grupos_upgma_k6) %>%
-  st_drop_geometry() %>% 
-  pivot_longer(-grupos_upgma_k6, names_to = "variable", values_to = "valor"))
+   rownames_to_column('hex_id') %>% 
+   mutate(grupos_upgma_k6) %>%
+   pivot_longer(-c(grupos_upgma_k6, hex_id), names_to = "variable", values_to = "valor") %>% 
+   inner_join(za %>% select(hex_id)))
+
 (m_amb_ward_k6 <- env %>%
-  select_if(is.numeric) %>%
-  mutate(grupos_ward_k6) %>%
-  st_drop_geometry() %>% 
-  pivot_longer(-grupos_ward_k6, names_to = "variable", values_to = "valor"))
+    rownames_to_column('hex_id') %>% 
+    mutate(grupos_ward_k6) %>%
+    pivot_longer(-c(grupos_ward_k6, hex_id), names_to = "variable", values_to = "valor") %>% 
+    inner_join(za %>% select(hex_id)))
 ```
 
-Evaluar efectos entre los grupos ("diferencias significativas") de los agrupamientos UPGMA y Ward. Al tratarse de 6 grupos, se utilizan las pruebas estadísticas ANOVA (evalúa homongeneidad de medias) y Kruskal-Wallis (evalúa homogeneidad de medianas).
+Evaluar efectos entre los grupos ("diferencias significativas") de los agrupamientos UPGMA y Ward. Al tratarse de 6 grupos, se utilizan las pruebas estadísticas ANOVA (evalúa homongeneidad de medias) y Kruskal-Wallis (evalúa homogeneidad de medianas). Las tablas están ordenadas en orden ascendente por la columna `p_valor_a`, que son los p-valores de la prueba ANOVA.
 
 ```{r}
 m_amb_upgma_k6 %>%
   group_by(variable) %>%
   summarise(
     p_valor_a = tryCatch(oneway.test(valor ~ grupos_upgma_k6)$p.value, error = function(e) NA),
-    # p_valor_k = tryCatch(kruskal.test(valor ~ grupos_upgma_k6, exact = F)$p.value, error = function(e) NA)
     p_valor_k = tryCatch(kruskal.test(valor ~ grupos_upgma_k6)$p.value, error = function(e) NA)
     ) %>%
   arrange(p_valor_a) %>%
@@ -360,15 +371,17 @@ m_amb_ward_k6 %>%
   group_by(variable) %>%
   summarise(
     p_valor_a = tryCatch(oneway.test(valor ~ grupos_upgma_k6)$p.value, error = function(e) NA),
-    # p_valor_k = tryCatch(kruskal.test(valor ~ grupos_upgma_k6, exact = F)$p.value, error = function(e) NA)
     p_valor_k = tryCatch(kruskal.test(valor ~ grupos_upgma_k6)$p.value, error = function(e) NA)
     ) %>%
   arrange(p_valor_a) %>%
   print(n=Inf)
-
 ```
 
-> Te recomiendo aprender sobre pruebas estadísticas para poder interpretar mejor estos resultados. Igualmente, considera que el resultado obtenido es complicado de interpretar con certeza, debido a que determinados supuestos para ejecutar el ANOVA no se cumplen. En tal sentido, la prueba de Kruskal-Wallis, que tiene menos requisitos, surge como alternativa, pero tiene menos potencia que el ANOVA.
+> Te recomiendo aprender sobre pruebas estadísticas para poder interpretar con asertividad estos resultados. Igualmente, considera que del resultado obtenido es difícil extraer conclusiones definitivas o contundentes, debido a que determinados supuestos para ejecutar el ANOVA no se cumplen. La prueba de Kruskal-Wallis, que tiene menos requisitos, surge como alternativa, pero tiene menos potencia que el ANOVA. Otorga a estos resultados la categoría de "preliminares", o considéralos como un "buen punto de partida".
+
+> Normalmente, se considera "0.01" como un umbral convencional (se denomina "nivel de significancia) por debajo del cual se habla de "resultado significativo". Cada fila de las tablas anteriores contiene el resultado de dos pruebas para una variable. Las primera filas, muestran las variables que obtuvieron resultados significativos en la prueba ANOVA, porque las tablas están ordenadas ascendentemente por medio del p-valor de la prueba ANOVA.
+
+> En principio, los resultados significativos indican que, el promedio de la variable en cuestión (recuerda, cada fila es una variable), no es homogéneo entre los grupos analizados (e.g. UPGMA o Ward). Por ejemplo, fíjate en el p-valor de la prueba ANOVA (`p_valor_a`) que obtuvieron variables como `GFC-LOSS year 2020`, `ESA Open Water` y `G90-GEOM footslope` por sólo citar 3. Esto significa que, la variable en cuestión, varía significativamente entre grupos, más allá de lo esperado por azar. En términos ecológicos, significa que, la variable en cuestión, podría estar asociada con la composición de la comunidad, por lo que podríamos seguir explorando dicha variable para determinar si explica algo de la varianza en la comunidad.
 
 ```{r}
 m_amb_upgma_k6 %>% 
@@ -379,7 +392,92 @@ m_amb_upgma_k6 %>%
   theme_bw() +
   theme(legend.position="none") +
   facet_wrap(~ variable, scales = 'free_y')
+m_amb_ward_k6 %>% 
+  group_by(variable) %>% 
+  ggplot() + aes(x = grupos_ward_k6, y = valor, fill = grupos_ward_k6) + 
+  geom_boxplot() + 
+  scale_fill_brewer(palette = 'Accent') +
+  theme_bw() +
+  theme(legend.position="none") +
+  facet_wrap(~ variable, scales = 'free_y')
 ```
+
+> En los diagramas de caja, notarás que, las variables que aparecen en las primeras filas de las tablas anteriores, son las mismas que presentan mayor variabilidad de las cajas. Sigo con el ejemplo de las variables `GFC-LOSS year 2020`, `ESA Open Water` y `G90-GEOM footslope`, y nota que las anchuras de sus cajas, sus bigotes y la posición de la mediana (línea interior de la caja), fluctúa mucho entre grupos.
+
+Algunos mapas:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r}
+m_amb_upgma_k6_sf <- env %>%
+   rownames_to_column('hex_id') %>% 
+   mutate(grupos_upgma_k6) %>%
+   inner_join(za %>% select(hex_id)) %>%
+  st_as_sf()
+# mapa_upgma_k6 <- mapView(
+#   m_amb_upgma_k6_sf %>% st_as_sf(),
+#   layer.name = 'Grupos (6) UPGMA',
+#   alpha.regions = 0.6,
+#   map.types = 'Esri',
+#   legend = T,
+#   col.regions = colores_grupos,
+#   zcol = 'grupos_upgma_k6') %>%
+#   leaflet::setView(
+#     lng = -71.5,
+#     lat = 18,
+#     zoom = 7)
+
+fpal_grupos <- colorFactor(
+    palette = RColorBrewer::brewer.pal(length(unique(m_amb_upgma_k6_sf$grupos_upgma_k6)), 'Set1'),
+  domain = unique(m_amb_upgma_k6_sf$grupos_upgma_k6))
+mapa_upgma_k6 <- leaflet(m_amb_upgma_k6_sf) %>% 
+  addPolygons(
+    group = ~ levels(grupos_upgma_k6),
+    label = grupos_upgma_k6,
+    color = ~ fpal_grupos(grupos_upgma_k6),
+    stroke = F, fillOpacity = 0.7
+  ) %>%
+  addLegend(pal = fpal_grupos, values = ~ grupos_upgma_k6,
+            group = ~ grupos_upgma_k6,
+            opacity = 0.7,
+            title = "Grupos UPGMA, k=6") %>%
+  addTiles(group = 'OSM') %>%
+  addProviderTiles("Esri.NatGeoWorldMap", group="ESRI Mapa") %>%
+  addProviderTiles("Esri.WorldImagery", group="ESRI Imagen") %>%
+  addProviderTiles("CartoDB.Positron", group= "CartoDB") %>%
+  addLayersControl(
+    baseGroups = c("ESRI Imagen", "CartoDB", "OSM", "ESRI Mapa"),    
+    overlayGroups = ~ levels(grupos_upgma_k6), position = 'bottomright',
+    options = layersControlOptions(collapsed = FALSE)) %>% 
+  leaflet_map_view %>% 
+  addFullscreenControl()
+mapa_upgma_k6
+#
+
+mapa_upgma_k2 %>% mapshot(
+  file = 'mapa_upgma_k2.png', 
+  remove_controls = c("zoomControl", "layersControl", "homeButton")
+)
+```
+
 
 
 ## Técnicas de ordenación
