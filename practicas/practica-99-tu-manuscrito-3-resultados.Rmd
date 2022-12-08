@@ -11,7 +11,7 @@ always_allow_html: true
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = T, cache=F, message=F, warning=F, fig.width=9)
+knitr::opts_chunk$set(echo = T, cache=T, message=F, warning=F, fig.width=9)
 ```
 
 # ¿Qué contiene la sección "Resultados"?
@@ -120,7 +120,7 @@ data.frame(`Número de hexágonos` = sort(colSums(mc_orig), decreasing = T), che
 # que están presentes en m hexágonos o más. Si eliges un rango, por ejemplo [m,n], el script generará
 # una matriz de comunidad que representadas un mínimo de m hexágonos y un máximo de n hexágonos.
 # (ambos extremos inclusive).
-en_cuantos_hex <- 15
+en_cuantos_hex <- 10
 # En este caso, 15 significa 15 o más (hasta el límite superior). IMPORTANTE: elige TU PROPIO umbral.
 # en_cuantos_hex <- 10:20
 {if(length(en_cuantos_hex)==1) selector <- en_cuantos_hex:max(colSums(mc_orig)) else
@@ -175,7 +175,7 @@ env <- za_intermedia[match(rownames(mi_fam), rownames(za_intermedia)), ]
 all(rownames(mi_fam) == rownames(env)) #Si es TRUE, sigue adelante
 ```
 
-Se puede probar con un subconjunto de variables, generando una matriz ambiental que seleccione variables según el grupo al que pertenecen, con ayuda del sufijo.
+Se puede probar con un subconjunto de variables, generando una matriz ambiental que seleccione variables según el grupo al que pertenecen, con ayuda del prefijo.
 
 ```{r}
 # env_selecionada <- env %>%
@@ -389,32 +389,40 @@ m_amb_ward_k6_ak %>%
   gsub(' NA ', '', .)
 ```
 
-> Te recomiendo aprender sobre pruebas estadísticas para poder interpretar con asertividad estos resultados. Igualmente, considera que del resultado obtenido es difícil extraer conclusiones definitivas o contundentes, debido a que determinados supuestos para ejecutar el ANOVA no se cumplen. La prueba de Kruskal-Wallis, que tiene menos requisitos, surge como alternativa, pero tiene menos potencia que el ANOVA. Otorga a estos resultados la categoría de "preliminares", o considéralos como un "buen punto de partida".
+Te recomiendo aprender sobre pruebas estadísticas para poder interpretar con asertividad estos resultados. Igualmente, considera que del resultado obtenido es difícil extraer conclusiones definitivas o contundentes, debido a que determinados supuestos para ejecutar el ANOVA no se cumplen. La prueba de Kruskal-Wallis, que tiene menos requisitos, surge como alternativa, pero tiene menos potencia que el ANOVA. Otorga a estos resultados la categoría de "preliminares", o considéralos como un "buen punto de partida".
 
-> Normalmente, se considera "0.01" como un umbral convencional (se denomina "nivel de significancia) por debajo del cual se habla de "resultado significativo". Cada fila de las tablas anteriores contiene el resultado de dos pruebas para una variable. Las primera filas, muestran las variables que obtuvieron resultados significativos en la prueba ANOVA, porque las tablas están ordenadas ascendentemente por medio del p-valor de la prueba ANOVA.
+Normalmente, se considera "0.01" como un umbral convencional (se denomina "nivel de significancia) por debajo del cual se habla de "resultado significativo". Cada fila de las tablas anteriores contiene el resultado de dos pruebas para una variable. Las primera filas, muestran las variables que obtuvieron resultados significativos en la prueba ANOVA, porque las tablas están ordenadas ascendentemente por medio del p-valor de la prueba ANOVA.
 
-> En principio, los resultados significativos indican que, el promedio de la variable en cuestión (recuerda, cada fila es una variable), no es homogéneo entre los grupos analizados (e.g. UPGMA o Ward). Por ejemplo, fíjate en el p-valor de la prueba ANOVA (`p_valor_a`) que obtuvieron variables como `GFC-LOSS year 2020`, `ESA Open Water` y `G90-GEOM footslope` por sólo citar 3. Esto significa que, la variable en cuestión, varía significativamente entre grupos, más allá de lo esperado por azar. En términos ecológicos, significa que, la variable en cuestión, podría estar asociada con la composición de la comunidad, por lo que podríamos seguir explorando dicha variable para determinar si explica algo de la varianza en la comunidad.
+En principio, los resultados significativos indican que, el promedio de la variable en cuestión (recuerda, cada fila es una variable), no es homogéneo entre los grupos analizados (e.g. UPGMA o Ward). Por ejemplo, fíjate en el p-valor de la prueba ANOVA (`p_valor_a`) que obtuvieron variables como `GFC-LOSS year 2020`, `ESA Open Water` y `G90-GEOM footslope` por sólo citar 3. Esto significa que, la variable en cuestión, varía significativamente entre grupos, más allá de lo esperado por azar. En términos ecológicos, significa que, la variable en cuestión, podría estar asociada con la composición de la comunidad, por lo que podríamos seguir explorando dicha variable para determinar si explica algo de la varianza en la comunidad.
 
 ```{r, fig.width=9, fig.height=20, dpi=300}
 m_amb_upgma_k6 %>% 
   group_by(variable) %>% 
   ggplot() + aes(x = grupos_upgma_k6, y = valor, fill = grupos_upgma_k6) + 
-  geom_boxplot() + 
-  scale_fill_brewer(palette = 'Accent') +
+  geom_boxplot(lwd = 0.2) + 
+  scale_fill_brewer(palette = 'Set1') +
   theme_bw(base_size=8) +
   theme(legend.position="none") +
   facet_wrap(~ variable, scales = 'free_y', ncol = 6)
 m_amb_ward_k6 %>% 
   group_by(variable) %>% 
   ggplot() + aes(x = grupos_ward_k6, y = valor, fill = grupos_ward_k6) + 
-  geom_boxplot() + 
-  scale_fill_brewer(palette = 'Accent') +
+  geom_boxplot(lwd = 0.2) + 
+  scale_fill_brewer(palette = 'Set1') +
   theme_bw(base_size=8) +
   theme(legend.position="none") +
   facet_wrap(~ variable, scales = 'free_y', ncol = 6)
 ```
 
-> En los diagramas de caja, notarás que, las variables que aparecen en las primeras filas de las tablas anteriores, son las mismas que presentan mayor variabilidad de las cajas. Sigo con el ejemplo de las variables `GFC-LOSS year 2020`, `ESA Open Water` y `G90-GEOM footslope`, y nota que las anchuras de sus cajas, sus bigotes y la posición de la mediana (línea interior de la caja), fluctúa mucho entre grupos.
+En los diagramas de caja, notarás que, las variables que aparecen en las primeras filas de las tablas anteriores, son las mismas que presentan mayor variabilidad de las cajas. Sigo con el ejemplo de las variables `GFC-LOSS year 2020`, `ESA Open Water` y `G90-GEOM footslope`, y nota que las anchuras de sus cajas, sus bigotes y la posición de la mediana (línea interior de la caja), fluctúa mucho entre grupos.
+
+El objetivo de adjuntarle, a la matriz ambiental, el vector de agrupamiento generado a partir de datos de comunidad, consiste en caracterizar ambientalmente los hábitats de los subgrupos diferenciados según su composición. Observando los resultados de las pruebas estadísticas, de los diagramas de caja, una evaluación rápida sugiere que los grupos se caracterizan, ambientalmente, de la siguiente manera:
+
+1. Hábitats 2 y 3. Terrenos a elevaciones moderadas y altas, en zonas de vertiente, espolones o valles fluviales, con predominio del bosque, con dosel cerrado y/o importante cobertura arbórea, normalmente con especies latifoliadas, con temperaturas promedio moderadas a bajas y precipitaciones elevadas, 
+
+2. Hábitats 1 y 4. Terrenos predominantemente bajos, en zonas costeras o próximo a ella, áreas construidas con categoría urbanística, o área con coberturas de matorral y/o uso agrícola, temperaturas elevadas y precipitaciones bajas a moderadas.
+
+3. Hábitats 5 y 6. Terrenos de piedemontes, con uso agrícola o cobertura de herbazal, de temperaturas elevadas y precipitaciones de moderadas, tanto en zonas costeras como moderamente de interior, pero no extremadamente continental.
 
 A continuación, muestro mapas de los dos agrupamientos, tanto UPGMA como Ward, y comparo con algunas de las variables que presentaron efecto. Usando la función `mapa_leaflet` este bloque genera un mapa interactivo que colorea los hexágonos en función del grupo al que fueron asignados de acuerdo al análisis de agrupamiento realizado a la matriz de comunidad por el método UPGMA. Te recomiendo que uses la función `mapa_leaflet`, especificando tu matriz ambiental, la variable que quieras representar y un título, para generar mapas de tus propias variables seleccionadas.
 
@@ -573,7 +581,7 @@ env <- za_intermedia[match(rownames(mi_fam), rownames(za_intermedia)), ]
 all(rownames(mi_fam) == rownames(env)) #Si es TRUE, sigue adelante
 ```
 
-Se puede probar con un subconjunto de variables, generando una matriz ambiental que seleccione variables según el grupo al que pertenecen, con ayuda del sufijo.
+Se puede probar con un subconjunto de variables, generando una matriz ambiental que seleccione variables según el grupo al que pertenecen, con ayuda del prefijo.
 
 ```{r}
 # env_selecionada <- env %>%
@@ -648,155 +656,63 @@ arrows(0, 0,
 
 ## Análisis de diversidad
 
+Me basaré en los scripts que comienzan por `di_` de este [repo](https://github.com/biogeografia-master/scripts-de-analisis-BCI), los cuales explico en los vídeos de "Análisis de diversidad" (vídeos 19 y 20) de la lista de reproducción ["Ecología Numérica con R" de mi canal](https://www.youtube.com/playlist?list=PLDcT2n8UzsCRDqjqSeqHI1wsiNOqpYmsJ).
 
+> INICIA texto+código común entre secciones
 
-A partir de este punto, inicia el análisis de diversidad. Primero cargaré los paquetes necesarios.
+Fijar un directorio de trabajo no es recomendable, mejor trabaja por proyecto. En cualquier caso, si no quieres o no puedes crear un proyecto, usa la sentencia que verás abajo, cambiando `TU_DIRECTORIO` por la ruta del directorio donde tengas almacenados tus datos y tus scripts.
 
-```{r, eval=F}
+```{r}
+# setwd('practicas/')
+```
+
+Cargar paquetes.
+
+```{r}
+library(vegan)
+library(sf)
+library(tidyverse)
+library(tmap)
 library(kableExtra)
-library(rgbif)
-library(terra)
-library(geodata)
-library(sf)
-library(h3jsr)
-library(tidyverse)
-library(units)
-library(devtools)
-library(CoordinateCleaner)
-library(countrycode)
-library(vegan)
-options(stringsAsFactors = FALSE)
-
-source_url('https://raw.githubusercontent.com/biogeografia-202202/material-de-apoyo/master/practicas/funciones.R')
-reg_pres <- occ_data(scientificName = 'Culicidae',
-                     hasCoordinate = T,
-                     country = 'DO',
-                     limit = 100000)$data
-# Imprime en pantalla el número de registros:
-nrow(reg_pres)
-
-# reg_pres <- occ_download_get('0069667-220831081235567') %>% 
-#   occ_download_import()
-
-reg_pres <- reg_pres %>% 
-  # Quitar registros en centroides de país y sus proximidades
-  cc_cen(lon = 'decimalLongitude', lat = 'decimalLatitude', buffer = 2000) %>%
-  # Quitar registros en colecciones y sus proximidades
-  cc_inst(lon = 'decimalLongitude', lat = 'decimalLatitude', buffer = 2000) %>%
-  # Quitar registros en mar/oceáno
-  cc_sea(lon = 'decimalLongitude', lat = 'decimalLatitude')
-# Imprime en pantalla el número de registros:
-nrow(reg_pres)
-
-table(reg_pres$species) %>% kable(col.names = c('Especie', 'N'), format="markdown")
-length(unique(reg_pres$acceptedScientificName))
-
-rd <- st_read('rd.gpkg', layer = 'pais')
-# Otras capas disponibles: regiones, provincias, municipios
-plot(rd)
-# Necesitarás un área buffer extra para que los hexágonos cubran todo el país
-rd_extra <- st_buffer(rd, dist = set_units(2, km))
-plot(rd)
-plot(rd_extra, add = T)
-
-resolucion <- 7 # RECOMENDADO: menor o igual a 6
-ind_esp <- polygon_to_cells(rd_extra, res = resolucion, simple = FALSE)
-ind_esp <- cell_to_polygon(unlist(ind_esp$h3_addresses), simple = FALSE)
-plot(rd_extra)
-plot(as_Spatial(ind_esp), add = T)
-plot(rd, add=T)
-
-nrow(ind_esp)
-
-ind_esp_centroides <- ind_esp %>%
-  st_centroid() %>%
-  mutate(lon = unlist(map(geometry, 1)), lat = unlist(map(geometry, 2)))
-
-plot(as_Spatial(ind_esp))
-plot(as_Spatial(ind_esp_centroides), add=T, cex = 0.2)
-
-reg_pres_sf <- st_as_sf(
-  x = reg_pres,
-  coords = c("decimalLongitude", "decimalLatitude"),
-  crs = 4326)
-
-plot(rd)
-plot(as_Spatial(ind_esp), add=T)
-plot(as_Spatial(reg_pres_sf), pch=16, col='green', add=T)
-
-reg_pres_sf_ok <- reg_pres_sf %>%
-  st_intersection(st_union(ind_esp))
-reg_pres_sf_ok
-
-plot(rd)
-plot(as_Spatial(ind_esp), add=T)
-plot(as_Spatial(reg_pres_sf_ok), pch=16, col='green', add=T)
-
-ggplot(data = rd) + # RD es la base, superpondremos capas
-  geom_sf(fill = 'antiquewhite1') + # La geometría base ya está colocada
-  geom_sf(data = ind_esp, fill = 'transparent') + # Esto añade el índice espacial estilizado
-  geom_text(data = ind_esp_centroides, aes(lon, lat, label = h3_address), size = 1) + # Etiquetas H3
-  geom_sf(data = reg_pres_sf_ok, size = 1, fill = 'green', color = 'green', alpha = 0.5) + # Registros GBIF
-  theme(legend.position = "none") +
-  theme_bw()
-
-st_write(reg_pres_sf_ok %>% select(-networkKeys), 'registros_depurados_de_presencia.gpkg', delete_dsn = T)
-st_write(ind_esp, 'indice_espacial.gpkg', delete_dsn = T)
-
-saveRDS(object = reg_pres_sf_ok, file = 'registros_depurados_de_presencia.RDS')
-saveRDS(ind_esp, 'indice_espacial.RDS')
-
-mc <- reg_pres_sf_ok %>%
-  st_join(ind_esp) %>% 
-  select(acceptedScientificName, h3_address) %>% 
-  st_drop_geometry() %>% 
-  mutate(n = 1) %>% 
-  distinct() %>% #Matriz de presencia/ausencia
-  # group_by(h3_address, acceptedScientificName) %>%  summarise(n = sum(n)) %>% #Matriz con número de registros
-  pivot_wider(names_from = acceptedScientificName, values_from = n, values_fill = 0) %>% 
-  column_to_rownames('h3_address')
-# Extracto de la matriz
-set.seed(999)
-mc[sample(seq_len(nrow(mc)), 10), sample(seq_len(ncol(mc)), ifelse(ncol(mc)<3, ncol(mc), 3))] %>%
-  kable(format="markdown")
-
-saveRDS(object = mc, file = 'matriz_de_comunidad.RDS')
-
-#Analisis de diversidad.
-#REINICIAR SESIÓN DE R
-
-library(vegan)
-library(adespatial)
-library(plyr)
-library(RColorBrewer)
-library(tidyverse)
-library(sf)
-library(SpadeR)
-library(iNEXT)
 gh_content <- 'https://raw.githubusercontent.com/'
 gh_zonal_stats <- 'https://github.com/geofis/zonal-statistics/raw/main/out/'
 repo_analisis <- 'biogeografia-master/scripts-de-analisis-BCI/master'
+repo_sem202202 <- 'biogeografia-202202/material-de-apoyo/master/practicas/'
 devtools::source_url(paste0(gh_content, repo_analisis, '/biodata/funciones.R'))
-# source('biodata/funciones.R')
+devtools::source_url(paste0(gh_content, repo_sem202202, 'train.R'))
+devtools::source_url(paste0(gh_content, repo_sem202202, 'funciones.R'))
+```
 
-#####REAPROVECHAR CON ANÁLISIS DE DIVERSIDAD TERMINADOS#####
-# grupos_upgma_k2 <- readRDS('grupos_upgma_k2.RDS')
-# table(grupos_upgma_k2)
-# grupos_ward_k3 <- readRDS('grupos_ward_k3.RDS')
-# table(grupos_ward_k3)
-##### FIN DE REAPROVECHAR CON ANÁLISIS DE DIVERSIDAD TERMINADOS#####
+Carga tu matriz de comunidad, que habrás generado en la práctica 2, y elige un umbral para especies raras o rangos de registros de presencia para seleccionar especies en una nueva matriz de comunidad.
 
+```{r}
 mc_orig <- readRDS("matriz_de_comunidad.RDS")
-nrow(mc_orig)
-ncol(mc_orig)
-names(mc_orig)
-unique(word(names(mc_orig), 1, 1))
-table(word(names(mc_orig), 1, 1))
-sort(colSums(mc_orig))
+nrow(mc_orig) #Número de filas, equivale a número de hexágonos con registros de presencia
+ncol(mc_orig)  #Número de columnas, equivale a número de especies, riqueza
+data.frame(Especies = names(mc_orig)) %>% 
+  kable(booktabs=T) %>%
+  kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
+  gsub(' NA ', '', .) #Lista de especies
+unique(word(names(mc_orig), 1, 1)) #Géneros representados
+table(word(names(mc_orig), 1, 1)) #Número de especies por género
+data.frame(`Número de hexágonos` = sort(colSums(mc_orig), decreasing = T), check.names = F) %>% 
+  kable(booktabs=T) %>%
+  kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
+  gsub(' NA ', '', .) # Número de hexágonos en los que está presente cada especie
 
-# ¿En cuántos hexágonos está cada especie?
-# Puede usar un único valor mínimo (inclusive) o un rango con dos números (extremos inclusive)
-en_cuantos_hex <- 4
+# Usa el vector anterior para determinar un umbral o rango de registros para filtrar tu matriz
+# ¿En cuántos hexágonos está cada especie? Filtra tus datos usando tu propio criterio.
+# Especies que aparecen en pocos hexágonos se consideran "raras". Por ejemplo, si una especie sólo
+# aparece en un hexágono en todo el país, es un "singleton", si en dos, "doubleton", y así.
+# Estas especies podrían contribuir a generar "ruido" en análisis posteriores, se recomienda excluirlas.
+# Elige un valor mínimo (representado por único número entero) o por un rango de enteros (e.g. de 10 a 20),
+# para seleccionar las especies que estén mejor representadas de acuerdo a tu criterio.
+# Por ejemplo, si usas el valor m, el script considerará a este valor como "el número mínimo de hexágonos
+# en los que está representada una especie, y creará una matriz de comunidad de especies seleccionadas
+# que están presentes en m hexágonos o más. Si eliges un rango, por ejemplo [m,n], el script generará
+# una matriz de comunidad que representadas un mínimo de m hexágonos y un máximo de n hexágonos.
+# (ambos extremos inclusive).
+en_cuantos_hex <- 10 #En análisis de diversidad, uso "1" para conservar todas las especies.
 # En este caso, 15 significa 15 o más (hasta el límite superior). IMPORTANTE: elige TU PROPIO umbral.
 # en_cuantos_hex <- 10:20
 {if(length(en_cuantos_hex)==1) selector <- en_cuantos_hex:max(colSums(mc_orig)) else
@@ -804,34 +720,41 @@ en_cuantos_hex <- 4
     selector <- min(en_cuantos_hex):max(en_cuantos_hex) else
       stop('Debes indicar uno o dos valores numéricos')}
 selector
-mi_fam <- mc_orig[, colSums(mc_orig) %in% selector]
-ncol(mi_fam)
+mc_orig_seleccionadas <- mc_orig[, colSums(mc_orig) %in% selector]
+mi_fam <- mc_orig_seleccionadas[!rowSums(mc_orig_seleccionadas)==0, ] #Elimina filas sin registros
+# rowSums(mi_fam) #Riqueza por hexágonos con especies seleccionadas. Comentado por extenso
+all(rowSums(mi_fam)>0) #Debe ser TRUE: todos los hexágonos tienen al menos 1 registro
+ncol(mi_fam) #Riqueza de especies
+
+# Usar nombres cortos o abreviados para las especies
 nombres_largos <- colnames(mi_fam)
 (colnames(mi_fam) <- make.cepnames(word(colnames(mi_fam), 1, 2)))
 (df_equivalencias <- data.frame(
   nombre_original = nombres_largos,
   colnames(mi_fam)))
+```
 
-mi_fam_t <- decostand(mi_fam, 'hellinger') #Hellinger
+Transforma la matriz de comunidad. Este paso es importante (pero sólo para análisis de agrupamiento y de ordenación, no para análisis de diversidad), lo explico [aquí](https://www.youtube.com/watch?v=yQ10lp0-nHc&list=PLDcT2n8UzsCRDqjqSeqHI1wsiNOqpYmsJ&index=10)
+
+```{r}
+# mi_fam_t <- decostand(mi_fam, 'hellinger') #Hellinger
 # Otras transformaciones posibles con datos de presencia/ausencia
 # mi_fam_t <- decostand(mi_fam, 'normalize') #Chord
 # mi_fam_t <- decostand(log1p(mi_fam), 'normalize') #Chord
 # mi_fam_t <- decostand(mi_fam, 'chi.square') #Chi-square
+```
 
+Genera la matriz ambiental a partir del archivo de estadística zonal por celdas H3 de República Dominicana, de acuerdo con la resolución que prefieras. Para el ejemplo, usé la resolución 5, pero puedes usar/probar con otra, para lo cual, sólo tendrías que cambiar el objeto `res <- X`, donde `X` puede ser un número cualquiera entre 4 y 7.
 
-library(vegan)
-library(sf)
-library(tidyverse)
-library(tmap)
-gh_content <- 'https://raw.githubusercontent.com/'
-gh_zonal_stats <- 'https://github.com/geofis/zonal-statistics/raw/main/out/'
-repo_analisis <- 'biogeografia-master/scripts-de-analisis-BCI/master'
-devtools::source_url(paste0(gh_content, repo_analisis, '/biodata/funciones.R'))
+Para aprender más sobre la fuente de estadística zonal de República Dominicana, que contiene un conjunto de más de 100 variables resumidas por celdas H3, visita [este repo](https://github.com/geofis/zonal-statistics). Debes visitar dicho repo para poder citarlo apropiadamente.
 
-res <- 7 #Resolución H3
+```{r, message=F, warning=F}
+#Matriz ambiental
+res <- 5 #Resolución H3
 tmpfile <- tempfile()
 download.file(paste0(gh_zonal_stats, 'all_sources_all_variables_res_', res, '.gpkg'), tmpfile)
 za <- st_read(tmpfile, optional = T)
+# Las siguientes líneas están comentadas, porque producen muchos mapas. Descoméntalas y ejecútalas si quieres verlos
 # za %>% st_as_sf('geom') %>%
 #   pivot_longer(cols = -matches('base|hex_id|geom')) %>% 
 #   tm_shape() + tm_fill(col = 'value') +
@@ -842,22 +765,168 @@ za_intermedia <- za %>%
   column_to_rownames('hex_id')
 env <- za_intermedia[match(rownames(mi_fam), rownames(za_intermedia)), ]
 all(rownames(mi_fam) == rownames(env)) #Si es TRUE, sigue adelante
+```
 
-(indices <- alpha_div(mi_fam_t))
-pairs(indices,
-      lower.panel = panel.smooth,
-      upper.panel = panel.cor,
-      diag.panel = panel.hist,
-      main = "Pearson Correlation Matrix")
-indices_env <- bind_cols(
-  indices,
-  bci_env_grid %>%
-    select_if(is.numeric) %>%
-    st_drop_geometry %>%
-    select(-id) %>% 
-    select(-matches('^geom.*pct$')))
-indices_env %>% tibble
-ezCorM(indices_env, r_size_lims = c(3,5), label_size = 4)
+Se puede probar con un subconjunto de variables, generando una matriz ambiental que seleccione variables según el grupo al que pertenecen, con ayuda del prefijo.
+
+```{r}
+# env_selecionada <- env %>%
+#   st_drop_geometry() %>%
+#   dplyr::select(matches('^ESA '))
+# env_selecionada <- env %>%
+#   st_drop_geometry() %>%
+#   dplyr::select(matches('^G90-GEOM '))
+# env_selecionada <- env %>%
+#   st_drop_geometry() %>%
+#   dplyr::select(matches('^CH-BIO '))
+# env_selecionada <- env %>%
+#   st_drop_geometry() %>%
+#   dplyr::select(matches('^GHH '))
+# env_selecionada <- env %>%
+#   st_drop_geometry() %>%
+#   dplyr::select(matches('^GSL '))
+# env_selecionada <- env %>%
+#   st_drop_geometry() %>%
+#   dplyr::select(matches('^CGL '))
+```
+
+> FINALIZA texto+código común entre secciones
+
+A partir de este punto, inicia el análisis de diversidad. Primero cargaré los paquetes necesarios (algunos redundan, pero no genera inconvenientes en el código).
+
+```{r}
+library(kableExtra)
+library(vegan)
+library(adespatial)
+library(RColorBrewer)
+library(tidyverse)
+library(sf)
+library(SpadeR)
+library(iNEXT)
+library(GGally)
+options(stringsAsFactors = FALSE)
+```
+
+La principal desventaja de trabajar con registros de presencia, es que la mayoría de los índices de diversidad alpha fueron diseñados originalmente para calcularse a partir de datos de abundancia. Sin embargo, la riqueza de especies, que es el número $q=0$ de Hill ($=N_0$ en las columnas que produce la función `alpha_div`) es un buen proxy sobre la diversidad, y nos ayudará a comparar sitios. Aparte de la columna `N0`, verás que la función `alpha_div` del siguiente bloque genera otras columnas; son índice pensados para datos de abundancia, que en este caso no usaremos. Por otra parte, y afortunadamente, los métodos de estimación de riqueza de Chao, y los de diversidad beta (al final de esta sección), aprovechan sustancialmente los registros de presencia.
+
+> Una nota adicional. Es recomendable que dispongas de un análisis clúster (agrupamiento) básico para acompañar los análisis de esta sección. Este te servirá para conocer cómo fluctúa la diversidad en función de los hábitats. Para obtenerlo, no te pido que ejecutes toda la sección de "Análisis de agrupamiento", sino tan sólo la primera parte, y que generes un vector de agrupamiento, como el que creé en la sección de análisis clúster denominado `grupos_upgma_k6`. Asegúrate que tu análisis cluster se basó en la misma matriz de comunidad que usarás en el análisis de diversidad (si en clúster usaste una matriz con umbral 5, asegúrate de usar la misma matriz aquí).
+
+```{r}
+indices <- alpha_div(mi_fam) # Mi fam fue definida justa arriba por "especies en 5 o más hexágonos",
+# lo cual coincide con el criterio usado en el análisis clúster.
+# Con datos de abundancia, todos estos índices serían útiles.
+# Con registros de presencia, como es nuestro caso, sólo N0 nos aportará algún resultado.
+# Imprimiré sólo 10 para no desbordar la consola
+set.seed(999); indices[sample(1:nrow(indices), 10), ] %>% 
+  kable(booktabs=T) %>%
+  kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
+  gsub(' NA |NaN ', '', .) #Lista de especies
+# También, imprimiré los hexágonos con mayor riqueza
+indices %>%
+  filter(N0 >= 5) %>% 
+  arrange(desc(N0)) %>% 
+  kable(booktabs=T) %>%
+  kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
+  gsub(' NA |NaN ', '', .) #Lista de especies
+#Comprobar ordenacion de hexágonos coincidente
+all(rownames(indices)==rownames(env)) # Debe ser TRUE
+```
+
+Evaluar correlación entre riqueza y variables ambientales mediante matriz de correlación. Usa los prefijos de cada grupo de variables. Consulta [esta tabla](https://geofis.github.io/zonal-statistics/README.html#tab:variables) para una lista completa de variables y sus prefijos (en la tabla, erróneamente, escribí "sufijos", pero son prefijos realmente). Presta atención a la última columna de la matriz, que muestra cómo se correlaciona `N0` con las variables ambientales que elijas. Si existe un $|R|$ elevado (si es muy cercano a -1 o a 1) y la prueba de producto-momento es significativa (si hay asteriscos, lo es), entonces toma nota de que dicha variable se asocia con la riqueza. Si $R$ es negativo, la relación es inversa (cuando aumenta la variable, disminuye la riqueza, y viceversa); si es positivo, la relación es directa (cuando aumenta la variable, aumenta también la riqueza).
+
+Estos son los prefijos disponibles (recuerda consultar la [tabla de referencia](https://geofis.github.io/zonal-statistics/README.html#tab:variables)).
+
+```{r}
+prefijos_disponibles <- c('ESA', 'CGL', 'GSL', 'GHH', 'WCL', 'CH-BIO', 'G90', 'G90-GEOM',
+              'CGIAR-ELE', 'GFC-PTC YEAR 2000', 'GFC-LOSS', 'OSM-DIST', 'GP-CONSUNadj YEAR 2020')
+```
+
+Correlación de la riqueza (`N0`) con las coberturas de la ESA. En mi caso, con Polygonaceae, es muy pero que muy llamativo, que exista relación directa significativa (y la máxima de todas las calculadas) de la riqueza con "porcentaje de zonas construidas en el hexágono". Esta es una prueba más de qué tan sesgados están los registros de presencia de GBIF.
+
+```{r}
+riq_esa <- sel_por_prefijo('ESA')
+ggpairs(riq_esa, labeller = label_wrap_gen(width=10)) + 
+  theme(text = element_text(size = 6))
+```
+
+Correlación de la riqueza (`N0`) con las variables bioclimáticas de CHELSA. Nota que existe correlación de la riqueza con variables de precipitación.
+
+```{r}
+riq_chbio <- sel_por_prefijo('CH-BIO')
+ggpairs(riq_chbio, labeller = label_wrap_gen(width=10)) + 
+  theme(text = element_text(size = 6))
+```
+
+En cuanto a heterogeneidad de hábitat, existe asociación con la variables "correlación de hábitat". Si investigas sobre esta variable (ver referencias señaladas en la [tabla de variables](https://geofis.github.io/zonal-statistics/README.html#tab:variables)), notarás que se refiere a la dependencia lineal del índice de vegetación mejorado (EVI) con píxeles adyacentes (autocorrelación espacial). Esto sugiere las áreas donde se concentran valores del EVI, hay mayores valores de riqueza.
+
+```{r}
+riq_ghh <- sel_por_prefijo('GHH')
+ggpairs(riq_ghh, labeller = label_wrap_gen(width=10)) + 
+  theme(text = element_text(size = 6))
+```
+
+MUY IMPORTANTE: no te quedes sólo con estas variables, pues mis datos seguramente serán muy diferentes a los tuyos. Además, estoy simplificando para evitar hacer la demostración demasiado larga, pero te recomiendo probar con todos los prefijos disponibles.
+
+<!-- Uno de los problemas de trabajar con la matriz de comunidad original, es que los hexágonos con pocos registros, o con solo una especie, alteran el análisis de correlación. Además, otro problema asociado a nuestros datos es que no son independientes (están autocorrelacionados espacialmente), por lo que se viola un supuesto fundamental. En cualquier caso, la exploración sigue siendo válida. Probemos a excluir los hexágonos con una especie, que son mayoría, 101 de hecho, unamos la matriz de comunidad con una matriz ambiental que coincidente (los hexágonos excluidos no pueden aparecer en la nueva matriz ambiental y deben estar en el mismo orden). -->
+
+<!-- ```{r} -->
+<!-- mc_selecc <- mc_orig[rowSums(mc_orig)>2,] -->
+<!-- mc_ma_selecc <- alpha_div(mc_selecc) %>% select(N0) %>% rownames_to_column('hex_id') %>%  -->
+<!--   inner_join(env %>% rownames_to_column('hex_id'), by = 'hex_id') -->
+<!-- ``` -->
+
+<!-- Ahora seleccionaré las mismas columnas de variables de hábitats anteriores (`ESA`, `CH-BIO`, `GHH`). Notarás que la relación entre las variables de heterogeneidad de hábitat (`GHH`) y la riqueza se hace significativa en muchos casos, y la asociación que había entre riqueza y porcentaje de áreas construidas de la ESA se hace más significativa. -->
+
+<!-- ```{r} -->
+<!-- # La expresión regular '^N0|^ESA' selecciona las columnas que comienzan por 'N0' (riqueza) -->
+<!-- # y las columnas que comienzan por 'ESA' (variables de cobertura de la ESA) -->
+<!-- ggpairs(mc_ma_selecc %>% select(matches('^N0|^ESA')), labeller = label_wrap_gen(width=10)) +  -->
+<!--   theme(text = element_text(size = 6)) -->
+<!-- ggpairs(mc_ma_selecc %>% select(matches('^N0|^CH-BIO')), labeller = label_wrap_gen(width=10)) +  -->
+<!--   theme(text = element_text(size = 6)) -->
+<!-- ggpairs(mc_ma_selecc %>% select(matches('^N0|^GHH')), labeller = label_wrap_gen(width=10)) +  -->
+<!--   theme(text = element_text(size = 6)) -->
+<!-- ``` -->
+
+Riqueza de especies, estimación y comparación, "completitud de muestra" (existe en el diccionario) (Chao y Chiu, 2016)
+
+
+```{r}
+specpool(mc_orig)
+specpool(mc_orig)[[1]]/specpool(mc_orig)*100 #En porcentajes
+```
+
+```{r}
+estimacion_riqueza_chao_incidence(colSums(mc_orig), 1)
+```
+
+
+1. Hábitats 2 y 3
+2. Hábitats 1 y 4
+3. Hábitats 5 y 6
+
+
+```{r}
+mi_fam_k6 <- mi_fam %>%
+  mutate(g = grupos_ward_k6) %>%
+  mutate(g2 = ifelse(g %in% c(2,3), '2y3', ifelse(g %in% c(1,4), '1y4', '5y6'))) %>% 
+  select(-g) %>% 
+  group_by(g2) %>%
+  summarise_all(sum) %>%
+  select(-g2) %>% 
+  data.frame
+estimacion_riqueza_chao_incidence(colSums(mc_orig), 1)
+```
+
+
+```{r}
+#COMPARAR ESTIMACIONES Y CURVAS DE ACUMULACIÓN ENTRE DISTINTOS GRUPOS
+#####REAPROVECHAR CON ANÁLISIS DE DIVERSIDAD TERMINADOS#####
+# grupos_upgma_k2 <- readRDS('grupos_upgma_k2.RDS')
+# table(grupos_upgma_k2)
+# grupos_ward_k3 <- readRDS('grupos_ward_k3.RDS')
+# table(grupos_ward_k3)
+##### FIN DE REAPROVECHAR CON ANÁLISIS DE DIVERSIDAD TERMINADOS#####
 
 ```
 
