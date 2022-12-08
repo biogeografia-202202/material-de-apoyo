@@ -238,7 +238,7 @@ map_df(lista_cl, function(x) {
 })
 ```
 
-Ahora, calcularé las anchuras de silueta, una métrica que ayuda a determinar en cuántos grupos se organiza la comunidad. En el ejemplo, dado que muchas especies de Polygonaceae están ausentes en muchos hexágonos, es esperable que el procedimiento sugiera un número de grupos alto denominados (ver objeto impreso `n_grupos_optimos`). Considera la siguiente regla general: muchos grupos, y 6 o más se considera mucho, es un resultado poco útil; 1 grupo es un resultado sin sentido.
+Ahora, calcularé las anchuras de silueta, una métrica que ayuda a determinar en cuántos grupos se organiza la comunidad. En el ejemplo, dado que muchas especies de Polygonaceae están ausentes en muchos hexágonos, es esperable que el procedimiento sugiera un número de grupos alto denominados (ver objeto impreso `n_grupos_optimos`). Considera la siguiente regla general: muchos grupos: el número ideal es 3 grupos, de 4 a 6 grupos es aceptable, 7 o más grupos se considera mucho y difícil de interpretar, es un resultado poco útil; 1 grupo es un resultado sin sentido.
 
 ```{r}
 # UPGMA
@@ -270,9 +270,9 @@ rect.hclust(
         k = anch_sil_ward$n_grupos_optimo)
 ```
 
-Por los resultados obtenidos, tanto por el método UPGMA como por Ward, parecería interesante explorar dos estrategias adicionales: 1) Reducir el umbral de registros de presencia de especies raras; 2) Probar métodos "aproximadamente insesgados", basados en remuestreos y permutaciones.
+Por los resultados obtenidos (muchos grupos sugeridos), tanto por el método UPGMA como por Ward, parecería interesante explorar dos estrategias adicionales: 1) Cambiar (preferiblemente, aumentar) el umbral de registros de presencia de especies raras; 2) Probar métodos "aproximadamente insesgados", basados en remuestreos y permutaciones.
 
-Probaré lo segundo, pero te animo a que pruebes también la estrategia 1) en tu caso, para lo cual, debes elegir un umbral (ya sea un valor mínimo o un rango) diferente al que elegiste en primera instancia. 
+Probaré lo segundo, pero te animo a que pruebes también la estrategia 1) (elegir un umbral diferente al que elegiste en primera instancia). Ten presente que todos los casos son diferentes. Al elegir un umbral (ya sea un valor mínimo o un rango) 
 
 ```{r}
 cl_pvclust_upgma <-
@@ -812,11 +812,13 @@ La principal desventaja de trabajar con registros de presencia, es que la mayor�
 > Una nota adicional. Es recomendable que dispongas de un análisis clúster (agrupamiento) básico para acompañar los análisis de esta sección. Este te servirá para conocer cómo fluctúa la diversidad en función de los hábitats. Para obtenerlo, no te pido que ejecutes toda la sección de "Análisis de agrupamiento", sino tan sólo la primera parte, y que generes un vector de agrupamiento, como el que creé en la sección de análisis clúster denominado `grupos_upgma_k6`. Asegúrate que tu análisis cluster se basó en la misma matriz de comunidad que usarás en el análisis de diversidad (si en clúster usaste una matriz con umbral 5, asegúrate de usar la misma matriz aquí).
 
 ```{r}
-indices <- alpha_div(mi_fam) # Mi fam fue definida justa arriba por "especies en 5 o más hexágonos",
+indices <- alpha_div(mi_fam) # mi_fam es la matriz de comunidad definida más arriba
+# por criterio "especies presentes en un número determinado de hexágonos",
 # lo cual coincide con el criterio usado en el análisis clúster.
-# Con datos de abundancia, todos estos índices serían útiles.
-# Con registros de presencia, como es nuestro caso, sólo N0 nos aportará algún resultado.
-# Imprimiré sólo 10 para no desbordar la consola
+# Con datos de abundancia, los índices que calcula la función "alpha_div" serían útiles,
+# pero con registros de presencia, como es nuestro caso, sólo la columna N0
+# nos aportará algún resultado. Imprimiré sólo 10 filas elegidas aleatoriamente
+# de la tabla resultante para no desbordar la consola
 set.seed(999); indices[sample(1:nrow(indices), 10), ] %>% 
   kable(booktabs=T) %>%
   kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
@@ -867,7 +869,7 @@ ggpairs(riq_ghh, labeller = label_wrap_gen(width=10)) +
 
 MUY IMPORTANTE: no te quedes sólo con estas variables, pues mis datos seguramente serán muy diferentes a los tuyos. Además, estoy simplificando para evitar hacer la demostración demasiado larga, pero te recomiendo probar con todos los prefijos disponibles.
 
-<!-- Uno de los problemas de trabajar con la matriz de comunidad original, es que los hexágonos con pocos registros, o con solo una especie, alteran el análisis de correlación. Además, otro problema asociado a nuestros datos es que no son independientes (están autocorrelacionados espacialmente), por lo que se viola un supuesto fundamental. En cualquier caso, la exploración sigue siendo válida. Probemos a excluir los hexágonos con una especie, que son mayoría, 101 de hecho, unamos la matriz de comunidad con una matriz ambiental que coincidente (los hexágonos excluidos no pueden aparecer en la nueva matriz ambiental y deben estar en el mismo orden). -->
+<!-- Uno de los problemas de trabajar con la matriz de comunidad original, es que los hexágonos con pocos registros, o con solo una especie, alteran el análisis de correlación. Además, otro problema asociado a nuestros datos es que no son independientes (están autocorrelacionados espacialmente), por lo que se inclumple un supuesto fundamental. En cualquier caso, la exploración sigue siendo válida. Probemos a excluir los hexágonos con una especie, que son mayoría, 101 de hecho, unamos la matriz de comunidad con una matriz ambiental que coincidente (los hexágonos excluidos no pueden aparecer en la nueva matriz ambiental y deben estar en el mismo orden). -->
 
 <!-- ```{r} -->
 <!-- mc_selecc <- mc_orig[rowSums(mc_orig)>2,] -->
@@ -897,38 +899,79 @@ specpool(mc_orig)[[1]]/specpool(mc_orig)*100 #En porcentajes
 ```
 
 ```{r}
-estimacion_riqueza_chao_incidence(colSums(mc_orig), 1)
+estimacion_riqueza_chao(colSums(mc_orig), 1)
 ```
 
 
-1. Hábitats 2 y 3
-2. Hábitats 1 y 4
-3. Hábitats 5 y 6
+1. Hábitats 2 y 3. Terrenos a elevaciones moderadas y altas, en zonas de vertiente, espolones o valles fluviales, con predominio del bosque, con dosel cerrado y/o importante cobertura arbórea, normalmente con especies latifoliadas, con temperaturas promedio moderadas a bajas y precipitaciones elevadas, 
+
+2. Hábitats 1 y 4. Terrenos predominantemente bajos, en zonas costeras o próximo a ella, áreas construidas con categoría urbanística, o área con coberturas de matorral y/o uso agrícola, temperaturas elevadas y precipitaciones bajas a moderadas.
+
+3. Hábitats 5 y 6. Terrenos de piedemontes, con uso agrícola o cobertura de herbazal, de temperaturas elevadas y precipitaciones de moderadas, tanto en zonas costeras como moderamente de interior, pero no extremadamente continental.
 
 
 ```{r}
+grupos_upgma_k6 <- readRDS('grupos_upgma_k6.RDS')
 mi_fam_k6 <- mi_fam %>%
-  mutate(g = grupos_ward_k6) %>%
+  mutate(g = grupos_upgma_k6) %>%
   mutate(g2 = ifelse(g %in% c(2,3), '2y3', ifelse(g %in% c(1,4), '1y4', '5y6'))) %>% 
   select(-g) %>% 
   group_by(g2) %>%
   summarise_all(sum) %>%
   select(-g2) %>% 
+  mutate(N = nrow(mc_orig)) %>% 
+  relocate(N, .before = 1) %>% 
   data.frame
+mi_fam_k6
 estimacion_riqueza_chao_incidence(colSums(mc_orig), 1)
+
+
+ChaoSpecies(data.frame(V1 = c(nrow(mc_orig), as.numeric(colSums(mc_orig)))), datatype = 'incidence_freq', k=10, conf=0.95)
+
+nasin_raref <- iNEXT::iNEXT(
+  x = data.frame(
+    V1 = c(nrow(mc_orig), as.numeric(colSums(mc_orig))),
+    V2 = c(nrow(mc_orig), as.numeric(colSums(mc_orig)))),
+  q=0,
+  knots = 400,
+  datatype = 'incidence_freq')
+acumulacion_especies <- iNEXT::ggiNEXT(nasin_raref, type=1) +
+  theme_bw() +
+  theme(
+    text = element_text(size = 20),
+    panel.background = element_rect(fill = 'white', colour = 'black'),
+    panel.grid.major = element_line(colour = "grey", linetype = "dashed", size = 0.25)
+  ) +
+  ylab('Riqueza de especies') +
+  xlab('Número de sitios') +
+  scale_y_continuous(breaks = seq(0,80, length.out = 9)) +
+  scale_color_manual(values = brewer.pal(8, 'Set2')) +
+  scale_fill_manual(values = brewer.pal(8, 'Set2'))
+acumulacion_especies
+
+
+nasin_raref <- iNEXT::iNEXT(
+  x = t(mi_fam_k6),
+  q=0,
+  knots = 400,
+  datatype = 'incidence_freq')
+acumulacion_especies <- iNEXT::ggiNEXT(nasin_raref, type=1) +
+  theme_bw() +
+  theme(
+    text = element_text(size = 20),
+    panel.background = element_rect(fill = 'white', colour = 'black'),
+    panel.grid.major = element_line(colour = "grey", linetype = "dashed", size = 0.25)
+  ) +
+  ylab('Riqueza de especies') +
+  xlab('Número de sitios') +
+  scale_y_continuous(breaks = seq(0,80, length.out = 9)) +
+  scale_color_manual(values = brewer.pal(8, 'Set2')) +
+  scale_fill_manual(values = brewer.pal(8, 'Set2'))
+acumulacion_especies
+
+
 ```
 
-
-```{r}
-#COMPARAR ESTIMACIONES Y CURVAS DE ACUMULACIÓN ENTRE DISTINTOS GRUPOS
-#####REAPROVECHAR CON ANÁLISIS DE DIVERSIDAD TERMINADOS#####
-# grupos_upgma_k2 <- readRDS('grupos_upgma_k2.RDS')
-# table(grupos_upgma_k2)
-# grupos_ward_k3 <- readRDS('grupos_ward_k3.RDS')
-# table(grupos_ward_k3)
-##### FIN DE REAPROVECHAR CON ANÁLISIS DE DIVERSIDAD TERMINADOS#####
-
-```
 
 
 ## Ecología espacial

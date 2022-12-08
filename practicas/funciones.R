@@ -87,7 +87,7 @@ sel_por_prefijo <- function(prefijo) {
       select(matches(paste0('^', prefijo, '.*$'))))
 }
 
-estimacion_riqueza_chao_incidence <- function(mc, tipo = 'incidence_freq', n_raras = 10) {
+estimacion_riqueza_chao_incidence <- function(mc, tipo = 'incidence_raw', n_raras = 10) {
   library(RColorBrewer)
   library(SpadeR)
   library(iNEXT)
