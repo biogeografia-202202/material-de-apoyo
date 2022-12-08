@@ -78,6 +78,15 @@ ezonalobj <- function(objraster = NULL, nombre = '', objgeometrias = NULL, expor
   return(geomsout)
 }
 
+sel_por_prefijo <- function(prefijo) {
+  resultado <- bind_cols(
+    indices %>% select(N0),
+    env %>%
+      select_if(is.numeric) %>%
+      st_drop_geometry %>%
+      select(matches(paste0('^', prefijo, '.*$'))))
+}
+
 mapa_leaflet <- function(mapa, variable, titulo_leyenda = NULL) {
   library(sf)
   library(leaflet)
