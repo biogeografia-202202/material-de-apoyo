@@ -77,3 +77,45 @@ ezonalobj <- function(objraster = NULL, nombre = '', objgeometrias = NULL, expor
   }
   return(geomsout)
 }
+
+mapa_leaflet <- function(mapa, variable, titulo_leyenda = NULL) {
+  library(sf)
+  library(leaflet)
+  library(leaflet.extras)
+  library(dplyr)
+  library(RColorBrewer)
+  variable <- mapa[, variable, drop=T]
+  if(is.character(variable) | is.factor(variable)) {
+    fpal <- colorFactor(
+      palette = RColorBrewer::brewer.pal(length(unique(variable)), 'Set1'),
+      domain = unique(variable))
+  } else
+    if(is.numeric(variable)) {
+      if(!is.integer(variable)) variable <- round(variable, 2)
+      fpal <- colorNumeric(
+        palette = "Blues",
+        domain = variable)
+    }
+  leaflet(mapa) %>% 
+    addPolygons(
+      group = ~ variable,
+      label = variable,
+      color = ~ fpal(variable),
+      stroke = F, fillOpacity = 0.6
+    ) %>%
+    addLegend(pal = fpal, values = ~ variable,
+              group = ~ variable,
+              opacity = 0.6,
+              title = titulo_leyenda) %>%
+    addTiles(group = 'OSM') %>%
+    addProviderTiles("Esri.NatGeoWorldMap", group="ESRI Mapa") %>%
+    addProviderTiles("Esri.WorldImagery", group="ESRI Imagen") %>%
+    addProviderTiles("CartoDB.Positron", group= "CartoDB") %>%
+    addLayersControl(
+      baseGroups = c("ESRI Imagen", "CartoDB", "OSM", "ESRI Mapa"),    
+      {if(is.character(variable) | is.factor(variable)) overlayGroups = ~ variable},
+      position = 'bottomright',
+      options = layersControlOptions(collapsed = FALSE)) %>% 
+    setView(lat = 18.7, lng = -70.3, zoom = 8) %>% 
+    addFullscreenControl()
+}

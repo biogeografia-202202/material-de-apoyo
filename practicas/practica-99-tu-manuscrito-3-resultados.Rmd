@@ -7,6 +7,7 @@ bibliography: ../ref/biblio.bib
 csl: ../ref/apa.csl
 editor_options: 
   chunk_output_type: console
+always_allow_html: true
 ---
 
 ```{r setup, include=FALSE}
@@ -80,25 +81,34 @@ library(vegan)
 library(sf)
 library(tidyverse)
 library(tmap)
+library(kableExtra)
 gh_content <- 'https://raw.githubusercontent.com/'
 gh_zonal_stats <- 'https://github.com/geofis/zonal-statistics/raw/main/out/'
 repo_analisis <- 'biogeografia-master/scripts-de-analisis-BCI/master'
+repo_sem202202 <- 'biogeografia-202202/material-de-apoyo/master/practicas/'
 devtools::source_url(paste0(gh_content, repo_analisis, '/biodata/funciones.R'))
-source(paste0(gh_content, 'biogeografia-202202/material-de-apoyo/master/practicas/', 'train.R'))
+devtools::source_url(paste0(gh_content, repo_sem202202, 'train.R'))
+devtools::source_url(paste0(gh_content, repo_sem202202, 'funciones.R'))
 ```
 
 Carga tu matriz de comunidad, que habrás generado en la práctica 2, y elige un umbral para especies raras o rangos de registros de presencia para seleccionar especies en una nueva matriz de comunidad.
 
 ```{r}
 mc_orig <- readRDS("matriz_de_comunidad.RDS")
-nrow(mc_orig)
-ncol(mc_orig)
-names(mc_orig)
+nrow(mc_orig) #Número de filas, equivale a número de hexágonos con registros de presencia
+ncol(mc_orig)  #Número de columnas, equivale a número de especies, riqueza
+data.frame(Especies = names(mc_orig)) %>% 
+  kable(booktabs=T) %>%
+  kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
+  gsub(' NA ', '', .) #Lista de especies
 unique(word(names(mc_orig), 1, 1)) #Géneros representados
 table(word(names(mc_orig), 1, 1)) #Número de especies por género
-sort(colSums(mc_orig)) # Número de hexágonos en los que está presente cada especie
-# Usa el vector anterior para determinar un umbral o rango de registros para filtrar tu matriz
+data.frame(`Número de hexágonos` = sort(colSums(mc_orig), decreasing = T), check.names = F) %>% 
+  kable(booktabs=T) %>%
+  kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
+  gsub(' NA ', '', .) # Número de hexágonos en los que está presente cada especie
 
+# Usa el vector anterior para determinar un umbral o rango de registros para filtrar tu matriz
 # ¿En cuántos hexágonos está cada especie? Filtra tus datos usando tu propio criterio.
 # Especies que aparecen en pocos hexágonos se consideran "raras". Por ejemplo, si una especie sólo
 # aparece en un hexágono en todo el país, es un "singleton", si en dos, "doubleton", y así.
@@ -120,7 +130,7 @@ en_cuantos_hex <- 15
 selector
 mc_orig_seleccionadas <- mc_orig[, colSums(mc_orig) %in% selector]
 mi_fam <- mc_orig_seleccionadas[!rowSums(mc_orig_seleccionadas)==0, ] #Elimina filas sin registros
-rowSums(mi_fam) #Riqueza por hexágonos con especies seleccionadas
+# rowSums(mi_fam) #Riqueza por hexágonos con especies seleccionadas. Comentado por extenso
 all(rowSums(mi_fam)>0) #Debe ser TRUE: todos los hexágonos tienen al menos 1 registro
 ncol(mi_fam) #Riqueza de especies
 
@@ -299,14 +309,16 @@ Generaré agrupamientos y los exportaré a archivos, para reutilizarlos más ade
 
 ```{r}
 # UPGMA
-(grupos_upgma_k6 <- as.factor(cutree(lista_cl$cl_upgma, k = 6)))
-table(grupos_upgma_k6)
+grupos_upgma_k6 <- as.factor(cutree(lista_cl$cl_upgma, k = 6))
+set.seed(999);sample(grupos_upgma_k6, 10) #¿A qué grupo pertenecen 10 hexágonos seleccionados al azar?
+table(grupos_upgma_k6) #¿Cuántos hexágonos hay en cada grupo?
 plot(u_dend_reord, hang = -1)
 rect.hclust(tree = u_dend_reord, k = 6)
 
 # Ward
-(grupos_ward_k6 <- as.factor(cutree(lista_cl$cl_ward, k = 6)))
-table(grupos_ward_k6)
+grupos_ward_k6 <- as.factor(cutree(lista_cl$cl_ward, k = 6))
+set.seed(999);sample(grupos_ward_k6, 10) #¿A qué grupo pertenecen 10 hexágonos seleccionados al azar?
+table(grupos_ward_k6) #¿Cuántos hexágonos hay en cada grupo?
 plot(w_dend_reord, hang = -1)
 rect.hclust(tree = w_dend_reord, k = 6)
 
@@ -331,14 +343,6 @@ library(leaflet.extras)
 leaflet_map_view <- . %>% setView(lat = 18.7, lng = -70.3, zoom = 8)
 ```
 
-Crearé algunas paletas que usaré más adelante.
-
-```{r}
-rojo <- colorRampPalette(brewer.pal(8, "Reds"))
-rojo_inv <- colorRampPalette(rev(brewer.pal(8, "Reds")))
-colores_grupos <- brewer.pal(8, "Accent")
-```
-
 Agrupar los hexágonos de la matriz ambiental.
 
 ```{r}
@@ -358,23 +362,31 @@ Agrupar los hexágonos de la matriz ambiental.
 Evaluar efectos entre los grupos ("diferencias significativas") de los agrupamientos UPGMA y Ward. Al tratarse de 6 grupos, se utilizan las pruebas estadísticas ANOVA (evalúa homongeneidad de medias) y Kruskal-Wallis (evalúa homogeneidad de medianas). Las tablas están ordenadas en orden ascendente por la columna `p_valor_a`, que son los p-valores de la prueba ANOVA.
 
 ```{r}
-m_amb_upgma_k6 %>%
+# UPGMA
+m_amb_upgma_k6_ak <- m_amb_upgma_k6 %>%
   group_by(variable) %>%
   summarise(
     p_valor_a = tryCatch(oneway.test(valor ~ grupos_upgma_k6)$p.value, error = function(e) NA),
     p_valor_k = tryCatch(kruskal.test(valor ~ grupos_upgma_k6)$p.value, error = function(e) NA)
     ) %>%
-  arrange(p_valor_a) %>%
-  print(n=Inf)
+  arrange(p_valor_a)
+m_amb_upgma_k6_ak %>%
+  kable(booktabs=T) %>%
+  kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
+  gsub(' NA ', '', .)
 
-m_amb_ward_k6 %>%
+# Ward
+m_amb_ward_k6_ak <- m_amb_ward_k6 %>%
   group_by(variable) %>%
   summarise(
     p_valor_a = tryCatch(oneway.test(valor ~ grupos_upgma_k6)$p.value, error = function(e) NA),
     p_valor_k = tryCatch(kruskal.test(valor ~ grupos_upgma_k6)$p.value, error = function(e) NA)
     ) %>%
-  arrange(p_valor_a) %>%
-  print(n=Inf)
+  arrange(p_valor_a)
+m_amb_ward_k6_ak %>%
+  kable(booktabs=T) %>%
+  kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
+  gsub(' NA ', '', .)
 ```
 
 > Te recomiendo aprender sobre pruebas estadísticas para poder interpretar con asertividad estos resultados. Igualmente, considera que del resultado obtenido es difícil extraer conclusiones definitivas o contundentes, debido a que determinados supuestos para ejecutar el ANOVA no se cumplen. La prueba de Kruskal-Wallis, que tiene menos requisitos, surge como alternativa, pero tiene menos potencia que el ANOVA. Otorga a estos resultados la categoría de "preliminares", o considéralos como un "buen punto de partida".
@@ -383,102 +395,69 @@ m_amb_ward_k6 %>%
 
 > En principio, los resultados significativos indican que, el promedio de la variable en cuestión (recuerda, cada fila es una variable), no es homogéneo entre los grupos analizados (e.g. UPGMA o Ward). Por ejemplo, fíjate en el p-valor de la prueba ANOVA (`p_valor_a`) que obtuvieron variables como `GFC-LOSS year 2020`, `ESA Open Water` y `G90-GEOM footslope` por sólo citar 3. Esto significa que, la variable en cuestión, varía significativamente entre grupos, más allá de lo esperado por azar. En términos ecológicos, significa que, la variable en cuestión, podría estar asociada con la composición de la comunidad, por lo que podríamos seguir explorando dicha variable para determinar si explica algo de la varianza en la comunidad.
 
-```{r}
+```{r, fig.width=9, fig.height=20, dpi=300}
 m_amb_upgma_k6 %>% 
   group_by(variable) %>% 
   ggplot() + aes(x = grupos_upgma_k6, y = valor, fill = grupos_upgma_k6) + 
   geom_boxplot() + 
   scale_fill_brewer(palette = 'Accent') +
-  theme_bw() +
+  theme_bw(base_size=8) +
   theme(legend.position="none") +
-  facet_wrap(~ variable, scales = 'free_y')
+  facet_wrap(~ variable, scales = 'free_y', ncol = 6)
 m_amb_ward_k6 %>% 
   group_by(variable) %>% 
   ggplot() + aes(x = grupos_ward_k6, y = valor, fill = grupos_ward_k6) + 
   geom_boxplot() + 
   scale_fill_brewer(palette = 'Accent') +
-  theme_bw() +
+  theme_bw(base_size=8) +
   theme(legend.position="none") +
-  facet_wrap(~ variable, scales = 'free_y')
+  facet_wrap(~ variable, scales = 'free_y', ncol = 6)
 ```
 
 > En los diagramas de caja, notarás que, las variables que aparecen en las primeras filas de las tablas anteriores, son las mismas que presentan mayor variabilidad de las cajas. Sigo con el ejemplo de las variables `GFC-LOSS year 2020`, `ESA Open Water` y `G90-GEOM footslope`, y nota que las anchuras de sus cajas, sus bigotes y la posición de la mediana (línea interior de la caja), fluctúa mucho entre grupos.
 
-Algunos mapas:
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+A continuación, muestro mapas de los dos agrupamientos, tanto UPGMA como Ward, y comparo con algunas de las variables que presentaron efecto. Usando la función `mapa_leaflet` este bloque genera un mapa interactivo que colorea los hexágonos en función del grupo al que fueron asignados de acuerdo al análisis de agrupamiento realizado a la matriz de comunidad por el método UPGMA. Te recomiendo que uses la función `mapa_leaflet`, especificando tu matriz ambiental, la variable que quieras representar y un título, para generar mapas de tus propias variables seleccionadas.
 
 ```{r}
-m_amb_upgma_k6_sf <- env %>%
-   rownames_to_column('hex_id') %>% 
-   mutate(grupos_upgma_k6) %>%
-   inner_join(za %>% select(hex_id)) %>%
+m_amb_clusters_sf <- env %>%
+  rownames_to_column('hex_id') %>% 
+  mutate(
+    grupos_upgma_k6 = as.character(grupos_upgma_k6),
+    grupos_ward_k6 = as.character(grupos_ward_k6)) %>%
+  inner_join(za %>% select(hex_id)) %>%
   st_as_sf()
-# mapa_upgma_k6 <- mapView(
-#   m_amb_upgma_k6_sf %>% st_as_sf(),
-#   layer.name = 'Grupos (6) UPGMA',
-#   alpha.regions = 0.6,
-#   map.types = 'Esri',
-#   legend = T,
-#   col.regions = colores_grupos,
-#   zcol = 'grupos_upgma_k6') %>%
-#   leaflet::setView(
-#     lng = -71.5,
-#     lat = 18,
-#     zoom = 7)
-
-fpal_grupos <- colorFactor(
-    palette = RColorBrewer::brewer.pal(length(unique(m_amb_upgma_k6_sf$grupos_upgma_k6)), 'Set1'),
-  domain = unique(m_amb_upgma_k6_sf$grupos_upgma_k6))
-mapa_upgma_k6 <- leaflet(m_amb_upgma_k6_sf) %>% 
-  addPolygons(
-    group = ~ levels(grupos_upgma_k6),
-    label = grupos_upgma_k6,
-    color = ~ fpal_grupos(grupos_upgma_k6),
-    stroke = F, fillOpacity = 0.7
-  ) %>%
-  addLegend(pal = fpal_grupos, values = ~ grupos_upgma_k6,
-            group = ~ grupos_upgma_k6,
-            opacity = 0.7,
-            title = "Grupos UPGMA, k=6") %>%
-  addTiles(group = 'OSM') %>%
-  addProviderTiles("Esri.NatGeoWorldMap", group="ESRI Mapa") %>%
-  addProviderTiles("Esri.WorldImagery", group="ESRI Imagen") %>%
-  addProviderTiles("CartoDB.Positron", group= "CartoDB") %>%
-  addLayersControl(
-    baseGroups = c("ESRI Imagen", "CartoDB", "OSM", "ESRI Mapa"),    
-    overlayGroups = ~ levels(grupos_upgma_k6), position = 'bottomright',
-    options = layersControlOptions(collapsed = FALSE)) %>% 
-  leaflet_map_view %>% 
-  addFullscreenControl()
+mapa_upgma_k6 <- mapa_leaflet(
+  mapa = m_amb_clusters_sf,
+  variable = 'grupos_upgma_k6',
+  titulo_leyenda = 'UPGMA, k=6')
 mapa_upgma_k6
-#
-
-mapa_upgma_k2 %>% mapshot(
-  file = 'mapa_upgma_k2.png', 
-  remove_controls = c("zoomControl", "layersControl", "homeButton")
-)
 ```
 
+Ídem anterior, pero según Ward.
 
+```{r}
+mapa_ward_k6 <- mapa_leaflet(
+  mapa = m_amb_clusters_sf,
+  variable = 'grupos_ward_k6',
+  titulo_leyenda = 'Ward, k=6')
+mapa_ward_k6
+```
+
+El siguiente bloque de código representa, cartográficamente, algunas variables que mostraron inhomogeneidad en las pruebas estadísticas, es decir, variables en las que parecía haber diferencias significativas entre hexágonos de distintos grupos. Las variables que mostraron diferencias significativas podrían ayudar a explicar la varianza de la composición de la comunidad.
+
+```{r}
+m_amb_upgma_k6_ak$variable[1:10]
+mapa_upgma_v3 <- mapa_leaflet(
+  mapa = m_amb_clusters_sf,
+  variable = m_amb_upgma_k6_ak$variable[3],
+  titulo_leyenda = m_amb_upgma_k6_ak$variable[3])
+mapa_upgma_v3
+mapa_upgma_v4 <- mapa_leaflet(
+  mapa = m_amb_clusters_sf,
+  variable = m_amb_upgma_k6_ak$variable[4],
+  titulo_leyenda = m_amb_upgma_k6_ak$variable[4])
+mapa_upgma_v4
+```
 
 ## Técnicas de ordenación
 
@@ -501,25 +480,34 @@ library(vegan)
 library(sf)
 library(tidyverse)
 library(tmap)
+library(kableExtra)
 gh_content <- 'https://raw.githubusercontent.com/'
 gh_zonal_stats <- 'https://github.com/geofis/zonal-statistics/raw/main/out/'
 repo_analisis <- 'biogeografia-master/scripts-de-analisis-BCI/master'
+repo_sem202202 <- 'biogeografia-202202/material-de-apoyo/master/practicas/'
 devtools::source_url(paste0(gh_content, repo_analisis, '/biodata/funciones.R'))
-source(paste0(gh_content, 'biogeografia-202202/material-de-apoyo/master/practicas/', 'train.R'))
+devtools::source_url(paste0(gh_content, repo_sem202202, 'train.R'))
+devtools::source_url(paste0(gh_content, repo_sem202202, 'funciones.R'))
 ```
 
 Carga tu matriz de comunidad, que habrás generado en la práctica 2, y elige un umbral para especies raras o rangos de registros de presencia para seleccionar especies en una nueva matriz de comunidad.
 
 ```{r}
 mc_orig <- readRDS("matriz_de_comunidad.RDS")
-nrow(mc_orig)
-ncol(mc_orig)
-names(mc_orig)
+nrow(mc_orig) #Número de filas, equivale a número de hexágonos con registros de presencia
+ncol(mc_orig)  #Número de columnas, equivale a número de especies, riqueza
+data.frame(Especies = names(mc_orig)) %>% 
+  kable(booktabs=T) %>%
+  kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
+  gsub(' NA ', '', .) #Lista de especies
 unique(word(names(mc_orig), 1, 1)) #Géneros representados
 table(word(names(mc_orig), 1, 1)) #Número de especies por género
-sort(colSums(mc_orig)) # Número de hexágonos en los que está presente cada especie
-# Usa el vector anterior para determinar un umbral o rango de registros para filtrar tu matriz
+data.frame(`Número de hexágonos` = sort(colSums(mc_orig), decreasing = T), check.names = F) %>% 
+  kable(booktabs=T) %>%
+  kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
+  gsub(' NA ', '', .) # Número de hexágonos en los que está presente cada especie
 
+# Usa el vector anterior para determinar un umbral o rango de registros para filtrar tu matriz
 # ¿En cuántos hexágonos está cada especie? Filtra tus datos usando tu propio criterio.
 # Especies que aparecen en pocos hexágonos se consideran "raras". Por ejemplo, si una especie sólo
 # aparece en un hexágono en todo el país, es un "singleton", si en dos, "doubleton", y así.
@@ -541,7 +529,7 @@ en_cuantos_hex <- 15
 selector
 mc_orig_sin_raras <- mc_orig[, colSums(mc_orig) %in% selector]
 mi_fam <- mc_orig_sin_raras[!rowSums(mc_orig_sin_raras)==0, ]
-rowSums(mi_fam) #Riqueza por hexágonos con especies seleccionadas
+# rowSums(mi_fam) #Riqueza por hexágonos con especies seleccionadas. Comentado por extenso
 all(rowSums(mi_fam)>0) #Debe ser TRUE: todos los hexágonos tienen al menos 1 registro
 ncol(mi_fam) #Riqueza de especies
 
@@ -660,7 +648,219 @@ arrows(0, 0,
 
 ## Análisis de diversidad
 
-\ldots
+
+
+A partir de este punto, inicia el análisis de diversidad. Primero cargaré los paquetes necesarios.
+
+```{r, eval=F}
+library(kableExtra)
+library(rgbif)
+library(terra)
+library(geodata)
+library(sf)
+library(h3jsr)
+library(tidyverse)
+library(units)
+library(devtools)
+library(CoordinateCleaner)
+library(countrycode)
+library(vegan)
+options(stringsAsFactors = FALSE)
+
+source_url('https://raw.githubusercontent.com/biogeografia-202202/material-de-apoyo/master/practicas/funciones.R')
+reg_pres <- occ_data(scientificName = 'Culicidae',
+                     hasCoordinate = T,
+                     country = 'DO',
+                     limit = 100000)$data
+# Imprime en pantalla el número de registros:
+nrow(reg_pres)
+
+# reg_pres <- occ_download_get('0069667-220831081235567') %>% 
+#   occ_download_import()
+
+reg_pres <- reg_pres %>% 
+  # Quitar registros en centroides de país y sus proximidades
+  cc_cen(lon = 'decimalLongitude', lat = 'decimalLatitude', buffer = 2000) %>%
+  # Quitar registros en colecciones y sus proximidades
+  cc_inst(lon = 'decimalLongitude', lat = 'decimalLatitude', buffer = 2000) %>%
+  # Quitar registros en mar/oceáno
+  cc_sea(lon = 'decimalLongitude', lat = 'decimalLatitude')
+# Imprime en pantalla el número de registros:
+nrow(reg_pres)
+
+table(reg_pres$species) %>% kable(col.names = c('Especie', 'N'), format="markdown")
+length(unique(reg_pres$acceptedScientificName))
+
+rd <- st_read('rd.gpkg', layer = 'pais')
+# Otras capas disponibles: regiones, provincias, municipios
+plot(rd)
+# Necesitarás un área buffer extra para que los hexágonos cubran todo el país
+rd_extra <- st_buffer(rd, dist = set_units(2, km))
+plot(rd)
+plot(rd_extra, add = T)
+
+resolucion <- 7 # RECOMENDADO: menor o igual a 6
+ind_esp <- polygon_to_cells(rd_extra, res = resolucion, simple = FALSE)
+ind_esp <- cell_to_polygon(unlist(ind_esp$h3_addresses), simple = FALSE)
+plot(rd_extra)
+plot(as_Spatial(ind_esp), add = T)
+plot(rd, add=T)
+
+nrow(ind_esp)
+
+ind_esp_centroides <- ind_esp %>%
+  st_centroid() %>%
+  mutate(lon = unlist(map(geometry, 1)), lat = unlist(map(geometry, 2)))
+
+plot(as_Spatial(ind_esp))
+plot(as_Spatial(ind_esp_centroides), add=T, cex = 0.2)
+
+reg_pres_sf <- st_as_sf(
+  x = reg_pres,
+  coords = c("decimalLongitude", "decimalLatitude"),
+  crs = 4326)
+
+plot(rd)
+plot(as_Spatial(ind_esp), add=T)
+plot(as_Spatial(reg_pres_sf), pch=16, col='green', add=T)
+
+reg_pres_sf_ok <- reg_pres_sf %>%
+  st_intersection(st_union(ind_esp))
+reg_pres_sf_ok
+
+plot(rd)
+plot(as_Spatial(ind_esp), add=T)
+plot(as_Spatial(reg_pres_sf_ok), pch=16, col='green', add=T)
+
+ggplot(data = rd) + # RD es la base, superpondremos capas
+  geom_sf(fill = 'antiquewhite1') + # La geometría base ya está colocada
+  geom_sf(data = ind_esp, fill = 'transparent') + # Esto añade el índice espacial estilizado
+  geom_text(data = ind_esp_centroides, aes(lon, lat, label = h3_address), size = 1) + # Etiquetas H3
+  geom_sf(data = reg_pres_sf_ok, size = 1, fill = 'green', color = 'green', alpha = 0.5) + # Registros GBIF
+  theme(legend.position = "none") +
+  theme_bw()
+
+st_write(reg_pres_sf_ok %>% select(-networkKeys), 'registros_depurados_de_presencia.gpkg', delete_dsn = T)
+st_write(ind_esp, 'indice_espacial.gpkg', delete_dsn = T)
+
+saveRDS(object = reg_pres_sf_ok, file = 'registros_depurados_de_presencia.RDS')
+saveRDS(ind_esp, 'indice_espacial.RDS')
+
+mc <- reg_pres_sf_ok %>%
+  st_join(ind_esp) %>% 
+  select(acceptedScientificName, h3_address) %>% 
+  st_drop_geometry() %>% 
+  mutate(n = 1) %>% 
+  distinct() %>% #Matriz de presencia/ausencia
+  # group_by(h3_address, acceptedScientificName) %>%  summarise(n = sum(n)) %>% #Matriz con número de registros
+  pivot_wider(names_from = acceptedScientificName, values_from = n, values_fill = 0) %>% 
+  column_to_rownames('h3_address')
+# Extracto de la matriz
+set.seed(999)
+mc[sample(seq_len(nrow(mc)), 10), sample(seq_len(ncol(mc)), ifelse(ncol(mc)<3, ncol(mc), 3))] %>%
+  kable(format="markdown")
+
+saveRDS(object = mc, file = 'matriz_de_comunidad.RDS')
+
+#Analisis de diversidad.
+#REINICIAR SESIÓN DE R
+
+library(vegan)
+library(adespatial)
+library(plyr)
+library(RColorBrewer)
+library(tidyverse)
+library(sf)
+library(SpadeR)
+library(iNEXT)
+gh_content <- 'https://raw.githubusercontent.com/'
+gh_zonal_stats <- 'https://github.com/geofis/zonal-statistics/raw/main/out/'
+repo_analisis <- 'biogeografia-master/scripts-de-analisis-BCI/master'
+devtools::source_url(paste0(gh_content, repo_analisis, '/biodata/funciones.R'))
+# source('biodata/funciones.R')
+
+#####REAPROVECHAR CON ANÁLISIS DE DIVERSIDAD TERMINADOS#####
+# grupos_upgma_k2 <- readRDS('grupos_upgma_k2.RDS')
+# table(grupos_upgma_k2)
+# grupos_ward_k3 <- readRDS('grupos_ward_k3.RDS')
+# table(grupos_ward_k3)
+##### FIN DE REAPROVECHAR CON ANÁLISIS DE DIVERSIDAD TERMINADOS#####
+
+mc_orig <- readRDS("matriz_de_comunidad.RDS")
+nrow(mc_orig)
+ncol(mc_orig)
+names(mc_orig)
+unique(word(names(mc_orig), 1, 1))
+table(word(names(mc_orig), 1, 1))
+sort(colSums(mc_orig))
+
+# ¿En cuántos hexágonos está cada especie?
+# Puede usar un único valor mínimo (inclusive) o un rango con dos números (extremos inclusive)
+en_cuantos_hex <- 4
+# En este caso, 15 significa 15 o más (hasta el límite superior). IMPORTANTE: elige TU PROPIO umbral.
+# en_cuantos_hex <- 10:20
+{if(length(en_cuantos_hex)==1) selector <- en_cuantos_hex:max(colSums(mc_orig)) else
+  if(length(en_cuantos_hex)==2)
+    selector <- min(en_cuantos_hex):max(en_cuantos_hex) else
+      stop('Debes indicar uno o dos valores numéricos')}
+selector
+mi_fam <- mc_orig[, colSums(mc_orig) %in% selector]
+ncol(mi_fam)
+nombres_largos <- colnames(mi_fam)
+(colnames(mi_fam) <- make.cepnames(word(colnames(mi_fam), 1, 2)))
+(df_equivalencias <- data.frame(
+  nombre_original = nombres_largos,
+  colnames(mi_fam)))
+
+mi_fam_t <- decostand(mi_fam, 'hellinger') #Hellinger
+# Otras transformaciones posibles con datos de presencia/ausencia
+# mi_fam_t <- decostand(mi_fam, 'normalize') #Chord
+# mi_fam_t <- decostand(log1p(mi_fam), 'normalize') #Chord
+# mi_fam_t <- decostand(mi_fam, 'chi.square') #Chi-square
+
+
+library(vegan)
+library(sf)
+library(tidyverse)
+library(tmap)
+gh_content <- 'https://raw.githubusercontent.com/'
+gh_zonal_stats <- 'https://github.com/geofis/zonal-statistics/raw/main/out/'
+repo_analisis <- 'biogeografia-master/scripts-de-analisis-BCI/master'
+devtools::source_url(paste0(gh_content, repo_analisis, '/biodata/funciones.R'))
+
+res <- 7 #Resolución H3
+tmpfile <- tempfile()
+download.file(paste0(gh_zonal_stats, 'all_sources_all_variables_res_', res, '.gpkg'), tmpfile)
+za <- st_read(tmpfile, optional = T)
+# za %>% st_as_sf('geom') %>%
+#   pivot_longer(cols = -matches('base|hex_id|geom')) %>% 
+#   tm_shape() + tm_fill(col = 'value') +
+#   tm_facets(by = 'name', free.scales = T)
+za_intermedia <- za %>%
+  st_drop_geometry() %>% 
+  select(-matches(c(' base'))) %>% 
+  column_to_rownames('hex_id')
+env <- za_intermedia[match(rownames(mi_fam), rownames(za_intermedia)), ]
+all(rownames(mi_fam) == rownames(env)) #Si es TRUE, sigue adelante
+
+(indices <- alpha_div(mi_fam_t))
+pairs(indices,
+      lower.panel = panel.smooth,
+      upper.panel = panel.cor,
+      diag.panel = panel.hist,
+      main = "Pearson Correlation Matrix")
+indices_env <- bind_cols(
+  indices,
+  bci_env_grid %>%
+    select_if(is.numeric) %>%
+    st_drop_geometry %>%
+    select(-id) %>% 
+    select(-matches('^geom.*pct$')))
+indices_env %>% tibble
+ezCorM(indices_env, r_size_lims = c(3,5), label_size = 4)
+
+```
+
 
 ## Ecología espacial
 
