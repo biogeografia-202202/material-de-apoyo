@@ -162,6 +162,8 @@ res <- 4 #Resolución H3, puedes elegir entre 4, 5, 6 o 7, pero cuidado con valo
 # usando resolución 4, cámbiale el nombre a "matriz_de_comunidad_res_5.RDS". Recuerda,
 # puedes usar cualquier resolución, lo único importante es que las resolución usada en la
 # creación de la matriz de comunidad, debe ser la misma que en la ambiental.
+# Prueba distintas resoluciones, no te enfrasques en quedarte con la misma que
+# uso en este ejemplo. Prueba con resolución 5, por ejemplo.
 mc_orig <- readRDS(paste0("matriz_de_comunidad_res_", res, ".RDS"))
 nrow(mc_orig) #Número de filas, equivale a número de hexágonos con registros de presencia
 ```
@@ -1287,7 +1289,7 @@ za <- st_read(tmpfile, optional = T)
 ```
 
     ## Reading layer `all_sources_all_variables_res_4' from data source 
-    ##   `/tmp/RtmpxezfiL/file3ce0353f249a54' using driver `GPKG'
+    ##   `/tmp/Rtmpd3HWIL/file3f81b16043b4da' using driver `GPKG'
     ## Simple feature collection with 64 features and 142 fields
     ## Geometry type: POLYGON
     ## Dimension:     XY
@@ -4838,23 +4840,28 @@ estadísticas, de los diagramas de caja, una evaluación rápida sugiere
 que los grupos se caracterizan, ambientalmente, de la siguiente manera:
 
 1.  Hábitat del grupo 1. Terrenos predominantemente bajos, en zonas
-    costeras o próximos a ella (salvo algún *outlier*), áreas
-    construidas con categoría urbanística, o área con coberturas de
-    matorral y/o uso agrícola, temperaturas elevadas y precipitaciones
-    bajas a moderadas.
+    costeras o próximos a ella (salvo algún *outlier*), pero también en
+    áreas de piedemonte, llanuras y fondos de valles, con una proporción
+    importante dedicada a áreas construidas, y también área con
+    coberturas de matorral y/o uso agrícola y, en menor proporción,
+    bosques; sus temperaturas son elevadas y sus precipitaciones
+    moderadas.
 
-2.  Hábitat del grupo 2. Terrenos a elevaciones moderadas y altas, en
-    zonas de vertiente, espolones o valles fluviales, con predominio del
-    bosque, con dosel cerrado y/o importante cobertura arbórea,
-    normalmente con especies latifoliadas, con temperaturas promedio
-    moderadas a bajas y precipitaciones elevadas,
+2.  Hábitat del grupo 2. Terrenos a elevaciones moderadas y
+    ocasionalmente altas, en zonas de vertiente, pero también con zonas
+    llanas, espolones y valles fluviales, tanto en zonas costeras con
+    proximidad a montañas y algún hexágono en interior, con predominio
+    de matorral y bosque (en ese orden, de mayor a menor), pero también
+    en mosaico con uso agrícola o cobertura de herbazal, con
+    temperaturas promedio moderadas a bajas y precipitaciones bajas
+    (salvo *outliers*).
 
-3.  Hábitats del grup 3. Terrenos a elevaciones moderadas y altas, pero
-    con mayor proporción de zonas llanas que en el grupo 2, con uso
-    agrícola o cobertura de herbazal, pero también con porciones de
-    bosques, de temperaturas bajas a moderadas, precipitaciones
-    moderadas, situados tanto en zonas costeras como moderamente de
-    interior, pero no extremadamente continental.
+3.  Hábitats del grupo 3. Terrenos a elevaciones altas y moderadas (en
+    ese orden, de mayor a menor), con dosel cerrado y/o importante
+    cobertura arbórea, normalmente con especies latifoliadas, en zonas
+    de vertiente predominantemente, de temperaturas bajas y
+    precipitaciones elevadas, situados predomintantemente en montaña
+    (cordillera Central) .
 
 A continuación, muestro mapas de los dos agrupamientos, tanto UPGMA como
 Ward, y comparo con algunas de las variables que presentaron efecto.
@@ -6113,7 +6120,7 @@ za <- st_read(tmpfile, optional = T)
 ```
 
     ## Reading layer `all_sources_all_variables_res_4' from data source 
-    ##   `/tmp/RtmpxezfiL/file3ce0352fb60183' using driver `GPKG'
+    ##   `/tmp/Rtmpd3HWIL/file3f81b15ae500a6' using driver `GPKG'
     ## Simple feature collection with 64 features and 142 fields
     ## Geometry type: POLYGON
     ## Dimension:     XY
@@ -6619,7 +6626,7 @@ vif.cca(mi_fam_t_rda)
     ##                                                               7.466655
 
 ``` r
-escalado <- 2
+escalado <- 1
 plot(mi_fam_t_rda,
      scaling = escalado,
      display = c("sp", "lc", "cn"),
@@ -7816,7 +7823,7 @@ za <- st_read(tmpfile, optional = T)
 ```
 
     ## Reading layer `all_sources_all_variables_res_4' from data source 
-    ##   `/tmp/RtmpxezfiL/file3ce03552458445' using driver `GPKG'
+    ##   `/tmp/Rtmpd3HWIL/file3f81b1487a26cc' using driver `GPKG'
     ## Simple feature collection with 64 features and 142 fields
     ## Geometry type: POLYGON
     ## Dimension:     XY
@@ -9382,5 +9389,5246 @@ acumulacion_especies
 ![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-42-1.png)<!-- -->
 
 ## Ecología espacial
+
+Me basaré en el script que comienza por `ee_` de este
+[repo](https://github.com/biogeografia-master/scripts-de-analisis-BCI),
+el cual explico en el vídeo de “Ecología espacial” (vídeos 21) de la
+lista de reproducción [“Ecología Numérica con R” de mi
+canal](https://www.youtube.com/playlist?list=PLDcT2n8UzsCRDqjqSeqHI1wsiNOqpYmsJ).
+
+> INICIA texto+código común entre secciones
+
+Fijar un directorio de trabajo no es recomendable, mejor trabaja por
+proyecto. En cualquier caso, si no quieres o no puedes crear un
+proyecto, usa la sentencia que verás abajo, cambiando `TU_DIRECTORIO`
+por la ruta del directorio donde tengas almacenados tus datos y tus
+scripts.
+
+``` r
+# setwd('practicas/')
+```
+
+Cargar paquetes.
+
+``` r
+library(vegan)
+library(sf)
+library(tidyverse)
+library(tmap)
+library(kableExtra)
+gh_content <- 'https://raw.githubusercontent.com/'
+gh_zonal_stats <- 'https://github.com/geofis/zonal-statistics/raw/main/out/'
+repo_analisis <- 'biogeografia-master/scripts-de-analisis-BCI/master'
+repo_sem202202 <- 'biogeografia-202202/material-de-apoyo/master/practicas/'
+devtools::source_url(paste0(gh_content, repo_analisis, '/biodata/funciones.R'))
+devtools::source_url(paste0(gh_content, repo_sem202202, 'train.R'))
+devtools::source_url(paste0(gh_content, repo_sem202202, 'funciones.R'))
+```
+
+Carga tu matriz de comunidad, que habrás generado en la práctica 2, y
+elige un umbral para especies raras o rangos de registros de presencia
+para seleccionar especies en una nueva matriz de comunidad.
+
+``` r
+res <- 5 #Resolución H3, puedes elegir entre 4, 5, 6 o 7, pero cuidado con valores >=6
+# IMPORTANTE: la resolución de las celdas H3, debe coincidir con la resolución
+# a la cual generaste tu matriz de comunidad. De lo contrario, obtendrás error. Si tu 
+# archivo RDS de matriz de comunidad se denomina "matriz_de_comunidad.RDS", y lo creaste
+# usando resolución 4, cámbiale el nombre a "matriz_de_comunidad_res_5.RDS". Recuerda,
+# puedes usar cualquier resolución, lo único importante es que las resolución usada en la
+# creación de la matriz de comunidad, debe ser la misma que en la ambiental.
+mc_orig <- readRDS(paste0("matriz_de_comunidad_res_", res, ".RDS"))
+nrow(mc_orig) #Número de filas, equivale a número de hexágonos con registros de presencia
+```
+
+    ## [1] 149
+
+``` r
+ncol(mc_orig)  #Número de columnas, equivale a número de especies, riqueza
+```
+
+    ## [1] 44
+
+``` r
+data.frame(Especies = names(mc_orig)) %>% 
+  kable(booktabs=T) %>%
+  kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
+  gsub(' NA ', '', .) #Lista de especies
+```
+
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Especies
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Coccoloba uvifera (L.) L.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Antigonon leptopus Hook. & Arn.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba pubescens L.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba diversifolia Jacq.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba P.Browne
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba jimenezii Alain
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Persicaria punctata (Elliott) Small
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba flavescens Jacq.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Leptogonum domingensis var. molle (Urb.) Brandbyge
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Leptogonum domingense Benth.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Leptogonum domingensis Benth.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba costata Wright
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba incrassata Urb.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba wrightii Lindau
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba picardae Urb.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rumex acetosella L.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rumex crispus L.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba leonardii Howard
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba ceibensis O.C.Schmidt
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba venosa L.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba leoganensis Jacq.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba microstachya Willd.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba krugii Lindau
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba buchii O.Schmidt
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba fuertesii Urb.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba nodosa Lindau
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba pauciflora Urb.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Polygonum L.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rumex L.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Persicaria pensylvanica (L.) M.Gómez
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Persicaria hydropiperoides (Michx.) Small
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba samanensis O.C.Schmidt
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Persicaria ferruginea (Wedd.) Soják
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Brunnichia ovata (Walter) Shinners
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ruprechtia C.A.Mey.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba subcordata Lindau
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Polygonum punctatum Kit., 1864
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Persicaria segetum (Kunth) Small
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Persicaria acuminata (Kunth) M.Gómez
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba swartzii Meisn.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Persicaria lapathifolia subsp. lapathifolia
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Persicaria glabra (Willd.) M.Gómez
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rumex obtusifolius L.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba fawcettii O.Schmidt
+</td>
+</tr>
+</tbody>
+</table>
+
+``` r
+unique(word(names(mc_orig), 1, 1)) #Géneros representados
+```
+
+    ## [1] "Coccoloba"  "Antigonon"  "Persicaria" "Leptogonum" "Rumex"     
+    ## [6] "Polygonum"  "Brunnichia" "Ruprechtia"
+
+``` r
+table(word(names(mc_orig), 1, 1)) #Número de especies por género
+```
+
+    ## 
+    ##  Antigonon Brunnichia  Coccoloba Leptogonum Persicaria  Polygonum      Rumex 
+    ##          1          1         24          3          8          2          4 
+    ## Ruprechtia 
+    ##          1
+
+``` r
+data.frame(`Número de hexágonos` = sort(colSums(mc_orig), decreasing = T), check.names = F) %>% 
+  kable(booktabs=T) %>%
+  kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
+  gsub(' NA ', '', .) # Número de hexágonos en los que está presente cada especie
+```
+
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+Número de hexágonos
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Coccoloba uvifera (L.) L.
+</td>
+<td style="text-align:right;">
+54
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba diversifolia Jacq.
+</td>
+<td style="text-align:right;">
+31
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba wrightii Lindau
+</td>
+<td style="text-align:right;">
+20
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba costata Wright
+</td>
+<td style="text-align:right;">
+18
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Antigonon leptopus Hook. & Arn.
+</td>
+<td style="text-align:right;">
+17
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba pubescens L.
+</td>
+<td style="text-align:right;">
+15
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba incrassata Urb.
+</td>
+<td style="text-align:right;">
+13
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba leoganensis Jacq.
+</td>
+<td style="text-align:right;">
+13
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba P.Browne
+</td>
+<td style="text-align:right;">
+12
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Persicaria punctata (Elliott) Small
+</td>
+<td style="text-align:right;">
+12
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba fuertesii Urb.
+</td>
+<td style="text-align:right;">
+10
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Leptogonum domingensis var. molle (Urb.) Brandbyge
+</td>
+<td style="text-align:right;">
+8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Leptogonum domingense Benth.
+</td>
+<td style="text-align:right;">
+8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rumex crispus L.
+</td>
+<td style="text-align:right;">
+8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba ceibensis O.C.Schmidt
+</td>
+<td style="text-align:right;">
+8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba buchii O.Schmidt
+</td>
+<td style="text-align:right;">
+8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba nodosa Lindau
+</td>
+<td style="text-align:right;">
+8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba pauciflora Urb.
+</td>
+<td style="text-align:right;">
+8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba picardae Urb.
+</td>
+<td style="text-align:right;">
+7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba flavescens Jacq.
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Leptogonum domingensis Benth.
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Polygonum L.
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba krugii Lindau
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Persicaria hydropiperoides (Michx.) Small
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba jimenezii Alain
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba microstachya Willd.
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rumex L.
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Polygonum punctatum Kit., 1864
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba venosa L.
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Persicaria acuminata (Kunth) M.Gómez
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba swartzii Meisn.
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rumex obtusifolius L.
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba leonardii Howard
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba samanensis O.C.Schmidt
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Persicaria ferruginea (Wedd.) Soják
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba subcordata Lindau
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Persicaria glabra (Willd.) M.Gómez
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rumex acetosella L.
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Persicaria pensylvanica (L.) M.Gómez
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Brunnichia ovata (Walter) Shinners
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ruprechtia C.A.Mey.
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Persicaria segetum (Kunth) Small
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Persicaria lapathifolia subsp. lapathifolia
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba fawcettii O.Schmidt
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+</tbody>
+</table>
+
+``` r
+# Usa el vector anterior para determinar un umbral o rango de registros para filtrar tu matriz
+# ¿En cuántos hexágonos está cada especie? Filtra tus datos usando tu propio criterio.
+# Especies que aparecen en pocos hexágonos se consideran "raras". Por ejemplo, si una especie sólo
+# aparece en un hexágono en todo el país, es un "singleton", si en dos, "doubleton", y así.
+# Estas especies podrían contribuir a generar "ruido" en análisis posteriores, se recomienda excluirlas.
+# Elige un valor mínimo (representado por único número entero) o por un rango de enteros (e.g. de 10 a 20),
+# para seleccionar las especies que estén mejor representadas de acuerdo a tu criterio.
+# Por ejemplo, si usas el valor m, el script considerará a este valor como "el número mínimo de hexágonos
+# en los que está representada una especie, y creará una matriz de comunidad de especies seleccionadas
+# que están presentes en m hexágonos o más. Si eliges un rango, por ejemplo [m,n], el script generará
+# una matriz de comunidad que representadas un mínimo de m hexágonos y un máximo de n hexágonos.
+# (ambos extremos inclusive).
+en_cuantos_hex <- 1
+# Explicación: "en_cuantos_hex <- X", donde X es el número de hexágonos mínimo donde cada especie
+# debe estar presente. IMPORTANTE: elige TU PROPIO umbral.
+{if(length(en_cuantos_hex)==1) selector <- en_cuantos_hex:max(colSums(mc_orig)) else
+  if(length(en_cuantos_hex)==2)
+    selector <- min(en_cuantos_hex):max(en_cuantos_hex) else
+      stop('Debes indicar uno o dos valores numéricos')}
+selector
+```
+
+    ##  [1]  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25
+    ## [26] 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50
+    ## [51] 51 52 53 54
+
+``` r
+mc_orig_seleccionadas <- mc_orig[, colSums(mc_orig) %in% selector]
+
+# Mínimo número de especies por hexágono
+data.frame(`Número de especies por hexágono` = sort(rowSums(mc_orig), decreasing = T), check.names = F) %>% 
+  kable(booktabs=T) %>%
+  kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
+  gsub(' NA ', '', .) # Número de hexágonos en los que está presente cada especie
+```
+
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+Número de especies por hexágono
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+854cd423fffffff
+</td>
+<td style="text-align:right;">
+11
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd42ffffffff
+</td>
+<td style="text-align:right;">
+9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd44bfffffff
+</td>
+<td style="text-align:right;">
+9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd0d3fffffff
+</td>
+<td style="text-align:right;">
+8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd46bfffffff
+</td>
+<td style="text-align:right;">
+8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd29bfffffff
+</td>
+<td style="text-align:right;">
+8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd427fffffff
+</td>
+<td style="text-align:right;">
+7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854c8997fffffff
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cf347fffffff
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd623fffffff
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd28bfffffff
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854c8833fffffff
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd5b3fffffff
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd4a7fffffff
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd667fffffff
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cf31bfffffff
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd40bfffffff
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd0d7fffffff
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd457fffffff
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd58ffffffff
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd2dbfffffff
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cf373fffffff
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cf333fffffff
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd5c3fffffff
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd453fffffff
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854c8927fffffff
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd43bfffffff
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd583fffffff
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd687fffffff
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cf36bfffffff
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd5bbfffffff
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd437fffffff
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cf243fffffff
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cf24bfffffff
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cc2d3fffffff
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd553fffffff
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cf20ffffffff
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+856725a7fffffff
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cc6c7fffffff
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854c882ffffffff
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+85672597fffffff
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854c894bfffffff
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd6b7fffffff
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cf37bfffffff
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd6a7fffffff
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd697fffffff
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd447fffffff
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cc643fffffff
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd5b7fffffff
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cf313fffffff
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cf3cffffffff
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd51bfffffff
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+85672527fffffff
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd083fffffff
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd293fffffff
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854c898ffffffff
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854c8913fffffff
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cc6cffffffff
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd5cbfffffff
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cc66bfffffff
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854c89a3fffffff
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+85672537fffffff
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854c89bbfffffff
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd643fffffff
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd44ffffffff
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cf233fffffff
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd6bbfffffff
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cc6cbfffffff
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd4cbfffffff
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd0c3fffffff
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd4dbfffffff
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854c8823fffffff
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+856725a3fffffff
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd46ffffffff
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd6affffffff
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd2d7fffffff
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cc60ffffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cc613fffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cf353fffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd0cffffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cf26ffffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd513fffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854c8993fffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cf32ffffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854c890ffffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854c89c7fffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854c8953fffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854c88affffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cc657fffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cc6c3fffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854c89abfffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd2cbfffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cc617fffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cf247fffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854c89d7fffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854c883bfffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd59bfffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd653fffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cf263fffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd407fffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cc67bfffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+85672587fffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd42bfffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cf303fffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd253fffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd4a3fffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cf30ffffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854c896ffffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd693fffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd66bfffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854c89b7fffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd2d3fffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd243fffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd093fffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cc65bfffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd247fffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd633fffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854c89b3fffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cf273fffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd473fffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd63bfffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854c8957fffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854c8baffffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd0c7fffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854c890bfffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+856725b7fffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+856725affffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cf343fffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd64ffffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd40ffffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cc673fffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cc653fffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cc6dbfffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd4bbfffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd21bfffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cc603fffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd443fffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+856725bbfffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd64bfffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd08bfffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd6a3fffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854c899bfffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd0dbfffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cf34ffffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854c89cbfffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854c895bfffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd647fffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd65bfffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+854cd45bfffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+</tbody>
+</table>
+
+``` r
+min_especies_por_hex <- 1
+# Explicación: "min_especies_por_hex <- Y", donde Y es el número mínimo (inclusive) de especies
+# que debe existir en cada hexágono. Por debajo de dicho valor, el hexágono es excluido.
+mi_fam <- mc_orig_seleccionadas[rowSums(mc_orig_seleccionadas)>=min_especies_por_hex, ]
+nrow(mi_fam)
+```
+
+    ## [1] 149
+
+``` r
+# mi_fam <- mc_orig_seleccionadas[!rowSums(mc_orig_seleccionadas)==0, ] #Elimina filas sin registros
+# rowSums(mi_fam) #Riqueza por hexágonos con especies seleccionadas. Comentado por extenso
+all(rowSums(mi_fam)>0) #Debe ser TRUE: todos los hexágonos tienen al menos 1 registro
+```
+
+    ## [1] TRUE
+
+``` r
+ncol(mi_fam) #Riqueza de especies
+```
+
+    ## [1] 44
+
+``` r
+# Usar nombres cortos o abreviados para las especies
+nombres_largos <- colnames(mi_fam)
+(colnames(mi_fam) <- make.cepnames(word(colnames(mi_fam), 1, 2)))
+```
+
+    ##  [1] "Coccuvif"   "Antilept"   "Coccpube"   "Coccdive"   "CoccBrow"  
+    ##  [6] "Coccjime"   "Perspunc"   "Coccflav"   "Leptdomi"   "Leptdomi.1"
+    ## [11] "Leptdomi.2" "Cocccost"   "Coccincr"   "Coccwrig"   "Coccpica"  
+    ## [16] "Rumeacet"   "Rumecris"   "Coccleon"   "Coccceib"   "Coccveno"  
+    ## [21] "Coccleog"   "Coccmicr"   "Cocckrug"   "Coccbuch"   "Coccfuer"  
+    ## [26] "Coccnodo"   "Coccpauc"   "PolyL"      "RumeL"      "Perspens"  
+    ## [31] "Pershydr"   "Coccsama"   "Persferr"   "Brunovat"   "RuprMey"   
+    ## [36] "Coccsubc"   "Polypunc"   "Perssege"   "Persacum"   "Coccswar"  
+    ## [41] "Perslapa"   "Persglab"   "Rumeobtu"   "Coccfawc"
+
+``` r
+(df_equivalencias <- data.frame(
+  nombre_original = nombres_largos,
+  abreviado = colnames(mi_fam)))
+```
+
+    ##                                       nombre_original  abreviado
+    ## 1                           Coccoloba uvifera (L.) L.   Coccuvif
+    ## 2                     Antigonon leptopus Hook. & Arn.   Antilept
+    ## 3                              Coccoloba pubescens L.   Coccpube
+    ## 4                        Coccoloba diversifolia Jacq.   Coccdive
+    ## 5                                  Coccoloba P.Browne   CoccBrow
+    ## 6                           Coccoloba jimenezii Alain   Coccjime
+    ## 7                 Persicaria punctata (Elliott) Small   Perspunc
+    ## 8                          Coccoloba flavescens Jacq.   Coccflav
+    ## 9  Leptogonum domingensis var. molle (Urb.) Brandbyge   Leptdomi
+    ## 10                       Leptogonum domingense Benth. Leptdomi.1
+    ## 11                      Leptogonum domingensis Benth. Leptdomi.2
+    ## 12                           Coccoloba costata Wright   Cocccost
+    ## 13                          Coccoloba incrassata Urb.   Coccincr
+    ## 14                          Coccoloba wrightii Lindau   Coccwrig
+    ## 15                            Coccoloba picardae Urb.   Coccpica
+    ## 16                                Rumex acetosella L.   Rumeacet
+    ## 17                                   Rumex crispus L.   Rumecris
+    ## 18                         Coccoloba leonardii Howard   Coccleon
+    ## 19                    Coccoloba ceibensis O.C.Schmidt   Coccceib
+    ## 20                                Coccoloba venosa L.   Coccveno
+    ## 21                        Coccoloba leoganensis Jacq.   Coccleog
+    ## 22                      Coccoloba microstachya Willd.   Coccmicr
+    ## 23                            Coccoloba krugii Lindau   Cocckrug
+    ## 24                         Coccoloba buchii O.Schmidt   Coccbuch
+    ## 25                           Coccoloba fuertesii Urb.   Coccfuer
+    ## 26                            Coccoloba nodosa Lindau   Coccnodo
+    ## 27                          Coccoloba pauciflora Urb.   Coccpauc
+    ## 28                                       Polygonum L.      PolyL
+    ## 29                                           Rumex L.      RumeL
+    ## 30               Persicaria pensylvanica (L.) M.Gómez   Perspens
+    ## 31          Persicaria hydropiperoides (Michx.) Small   Pershydr
+    ## 32                   Coccoloba samanensis O.C.Schmidt   Coccsama
+    ## 33                Persicaria ferruginea (Wedd.) Soják   Persferr
+    ## 34                 Brunnichia ovata (Walter) Shinners   Brunovat
+    ## 35                                Ruprechtia C.A.Mey.    RuprMey
+    ## 36                        Coccoloba subcordata Lindau   Coccsubc
+    ## 37                     Polygonum punctatum Kit., 1864   Polypunc
+    ## 38                   Persicaria segetum (Kunth) Small   Perssege
+    ## 39               Persicaria acuminata (Kunth) M.Gómez   Persacum
+    ## 40                          Coccoloba swartzii Meisn.   Coccswar
+    ## 41        Persicaria lapathifolia subsp. lapathifolia   Perslapa
+    ## 42                 Persicaria glabra (Willd.) M.Gómez   Persglab
+    ## 43                              Rumex obtusifolius L.   Rumeobtu
+    ## 44                      Coccoloba fawcettii O.Schmidt   Coccfawc
+
+Transforma la matriz de comunidad. Este paso es importante, lo explico
+[aquí](https://www.youtube.com/watch?v=yQ10lp0-nHc&list=PLDcT2n8UzsCRDqjqSeqHI1wsiNOqpYmsJ&index=10)
+
+``` r
+mi_fam_t <- decostand(mi_fam, 'hellinger') #Hellinger
+# Otras transformaciones posibles con datos de presencia/ausencia
+# mi_fam_t <- decostand(mi_fam, 'normalize') #Chord
+# mi_fam_t <- decostand(log1p(mi_fam), 'normalize') #Chord
+# mi_fam_t <- decostand(mi_fam, 'chi.square') #Chi-square
+```
+
+Genera la matriz ambiental a partir del archivo de estadística zonal por
+celdas H3 de República Dominicana, de acuerdo con la resolución que
+prefieras. Para el ejemplo, usé la resolución 5, pero puedes usar/probar
+con otra, para lo cual, sólo tendrías que cambiar el objeto `res <- X`,
+donde `X` puede ser un número cualquiera entre 4 y 7.
+
+Para aprender más sobre la fuente de estadística zonal de República
+Dominicana, que contiene un conjunto de más de 100 variables resumidas
+por celdas H3, visita [este
+repo](https://github.com/geofis/zonal-statistics). Debes visitar dicho
+repo para poder citarlo apropiadamente.
+
+``` r
+#Matriz ambiental
+tmpfile <- tempfile()
+download.file(paste0(gh_zonal_stats, 'all_sources_all_variables_res_', res, '.gpkg'), tmpfile)
+za <- st_read(tmpfile, optional = T)
+```
+
+    ## Reading layer `all_sources_all_variables_res_5' from data source 
+    ##   `/tmp/Rtmpd3HWIL/file3f81b1143d3580' using driver `GPKG'
+    ## Simple feature collection with 335 features and 142 fields
+    ## Geometry type: POLYGON
+    ## Dimension:     XY
+    ## Bounding box:  xmin: -72.13564 ymin: 17.40413 xmax: -68.20998 ymax: 20.04043
+    ## Geodetic CRS:  WGS 84
+
+``` r
+# Las siguientes líneas están comentadas, porque producen muchos mapas. Descoméntalas y ejecútalas si quieres verlos
+# za %>% st_as_sf('geom') %>%
+#   pivot_longer(cols = -matches('base|hex_id|geom')) %>% 
+#   tm_shape() + tm_fill(col = 'value') +
+#   tm_facets(by = 'name', free.scales = T)
+za_intermedia <- za %>%
+  st_drop_geometry() %>% 
+  select(-matches(c(' base'))) %>% 
+  column_to_rownames('hex_id')
+env <- za_intermedia[match(rownames(mi_fam), rownames(za_intermedia)), ]
+all(rownames(mi_fam) == rownames(env)) #Si es TRUE, sigue adelante
+```
+
+    ## [1] TRUE
+
+Se puede probar con un subconjunto de variables, generando una matriz
+ambiental que seleccione variables según el grupo al que pertenecen, con
+ayuda del prefijo.
+
+``` r
+# env_selecionada <- env %>%
+#   st_drop_geometry() %>%
+#   dplyr::select(matches('^ESA '))
+# env_selecionada <- env %>%
+#   st_drop_geometry() %>%
+#   dplyr::select(matches('^G90-GEOM '))
+# env_selecionada <- env %>%
+#   st_drop_geometry() %>%
+#   dplyr::select(matches('^CH-BIO '))
+# env_selecionada <- env %>%
+#   st_drop_geometry() %>%
+#   dplyr::select(matches('^GHH '))
+# env_selecionada <- env %>%
+#   st_drop_geometry() %>%
+#   dplyr::select(matches('^GSL '))
+# env_selecionada <- env %>%
+#   st_drop_geometry() %>%
+#   dplyr::select(matches('^CGL '))
+```
+
+> FINALIZA texto+código común entre secciones
+
+Desde aquí, la parte correspondiente a ecología espacial propiamente.
+
+Dado que Has elegido trabajar con ecología espacial, te tengo algunas
+observaciones de bienvenida:
+
+1.  Una de las aplicaciones más comunes, dentro de esta rama, es la
+    generación de modelos de distribución de especies. Aclaro que no he
+    incluido esta herramienta en esta sección, y he preferido
+    presentarte material sobre el análisis de “núcleo duro” de patrones
+    espaciales de especies y variables ambientales.
+
+2.  Considera trabajar a distintas resoluciones de hexágonos H3, por
+    ejemplo, a resoluciones 4 y 5, porque verás patrones claramente
+    diferenciados, y descubrirás efectos que probablemente podrías
+    ocultar o sobreexponer si trabajaras sólo con una resolución. Crea
+    resultados para dos resoluciones, y compara las salidas.
+
+3.  Para evitar discontinuidades y garantizar la integridad de la
+    vecindad, es necesario trabajar con un objeto espacial que cubra
+    todo el país, con independencia de que contenga hexágonos sin
+    registros de presencia de GBIF. La continuidad en los análisis de
+    ecología espacial, es fundamental para garantizar la vecindad. Un
+    hexágono sin registros de presencia es un hábitat potencial de las
+    especies de la comunidad, no un vacío de discontinuidades. En esta
+    sección, “el territorio manda”, por lo que oportunamente le
+    adosaremos una columna con los registros de presencia al objeto de
+    estadística zonal (`za`) traído del repo correspondiente.
+
+4.  Nota que los objetos `min_especies_por_hex` y `en_cuantos_hex`
+    tienen asignados valor 1 (sólo en esta sección de ecología
+    espacial), lo cual significa que, en pocas palabras, el objeto
+    `mi_fam`, que es con el que hacemos la mayor parte de los análisis
+    en secciones anteriores, es exactamente igual a la matriz de
+    comunidad original (si ejecutas `all(mc_orig == mi_fam)` recibirás
+    `TRUE`, es decir, iguales). En otras secciones, filtramos la matriz
+    original para quitar hexágonos con pocos registros o especies que
+    están poco representadas. y así producir una matriz de comunidad de
+    la cual poder extraer patrones específicos, algo necesario en los
+    análisis anteriores. En este caso, nos interesa conservar la matriz
+    íntegra.
+
+5.  Nos interesa conservar los nombres largos en la matriz de comunidad
+    `mi_fam`, así que los restablezco aquí:
+
+``` r
+colnames(mi_fam) <- colnames(mc_orig_seleccionadas)
+colnames(mi_fam_t) <- colnames(mc_orig_seleccionadas)
+```
+
+Cargaré algunos paquetes específicos:
+
+``` r
+library(ape)
+library(spdep)
+library(ade4)
+library(adegraphics)
+library(adespatial)
+library(gridExtra)
+library(grid)
+library(gtable)
+source('https://raw.githubusercontent.com/maestria-geotel-master/unidad-3-asignacion-1-vecindad-autocorrelacion-espacial/master/lisaclusters.R')
+```
+
+Comienza el análisis espacial. Lo primero que necesitamos es crear un
+objeto de vecindad. Como ya señalé, necesitamos una superficie continua
+del territorio en cuestión, además de que la transformaremos a objeto
+clase `sp`.
+
+``` r
+# Transformar matriz ambiental en objeto sp, clase del paquete sp, para generar vecindad.
+# Este paquete será retirado del CRAN en 2023; es importante tenerlo presente.
+# Retomo el objeto za de arriba, y genero objetos de clase sf y sp a partir de él
+za_sf <- za %>%
+  select(-matches(c(' base'))) %>% 
+  column_to_rownames('hex_id') %>% st_as_sf
+riq_hex <- mi_fam %>% mutate(riqueza = rowSums(.)) %>%
+  rownames_to_column('hex_id') %>% select (riqueza, hex_id)
+env_sf <- za_sf %>%
+  rownames_to_column('hex_id') %>% 
+  left_join(riq_hex, by = 'hex_id')
+env_sp <- env_sf %>% as_Spatial
+centroides <- env_sf %>% st_centroid
+env_xy <- centroides %>% st_coordinates %>% as.data.frame
+(vecindad <- env_sp %>% poly2nb)
+```
+
+    ## Neighbour list object:
+    ## Number of regions: 335 
+    ## Number of nonzero links: 1820 
+    ## Percentage nonzero weights: 1.621742 
+    ## Average number of links: 5.432836
+
+``` r
+(pesos_b <- nb2listw(vecindad, style = 'B'))
+```
+
+    ## Characteristics of weights list object:
+    ## Neighbour list object:
+    ## Number of regions: 335 
+    ## Number of nonzero links: 1820 
+    ## Percentage nonzero weights: 1.621742 
+    ## Average number of links: 5.432836 
+    ## 
+    ## Weights style: B 
+    ## Weights constants summary:
+    ##     n     nn   S0   S1    S2
+    ## B 335 112225 1820 3640 41000
+
+``` r
+plot(env_sp)
+plot(vecindad, coords = env_xy, add =T , col = 'red')
+```
+
+![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-51-1.png)<!-- -->
+
+Igualmente, será necesario una matriz de comunidad transformada
+“espacial”, con la cual hacer los cálculos de autocorrelación. En este
+caso, calcularé la autocorrelación por especies, usando la matriz
+transformada Hellinger. Normalmente, cuando se trata de territorios tan
+grandes como nuestro país, los datos de incidencia (o abudancia, si los
+tuviéramos), no están fuertemente autocorrelacionados espacialmente. No
+obstante, los datos ambientales suelen estar autocorrelacionados; lo
+veremos más adelante.
+
+``` r
+mi_fam_t_all <- env_sf %>% select(hex_id) %>%
+  left_join(mi_fam_t %>% rownames_to_column('hex_id'), by = 'hex_id') %>%
+  replace(is.na(.), 0) %>% 
+  st_drop_geometry %>% select(-hex_id)
+suppressWarnings(auto_spp_hel <- calcular_autocorrelacion(
+  df_fuente = mi_fam_t_all,
+  orden = 9,
+  obj_vecindad = vecindad,
+  pos_var = '(matriz Hellinger)'))
+print(auto_spp_hel, digits = 2, p.adj.method = 'holm')
+```
+
+    ## $`Coccoloba uvifera (L.) L.`
+    ## Spatial correlogram for Coccoloba uvifera (L.) L. (matriz Hellinger) 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.06654    -0.00299  0.00111              2.1             0.3    
+    ## 2 (335)  0.09782    -0.00299  0.00062              4.1           4e-04 ***
+    ## 3 (335)  0.10574    -0.00299  0.00045              5.1           2e-06 ***
+    ## 4 (335)  0.02724    -0.00299  0.00037              1.6             0.7    
+    ## 5 (335)  0.01462    -0.00299  0.00032              1.0             1.0    
+    ## 6 (335)  0.02267    -0.00299  0.00030              1.5             0.7    
+    ## 7 (335) -0.01134    -0.00299  0.00028             -0.5             1.0    
+    ## 8 (335)  0.02086    -0.00299  0.00027              1.4             0.7    
+    ## 9 (335) -0.01692    -0.00299  0.00027             -0.9             1.0    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`Antigonon leptopus Hook. & Arn.`
+    ## Spatial correlogram for Antigonon leptopus Hook. & Arn. (matriz Hellinger) 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided
+    ## 1 (335) -7.2e-03    -3.0e-03  1.0e-03             -0.1             1.0
+    ## 2 (335)  1.7e-02    -3.0e-03  5.8e-04              0.8             1.0
+    ## 3 (335)  1.3e-02    -3.0e-03  4.2e-04              0.8             1.0
+    ## 4 (335) -3.4e-02    -3.0e-03  3.4e-04             -1.7             0.9
+    ## 5 (335) -2.5e-02    -3.0e-03  3.0e-04             -1.3             1.0
+    ## 6 (335) -3.3e-03    -3.0e-03  2.8e-04              0.0             1.0
+    ## 7 (335) -3.9e-05    -3.0e-03  2.6e-04              0.2             1.0
+    ## 8 (335) -1.3e-02    -3.0e-03  2.6e-04             -0.6             1.0
+    ## 9 (335) -1.0e-02    -3.0e-03  2.5e-04             -0.5             1.0
+    ## 
+    ## $`Coccoloba pubescens L.`
+    ## Spatial correlogram for Coccoloba pubescens L. (matriz Hellinger) 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided
+    ## 1 (335)  0.07622    -0.00299  0.00102              2.5             0.1
+    ## 2 (335)  0.01418    -0.00299  0.00056              0.7             1.0
+    ## 3 (335)  0.03282    -0.00299  0.00041              1.8             0.6
+    ## 4 (335) -0.01031    -0.00299  0.00034             -0.4             1.0
+    ## 5 (335) -0.02483    -0.00299  0.00029             -1.3             1.0
+    ## 6 (335) -0.03012    -0.00299  0.00027             -1.6             0.7
+    ## 7 (335)  0.00672    -0.00299  0.00026              0.6             1.0
+    ## 8 (335) -0.01112    -0.00299  0.00025             -0.5             1.0
+    ## 9 (335) -0.01984    -0.00299  0.00024             -1.1             1.0
+    ## 
+    ## $`Coccoloba diversifolia Jacq.`
+    ## Spatial correlogram for Coccoloba diversifolia Jacq. (matriz Hellinger) 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided
+    ## 1 (335)  0.02037    -0.00299  0.00109              0.7               1
+    ## 2 (335) -0.02502    -0.00299  0.00060             -0.9               1
+    ## 3 (335)  0.01128    -0.00299  0.00044              0.7               1
+    ## 4 (335)  0.00096    -0.00299  0.00036              0.2               1
+    ## 5 (335)  0.00405    -0.00299  0.00031              0.4               1
+    ## 6 (335) -0.01003    -0.00299  0.00029             -0.4               1
+    ## 7 (335) -0.01776    -0.00299  0.00028             -0.9               1
+    ## 8 (335) -0.01398    -0.00299  0.00027             -0.7               1
+    ## 9 (335) -0.00087    -0.00299  0.00026              0.1               1
+    ## 
+    ## $`Coccoloba P.Browne`
+    ## Spatial correlogram for Coccoloba P.Browne (matriz Hellinger) 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided
+    ## 1 (335)  0.04637    -0.00299  0.00099              1.6             0.9
+    ## 2 (335) -0.01058    -0.00299  0.00055             -0.3             1.0
+    ## 3 (335)  0.01478    -0.00299  0.00040              0.9             1.0
+    ## 4 (335) -0.02159    -0.00299  0.00033             -1.0             1.0
+    ## 5 (335)  0.00750    -0.00299  0.00029              0.6             1.0
+    ## 6 (335)  0.02695    -0.00299  0.00026              1.8             0.6
+    ## 7 (335)  0.00895    -0.00299  0.00025              0.8             1.0
+    ## 8 (335) -0.01061    -0.00299  0.00024             -0.5             1.0
+    ## 9 (335)  0.00090    -0.00299  0.00024              0.3             1.0
+    ## 
+    ## $`Coccoloba jimenezii Alain`
+    ## Spatial correlogram for Coccoloba jimenezii Alain (matriz Hellinger) 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.37318    -0.00299  0.00081             13.2          <2e-16 ***
+    ## 2 (335)  0.04290    -0.00299  0.00045              2.2             0.2    
+    ## 3 (335) -0.01165    -0.00299  0.00032             -0.5             1.0    
+    ## 4 (335) -0.01118    -0.00299  0.00027             -0.5             1.0    
+    ## 5 (335) -0.01146    -0.00299  0.00023             -0.6             1.0    
+    ## 6 (335) -0.01225    -0.00299  0.00022             -0.6             1.0    
+    ## 7 (335) -0.01410    -0.00299  0.00021             -0.8             1.0    
+    ## 8 (335) -0.01660    -0.00299  0.00020             -1.0             1.0    
+    ## 9 (335) -0.01907    -0.00299  0.00019             -1.2             1.0    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`Persicaria punctata (Elliott) Small`
+    ## Spatial correlogram for Persicaria punctata (Elliott) Small (matriz Hellinger) 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided
+    ## 1 (335)  0.03492    -0.00299  0.00098              1.2             1.0
+    ## 2 (335) -0.00874    -0.00299  0.00054             -0.2             1.0
+    ## 3 (335)  0.02031    -0.00299  0.00039              1.2             1.0
+    ## 4 (335)  0.00850    -0.00299  0.00032              0.6             1.0
+    ## 5 (335)  0.03771    -0.00299  0.00028              2.4             0.1
+    ## 6 (335)  0.00923    -0.00299  0.00026              0.8             1.0
+    ## 7 (335) -0.00485    -0.00299  0.00025             -0.1             1.0
+    ## 8 (335)  0.00168    -0.00299  0.00024              0.3             1.0
+    ## 9 (335) -0.03582    -0.00299  0.00024             -2.1             0.3
+    ## 
+    ## $`Coccoloba flavescens Jacq.`
+    ## Spatial correlogram for Coccoloba flavescens Jacq. (matriz Hellinger) 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided
+    ## 1 (335) -0.01633    -0.00299  0.00083             -0.5               1
+    ## 2 (335) -0.00231    -0.00299  0.00046              0.0               1
+    ## 3 (335) -0.01459    -0.00299  0.00033             -0.6               1
+    ## 4 (335) -0.01492    -0.00299  0.00027             -0.7               1
+    ## 5 (335) -0.00033    -0.00299  0.00024              0.2               1
+    ## 6 (335)  0.01937    -0.00299  0.00022              1.5               1
+    ## 7 (335)  0.01003    -0.00299  0.00021              0.9               1
+    ## 8 (335)  0.01312    -0.00299  0.00020              1.1               1
+    ## 9 (335) -0.01294    -0.00299  0.00020             -0.7               1
+    ## 
+    ## $`Leptogonum domingensis var. molle (Urb.) Brandbyge`
+    ## Spatial correlogram for Leptogonum domingensis var. molle (Urb.) Brandbyge (matriz Hellinger) 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided  
+    ## 1 (335)  0.03983    -0.00299  0.00091              1.4            1.00  
+    ## 2 (335)  0.00355    -0.00299  0.00050              0.3            1.00  
+    ## 3 (335) -0.00302    -0.00299  0.00036              0.0            1.00  
+    ## 4 (335) -0.00479    -0.00299  0.00030             -0.1            1.00  
+    ## 5 (335)  0.04749    -0.00299  0.00026              3.1            0.02 *
+    ## 6 (335)  0.02583    -0.00299  0.00024              1.9            0.51  
+    ## 7 (335)  0.00328    -0.00299  0.00023              0.4            1.00  
+    ## 8 (335) -0.01653    -0.00299  0.00022             -0.9            1.00  
+    ## 9 (335) -0.01678    -0.00299  0.00022             -0.9            1.00  
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`Leptogonum domingense Benth.`
+    ## Spatial correlogram for Leptogonum domingense Benth. (matriz Hellinger) 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided
+    ## 1 (335)  0.01988    -0.00299  0.00090              0.8             1.0
+    ## 2 (335) -0.02333    -0.00299  0.00050             -0.9             1.0
+    ## 3 (335) -0.01736    -0.00299  0.00036             -0.8             1.0
+    ## 4 (335)  0.02512    -0.00299  0.00030              1.6             0.8
+    ## 5 (335) -0.00731    -0.00299  0.00026             -0.3             1.0
+    ## 6 (335) -0.01203    -0.00299  0.00024             -0.6             1.0
+    ## 7 (335) -0.00261    -0.00299  0.00023              0.0             1.0
+    ## 8 (335) -0.01045    -0.00299  0.00022             -0.5             1.0
+    ## 9 (335)  0.02672    -0.00299  0.00022              2.0             0.4
+    ## 
+    ## $`Leptogonum domingensis Benth.`
+    ## Spatial correlogram for Leptogonum domingensis Benth. (matriz Hellinger) 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided  
+    ## 1 (335)  0.01160    -0.00299  0.00086              0.5            1.00  
+    ## 2 (335) -0.01806    -0.00299  0.00048             -0.7            1.00  
+    ## 3 (335) -0.01241    -0.00299  0.00034             -0.5            1.00  
+    ## 4 (335) -0.00942    -0.00299  0.00028             -0.4            1.00  
+    ## 5 (335) -0.01510    -0.00299  0.00025             -0.8            1.00  
+    ## 6 (335) -0.01457    -0.00299  0.00023             -0.8            1.00  
+    ## 7 (335)  0.04288    -0.00299  0.00022              3.1            0.02 *
+    ## 8 (335) -0.01538    -0.00299  0.00021             -0.9            1.00  
+    ## 9 (335) -0.00196    -0.00299  0.00021              0.1            1.00  
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`Coccoloba costata Wright`
+    ## Spatial correlogram for Coccoloba costata Wright (matriz Hellinger) 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided   
+    ## 1 (335)  0.11348    -0.00299  0.00107              3.6           0.003 **
+    ## 2 (335)  0.01320    -0.00299  0.00059              0.7           1.000   
+    ## 3 (335)  0.02666    -0.00299  0.00043              1.4           0.763   
+    ## 4 (335)  0.02149    -0.00299  0.00035              1.3           0.763   
+    ## 5 (335) -0.03106    -0.00299  0.00031             -1.6           0.763   
+    ## 6 (335) -0.01013    -0.00299  0.00028             -0.4           1.000   
+    ## 7 (335) -0.01375    -0.00299  0.00027             -0.7           1.000   
+    ## 8 (335)  0.03052    -0.00299  0.00026              2.1           0.303   
+    ## 9 (335) -0.02762    -0.00299  0.00026             -1.5           0.763   
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`Coccoloba incrassata Urb.`
+    ## Spatial correlogram for Coccoloba incrassata Urb. (matriz Hellinger) 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided
+    ## 1 (335)  0.03749    -0.00299  0.00101              1.3               1
+    ## 2 (335) -0.01333    -0.00299  0.00056             -0.4               1
+    ## 3 (335)  0.02331    -0.00299  0.00041              1.3               1
+    ## 4 (335)  0.00657    -0.00299  0.00033              0.5               1
+    ## 5 (335) -0.01261    -0.00299  0.00029             -0.6               1
+    ## 6 (335) -0.02735    -0.00299  0.00027             -1.5               1
+    ## 7 (335)  0.00828    -0.00299  0.00026              0.7               1
+    ## 8 (335)  0.00706    -0.00299  0.00025              0.6               1
+    ## 9 (335)  0.01409    -0.00299  0.00024              1.1               1
+    ## 
+    ## $`Coccoloba wrightii Lindau`
+    ## Spatial correlogram for Coccoloba wrightii Lindau (matriz Hellinger) 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided
+    ## 1 (335)  0.07653    -0.00299  0.00106              2.4             0.1
+    ## 2 (335)  0.01646    -0.00299  0.00059              0.8             1.0
+    ## 3 (335)  0.01930    -0.00299  0.00043              1.1             1.0
+    ## 4 (335) -0.01401    -0.00299  0.00035             -0.6             1.0
+    ## 5 (335)  0.01348    -0.00299  0.00031              0.9             1.0
+    ## 6 (335)  0.00656    -0.00299  0.00028              0.6             1.0
+    ## 7 (335) -0.00219    -0.00299  0.00027              0.0             1.0
+    ## 8 (335) -0.01610    -0.00299  0.00026             -0.8             1.0
+    ## 9 (335) -0.01377    -0.00299  0.00025             -0.7             1.0
+    ## 
+    ## $`Coccoloba picardae Urb.`
+    ## Spatial correlogram for Coccoloba picardae Urb. (matriz Hellinger) 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.11882    -0.00299  0.00092              4.0           5e-04 ***
+    ## 2 (335)  0.02150    -0.00299  0.00051              1.1            1.00    
+    ## 3 (335) -0.00467    -0.00299  0.00037             -0.1            1.00    
+    ## 4 (335)  0.04473    -0.00299  0.00030              2.7            0.05 *  
+    ## 5 (335)  0.03222    -0.00299  0.00026              2.2            0.21    
+    ## 6 (335) -0.01966    -0.00299  0.00025             -1.1            1.00    
+    ## 7 (335)  0.00741    -0.00299  0.00023              0.7            1.00    
+    ## 8 (335)  0.00022    -0.00299  0.00022              0.2            1.00    
+    ## 9 (335) -0.01282    -0.00299  0.00022             -0.7            1.00    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`Rumex acetosella L.`
+    ## Spatial correlogram for Rumex acetosella L. (matriz Hellinger) 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided
+    ## 1 (335) -3.0e-03    -3.0e-03  2.4e-07              0.0             1.0
+    ## 2 (335) -3.0e-03    -3.0e-03  4.2e-07              0.0             1.0
+    ## 3 (335) -3.2e-03    -3.0e-03  5.9e-07             -0.2             1.0
+    ## 4 (335) -3.6e-03    -3.0e-03  6.6e-07             -0.7             1.0
+    ## 5 (335) -3.7e-03    -3.0e-03  8.3e-07             -0.7             1.0
+    ## 6 (335) -3.8e-03    -3.0e-03  1.1e-06             -0.7             1.0
+    ## 7 (335) -4.1e-03    -3.0e-03  1.3e-06             -0.9             1.0
+    ## 8 (335) -5.0e-03    -3.0e-03  1.4e-06             -1.7             0.7
+    ## 9 (335) -5.5e-03    -3.0e-03  1.5e-06             -2.1             0.4
+    ## 
+    ## $`Rumex crispus L.`
+    ## Spatial correlogram for Rumex crispus L. (matriz Hellinger) 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.12772    -0.00299  0.00097              4.2           3e-04 ***
+    ## 2 (335)  0.08373    -0.00299  0.00054              3.7           0.001 ** 
+    ## 3 (335)  0.04701    -0.00299  0.00039              2.5           0.079 .  
+    ## 4 (335)  0.00146    -0.00299  0.00032              0.2           1.000    
+    ## 5 (335)  0.00047    -0.00299  0.00028              0.2           1.000    
+    ## 6 (335) -0.01488    -0.00299  0.00026             -0.7           1.000    
+    ## 7 (335)  0.00452    -0.00299  0.00025              0.5           1.000    
+    ## 8 (335) -0.01126    -0.00299  0.00024             -0.5           1.000    
+    ## 9 (335) -0.02644    -0.00299  0.00023             -1.5           0.749    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`Coccoloba leonardii Howard`
+    ## Spatial correlogram for Coccoloba leonardii Howard (matriz Hellinger) 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.18243    -0.00299  0.00047              8.6          <2e-16 ***
+    ## 2 (335) -0.00430    -0.00299  0.00026             -0.1               1    
+    ## 3 (335) -0.00310    -0.00299  0.00019              0.0               1    
+    ## 4 (335) -0.00322    -0.00299  0.00015              0.0               1    
+    ## 5 (335) -0.00321    -0.00299  0.00013              0.0               1    
+    ## 6 (335) -0.00284    -0.00299  0.00012              0.0               1    
+    ## 7 (335) -0.00307    -0.00299  0.00012              0.0               1    
+    ## 8 (335) -0.00326    -0.00299  0.00011              0.0               1    
+    ## 9 (335) -0.00339    -0.00299  0.00011              0.0               1    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`Coccoloba ceibensis O.C.Schmidt`
+    ## Spatial correlogram for Coccoloba ceibensis O.C.Schmidt (matriz Hellinger) 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided  
+    ## 1 (335)  0.02299    -0.00299  0.00096              0.8            1.00  
+    ## 2 (335)  0.01402    -0.00299  0.00053              0.7            1.00  
+    ## 3 (335)  0.02328    -0.00299  0.00038              1.3            1.00  
+    ## 4 (335)  0.04258    -0.00299  0.00031              2.6            0.09 .
+    ## 5 (335) -0.01563    -0.00299  0.00028             -0.8            1.00  
+    ## 6 (335) -0.00361    -0.00299  0.00026              0.0            1.00  
+    ## 7 (335)  0.02593    -0.00299  0.00024              1.9            0.51  
+    ## 8 (335) -0.00974    -0.00299  0.00023             -0.4            1.00  
+    ## 9 (335) -0.02125    -0.00299  0.00023             -1.2            1.00  
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`Coccoloba venosa L.`
+    ## Spatial correlogram for Coccoloba venosa L. (matriz Hellinger) 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335) -0.00841    -0.00299  0.00061             -0.2             1.0    
+    ## 2 (335) -0.00962    -0.00299  0.00034             -0.4             1.0    
+    ## 3 (335) -0.00783    -0.00299  0.00024             -0.3             1.0    
+    ## 4 (335)  0.11585    -0.00299  0.00020              8.4           4e-16 ***
+    ## 5 (335) -0.00587    -0.00299  0.00017             -0.2             1.0    
+    ## 6 (335)  0.01728    -0.00299  0.00016              1.6             0.9    
+    ## 7 (335) -0.00435    -0.00299  0.00015             -0.1             1.0    
+    ## 8 (335) -0.00395    -0.00299  0.00015             -0.1             1.0    
+    ## 9 (335) -0.00374    -0.00299  0.00015             -0.1             1.0    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`Coccoloba leoganensis Jacq.`
+    ## Spatial correlogram for Coccoloba leoganensis Jacq. (matriz Hellinger) 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided  
+    ## 1 (335)  0.04333    -0.00299  0.00102              1.4            1.00  
+    ## 2 (335)  0.06509    -0.00299  0.00057              2.9            0.04 *
+    ## 3 (335) -0.01696    -0.00299  0.00041             -0.7            1.00  
+    ## 4 (335) -0.00827    -0.00299  0.00034             -0.3            1.00  
+    ## 5 (335) -0.02317    -0.00299  0.00029             -1.2            1.00  
+    ## 6 (335) -0.00789    -0.00299  0.00027             -0.3            1.00  
+    ## 7 (335) -0.01660    -0.00299  0.00026             -0.8            1.00  
+    ## 8 (335) -0.00081    -0.00299  0.00025              0.1            1.00  
+    ## 9 (335)  0.02079    -0.00299  0.00025              1.5            1.00  
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`Coccoloba microstachya Willd.`
+    ## Spatial correlogram for Coccoloba microstachya Willd. (matriz Hellinger) 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335) -0.01265    -0.00299  0.00081             -0.3               1    
+    ## 2 (335) -0.00832    -0.00299  0.00045             -0.3               1    
+    ## 3 (335) -0.00872    -0.00299  0.00033             -0.3               1    
+    ## 4 (335)  0.01005    -0.00299  0.00027              0.8               1    
+    ## 5 (335)  0.01553    -0.00299  0.00023              1.2               1    
+    ## 6 (335) -0.01145    -0.00299  0.00022             -0.6               1    
+    ## 7 (335) -0.00983    -0.00299  0.00021             -0.5               1    
+    ## 8 (335)  0.06154    -0.00299  0.00020              4.6           4e-05 ***
+    ## 9 (335) -0.01017    -0.00299  0.00020             -0.5               1    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`Coccoloba krugii Lindau`
+    ## Spatial correlogram for Coccoloba krugii Lindau (matriz Hellinger) 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided
+    ## 1 (335)  0.05135    -0.00299  0.00077              2.0             0.4
+    ## 2 (335) -0.01234    -0.00299  0.00042             -0.5             1.0
+    ## 3 (335)  0.01953    -0.00299  0.00031              1.3             1.0
+    ## 4 (335) -0.01261    -0.00299  0.00025             -0.6             1.0
+    ## 5 (335) -0.01064    -0.00299  0.00022             -0.5             1.0
+    ## 6 (335) -0.00947    -0.00299  0.00021             -0.5             1.0
+    ## 7 (335) -0.00835    -0.00299  0.00020             -0.4             1.0
+    ## 8 (335)  0.01976    -0.00299  0.00019              1.7             0.8
+    ## 9 (335) -0.00825    -0.00299  0.00018             -0.4             1.0
+    ## 
+    ## $`Coccoloba buchii O.Schmidt`
+    ## Spatial correlogram for Coccoloba buchii O.Schmidt (matriz Hellinger) 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided
+    ## 1 (335) -0.02478    -0.00299  0.00096             -0.7               1
+    ## 2 (335) -0.00869    -0.00299  0.00053             -0.2               1
+    ## 3 (335) -0.00662    -0.00299  0.00039             -0.2               1
+    ## 4 (335)  0.02499    -0.00299  0.00032              1.6               1
+    ## 5 (335) -0.02138    -0.00299  0.00028             -1.1               1
+    ## 6 (335) -0.00980    -0.00299  0.00026             -0.4               1
+    ## 7 (335)  0.01737    -0.00299  0.00024              1.3               1
+    ## 8 (335) -0.00591    -0.00299  0.00024             -0.2               1
+    ## 9 (335) -0.01097    -0.00299  0.00023             -0.5               1
+    ## 
+    ## $`Coccoloba fuertesii Urb.`
+    ## Spatial correlogram for Coccoloba fuertesii Urb. (matriz Hellinger) 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided
+    ## 1 (335)  0.06130    -0.00299  0.00100              2.0             0.4
+    ## 2 (335) -0.02922    -0.00299  0.00055             -1.1             1.0
+    ## 3 (335) -0.02523    -0.00299  0.00040             -1.1             1.0
+    ## 4 (335) -0.02135    -0.00299  0.00033             -1.0             1.0
+    ## 5 (335) -0.02916    -0.00299  0.00029             -1.5             1.0
+    ## 6 (335)  0.00734    -0.00299  0.00027              0.6             1.0
+    ## 7 (335)  0.01884    -0.00299  0.00025              1.4             1.0
+    ## 8 (335)  0.01780    -0.00299  0.00024              1.3             1.0
+    ## 9 (335) -0.01460    -0.00299  0.00024             -0.8             1.0
+    ## 
+    ## $`Coccoloba nodosa Lindau`
+    ## Spatial correlogram for Coccoloba nodosa Lindau (matriz Hellinger) 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.07762    -0.00299  0.00088              2.7            0.04 *  
+    ## 2 (335)  0.10551    -0.00299  0.00049              4.9           7e-06 ***
+    ## 3 (335)  0.10072    -0.00299  0.00035              5.5           3e-07 ***
+    ## 4 (335)  0.04641    -0.00299  0.00029              2.9            0.03 *  
+    ## 5 (335) -0.00478    -0.00299  0.00025             -0.1            0.91    
+    ## 6 (335) -0.02301    -0.00299  0.00024             -1.3            0.39    
+    ## 7 (335) -0.02575    -0.00299  0.00022             -1.5            0.39    
+    ## 8 (335) -0.02806    -0.00299  0.00022             -1.7            0.35    
+    ## 9 (335) -0.03030    -0.00299  0.00021             -1.9            0.30    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`Coccoloba pauciflora Urb.`
+    ## Spatial correlogram for Coccoloba pauciflora Urb. (matriz Hellinger) 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.12345    -0.00299  0.00090              4.2           2e-04 ***
+    ## 2 (335)  0.04396    -0.00299  0.00050              2.1            0.24    
+    ## 3 (335)  0.04704    -0.00299  0.00036              2.6            0.07 .  
+    ## 4 (335)  0.01491    -0.00299  0.00030              1.0            1.00    
+    ## 5 (335) -0.02419    -0.00299  0.00026             -1.3            1.00    
+    ## 6 (335) -0.02253    -0.00299  0.00024             -1.3            1.00    
+    ## 7 (335) -0.01386    -0.00299  0.00023             -0.7            1.00    
+    ## 8 (335) -0.01400    -0.00299  0.00022             -0.7            1.00    
+    ## 9 (335)  0.00432    -0.00299  0.00022              0.5            1.00    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`Polygonum L.`
+    ## Spatial correlogram for Polygonum L. (matriz Hellinger) 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided
+    ## 1 (335)  0.01544    -0.00299  0.00089              0.6             1.0
+    ## 2 (335) -0.01599    -0.00299  0.00049             -0.6             1.0
+    ## 3 (335) -0.01679    -0.00299  0.00036             -0.7             1.0
+    ## 4 (335)  0.01307    -0.00299  0.00029              0.9             1.0
+    ## 5 (335)  0.03094    -0.00299  0.00025              2.1             0.3
+    ## 6 (335) -0.01266    -0.00299  0.00024             -0.6             1.0
+    ## 7 (335) -0.01299    -0.00299  0.00022             -0.7             1.0
+    ## 8 (335)  0.01821    -0.00299  0.00022              1.4             1.0
+    ## 9 (335) -0.02359    -0.00299  0.00021             -1.4             1.0
+    ## 
+    ## $`Rumex L.`
+    ## Spatial correlogram for Rumex L. (matriz Hellinger) 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided  
+    ## 1 (335)  0.04324    -0.00299  0.00082              1.6            0.85  
+    ## 2 (335)  0.06582    -0.00299  0.00045              3.2            0.01 *
+    ## 3 (335) -0.01168    -0.00299  0.00033             -0.5            1.00  
+    ## 4 (335) -0.01189    -0.00299  0.00027             -0.5            1.00  
+    ## 5 (335) -0.01260    -0.00299  0.00024             -0.6            1.00  
+    ## 6 (335) -0.01414    -0.00299  0.00022             -0.8            1.00  
+    ## 7 (335)  0.00608    -0.00299  0.00021              0.6            1.00  
+    ## 8 (335) -0.00163    -0.00299  0.00020              0.1            1.00  
+    ## 9 (335)  0.00743    -0.00299  0.00020              0.7            1.00  
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`Persicaria pensylvanica (L.) M.Gómez`
+    ## Spatial correlogram for Persicaria pensylvanica (L.) M.Gómez (matriz Hellinger) 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided
+    ## 1 (335) -3.0e-03    -3.0e-03  2.4e-07              0.0             1.0
+    ## 2 (335) -3.4e-03    -3.0e-03  4.2e-07             -0.7             1.0
+    ## 3 (335) -3.2e-03    -3.0e-03  5.9e-07             -0.3             1.0
+    ## 4 (335) -3.2e-03    -3.0e-03  6.6e-07             -0.2             1.0
+    ## 5 (335) -2.7e-03    -3.0e-03  8.3e-07              0.4             1.0
+    ## 6 (335) -2.5e-03    -3.0e-03  1.1e-06              0.5             1.0
+    ## 7 (335) -3.3e-03    -3.0e-03  1.3e-06             -0.3             1.0
+    ## 8 (335) -4.3e-03    -3.0e-03  1.4e-06             -1.1             1.0
+    ## 9 (335) -5.1e-03    -3.0e-03  1.5e-06             -1.7             0.8
+    ## 
+    ## $`Persicaria hydropiperoides (Michx.) Small`
+    ## Spatial correlogram for Persicaria hydropiperoides (Michx.) Small (matriz Hellinger) 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided
+    ## 1 (335)  0.01106    -0.00299  0.00080              0.5             1.0
+    ## 2 (335)  0.03621    -0.00299  0.00044              1.9             0.5
+    ## 3 (335)  0.03513    -0.00299  0.00032              2.1             0.3
+    ## 4 (335)  0.02748    -0.00299  0.00026              1.9             0.5
+    ## 5 (335)  0.01236    -0.00299  0.00023              1.0             1.0
+    ## 6 (335) -0.01814    -0.00299  0.00021             -1.0             1.0
+    ## 7 (335) -0.02071    -0.00299  0.00020             -1.2             1.0
+    ## 8 (335) -0.02180    -0.00299  0.00020             -1.3             1.0
+    ## 9 (335) -0.01857    -0.00299  0.00019             -1.1             1.0
+    ## 
+    ## $`Coccoloba samanensis O.C.Schmidt`
+    ## Spatial correlogram for Coccoloba samanensis O.C.Schmidt (matriz Hellinger) 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335) -0.00634    -0.00299  0.00054             -0.1               1    
+    ## 2 (335) -0.00654    -0.00299  0.00030             -0.2               1    
+    ## 3 (335)  0.07558    -0.00299  0.00022              5.4           8e-07 ***
+    ## 4 (335) -0.00599    -0.00299  0.00018             -0.2               1    
+    ## 5 (335) -0.00642    -0.00299  0.00015             -0.3               1    
+    ## 6 (335) -0.00683    -0.00299  0.00014             -0.3               1    
+    ## 7 (335) -0.00715    -0.00299  0.00014             -0.4               1    
+    ## 8 (335) -0.00686    -0.00299  0.00013             -0.3               1    
+    ## 9 (335) -0.00673    -0.00299  0.00013             -0.3               1    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`Persicaria ferruginea (Wedd.) Soják`
+    ## Spatial correlogram for Persicaria ferruginea (Wedd.) Soják (matriz Hellinger) 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335) -5.8e-03    -3.0e-03  3.6e-04             -0.1               1    
+    ## 2 (335) -6.1e-03    -3.0e-03  2.0e-04             -0.2               1    
+    ## 3 (335) -5.2e-03    -3.0e-03  1.5e-04             -0.2               1    
+    ## 4 (335)  4.4e-02    -3.0e-03  1.2e-04              4.3           2e-04 ***
+    ## 5 (335) -4.4e-03    -3.0e-03  1.1e-04             -0.1               1    
+    ## 6 (335) -5.2e-03    -3.0e-03  9.8e-05             -0.2               1    
+    ## 7 (335) -6.3e-03    -3.0e-03  9.3e-05             -0.3               1    
+    ## 8 (335) -7.0e-03    -3.0e-03  9.0e-05             -0.4               1    
+    ## 9 (335) -7.6e-03    -3.0e-03  8.9e-05             -0.5               1    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`Brunnichia ovata (Walter) Shinners`
+    ## Spatial correlogram for Brunnichia ovata (Walter) Shinners (matriz Hellinger) 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided
+    ## 1 (335) -3.0e-03    -3.0e-03  2.4e-07              0.0             1.0
+    ## 2 (335) -3.0e-03    -3.0e-03  4.2e-07              0.0             1.0
+    ## 3 (335) -3.0e-03    -3.0e-03  5.9e-07              0.0             1.0
+    ## 4 (335) -3.4e-03    -3.0e-03  6.6e-07             -0.5             1.0
+    ## 5 (335) -3.9e-03    -3.0e-03  8.3e-07             -1.1             1.0
+    ## 6 (335) -4.8e-03    -3.0e-03  1.1e-06             -1.7             0.8
+    ## 7 (335) -4.5e-03    -3.0e-03  1.3e-06             -1.3             1.0
+    ## 8 (335) -4.3e-03    -3.0e-03  1.4e-06             -1.1             1.0
+    ## 9 (335) -4.9e-03    -3.0e-03  1.5e-06             -1.6             1.0
+    ## 
+    ## $`Ruprechtia C.A.Mey.`
+    ## Spatial correlogram for Ruprechtia C.A.Mey. (matriz Hellinger) 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided
+    ## 1 (335) -3.0e-03    -3.0e-03  2.4e-07              0.0             1.0
+    ## 2 (335) -3.4e-03    -3.0e-03  4.2e-07             -0.7             1.0
+    ## 3 (335) -3.0e-03    -3.0e-03  5.9e-07              0.0             1.0
+    ## 4 (335) -3.1e-03    -3.0e-03  6.6e-07             -0.2             1.0
+    ## 5 (335) -3.0e-03    -3.0e-03  8.3e-07              0.0             1.0
+    ## 6 (335) -3.2e-03    -3.0e-03  1.1e-06             -0.2             1.0
+    ## 7 (335) -3.5e-03    -3.0e-03  1.3e-06             -0.5             1.0
+    ## 8 (335) -4.4e-03    -3.0e-03  1.4e-06             -1.2             1.0
+    ## 9 (335) -5.0e-03    -3.0e-03  1.5e-06             -1.6             0.9
+    ## 
+    ## $`Coccoloba subcordata Lindau`
+    ## Spatial correlogram for Coccoloba subcordata Lindau (matriz Hellinger) 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335) -0.00687    -0.00299  0.00055             -0.2               1    
+    ## 2 (335)  0.09673    -0.00299  0.00030              5.7           9e-08 ***
+    ## 3 (335) -0.00647    -0.00299  0.00022             -0.2               1    
+    ## 4 (335) -0.00747    -0.00299  0.00018             -0.3               1    
+    ## 5 (335) -0.00596    -0.00299  0.00016             -0.2               1    
+    ## 6 (335) -0.00369    -0.00299  0.00015             -0.1               1    
+    ## 7 (335) -0.00256    -0.00299  0.00014              0.0               1    
+    ## 8 (335) -0.00271    -0.00299  0.00013              0.0               1    
+    ## 9 (335) -0.00289    -0.00299  0.00013              0.0               1    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`Polygonum punctatum Kit., 1864`
+    ## Spatial correlogram for Polygonum punctatum Kit., 1864 (matriz Hellinger) 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided
+    ## 1 (335)  0.04930    -0.00299  0.00078              1.9             0.5
+    ## 2 (335) -0.01303    -0.00299  0.00043             -0.5             1.0
+    ## 3 (335)  0.00340    -0.00299  0.00031              0.4             1.0
+    ## 4 (335)  0.00652    -0.00299  0.00026              0.6             1.0
+    ## 5 (335) -0.00893    -0.00299  0.00022             -0.4             1.0
+    ## 6 (335) -0.00982    -0.00299  0.00021             -0.5             1.0
+    ## 7 (335) -0.01145    -0.00299  0.00020             -0.6             1.0
+    ## 8 (335) -0.01332    -0.00299  0.00019             -0.7             1.0
+    ## 9 (335) -0.01426    -0.00299  0.00019             -0.8             1.0
+    ## 
+    ## $`Persicaria segetum (Kunth) Small`
+    ## Spatial correlogram for Persicaria segetum (Kunth) Small (matriz Hellinger) 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided
+    ## 1 (335) -3.0e-03    -3.0e-03  2.4e-07              0.0             1.0
+    ## 2 (335) -3.9e-03    -3.0e-03  4.2e-07             -1.4             1.0
+    ## 3 (335) -3.1e-03    -3.0e-03  5.9e-07             -0.2             1.0
+    ## 4 (335) -2.3e-03    -3.0e-03  6.6e-07              0.8             1.0
+    ## 5 (335) -2.2e-03    -3.0e-03  8.3e-07              0.8             1.0
+    ## 6 (335) -2.7e-03    -3.0e-03  1.1e-06              0.3             1.0
+    ## 7 (335) -3.3e-03    -3.0e-03  1.3e-06             -0.3             1.0
+    ## 8 (335) -4.3e-03    -3.0e-03  1.4e-06             -1.1             1.0
+    ## 9 (335) -5.1e-03    -3.0e-03  1.5e-06             -1.7             0.9
+    ## 
+    ## $`Persicaria acuminata (Kunth) M.Gómez`
+    ## Spatial correlogram for Persicaria acuminata (Kunth) M.Gómez (matriz Hellinger) 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335) -0.00808    -0.00299  0.00068             -0.2             1.0    
+    ## 2 (335) -0.00735    -0.00299  0.00037             -0.2             1.0    
+    ## 3 (335)  0.01874    -0.00299  0.00027              1.3             1.0    
+    ## 4 (335) -0.00921    -0.00299  0.00022             -0.4             1.0    
+    ## 5 (335) -0.01044    -0.00299  0.00019             -0.5             1.0    
+    ## 6 (335) -0.01030    -0.00299  0.00018             -0.5             1.0    
+    ## 7 (335) -0.00849    -0.00299  0.00017             -0.4             1.0    
+    ## 8 (335)  0.02020    -0.00299  0.00017              1.8             0.6    
+    ## 9 (335)  0.05017    -0.00299  0.00016              4.2           3e-04 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`Coccoloba swartzii Meisn.`
+    ## Spatial correlogram for Coccoloba swartzii Meisn. (matriz Hellinger) 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided  
+    ## 1 (335) -0.00787    -0.00299  0.00054             -0.2            1.00  
+    ## 2 (335) -0.00940    -0.00299  0.00030             -0.4            1.00  
+    ## 3 (335)  0.03862    -0.00299  0.00022              2.8            0.04 *
+    ## 4 (335)  0.00468    -0.00299  0.00018              0.6            1.00  
+    ## 5 (335) -0.00820    -0.00299  0.00016             -0.4            1.00  
+    ## 6 (335) -0.00719    -0.00299  0.00015             -0.3            1.00  
+    ## 7 (335)  0.03154    -0.00299  0.00014              2.9            0.03 *
+    ## 8 (335) -0.00480    -0.00299  0.00013             -0.2            1.00  
+    ## 9 (335) -0.00482    -0.00299  0.00013             -0.2            1.00  
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`Persicaria lapathifolia subsp. lapathifolia`
+    ## Spatial correlogram for Persicaria lapathifolia subsp. lapathifolia (matriz Hellinger) 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided  
+    ## 1 (335) -4.3e-03    -3.0e-03  2.4e-07             -2.7            0.06 .
+    ## 2 (335) -2.0e-03    -3.0e-03  4.2e-07              1.5            0.80  
+    ## 3 (335) -1.9e-03    -3.0e-03  5.9e-07              1.5            0.80  
+    ## 4 (335) -2.1e-03    -3.0e-03  6.6e-07              1.1            0.80  
+    ## 5 (335) -2.3e-03    -3.0e-03  8.3e-07              0.8            0.80  
+    ## 6 (335) -1.1e-03    -3.0e-03  1.1e-06              1.8            0.57  
+    ## 7 (335) -1.2e-03    -3.0e-03  1.3e-06              1.6            0.77  
+    ## 8 (335) -1.4e-03    -3.0e-03  1.4e-06              1.3            0.80  
+    ## 9 (335) -1.5e-03    -3.0e-03  1.5e-06              1.2            0.80  
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`Persicaria glabra (Willd.) M.Gómez`
+    ## Spatial correlogram for Persicaria glabra (Willd.) M.Gómez (matriz Hellinger) 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335) -0.00686    -0.00299  0.00057             -0.2               1    
+    ## 2 (335) -0.00676    -0.00299  0.00032             -0.2               1    
+    ## 3 (335) -0.00536    -0.00299  0.00023             -0.2               1    
+    ## 4 (335) -0.00575    -0.00299  0.00019             -0.2               1    
+    ## 5 (335) -0.00573    -0.00299  0.00016             -0.2               1    
+    ## 6 (335) -0.00438    -0.00299  0.00015             -0.1               1    
+    ## 7 (335) -0.00470    -0.00299  0.00015             -0.1               1    
+    ## 8 (335)  0.05650    -0.00299  0.00014              5.0           5e-06 ***
+    ## 9 (335) -0.00492    -0.00299  0.00014             -0.2               1    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`Rumex obtusifolius L.`
+    ## Spatial correlogram for Rumex obtusifolius L. (matriz Hellinger) 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.04316    -0.00299  0.00059              1.9             0.5    
+    ## 2 (335) -0.00921    -0.00299  0.00033             -0.3             1.0    
+    ## 3 (335) -0.00878    -0.00299  0.00024             -0.4             1.0    
+    ## 4 (335) -0.00832    -0.00299  0.00020             -0.4             1.0    
+    ## 5 (335) -0.00751    -0.00299  0.00017             -0.3             1.0    
+    ## 6 (335)  0.06631    -0.00299  0.00016              5.5           3e-07 ***
+    ## 7 (335) -0.00612    -0.00299  0.00015             -0.3             1.0    
+    ## 8 (335) -0.00606    -0.00299  0.00015             -0.3             1.0    
+    ## 9 (335) -0.00647    -0.00299  0.00014             -0.3             1.0    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`Coccoloba fawcettii O.Schmidt`
+    ## Spatial correlogram for Coccoloba fawcettii O.Schmidt (matriz Hellinger) 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided
+    ## 1 (335) -3.7e-03    -3.0e-03  2.4e-07             -1.4               1
+    ## 2 (335) -2.8e-03    -3.0e-03  4.2e-07              0.3               1
+    ## 3 (335) -2.4e-03    -3.0e-03  5.9e-07              0.8               1
+    ## 4 (335) -3.4e-03    -3.0e-03  6.6e-07             -0.5               1
+    ## 5 (335) -4.1e-03    -3.0e-03  8.3e-07             -1.2               1
+    ## 6 (335) -2.8e-03    -3.0e-03  1.1e-06              0.2               1
+    ## 7 (335) -2.1e-03    -3.0e-03  1.3e-06              0.8               1
+    ## 8 (335) -1.7e-03    -3.0e-03  1.4e-06              1.1               1
+    ## 9 (335) -1.9e-03    -3.0e-03  1.5e-06              0.8               1
+
+``` r
+dim_panel <- rev(n2mfrow(ncol(mi_fam_t_all)))
+par(mfrow = dim_panel)
+suppressWarnings(invisible(lapply(auto_spp_hel, function(x) plot(x, main = x$var))))
+```
+
+![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-52-1.png)<!-- -->
+
+Ahora exploraré la autocorrelación de las variables ambientales. Entre
+estas, como verás, muchas están autocorrelacionadas, al tratarse de
+variables continuas. Te interesa explorar qué variables están
+autocorrelacionadas espacialmente, y qué especies también lo están, para
+comprobar posteriormente si tanto especies como variables ambientales
+tienen *coldspots* y *hotspots* coincidentes espacialmente, lo cual
+sugeriría que existe asociación entre ellas.
+
+``` r
+env_num <- env_sf %>%
+  st_drop_geometry %>% 
+  select_if(is.numeric) %>% 
+  replace(is.na(.), 0)
+suppressWarnings(auto_amb <- calcular_autocorrelacion(
+  df_fuente = env_num,
+  orden = 9,
+  obj_vecindad = vecindad))
+print(auto_amb, digits = 2, p.adj.method = 'holm')
+```
+
+    ## $`ESA Trees`
+    ## Spatial correlogram for ESA Trees 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.55233    -0.00299  0.00113             16.5          <2e-16 ***
+    ## 2 (335)  0.27811    -0.00299  0.00062             11.3          <2e-16 ***
+    ## 3 (335)  0.14912    -0.00299  0.00045              7.1           6e-12 ***
+    ## 4 (335)  0.07418    -0.00299  0.00037              4.0           4e-04 ***
+    ## 5 (335)  0.05891    -0.00299  0.00032              3.4           0.002 ** 
+    ## 6 (335)  0.06477    -0.00299  0.00030              3.9           5e-04 ***
+    ## 7 (335)  0.04595    -0.00299  0.00029              2.9           0.011 *  
+    ## 8 (335) -0.00650    -0.00299  0.00028             -0.2           0.833    
+    ## 9 (335) -0.04584    -0.00299  0.00027             -2.6           0.018 *  
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`ESA Shrubland`
+    ## Spatial correlogram for ESA Shrubland 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.56189    -0.00299  0.00108             17.2          <2e-16 ***
+    ## 2 (335)  0.28854    -0.00299  0.00060             11.9          <2e-16 ***
+    ## 3 (335)  0.17403    -0.00299  0.00043              8.5          <2e-16 ***
+    ## 4 (335)  0.12970    -0.00299  0.00036              7.0           1e-11 ***
+    ## 5 (335)  0.08708    -0.00299  0.00031              5.1           2e-06 ***
+    ## 6 (335)  0.05312    -0.00299  0.00029              3.3           0.004 ** 
+    ## 7 (335)  0.02391    -0.00299  0.00027              1.6           0.313    
+    ## 8 (335) -0.01360    -0.00299  0.00026             -0.7           0.673    
+    ## 9 (335) -0.01847    -0.00299  0.00026             -1.0           0.673    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`ESA Grassland`
+    ## Spatial correlogram for ESA Grassland 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.65010    -0.00299  0.00113             19.5          <2e-16 ***
+    ## 2 (335)  0.38982    -0.00299  0.00062             15.7          <2e-16 ***
+    ## 3 (335)  0.21980    -0.00299  0.00045             10.5          <2e-16 ***
+    ## 4 (335)  0.07667    -0.00299  0.00037              4.1           1e-04 ***
+    ## 5 (335) -0.02063    -0.00299  0.00032             -1.0             0.3    
+    ## 6 (335) -0.06685    -0.00299  0.00030             -3.7           5e-04 ***
+    ## 7 (335) -0.07608    -0.00299  0.00029             -4.3           6e-05 ***
+    ## 8 (335) -0.07539    -0.00299  0.00027             -4.4           6e-05 ***
+    ## 9 (335) -0.09497    -0.00299  0.00027             -5.6           1e-07 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`ESA Cropland`
+    ## Spatial correlogram for ESA Cropland 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.31663    -0.00299  0.00106              9.8          <2e-16 ***
+    ## 2 (335)  0.01416    -0.00299  0.00059              0.7            1.00    
+    ## 3 (335) -0.01476    -0.00299  0.00043             -0.6            1.00    
+    ## 4 (335) -0.02770    -0.00299  0.00035             -1.3            1.00    
+    ## 5 (335) -0.04985    -0.00299  0.00031             -2.7            0.06 .  
+    ## 6 (335) -0.04844    -0.00299  0.00028             -2.7            0.06 .  
+    ## 7 (335)  0.00572    -0.00299  0.00027              0.5            1.00    
+    ## 8 (335)  0.01310    -0.00299  0.00026              1.0            1.00    
+    ## 9 (335)  0.00050    -0.00299  0.00025              0.2            1.00    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`ESA Built-up`
+    ## Spatial correlogram for ESA Built-up 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.27451    -0.00299  0.00086              9.5          <2e-16 ***
+    ## 2 (335)  0.07082    -0.00299  0.00047              3.4           0.006 ** 
+    ## 3 (335)  0.01960    -0.00299  0.00034              1.2           1.000    
+    ## 4 (335) -0.00457    -0.00299  0.00028             -0.1           1.000    
+    ## 5 (335) -0.00877    -0.00299  0.00025             -0.4           1.000    
+    ## 6 (335) -0.01799    -0.00299  0.00023             -1.0           1.000    
+    ## 7 (335) -0.01063    -0.00299  0.00022             -0.5           1.000    
+    ## 8 (335) -0.01309    -0.00299  0.00021             -0.7           1.000    
+    ## 9 (335) -0.01577    -0.00299  0.00021             -0.9           1.000    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`ESA Barren / sparse vegetation`
+    ## Spatial correlogram for ESA Barren / sparse vegetation 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.33481    -0.00299  0.00082             11.8          <2e-16 ***
+    ## 2 (335)  0.11298    -0.00299  0.00045              5.4           4e-07 ***
+    ## 3 (335)  0.03154    -0.00299  0.00033              1.9             0.3    
+    ## 4 (335)  0.00066    -0.00299  0.00027              0.2             1.0    
+    ## 5 (335) -0.00373    -0.00299  0.00024              0.0             1.0    
+    ## 6 (335) -0.01350    -0.00299  0.00022             -0.7             1.0    
+    ## 7 (335) -0.02311    -0.00299  0.00021             -1.4             0.8    
+    ## 8 (335) -0.03605    -0.00299  0.00020             -2.3             0.1    
+    ## 9 (335) -0.01814    -0.00299  0.00020             -1.1             1.0    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`ESA Open water`
+    ## Spatial correlogram for ESA Open water 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.52017    -0.00299  0.00112             15.6          <2e-16 ***
+    ## 2 (335)  0.28506    -0.00299  0.00062             11.6          <2e-16 ***
+    ## 3 (335)  0.16818    -0.00299  0.00045              8.1           5e-15 ***
+    ## 4 (335)  0.04641    -0.00299  0.00037              2.6            0.06 .  
+    ## 5 (335)  0.01538    -0.00299  0.00032              1.0            1.00    
+    ## 6 (335)  0.01856    -0.00299  0.00030              1.2            1.00    
+    ## 7 (335)  0.01336    -0.00299  0.00029              1.0            1.00    
+    ## 8 (335)  0.01496    -0.00299  0.00027              1.1            1.00    
+    ## 9 (335) -0.00306    -0.00299  0.00027              0.0            1.00    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`ESA Herbaceous wetland`
+    ## Spatial correlogram for ESA Herbaceous wetland 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.24187    -0.00299  0.00088              8.2           2e-15 ***
+    ## 2 (335)  0.04271    -0.00299  0.00049              2.1             0.3    
+    ## 3 (335)  0.00336    -0.00299  0.00035              0.3             1.0    
+    ## 4 (335) -0.02323    -0.00299  0.00029             -1.2             1.0    
+    ## 5 (335)  0.00143    -0.00299  0.00025              0.3             1.0    
+    ## 6 (335)  0.00326    -0.00299  0.00024              0.4             1.0    
+    ## 7 (335)  0.00014    -0.00299  0.00022              0.2             1.0    
+    ## 8 (335)  0.02434    -0.00299  0.00022              1.9             0.4    
+    ## 9 (335)  0.01166    -0.00299  0.00021              1.0             1.0    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`ESA Mangroves`
+    ## Spatial correlogram for ESA Mangroves 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.17025    -0.00299  0.00096              5.6           2e-07 ***
+    ## 2 (335)  0.07926    -0.00299  0.00053              3.6           0.003 ** 
+    ## 3 (335)  0.01207    -0.00299  0.00038              0.8           1.000    
+    ## 4 (335)  0.00399    -0.00299  0.00032              0.4           1.000    
+    ## 5 (335) -0.01452    -0.00299  0.00028             -0.7           1.000    
+    ## 6 (335) -0.01315    -0.00299  0.00026             -0.6           1.000    
+    ## 7 (335) -0.01838    -0.00299  0.00024             -1.0           1.000    
+    ## 8 (335) -0.01903    -0.00299  0.00023             -1.0           1.000    
+    ## 9 (335) -0.02707    -0.00299  0.00023             -1.6           0.787    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`CGL Closed forest, evergreen needle leaf`
+    ## Spatial correlogram for CGL Closed forest, evergreen needle leaf 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.19780    -0.00299  0.00056              8.5          <2e-16 ***
+    ## 2 (335)  0.01381    -0.00299  0.00031              1.0             1.0    
+    ## 3 (335)  0.00993    -0.00299  0.00022              0.9             1.0    
+    ## 4 (335)  0.02705    -0.00299  0.00018              2.2             0.2    
+    ## 5 (335) -0.00249    -0.00299  0.00016              0.0             1.0    
+    ## 6 (335) -0.02033    -0.00299  0.00015             -1.4             0.9    
+    ## 7 (335) -0.02395    -0.00299  0.00014             -1.8             0.6    
+    ## 8 (335) -0.01733    -0.00299  0.00014             -1.2             1.0    
+    ## 9 (335)  0.00498    -0.00299  0.00013              0.7             1.0    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`CGL Closed forest, evergreen broad leaf`
+    ## Spatial correlogram for CGL Closed forest, evergreen broad leaf 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.58565    -0.00299  0.00112             17.6          <2e-16 ***
+    ## 2 (335)  0.26428    -0.00299  0.00062             10.7          <2e-16 ***
+    ## 3 (335)  0.08475    -0.00299  0.00045              4.1           2e-04 ***
+    ## 4 (335)  0.02353    -0.00299  0.00037              1.4            0.67    
+    ## 5 (335)  0.01386    -0.00299  0.00032              0.9            0.70    
+    ## 6 (335)  0.01944    -0.00299  0.00030              1.3            0.67    
+    ## 7 (335)  0.03934    -0.00299  0.00028              2.5            0.07 .  
+    ## 8 (335)  0.03185    -0.00299  0.00027              2.1            0.18    
+    ## 9 (335) -0.00945    -0.00299  0.00027             -0.4            0.70    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`CGL Closed forest, deciduous broad leaf`
+    ## Spatial correlogram for CGL Closed forest, deciduous broad leaf 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.30210    -0.00299  0.00103              9.5          <2e-16 ***
+    ## 2 (335)  0.10732    -0.00299  0.00057              4.6           3e-05 ***
+    ## 3 (335)  0.07161    -0.00299  0.00041              3.7           0.002 ** 
+    ## 4 (335)  0.04252    -0.00299  0.00034              2.5           0.034 *  
+    ## 5 (335)  0.04129    -0.00299  0.00029              2.6           0.034 *  
+    ## 6 (335)  0.04056    -0.00299  0.00027              2.6           0.034 *  
+    ## 7 (335)  0.04650    -0.00299  0.00026              3.1           0.011 *  
+    ## 8 (335)  0.05020    -0.00299  0.00025              3.4           0.005 ** 
+    ## 9 (335) -0.00497    -0.00299  0.00025             -0.1           0.900    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`CGL Closed forest, mixed`
+    ## Spatial correlogram for CGL Closed forest, mixed 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.70511    -0.00299  0.00105             21.9          <2e-16 ***
+    ## 2 (335)  0.40925    -0.00299  0.00058             17.1          <2e-16 ***
+    ## 3 (335)  0.18692    -0.00299  0.00042              9.3          <2e-16 ***
+    ## 4 (335)  0.06839    -0.00299  0.00034              3.8           5e-04 ***
+    ## 5 (335)  0.00407    -0.00299  0.00030              0.4            0.68    
+    ## 6 (335) -0.04757    -0.00299  0.00028             -2.7            0.02 *  
+    ## 7 (335) -0.07115    -0.00299  0.00027             -4.2           1e-04 ***
+    ## 8 (335) -0.07093    -0.00299  0.00026             -4.2           1e-04 ***
+    ## 9 (335) -0.06211    -0.00299  0.00025             -3.7           6e-04 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`CGL Closed forest, not matching any of the other definitions`
+    ## Spatial correlogram for CGL Closed forest, not matching any of the other definitions 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.28809    -0.00299  0.00106              8.9          <2e-16 ***
+    ## 2 (335)  0.01877    -0.00299  0.00059              0.9            1.00    
+    ## 3 (335) -0.03098    -0.00299  0.00043             -1.4            1.00    
+    ## 4 (335) -0.05204    -0.00299  0.00035             -2.6            0.07 .  
+    ## 5 (335) -0.02593    -0.00299  0.00031             -1.3            1.00    
+    ## 6 (335) -0.01245    -0.00299  0.00028             -0.6            1.00    
+    ## 7 (335) -0.00837    -0.00299  0.00027             -0.3            1.00    
+    ## 8 (335)  0.00604    -0.00299  0.00026              0.6            1.00    
+    ## 9 (335)  0.02501    -0.00299  0.00026              1.8            0.56    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`CGL Open forest, evergreen needle leaf`
+    ## Spatial correlogram for CGL Open forest, evergreen needle leaf 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided
+    ## 1 (335) -3.0e-03    -3.0e-03  2.4e-07              0.0             1.0
+    ## 2 (335) -3.0e-03    -3.0e-03  4.2e-07              0.0             1.0
+    ## 3 (335) -3.2e-03    -3.0e-03  5.9e-07             -0.2             1.0
+    ## 4 (335) -3.6e-03    -3.0e-03  6.6e-07             -0.7             1.0
+    ## 5 (335) -3.7e-03    -3.0e-03  8.3e-07             -0.7             1.0
+    ## 6 (335) -3.8e-03    -3.0e-03  1.1e-06             -0.7             1.0
+    ## 7 (335) -4.1e-03    -3.0e-03  1.3e-06             -0.9             1.0
+    ## 8 (335) -5.0e-03    -3.0e-03  1.4e-06             -1.7             0.7
+    ## 9 (335) -5.5e-03    -3.0e-03  1.5e-06             -2.1             0.4
+    ## 
+    ## $`CGL Open forest, evergreen broad leaf`
+    ## Spatial correlogram for CGL Open forest, evergreen broad leaf 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.51729    -0.00299  0.00112             15.5          <2e-16 ***
+    ## 2 (335)  0.19896    -0.00299  0.00062              8.1           4e-15 ***
+    ## 3 (335)  0.07886    -0.00299  0.00045              3.9           7e-04 ***
+    ## 4 (335)  0.06753    -0.00299  0.00037              3.7           0.001 ** 
+    ## 5 (335)  0.07759    -0.00299  0.00032              4.5           5e-05 ***
+    ## 6 (335)  0.05634    -0.00299  0.00030              3.4           0.002 ** 
+    ## 7 (335)  0.04328    -0.00299  0.00029              2.7           0.018 *  
+    ## 8 (335)  0.02391    -0.00299  0.00027              1.6           0.104    
+    ## 9 (335) -0.04595    -0.00299  0.00027             -2.6           0.018 *  
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`CGL Open forest, deciduous broad leaf`
+    ## Spatial correlogram for CGL Open forest, deciduous broad leaf 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.49701    -0.00299  0.00107             15.3          <2e-16 ***
+    ## 2 (335)  0.25788    -0.00299  0.00059             10.8          <2e-16 ***
+    ## 3 (335)  0.17417    -0.00299  0.00043              8.6          <2e-16 ***
+    ## 4 (335)  0.11342    -0.00299  0.00035              6.2           3e-09 ***
+    ## 5 (335)  0.06714    -0.00299  0.00031              4.0           3e-04 ***
+    ## 6 (335)  0.03189    -0.00299  0.00028              2.1           0.116    
+    ## 7 (335)  0.01301    -0.00299  0.00027              1.0           0.660    
+    ## 8 (335) -0.00204    -0.00299  0.00026              0.1           0.953    
+    ## 9 (335) -0.05553    -0.00299  0.00026             -3.3           0.004 ** 
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`CGL Open forest, mixed`
+    ## Spatial correlogram for CGL Open forest, mixed 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.22657    -0.00299  0.00097              7.4           1e-12 ***
+    ## 2 (335)  0.15671    -0.00299  0.00053              6.9           4e-11 ***
+    ## 3 (335)  0.07038    -0.00299  0.00039              3.7           0.001 ** 
+    ## 4 (335)  0.01181    -0.00299  0.00032              0.8           1.000    
+    ## 5 (335)  0.03832    -0.00299  0.00028              2.5           0.079 .  
+    ## 6 (335) -0.01369    -0.00299  0.00026             -0.7           1.000    
+    ## 7 (335) -0.00198    -0.00299  0.00025              0.1           1.000    
+    ## 8 (335) -0.01509    -0.00299  0.00024             -0.8           1.000    
+    ## 9 (335)  0.01008    -0.00299  0.00023              0.9           1.000    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`CGL Open forest, not matching any of the other definitions`
+    ## Spatial correlogram for CGL Open forest, not matching any of the other definitions 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.49183    -0.00299  0.00113             14.7          <2e-16 ***
+    ## 2 (335)  0.19549    -0.00299  0.00062              7.9           2e-14 ***
+    ## 3 (335)  0.08033    -0.00299  0.00045              3.9           6e-04 ***
+    ## 4 (335)  0.00724    -0.00299  0.00037              0.5            1.00    
+    ## 5 (335) -0.01293    -0.00299  0.00032             -0.6            1.00    
+    ## 6 (335) -0.00012    -0.00299  0.00030              0.2            1.00    
+    ## 7 (335)  0.02366    -0.00299  0.00029              1.6            0.58    
+    ## 8 (335)  0.04476    -0.00299  0.00028              2.9            0.02 *  
+    ## 9 (335)  0.01252    -0.00299  0.00027              0.9            1.00    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`CGL Shrubs`
+    ## Spatial correlogram for CGL Shrubs 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.53682    -0.00299  0.00110             16.3          <2e-16 ***
+    ## 2 (335)  0.25729    -0.00299  0.00061             10.6          <2e-16 ***
+    ## 3 (335)  0.17378    -0.00299  0.00044              8.4          <2e-16 ***
+    ## 4 (335)  0.17785    -0.00299  0.00036              9.5          <2e-16 ***
+    ## 5 (335)  0.18053    -0.00299  0.00032             10.3          <2e-16 ***
+    ## 6 (335)  0.13609    -0.00299  0.00029              8.1           2e-15 ***
+    ## 7 (335)  0.09818    -0.00299  0.00028              6.1           4e-09 ***
+    ## 8 (335)  0.04814    -0.00299  0.00027              3.1           0.004 ** 
+    ## 9 (335)  0.02007    -0.00299  0.00026              1.4           0.155    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`CGL Oceans, seas`
+    ## Spatial correlogram for CGL Oceans, seas 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.52301    -0.00299  0.00112             15.7          <2e-16 ***
+    ## 2 (335)  0.29675    -0.00299  0.00062             12.0          <2e-16 ***
+    ## 3 (335)  0.18154    -0.00299  0.00045              8.7          <2e-16 ***
+    ## 4 (335)  0.05733    -0.00299  0.00037              3.1            0.01 *  
+    ## 5 (335)  0.01647    -0.00299  0.00032              1.1            1.00    
+    ## 6 (335)  0.01417    -0.00299  0.00030              1.0            1.00    
+    ## 7 (335)  0.00645    -0.00299  0.00028              0.6            1.00    
+    ## 8 (335)  0.00482    -0.00299  0.00027              0.5            1.00    
+    ## 9 (335)  0.00112    -0.00299  0.00027              0.3            1.00    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`CGL Herbaceous vegetation`
+    ## Spatial correlogram for CGL Herbaceous vegetation 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.62312    -0.00299  0.00111             18.8          <2e-16 ***
+    ## 2 (335)  0.36673    -0.00299  0.00062             14.9          <2e-16 ***
+    ## 3 (335)  0.20890    -0.00299  0.00045             10.0          <2e-16 ***
+    ## 4 (335)  0.09373    -0.00299  0.00037              5.1           3e-06 ***
+    ## 5 (335)  0.05849    -0.00299  0.00032              3.4           0.003 ** 
+    ## 6 (335)  0.00863    -0.00299  0.00030              0.7           1.000    
+    ## 7 (335) -0.00977    -0.00299  0.00028             -0.4           1.000    
+    ## 8 (335) -0.00027    -0.00299  0.00027              0.2           1.000    
+    ## 9 (335)  0.01846    -0.00299  0.00027              1.3           0.757    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`CGL Cultivated and managed vegetation / agriculture`
+    ## Spatial correlogram for CGL Cultivated and managed vegetation / agriculture 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.45198    -0.00299  0.00108             13.8          <2e-16 ***
+    ## 2 (335)  0.14331    -0.00299  0.00060              6.0           2e-08 ***
+    ## 3 (335)  0.01352    -0.00299  0.00043              0.8           1.000    
+    ## 4 (335) -0.04405    -0.00299  0.00036             -2.2           0.148    
+    ## 5 (335) -0.06425    -0.00299  0.00031             -3.5           0.004 ** 
+    ## 6 (335) -0.05648    -0.00299  0.00029             -3.1           0.010 ** 
+    ## 7 (335) -0.00658    -0.00299  0.00027             -0.2           1.000    
+    ## 8 (335)  0.00328    -0.00299  0.00026              0.4           1.000    
+    ## 9 (335)  0.00743    -0.00299  0.00026              0.6           1.000    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`CGL Urban / built up`
+    ## Spatial correlogram for CGL Urban / built up 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.25976    -0.00299  0.00086              9.0          <2e-16 ***
+    ## 2 (335)  0.06115    -0.00299  0.00047              3.0            0.03 *  
+    ## 3 (335)  0.01734    -0.00299  0.00034              1.1            1.00    
+    ## 4 (335) -0.00691    -0.00299  0.00028             -0.2            1.00    
+    ## 5 (335) -0.00848    -0.00299  0.00025             -0.3            1.00    
+    ## 6 (335) -0.01504    -0.00299  0.00023             -0.8            1.00    
+    ## 7 (335) -0.00691    -0.00299  0.00022             -0.3            1.00    
+    ## 8 (335) -0.01012    -0.00299  0.00021             -0.5            1.00    
+    ## 9 (335) -0.01517    -0.00299  0.00021             -0.8            1.00    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`CGL Bare / sparse vegetation`
+    ## Spatial correlogram for CGL Bare / sparse vegetation 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.12454    -0.00299  0.00068              4.9           8e-06 ***
+    ## 2 (335)  0.03421    -0.00299  0.00037              1.9             0.4    
+    ## 3 (335)  0.02236    -0.00299  0.00027              1.5             0.9    
+    ## 4 (335) -0.00799    -0.00299  0.00022             -0.3             1.0    
+    ## 5 (335) -0.00490    -0.00299  0.00019             -0.1             1.0    
+    ## 6 (335) -0.00327    -0.00299  0.00018              0.0             1.0    
+    ## 7 (335) -0.00253    -0.00299  0.00017              0.0             1.0    
+    ## 8 (335) -0.01266    -0.00299  0.00017             -0.8             1.0    
+    ## 9 (335) -0.01266    -0.00299  0.00016             -0.8             1.0    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`CGL Permanent water bodies`
+    ## Spatial correlogram for CGL Permanent water bodies 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.38625    -0.00299  0.00089             13.1          <2e-16 ***
+    ## 2 (335)  0.13310    -0.00299  0.00049              6.1           7e-09 ***
+    ## 3 (335)  0.10134    -0.00299  0.00036              5.5           2e-07 ***
+    ## 4 (335)  0.02780    -0.00299  0.00029              1.8             0.4    
+    ## 5 (335) -0.01126    -0.00299  0.00026             -0.5             1.0    
+    ## 6 (335)  0.00702    -0.00299  0.00024              0.7             1.0    
+    ## 7 (335)  0.00901    -0.00299  0.00023              0.8             1.0    
+    ## 8 (335) -0.00505    -0.00299  0.00022             -0.1             1.0    
+    ## 9 (335) -0.01369    -0.00299  0.00021             -0.7             1.0    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`CGL Herbaceous wetland`
+    ## Spatial correlogram for CGL Herbaceous wetland 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.31125    -0.00299  0.00092             10.4          <2e-16 ***
+    ## 2 (335)  0.05785    -0.00299  0.00051              2.7            0.06 .  
+    ## 3 (335) -0.00985    -0.00299  0.00037             -0.4            0.72    
+    ## 4 (335) -0.02850    -0.00299  0.00030             -1.5            0.39    
+    ## 5 (335) -0.02757    -0.00299  0.00026             -1.5            0.39    
+    ## 6 (335) -0.03518    -0.00299  0.00024             -2.1            0.16    
+    ## 7 (335) -0.04321    -0.00299  0.00023             -2.6            0.06 .  
+    ## 8 (335) -0.04276    -0.00299  0.00022             -2.7            0.06 .  
+    ## 9 (335) -0.03593    -0.00299  0.00022             -2.2            0.13    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`GSL Peak/ridge (warm)`
+    ## Spatial correlogram for GSL Peak/ridge (warm) 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.29856    -0.00299  0.00102              9.4          <2e-16 ***
+    ## 2 (335)  0.13603    -0.00299  0.00056              5.9           4e-08 ***
+    ## 3 (335)  0.03216    -0.00299  0.00041              1.7             0.3    
+    ## 4 (335)  0.01072    -0.00299  0.00034              0.7             1.0    
+    ## 5 (335)  0.01402    -0.00299  0.00029              1.0             1.0    
+    ## 6 (335)  0.00396    -0.00299  0.00027              0.4             1.0    
+    ## 7 (335) -0.03668    -0.00299  0.00026             -2.1             0.2    
+    ## 8 (335) -0.07024    -0.00299  0.00025             -4.3           1e-04 ***
+    ## 9 (335) -0.06489    -0.00299  0.00024             -4.0           5e-04 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`GSL Peak/ridge`
+    ## Spatial correlogram for GSL Peak/ridge 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.38871    -0.00299  0.00110             11.8          <2e-16 ***
+    ## 2 (335)  0.17490    -0.00299  0.00061              7.2           4e-12 ***
+    ## 3 (335)  0.05709    -0.00299  0.00044              2.9            0.02 *  
+    ## 4 (335)  0.07390    -0.00299  0.00036              4.1           3e-04 ***
+    ## 5 (335)  0.00853    -0.00299  0.00031              0.6            0.52    
+    ## 6 (335) -0.03948    -0.00299  0.00029             -2.1            0.07 .  
+    ## 7 (335) -0.04516    -0.00299  0.00028             -2.5            0.03 *  
+    ## 8 (335) -0.05151    -0.00299  0.00027             -3.0            0.02 *  
+    ## 9 (335) -0.07698    -0.00299  0.00026             -4.6           3e-05 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`GSL Mountain/divide`
+    ## Spatial correlogram for GSL Mountain/divide 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.54884    -0.00299  0.00108             16.8          <2e-16 ***
+    ## 2 (335)  0.30272    -0.00299  0.00060             12.5          <2e-16 ***
+    ## 3 (335)  0.18692    -0.00299  0.00043              9.1          <2e-16 ***
+    ## 4 (335)  0.13611    -0.00299  0.00036              7.4           1e-12 ***
+    ## 5 (335)  0.06306    -0.00299  0.00031              3.7           7e-04 ***
+    ## 6 (335)  0.02782    -0.00299  0.00029              1.8            0.14    
+    ## 7 (335) -0.00398    -0.00299  0.00027             -0.1            0.95    
+    ## 8 (335) -0.04611    -0.00299  0.00026             -2.6            0.02 *  
+    ## 9 (335) -0.09252    -0.00299  0.00026             -5.6           1e-07 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`GSL Cliff`
+    ## Spatial correlogram for GSL Cliff 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.10885    -0.00299  0.00064              4.4           7e-05 ***
+    ## 2 (335)  0.01020    -0.00299  0.00035              0.7            1.00    
+    ## 3 (335)  0.03043    -0.00299  0.00026              2.1            0.22    
+    ## 4 (335) -0.00039    -0.00299  0.00021              0.2            1.00    
+    ## 5 (335) -0.01479    -0.00299  0.00018             -0.9            1.00    
+    ## 6 (335)  0.01575    -0.00299  0.00017              1.4            0.75    
+    ## 7 (335)  0.06396    -0.00299  0.00016              5.3           1e-06 ***
+    ## 8 (335)  0.02935    -0.00299  0.00016              2.6            0.07 .  
+    ## 9 (335)  0.00087    -0.00299  0.00015              0.3            1.00    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`GSL Upper slope (warm)`
+    ## Spatial correlogram for GSL Upper slope (warm) 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.47126    -0.00299  0.00113             14.1          <2e-16 ***
+    ## 2 (335)  0.24431    -0.00299  0.00062              9.9          <2e-16 ***
+    ## 3 (335)  0.14330    -0.00299  0.00045              6.9           4e-11 ***
+    ## 4 (335)  0.09073    -0.00299  0.00037              4.9           3e-06 ***
+    ## 5 (335)  0.08993    -0.00299  0.00032              5.2           1e-06 ***
+    ## 6 (335)  0.11463    -0.00299  0.00030              6.8           6e-11 ***
+    ## 7 (335)  0.11204    -0.00299  0.00029              6.8           6e-11 ***
+    ## 8 (335)  0.05910    -0.00299  0.00028              3.7           4e-04 ***
+    ## 9 (335)  0.02235    -0.00299  0.00027              1.5             0.1    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`GSL Upper slope`
+    ## Spatial correlogram for GSL Upper slope 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.57876    -0.00299  0.00111             17.5          <2e-16 ***
+    ## 2 (335)  0.33790    -0.00299  0.00061             13.8          <2e-16 ***
+    ## 3 (335)  0.24046    -0.00299  0.00044             11.6          <2e-16 ***
+    ## 4 (335)  0.15266    -0.00299  0.00036              8.2           2e-15 ***
+    ## 5 (335)  0.04633    -0.00299  0.00032              2.8            0.03 *  
+    ## 6 (335)  0.00911    -0.00299  0.00029              0.7            0.96    
+    ## 7 (335)  0.04304    -0.00299  0.00028              2.8            0.03 *  
+    ## 8 (335)  0.03755    -0.00299  0.00027              2.5            0.04 *  
+    ## 9 (335) -0.00570    -0.00299  0.00026             -0.2            0.96    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`GSL Upper slope (cool)`
+    ## Spatial correlogram for GSL Upper slope (cool) 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.01840    -0.00299  0.00075              0.8             1.0    
+    ## 2 (335)  0.02876    -0.00299  0.00041              1.6             0.9    
+    ## 3 (335)  0.01668    -0.00299  0.00030              1.1             1.0    
+    ## 4 (335) -0.01009    -0.00299  0.00025             -0.5             1.0    
+    ## 5 (335)  0.00484    -0.00299  0.00022              0.5             1.0    
+    ## 6 (335) -0.01393    -0.00299  0.00020             -0.8             1.0    
+    ## 7 (335) -0.00816    -0.00299  0.00019             -0.4             1.0    
+    ## 8 (335) -0.00019    -0.00299  0.00018              0.2             1.0    
+    ## 9 (335)  0.04956    -0.00299  0.00018              3.9           8e-04 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`GSL Upper slope (flat)`
+    ## Spatial correlogram for GSL Upper slope (flat) 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.58330    -0.00299  0.00111             17.6          <2e-16 ***
+    ## 2 (335)  0.40936    -0.00299  0.00061             16.6          <2e-16 ***
+    ## 3 (335)  0.23309    -0.00299  0.00045             11.2          <2e-16 ***
+    ## 4 (335)  0.14744    -0.00299  0.00037              7.9           1e-14 ***
+    ## 5 (335)  0.15481    -0.00299  0.00032              8.8          <2e-16 ***
+    ## 6 (335)  0.15857    -0.00299  0.00030              9.4          <2e-16 ***
+    ## 7 (335)  0.14914    -0.00299  0.00028              9.1          <2e-16 ***
+    ## 8 (335)  0.11575    -0.00299  0.00027              7.2           1e-12 ***
+    ## 9 (335)  0.08307    -0.00299  0.00027              5.3           1e-07 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`GSL Lower slope (warm)`
+    ## Spatial correlogram for GSL Lower slope (warm) 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.56690    -0.00299  0.00113             17.0          <2e-16 ***
+    ## 2 (335)  0.32846    -0.00299  0.00062             13.3          <2e-16 ***
+    ## 3 (335)  0.16787    -0.00299  0.00045              8.0           7e-15 ***
+    ## 4 (335)  0.09390    -0.00299  0.00037              5.0           1e-06 ***
+    ## 5 (335)  0.09773    -0.00299  0.00032              5.6           9e-08 ***
+    ## 6 (335)  0.13488    -0.00299  0.00030              7.9           1e-14 ***
+    ## 7 (335)  0.10333    -0.00299  0.00029              6.3           2e-09 ***
+    ## 8 (335)  0.07814    -0.00299  0.00028              4.9           2e-06 ***
+    ## 9 (335)  0.07121    -0.00299  0.00027              4.5           6e-06 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`GSL Lower slope`
+    ## Spatial correlogram for GSL Lower slope 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.54730    -0.00299  0.00110             16.6          <2e-16 ***
+    ## 2 (335)  0.31791    -0.00299  0.00061             13.0          <2e-16 ***
+    ## 3 (335)  0.22923    -0.00299  0.00044             11.0          <2e-16 ***
+    ## 4 (335)  0.13425    -0.00299  0.00036              7.2           3e-12 ***
+    ## 5 (335)  0.03258    -0.00299  0.00032              2.0            0.14    
+    ## 6 (335)  0.00025    -0.00299  0.00029              0.2            0.85    
+    ## 7 (335)  0.03954    -0.00299  0.00028              2.5            0.04 *  
+    ## 8 (335)  0.05811    -0.00299  0.00027              3.7           1e-03 ***
+    ## 9 (335)  0.02277    -0.00299  0.00026              1.6            0.23    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`GSL Lower slope (cool)`
+    ## Spatial correlogram for GSL Lower slope (cool) 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335) -0.01286    -0.00299  0.00081             -0.3               1    
+    ## 2 (335)  0.01536    -0.00299  0.00045              0.9               1    
+    ## 3 (335)  0.10785    -0.00299  0.00033              6.1           8e-09 ***
+    ## 4 (335) -0.00288    -0.00299  0.00027              0.0               1    
+    ## 5 (335) -0.01411    -0.00299  0.00023             -0.7               1    
+    ## 6 (335) -0.01376    -0.00299  0.00022             -0.7               1    
+    ## 7 (335)  0.00200    -0.00299  0.00021              0.3               1    
+    ## 8 (335)  0.00503    -0.00299  0.00020              0.6               1    
+    ## 9 (335)  0.00457    -0.00299  0.00020              0.5               1    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`GSL Lower slope (flat)`
+    ## Spatial correlogram for GSL Lower slope (flat) 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.30719    -0.00299  0.00112              9.3          <2e-16 ***
+    ## 2 (335)  0.09320    -0.00299  0.00062              3.9           9e-04 ***
+    ## 3 (335)  0.02296    -0.00299  0.00045              1.2             1.0    
+    ## 4 (335)  0.00302    -0.00299  0.00037              0.3             1.0    
+    ## 5 (335)  0.00545    -0.00299  0.00032              0.5             1.0    
+    ## 6 (335)  0.02307    -0.00299  0.00030              1.5             0.9    
+    ## 7 (335)  0.00487    -0.00299  0.00028              0.5             1.0    
+    ## 8 (335)  0.01615    -0.00299  0.00027              1.2             1.0    
+    ## 9 (335) -0.00905    -0.00299  0.00027             -0.4             1.0    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`GSL Valley`
+    ## Spatial correlogram for GSL Valley 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.43371    -0.00299  0.00113             13.0          <2e-16 ***
+    ## 2 (335)  0.24305    -0.00299  0.00062              9.9          <2e-16 ***
+    ## 3 (335)  0.19477    -0.00299  0.00045              9.3          <2e-16 ***
+    ## 4 (335)  0.11702    -0.00299  0.00037              6.2           2e-09 ***
+    ## 5 (335)  0.13057    -0.00299  0.00032              7.4           7e-13 ***
+    ## 6 (335)  0.07716    -0.00299  0.00030              4.6           1e-05 ***
+    ## 7 (335)  0.03312    -0.00299  0.00029              2.1             0.1 .  
+    ## 8 (335)  0.01840    -0.00299  0.00027              1.3             0.4    
+    ## 9 (335)  0.01694    -0.00299  0.00027              1.2             0.4    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`GSL Valley (narrow)`
+    ## Spatial correlogram for GSL Valley (narrow) 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.50390    -0.00299  0.00111             15.2          <2e-16 ***
+    ## 2 (335)  0.23986    -0.00299  0.00062              9.8          <2e-16 ***
+    ## 3 (335)  0.10734    -0.00299  0.00045              5.2           1e-06 ***
+    ## 4 (335)  0.04740    -0.00299  0.00037              2.6            0.03 *  
+    ## 5 (335)  0.02924    -0.00299  0.00032              1.8            0.14    
+    ## 6 (335)  0.04483    -0.00299  0.00030              2.8            0.03 *  
+    ## 7 (335)  0.03785    -0.00299  0.00028              2.4            0.05 *  
+    ## 8 (335)  0.00769    -0.00299  0.00027              0.6            0.52    
+    ## 9 (335) -0.04987    -0.00299  0.00027             -2.9            0.02 *  
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`GHH coefficient_of_variation_1km`
+    ## Spatial correlogram for GHH coefficient_of_variation_1km 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.17644    -0.00299  0.00108              5.5           4e-07 ***
+    ## 2 (335)  0.02280    -0.00299  0.00060              1.1            1.00    
+    ## 3 (335) -0.00324    -0.00299  0.00043              0.0            1.00    
+    ## 4 (335) -0.02031    -0.00299  0.00036             -0.9            1.00    
+    ## 5 (335) -0.00235    -0.00299  0.00031              0.0            1.00    
+    ## 6 (335) -0.02712    -0.00299  0.00029             -1.4            1.00    
+    ## 7 (335) -0.01913    -0.00299  0.00027             -1.0            1.00    
+    ## 8 (335) -0.04645    -0.00299  0.00026             -2.7            0.06 .  
+    ## 9 (335) -0.00917    -0.00299  0.00026             -0.4            1.00    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`GHH contrast_1km`
+    ## Spatial correlogram for GHH contrast_1km 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.13031    -0.00299  0.00088              4.5           6e-05 ***
+    ## 2 (335)  0.03714    -0.00299  0.00049              1.8            0.41    
+    ## 3 (335)  0.03631    -0.00299  0.00035              2.1            0.25    
+    ## 4 (335) -0.00824    -0.00299  0.00029             -0.3            1.00    
+    ## 5 (335) -0.01082    -0.00299  0.00025             -0.5            1.00    
+    ## 6 (335) -0.02559    -0.00299  0.00023             -1.5            0.70    
+    ## 7 (335) -0.01004    -0.00299  0.00022             -0.5            1.00    
+    ## 8 (335) -0.01903    -0.00299  0.00021             -1.1            1.00    
+    ## 9 (335)  0.03373    -0.00299  0.00021              2.5            0.09 .  
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`GHH correlation_1km`
+    ## Spatial correlogram for GHH correlation_1km 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.23917    -0.00299  0.00106              7.4           9e-13 ***
+    ## 2 (335)  0.13188    -0.00299  0.00059              5.6           2e-07 ***
+    ## 3 (335)  0.04706    -0.00299  0.00042              2.4             0.1    
+    ## 4 (335) -0.00302    -0.00299  0.00035              0.0             1.0    
+    ## 5 (335)  0.02948    -0.00299  0.00030              1.9             0.4    
+    ## 6 (335)  0.01884    -0.00299  0.00028              1.3             1.0    
+    ## 7 (335)  0.00496    -0.00299  0.00027              0.5             1.0    
+    ## 8 (335) -0.01695    -0.00299  0.00026             -0.9             1.0    
+    ## 9 (335) -0.00190    -0.00299  0.00025              0.1             1.0    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`GHH dissimilarity_1km`
+    ## Spatial correlogram for GHH dissimilarity_1km 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.15053    -0.00299  0.00103              4.8           2e-05 ***
+    ## 2 (335)  0.04058    -0.00299  0.00057              1.8             0.5    
+    ## 3 (335)  0.02701    -0.00299  0.00041              1.5             0.7    
+    ## 4 (335) -0.00142    -0.00299  0.00034              0.1             1.0    
+    ## 5 (335) -0.00290    -0.00299  0.00030              0.0             1.0    
+    ## 6 (335) -0.03121    -0.00299  0.00028             -1.7             0.5    
+    ## 7 (335) -0.01149    -0.00299  0.00026             -0.5             1.0    
+    ## 8 (335) -0.02453    -0.00299  0.00025             -1.4             0.7    
+    ## 9 (335)  0.02905    -0.00299  0.00025              2.0             0.3    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`GHH entropy_1km`
+    ## Spatial correlogram for GHH entropy_1km 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided  
+    ## 1 (335)  0.06969    -0.00299  0.00100              2.3            0.17  
+    ## 2 (335)  0.06402    -0.00299  0.00055              2.8            0.04 *
+    ## 3 (335)  0.02521    -0.00299  0.00040              1.4            0.97  
+    ## 4 (335)  0.01057    -0.00299  0.00033              0.7            1.00  
+    ## 5 (335)  0.01044    -0.00299  0.00029              0.8            1.00  
+    ## 6 (335) -0.01732    -0.00299  0.00027             -0.9            1.00  
+    ## 7 (335) -0.01408    -0.00299  0.00025             -0.7            1.00  
+    ## 8 (335) -0.02612    -0.00299  0.00024             -1.5            0.97  
+    ## 9 (335) -0.00423    -0.00299  0.00024             -0.1            1.00  
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`GHH homogeneity_1km`
+    ## Spatial correlogram for GHH homogeneity_1km 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.30405    -0.00299  0.00111              9.2          <2e-16 ***
+    ## 2 (335)  0.11771    -0.00299  0.00061              4.9           8e-06 ***
+    ## 3 (335)  0.04842    -0.00299  0.00044              2.4             0.1    
+    ## 4 (335)  0.03933    -0.00299  0.00036              2.2             0.2    
+    ## 5 (335)  0.00906    -0.00299  0.00032              0.7             1.0    
+    ## 6 (335) -0.01392    -0.00299  0.00030             -0.6             1.0    
+    ## 7 (335)  0.00430    -0.00299  0.00028              0.4             1.0    
+    ## 8 (335) -0.00070    -0.00299  0.00027              0.1             1.0    
+    ## 9 (335)  0.00981    -0.00299  0.00027              0.8             1.0    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`GHH maximum_1km`
+    ## Spatial correlogram for GHH maximum_1km 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.32603    -0.00299  0.00109              9.9          <2e-16 ***
+    ## 2 (335)  0.14890    -0.00299  0.00060              6.2           5e-09 ***
+    ## 3 (335)  0.03395    -0.00299  0.00044              1.8            0.47    
+    ## 4 (335)  0.04660    -0.00299  0.00036              2.6            0.06 .  
+    ## 5 (335)  0.00931    -0.00299  0.00031              0.7            1.00    
+    ## 6 (335) -0.01647    -0.00299  0.00029             -0.8            1.00    
+    ## 7 (335)  0.01005    -0.00299  0.00028              0.8            1.00    
+    ## 8 (335)  0.00776    -0.00299  0.00027              0.7            1.00    
+    ## 9 (335)  0.00369    -0.00299  0.00026              0.4            1.00    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`GHH mean_1km`
+    ## Spatial correlogram for GHH mean_1km 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.43941    -0.00299  0.00110             13.3          <2e-16 ***
+    ## 2 (335)  0.27922    -0.00299  0.00061             11.4          <2e-16 ***
+    ## 3 (335)  0.20881    -0.00299  0.00044             10.1          <2e-16 ***
+    ## 4 (335)  0.21514    -0.00299  0.00036             11.5          <2e-16 ***
+    ## 5 (335)  0.20710    -0.00299  0.00032             11.8          <2e-16 ***
+    ## 6 (335)  0.18188    -0.00299  0.00029             10.8          <2e-16 ***
+    ## 7 (335)  0.14353    -0.00299  0.00028              8.8          <2e-16 ***
+    ## 8 (335)  0.11771    -0.00299  0.00027              7.4           4e-13 ***
+    ## 9 (335)  0.08766    -0.00299  0.00026              5.6           2e-08 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`GHH pielou_1km`
+    ## Spatial correlogram for GHH pielou_1km 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided
+    ## 1 (335) -0.02867    -0.00299  0.00096             -0.8               1
+    ## 2 (335) -0.01320    -0.00299  0.00053             -0.4               1
+    ## 3 (335) -0.01108    -0.00299  0.00038             -0.4               1
+    ## 4 (335)  0.01855    -0.00299  0.00031              1.2               1
+    ## 5 (335)  0.00836    -0.00299  0.00028              0.7               1
+    ## 6 (335) -0.01702    -0.00299  0.00026             -0.9               1
+    ## 7 (335) -0.00174    -0.00299  0.00024              0.1               1
+    ## 8 (335) -0.01746    -0.00299  0.00023             -0.9               1
+    ## 9 (335) -0.00048    -0.00299  0.00023              0.2               1
+    ## 
+    ## $`GHH range_1km`
+    ## Spatial correlogram for GHH range_1km 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.17869    -0.00299  0.00105              5.6           2e-07 ***
+    ## 2 (335)  0.06486    -0.00299  0.00058              2.8            0.04 *  
+    ## 3 (335)  0.03269    -0.00299  0.00042              1.7            0.50    
+    ## 4 (335) -0.00476    -0.00299  0.00035             -0.1            1.00    
+    ## 5 (335)  0.00196    -0.00299  0.00030              0.3            1.00    
+    ## 6 (335) -0.02552    -0.00299  0.00028             -1.3            0.90    
+    ## 7 (335) -0.01933    -0.00299  0.00027             -1.0            1.00    
+    ## 8 (335) -0.02054    -0.00299  0.00026             -1.1            1.00    
+    ## 9 (335)  0.03205    -0.00299  0.00025              2.2            0.19    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`GHH shannon_1km`
+    ## Spatial correlogram for GHH shannon_1km 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided
+    ## 1 (335)  0.04521    -0.00299  0.00104              1.5             0.9
+    ## 2 (335)  0.05259    -0.00299  0.00057              2.3             0.2
+    ## 3 (335)  0.01648    -0.00299  0.00042              1.0             1.0
+    ## 4 (335)  0.01347    -0.00299  0.00034              0.9             1.0
+    ## 5 (335)  0.01489    -0.00299  0.00030              1.0             1.0
+    ## 6 (335) -0.02197    -0.00299  0.00028             -1.1             1.0
+    ## 7 (335) -0.02138    -0.00299  0.00026             -1.1             1.0
+    ## 8 (335) -0.03070    -0.00299  0.00025             -1.7             0.7
+    ## 9 (335)  0.00052    -0.00299  0.00025              0.2             1.0
+    ## 
+    ## $`GHH simpson_1km`
+    ## Spatial correlogram for GHH simpson_1km 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided
+    ## 1 (335) -0.00646    -0.00299  0.00098             -0.1               1
+    ## 2 (335)  0.01032    -0.00299  0.00054              0.6               1
+    ## 3 (335)  0.00382    -0.00299  0.00039              0.3               1
+    ## 4 (335)  0.01707    -0.00299  0.00032              1.1               1
+    ## 5 (335)  0.01128    -0.00299  0.00028              0.9               1
+    ## 6 (335) -0.01919    -0.00299  0.00026             -1.0               1
+    ## 7 (335) -0.00968    -0.00299  0.00025             -0.4               1
+    ## 8 (335) -0.02304    -0.00299  0.00024             -1.3               1
+    ## 9 (335) -0.00029    -0.00299  0.00023              0.2               1
+    ## 
+    ## $`GHH standard_deviation_1km`
+    ## Spatial correlogram for GHH standard_deviation_1km 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.16427    -0.00299  0.00105              5.2           2e-06 ***
+    ## 2 (335)  0.04700    -0.00299  0.00058              2.1             0.3    
+    ## 3 (335)  0.02631    -0.00299  0.00042              1.4             0.8    
+    ## 4 (335) -0.00816    -0.00299  0.00034             -0.3             1.0    
+    ## 5 (335) -0.00302    -0.00299  0.00030              0.0             1.0    
+    ## 6 (335) -0.02908    -0.00299  0.00028             -1.6             0.7    
+    ## 7 (335) -0.01411    -0.00299  0.00027             -0.7             1.0    
+    ## 8 (335) -0.02405    -0.00299  0.00026             -1.3             0.8    
+    ## 9 (335)  0.02587    -0.00299  0.00025              1.8             0.5    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`GHH uniformity_1km`
+    ## Spatial correlogram for GHH uniformity_1km 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.32867    -0.00299  0.00110             10.0          <2e-16 ***
+    ## 2 (335)  0.16844    -0.00299  0.00061              7.0           3e-11 ***
+    ## 3 (335)  0.03388    -0.00299  0.00044              1.8            0.47    
+    ## 4 (335)  0.04673    -0.00299  0.00036              2.6            0.06 .  
+    ## 5 (335)  0.01260    -0.00299  0.00031              0.9            1.00    
+    ## 6 (335) -0.01506    -0.00299  0.00029             -0.7            1.00    
+    ## 7 (335)  0.00507    -0.00299  0.00028              0.5            1.00    
+    ## 8 (335)  0.00470    -0.00299  0.00027              0.5            1.00    
+    ## 9 (335) -0.00169    -0.00299  0.00026              0.1            1.00    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`GHH variance_1km`
+    ## Spatial correlogram for GHH variance_1km 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.15257    -0.00299  0.00096              5.0           4e-06 ***
+    ## 2 (335)  0.04034    -0.00299  0.00053              1.9            0.36    
+    ## 3 (335)  0.03645    -0.00299  0.00038              2.0            0.31    
+    ## 4 (335) -0.01297    -0.00299  0.00031             -0.6            1.00    
+    ## 5 (335) -0.01173    -0.00299  0.00028             -0.5            1.00    
+    ## 6 (335) -0.02756    -0.00299  0.00026             -1.5            0.62    
+    ## 7 (335) -0.01080    -0.00299  0.00024             -0.5            1.00    
+    ## 8 (335) -0.02082    -0.00299  0.00023             -1.2            0.97    
+    ## 9 (335)  0.03511    -0.00299  0.00023              2.5            0.09 .  
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`WCL bio01 Annual mean temperature`
+    ## Spatial correlogram for WCL bio01 Annual mean temperature 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.40663    -0.00299  0.00107             12.5          <2e-16 ***
+    ## 2 (335)  0.22929    -0.00299  0.00059              9.6          <2e-16 ***
+    ## 3 (335)  0.12184    -0.00299  0.00043              6.0           1e-08 ***
+    ## 4 (335)  0.07018    -0.00299  0.00035              3.9           6e-04 ***
+    ## 5 (335)  0.02829    -0.00299  0.00031              1.8           0.297    
+    ## 6 (335) -0.02540    -0.00299  0.00028             -1.3           0.368    
+    ## 7 (335) -0.05567    -0.00299  0.00027             -3.2           0.007 ** 
+    ## 8 (335) -0.01907    -0.00299  0.00026             -1.0           0.368    
+    ## 9 (335)  0.02273    -0.00299  0.00026              1.6           0.324    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`WCL bio02 Mean diurnal range mean of monthly max temp - min temp`
+    ## Spatial correlogram for WCL bio02 Mean diurnal range mean of monthly max temp - min temp 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.64748    -0.00299  0.00108             19.8          <2e-16 ***
+    ## 2 (335)  0.55627    -0.00299  0.00060             22.9          <2e-16 ***
+    ## 3 (335)  0.45483    -0.00299  0.00043             22.0          <2e-16 ***
+    ## 4 (335)  0.35911    -0.00299  0.00036             19.2          <2e-16 ***
+    ## 5 (335)  0.30119    -0.00299  0.00031             17.3          <2e-16 ***
+    ## 6 (335)  0.26152    -0.00299  0.00029             15.6          <2e-16 ***
+    ## 7 (335)  0.22292    -0.00299  0.00027             13.6          <2e-16 ***
+    ## 8 (335)  0.14744    -0.00299  0.00026              9.3          <2e-16 ***
+    ## 9 (335)  0.08917    -0.00299  0.00026              5.7           1e-08 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`WCL bio03 Isothermality bio02 div/bio07`
+    ## Spatial correlogram for WCL bio03 Isothermality bio02 div/bio07 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided  
+    ## 1 (335)  0.07294    -0.00299  0.00082              2.6            0.07 .
+    ## 2 (335)  0.05623    -0.00299  0.00046              2.8            0.05 *
+    ## 3 (335)  0.04106    -0.00299  0.00033              2.4            0.11  
+    ## 4 (335)  0.02680    -0.00299  0.00027              1.8            0.42  
+    ## 5 (335)  0.01666    -0.00299  0.00024              1.3            1.00  
+    ## 6 (335)  0.00806    -0.00299  0.00022              0.7            1.00  
+    ## 7 (335)  0.00343    -0.00299  0.00021              0.4            1.00  
+    ## 8 (335) -0.01869    -0.00299  0.00020             -1.1            1.00  
+    ## 9 (335)  0.00748    -0.00299  0.00020              0.7            1.00  
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`WCL bio04 Temperature seasonality Standard deviation times 100`
+    ## Spatial correlogram for WCL bio04 Temperature seasonality Standard deviation times 100 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.64399    -0.00299  0.00108             19.7          <2e-16 ***
+    ## 2 (335)  0.58385    -0.00299  0.00060             24.0          <2e-16 ***
+    ## 3 (335)  0.50308    -0.00299  0.00043             24.3          <2e-16 ***
+    ## 4 (335)  0.40675    -0.00299  0.00036             21.7          <2e-16 ***
+    ## 5 (335)  0.31601    -0.00299  0.00031             18.1          <2e-16 ***
+    ## 6 (335)  0.23300    -0.00299  0.00029             13.9          <2e-16 ***
+    ## 7 (335)  0.14451    -0.00299  0.00027              8.9          <2e-16 ***
+    ## 8 (335)  0.05706    -0.00299  0.00026              3.7           4e-04 ***
+    ## 9 (335) -0.02976    -0.00299  0.00026             -1.7             0.1 .  
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`WCL bio05 Max temperature of warmest month`
+    ## Spatial correlogram for WCL bio05 Max temperature of warmest month 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.28143    -0.00299  0.00101              9.0          <2e-16 ***
+    ## 2 (335)  0.13399    -0.00299  0.00056              5.8           5e-08 ***
+    ## 3 (335)  0.05210    -0.00299  0.00040              2.7            0.04 *  
+    ## 4 (335)  0.01814    -0.00299  0.00033              1.2            0.49    
+    ## 5 (335) -0.00832    -0.00299  0.00029             -0.3            0.75    
+    ## 6 (335) -0.04811    -0.00299  0.00027             -2.8            0.04 *  
+    ## 7 (335) -0.06806    -0.00299  0.00026             -4.1           3e-04 ***
+    ## 8 (335) -0.03278    -0.00299  0.00025             -1.9            0.23    
+    ## 9 (335)  0.02526    -0.00299  0.00024              1.8            0.23    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`WCL bio06 Min temperature of coldest month`
+    ## Spatial correlogram for WCL bio06 Min temperature of coldest month 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.61479    -0.00299  0.00111             18.5          <2e-16 ***
+    ## 2 (335)  0.41287    -0.00299  0.00062             16.8          <2e-16 ***
+    ## 3 (335)  0.27676    -0.00299  0.00045             13.2          <2e-16 ***
+    ## 4 (335)  0.19870    -0.00299  0.00037             10.5          <2e-16 ***
+    ## 5 (335)  0.13246    -0.00299  0.00032              7.6           2e-13 ***
+    ## 6 (335)  0.05619    -0.00299  0.00030              3.4           0.002 ** 
+    ## 7 (335)  0.00504    -0.00299  0.00028              0.5           0.632    
+    ## 8 (335)  0.02208    -0.00299  0.00027              1.5           0.257    
+    ## 9 (335)  0.02542    -0.00299  0.00027              1.7           0.246    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`WCL bio07 Temperature annual range bio05-bio06`
+    ## Spatial correlogram for WCL bio07 Temperature annual range bio05-bio06 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.61317    -0.00299  0.00107             18.9          <2e-16 ***
+    ## 2 (335)  0.53241    -0.00299  0.00059             22.0          <2e-16 ***
+    ## 3 (335)  0.44285    -0.00299  0.00043             21.5          <2e-16 ***
+    ## 4 (335)  0.35791    -0.00299  0.00035             19.3          <2e-16 ***
+    ## 5 (335)  0.30786    -0.00299  0.00031             17.7          <2e-16 ***
+    ## 6 (335)  0.27462    -0.00299  0.00028             16.5          <2e-16 ***
+    ## 7 (335)  0.23902    -0.00299  0.00027             14.7          <2e-16 ***
+    ## 8 (335)  0.16381    -0.00299  0.00026             10.3          <2e-16 ***
+    ## 9 (335)  0.10051    -0.00299  0.00026              6.5           1e-10 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`WCL bio08 Mean temperature of wettest quarter`
+    ## Spatial correlogram for WCL bio08 Mean temperature of wettest quarter 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.40302    -0.00299  0.00107             12.4          <2e-16 ***
+    ## 2 (335)  0.22371    -0.00299  0.00059              9.3          <2e-16 ***
+    ## 3 (335)  0.11297    -0.00299  0.00043              5.6           1e-07 ***
+    ## 4 (335)  0.05963    -0.00299  0.00035              3.3           0.005 ** 
+    ## 5 (335)  0.02473    -0.00299  0.00031              1.6           0.340    
+    ## 6 (335) -0.01643    -0.00299  0.00028             -0.8           0.851    
+    ## 7 (335) -0.03463    -0.00299  0.00027             -1.9           0.217    
+    ## 8 (335)  0.00424    -0.00299  0.00026              0.4           0.851    
+    ## 9 (335)  0.04109    -0.00299  0.00026              2.8           0.029 *  
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`WCL bio09 Mean temperature of driest quarter`
+    ## Spatial correlogram for WCL bio09 Mean temperature of driest quarter 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.48207    -0.00299  0.00109             14.7          <2e-16 ***
+    ## 2 (335)  0.30326    -0.00299  0.00060             12.5          <2e-16 ***
+    ## 3 (335)  0.18577    -0.00299  0.00044              9.0          <2e-16 ***
+    ## 4 (335)  0.11772    -0.00299  0.00036              6.4           1e-09 ***
+    ## 5 (335)  0.04723    -0.00299  0.00031              2.8            0.01 *  
+    ## 6 (335) -0.03377    -0.00299  0.00029             -1.8            0.14    
+    ## 7 (335) -0.09091    -0.00299  0.00028             -5.3           6e-07 ***
+    ## 8 (335) -0.06650    -0.00299  0.00026             -3.9           4e-04 ***
+    ## 9 (335) -0.02322    -0.00299  0.00026             -1.3            0.21    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`WCL bio10 Mean temperature of warmest quarter`
+    ## Spatial correlogram for WCL bio10 Mean temperature of warmest quarter 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.39377    -0.00299  0.00106             12.2          <2e-16 ***
+    ## 2 (335)  0.22419    -0.00299  0.00059              9.4          <2e-16 ***
+    ## 3 (335)  0.12037    -0.00299  0.00043              6.0           2e-08 ***
+    ## 4 (335)  0.06860    -0.00299  0.00035              3.8           8e-04 ***
+    ## 5 (335)  0.02602    -0.00299  0.00031              1.7           0.387    
+    ## 6 (335) -0.02811    -0.00299  0.00028             -1.5           0.390    
+    ## 7 (335) -0.05842    -0.00299  0.00027             -3.4           0.004 ** 
+    ## 8 (335) -0.02157    -0.00299  0.00026             -1.2           0.390    
+    ## 9 (335)  0.02115    -0.00299  0.00025              1.5           0.390    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`WCL bio11 Mean temperature of coldest quarter`
+    ## Spatial correlogram for WCL bio11 Mean temperature of coldest quarter 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.43690    -0.00299  0.00108             13.4          <2e-16 ***
+    ## 2 (335)  0.24948    -0.00299  0.00060             10.3          <2e-16 ***
+    ## 3 (335)  0.13601    -0.00299  0.00043              6.7           2e-10 ***
+    ## 4 (335)  0.08270    -0.00299  0.00035              4.6           3e-05 ***
+    ## 5 (335)  0.04024    -0.00299  0.00031              2.5            0.06 .  
+    ## 6 (335) -0.01537    -0.00299  0.00029             -0.7            0.80    
+    ## 7 (335) -0.04889    -0.00299  0.00027             -2.8            0.03 *  
+    ## 8 (335) -0.01665    -0.00299  0.00026             -0.8            0.80    
+    ## 9 (335)  0.01822    -0.00299  0.00026              1.3            0.56    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`WCL bio12 Annual precipitation`
+    ## Spatial correlogram for WCL bio12 Annual precipitation 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.76128    -0.00299  0.00113             22.8          <2e-16 ***
+    ## 2 (335)  0.57670    -0.00299  0.00062             23.3          <2e-16 ***
+    ## 3 (335)  0.40102    -0.00299  0.00045             19.0          <2e-16 ***
+    ## 4 (335)  0.26069    -0.00299  0.00037             13.7          <2e-16 ***
+    ## 5 (335)  0.16931    -0.00299  0.00032              9.6          <2e-16 ***
+    ## 6 (335)  0.09765    -0.00299  0.00030              5.8           2e-08 ***
+    ## 7 (335)  0.04473    -0.00299  0.00029              2.8            0.01 *  
+    ## 8 (335)  0.00858    -0.00299  0.00027              0.7            0.69    
+    ## 9 (335) -0.01848    -0.00299  0.00027             -0.9            0.69    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`WCL bio13 Precipitation of wettest month`
+    ## Spatial correlogram for WCL bio13 Precipitation of wettest month 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.66964    -0.00299  0.00112             20.1          <2e-16 ***
+    ## 2 (335)  0.39789    -0.00299  0.00062             16.1          <2e-16 ***
+    ## 3 (335)  0.17659    -0.00299  0.00045              8.5          <2e-16 ***
+    ## 4 (335)  0.04017    -0.00299  0.00037              2.2            0.07 .  
+    ## 5 (335) -0.02917    -0.00299  0.00032             -1.5            0.29    
+    ## 6 (335) -0.07590    -0.00299  0.00030             -4.2           1e-04 ***
+    ## 7 (335) -0.08339    -0.00299  0.00028             -4.8           1e-05 ***
+    ## 8 (335) -0.04816    -0.00299  0.00027             -2.7            0.03 *  
+    ## 9 (335) -0.01592    -0.00299  0.00027             -0.8            0.43    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`WCL bio14 Precipitation of driest month`
+    ## Spatial correlogram for WCL bio14 Precipitation of driest month 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.90321    -0.00299  0.00113             27.0          <2e-16 ***
+    ## 2 (335)  0.81640    -0.00299  0.00062             32.8          <2e-16 ***
+    ## 3 (335)  0.70687    -0.00299  0.00045             33.4          <2e-16 ***
+    ## 4 (335)  0.59091    -0.00299  0.00037             30.8          <2e-16 ***
+    ## 5 (335)  0.48367    -0.00299  0.00032             27.0          <2e-16 ***
+    ## 6 (335)  0.38946    -0.00299  0.00030             22.6          <2e-16 ***
+    ## 7 (335)  0.29147    -0.00299  0.00029             17.4          <2e-16 ***
+    ## 8 (335)  0.18786    -0.00299  0.00028             11.5          <2e-16 ***
+    ## 9 (335)  0.08109    -0.00299  0.00027              5.1           3e-07 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`WCL bio15 Precipitation seasonality`
+    ## Spatial correlogram for WCL bio15 Precipitation seasonality 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.82979    -0.00299  0.00113               25          <2e-16 ***
+    ## 2 (335)  0.76131    -0.00299  0.00062               31          <2e-16 ***
+    ## 3 (335)  0.68633    -0.00299  0.00045               32          <2e-16 ***
+    ## 4 (335)  0.60634    -0.00299  0.00037               32          <2e-16 ***
+    ## 5 (335)  0.53164    -0.00299  0.00032               30          <2e-16 ***
+    ## 6 (335)  0.45632    -0.00299  0.00030               26          <2e-16 ***
+    ## 7 (335)  0.37090    -0.00299  0.00029               22          <2e-16 ***
+    ## 8 (335)  0.26496    -0.00299  0.00028               16          <2e-16 ***
+    ## 9 (335)  0.16785    -0.00299  0.00027               10          <2e-16 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`WCL bio16 Precipitation of wettest quarter`
+    ## Spatial correlogram for WCL bio16 Precipitation of wettest quarter 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.67618    -0.00299  0.00112             20.3          <2e-16 ***
+    ## 2 (335)  0.41418    -0.00299  0.00062             16.8          <2e-16 ***
+    ## 3 (335)  0.19789    -0.00299  0.00045              9.5          <2e-16 ***
+    ## 4 (335)  0.06249    -0.00299  0.00037              3.4           0.002 ** 
+    ## 5 (335) -0.00693    -0.00299  0.00032             -0.2           0.827    
+    ## 6 (335) -0.06314    -0.00299  0.00030             -3.5           0.002 ** 
+    ## 7 (335) -0.09600    -0.00299  0.00028             -5.5           2e-07 ***
+    ## 8 (335) -0.10458    -0.00299  0.00027             -6.1           5e-09 ***
+    ## 9 (335) -0.08664    -0.00299  0.00027             -5.1           1e-06 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`WCL bio17 Precipitation of driest quarter`
+    ## Spatial correlogram for WCL bio17 Precipitation of driest quarter 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.89321    -0.00299  0.00113             26.7          <2e-16 ***
+    ## 2 (335)  0.80310    -0.00299  0.00062             32.3          <2e-16 ***
+    ## 3 (335)  0.69410    -0.00299  0.00045             32.8          <2e-16 ***
+    ## 4 (335)  0.58067    -0.00299  0.00037             30.3          <2e-16 ***
+    ## 5 (335)  0.47676    -0.00299  0.00032             26.6          <2e-16 ***
+    ## 6 (335)  0.38232    -0.00299  0.00030             22.2          <2e-16 ***
+    ## 7 (335)  0.28670    -0.00299  0.00029             17.1          <2e-16 ***
+    ## 8 (335)  0.18475    -0.00299  0.00028             11.3          <2e-16 ***
+    ## 9 (335)  0.08225    -0.00299  0.00027              5.2           2e-07 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`WCL bio18 Precipitation of warmest quarter`
+    ## Spatial correlogram for WCL bio18 Precipitation of warmest quarter 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.80626    -0.00299  0.00113             24.1          <2e-16 ***
+    ## 2 (335)  0.62646    -0.00299  0.00062             25.2          <2e-16 ***
+    ## 3 (335)  0.46483    -0.00299  0.00045             22.0          <2e-16 ***
+    ## 4 (335)  0.32388    -0.00299  0.00037             17.0          <2e-16 ***
+    ## 5 (335)  0.19385    -0.00299  0.00032             10.9          <2e-16 ***
+    ## 6 (335)  0.05944    -0.00299  0.00030              3.6           6e-04 ***
+    ## 7 (335) -0.06109    -0.00299  0.00029             -3.4           6e-04 ***
+    ## 8 (335) -0.14671    -0.00299  0.00027             -8.7          <2e-16 ***
+    ## 9 (335) -0.18886    -0.00299  0.00027            -11.3          <2e-16 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`WCL bio19 Precipitation of coldest quarter`
+    ## Spatial correlogram for WCL bio19 Precipitation of coldest quarter 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.91344    -0.00299  0.00112             27.3          <2e-16 ***
+    ## 2 (335)  0.80456    -0.00299  0.00062             32.4          <2e-16 ***
+    ## 3 (335)  0.65849    -0.00299  0.00045             31.2          <2e-16 ***
+    ## 4 (335)  0.52662    -0.00299  0.00037             27.6          <2e-16 ***
+    ## 5 (335)  0.43097    -0.00299  0.00032             24.1          <2e-16 ***
+    ## 6 (335)  0.35272    -0.00299  0.00030             20.5          <2e-16 ***
+    ## 7 (335)  0.27392    -0.00299  0.00028             16.4          <2e-16 ***
+    ## 8 (335)  0.18813    -0.00299  0.00027             11.5          <2e-16 ***
+    ## 9 (335)  0.09279    -0.00299  0.00027              5.8           5e-09 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`CH-BIO bio01 mean annual air temperature`
+    ## Spatial correlogram for CH-BIO bio01 mean annual air temperature 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.77028    -0.00299  0.00112             23.2          <2e-16 ***
+    ## 2 (335)  0.47853    -0.00299  0.00062             19.4          <2e-16 ***
+    ## 3 (335)  0.29275    -0.00299  0.00045             14.0          <2e-16 ***
+    ## 4 (335)  0.19575    -0.00299  0.00037             10.4          <2e-16 ***
+    ## 5 (335)  0.11371    -0.00299  0.00032              6.5           4e-10 ***
+    ## 6 (335)  0.02158    -0.00299  0.00030              1.4            0.15    
+    ## 7 (335) -0.03979    -0.00299  0.00028             -2.2            0.08 .  
+    ## 8 (335) -0.03974    -0.00299  0.00027             -2.2            0.08 .  
+    ## 9 (335) -0.05193    -0.00299  0.00027             -3.0            0.01 *  
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`CH-BIO bio02 mean diurnal air temperature range`
+    ## Spatial correlogram for CH-BIO bio02 mean diurnal air temperature range 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.88589    -0.00299  0.00113             26.5          <2e-16 ***
+    ## 2 (335)  0.67132    -0.00299  0.00062             27.0          <2e-16 ***
+    ## 3 (335)  0.45551    -0.00299  0.00045             21.6          <2e-16 ***
+    ## 4 (335)  0.30938    -0.00299  0.00037             16.2          <2e-16 ***
+    ## 5 (335)  0.23625    -0.00299  0.00032             13.3          <2e-16 ***
+    ## 6 (335)  0.17865    -0.00299  0.00030             10.5          <2e-16 ***
+    ## 7 (335)  0.12916    -0.00299  0.00029              7.8           2e-14 ***
+    ## 8 (335)  0.08317    -0.00299  0.00028              5.2           4e-07 ***
+    ## 9 (335)  0.03411    -0.00299  0.00027              2.3            0.02 *  
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`CH-BIO bio03 isothermality`
+    ## Spatial correlogram for CH-BIO bio03 isothermality 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.81875    -0.00299  0.00112             24.5          <2e-16 ***
+    ## 2 (335)  0.54613    -0.00299  0.00062             22.1          <2e-16 ***
+    ## 3 (335)  0.32114    -0.00299  0.00045             15.3          <2e-16 ***
+    ## 4 (335)  0.18859    -0.00299  0.00037             10.0          <2e-16 ***
+    ## 5 (335)  0.14133    -0.00299  0.00032              8.0           5e-15 ***
+    ## 6 (335)  0.08762    -0.00299  0.00030              5.2           6e-07 ***
+    ## 7 (335)  0.04243    -0.00299  0.00028              2.7            0.02 *  
+    ## 8 (335)  0.00138    -0.00299  0.00027              0.3            0.79    
+    ## 9 (335) -0.04399    -0.00299  0.00027             -2.5            0.02 *  
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`CH-BIO bio04 temperature seasonality`
+    ## Spatial correlogram for CH-BIO bio04 temperature seasonality 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.93418    -0.00299  0.00113             27.9          <2e-16 ***
+    ## 2 (335)  0.81844    -0.00299  0.00062             32.9          <2e-16 ***
+    ## 3 (335)  0.68010    -0.00299  0.00045             32.1          <2e-16 ***
+    ## 4 (335)  0.53286    -0.00299  0.00037             27.9          <2e-16 ***
+    ## 5 (335)  0.39595    -0.00299  0.00032             22.2          <2e-16 ***
+    ## 6 (335)  0.27806    -0.00299  0.00030             16.2          <2e-16 ***
+    ## 7 (335)  0.17528    -0.00299  0.00029             10.6          <2e-16 ***
+    ## 8 (335)  0.08367    -0.00299  0.00028              5.2           3e-07 ***
+    ## 9 (335) -0.00466    -0.00299  0.00027             -0.1             0.9    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`CH-BIO bio05 mean daily maximum air temperature of the warmest month`
+    ## Spatial correlogram for CH-BIO bio05 mean daily maximum air temperature of the warmest month 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.76053    -0.00299  0.00112             22.8          <2e-16 ***
+    ## 2 (335)  0.43346    -0.00299  0.00062             17.6          <2e-16 ***
+    ## 3 (335)  0.20748    -0.00299  0.00045              9.9          <2e-16 ***
+    ## 4 (335)  0.07788    -0.00299  0.00037              4.2           7e-05 ***
+    ## 5 (335) -0.03476    -0.00299  0.00032             -1.8             0.2    
+    ## 6 (335) -0.13283    -0.00299  0.00030             -7.5           3e-13 ***
+    ## 7 (335) -0.15744    -0.00299  0.00028             -9.2          <2e-16 ***
+    ## 8 (335) -0.09660    -0.00299  0.00027             -5.7           6e-08 ***
+    ## 9 (335) -0.02649    -0.00299  0.00027             -1.4             0.2    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`CH-BIO bio06 mean daily minimum air temperature of the coldest month`
+    ## Spatial correlogram for CH-BIO bio06 mean daily minimum air temperature of the coldest month 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.82927    -0.00299  0.00112             24.8          <2e-16 ***
+    ## 2 (335)  0.59958    -0.00299  0.00062             24.2          <2e-16 ***
+    ## 3 (335)  0.42956    -0.00299  0.00045             20.4          <2e-16 ***
+    ## 4 (335)  0.32443    -0.00299  0.00037             17.0          <2e-16 ***
+    ## 5 (335)  0.25006    -0.00299  0.00032             14.1          <2e-16 ***
+    ## 6 (335)  0.16579    -0.00299  0.00030              9.8          <2e-16 ***
+    ## 7 (335)  0.08612    -0.00299  0.00028              5.3           4e-07 ***
+    ## 8 (335)  0.03540    -0.00299  0.00027              2.3            0.04 *  
+    ## 9 (335) -0.03606    -0.00299  0.00027             -2.0            0.04 *  
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`CH-BIO bio07 annual range of air temperature`
+    ## Spatial correlogram for CH-BIO bio07 annual range of air temperature 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.89136    -0.00299  0.00113             26.6          <2e-16 ***
+    ## 2 (335)  0.68957    -0.00299  0.00062             27.7          <2e-16 ***
+    ## 3 (335)  0.48474    -0.00299  0.00045             22.9          <2e-16 ***
+    ## 4 (335)  0.34010    -0.00299  0.00037             17.8          <2e-16 ***
+    ## 5 (335)  0.26280    -0.00299  0.00032             14.8          <2e-16 ***
+    ## 6 (335)  0.20348    -0.00299  0.00030             11.9          <2e-16 ***
+    ## 7 (335)  0.15602    -0.00299  0.00029              9.4          <2e-16 ***
+    ## 8 (335)  0.11455    -0.00299  0.00028              7.1           3e-12 ***
+    ## 9 (335)  0.06811    -0.00299  0.00027              4.3           2e-05 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`CH-BIO bio08 mean daily mean air temperatures of the wettest quarter`
+    ## Spatial correlogram for CH-BIO bio08 mean daily mean air temperatures of the wettest quarter 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.77272    -0.00299  0.00112             23.2          <2e-16 ***
+    ## 2 (335)  0.48099    -0.00299  0.00062             19.5          <2e-16 ***
+    ## 3 (335)  0.28836    -0.00299  0.00045             13.8          <2e-16 ***
+    ## 4 (335)  0.18351    -0.00299  0.00037              9.7          <2e-16 ***
+    ## 5 (335)  0.10376    -0.00299  0.00032              6.0           1e-08 ***
+    ## 6 (335)  0.02059    -0.00299  0.00030              1.4            0.28    
+    ## 7 (335) -0.03033    -0.00299  0.00028             -1.6            0.28    
+    ## 8 (335) -0.03063    -0.00299  0.00027             -1.7            0.28    
+    ## 9 (335) -0.05167    -0.00299  0.00027             -3.0            0.01 *  
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`CH-BIO bio09 mean daily mean air temperatures of the driest quarter`
+    ## Spatial correlogram for CH-BIO bio09 mean daily mean air temperatures of the driest quarter 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.78900    -0.00299  0.00112             23.7          <2e-16 ***
+    ## 2 (335)  0.52435    -0.00299  0.00062             21.2          <2e-16 ***
+    ## 3 (335)  0.34308    -0.00299  0.00045             16.3          <2e-16 ***
+    ## 4 (335)  0.22866    -0.00299  0.00037             12.1          <2e-16 ***
+    ## 5 (335)  0.11695    -0.00299  0.00032              6.7           1e-10 ***
+    ## 6 (335) -0.00781    -0.00299  0.00030             -0.3             0.8    
+    ## 7 (335) -0.09406    -0.00299  0.00028             -5.4           1e-07 ***
+    ## 8 (335) -0.09669    -0.00299  0.00027             -5.7           4e-08 ***
+    ## 9 (335) -0.09882    -0.00299  0.00027             -5.9           2e-08 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`CH-BIO bio10 mean daily mean air temperatures of the warmest quarter`
+    ## Spatial correlogram for CH-BIO bio10 mean daily mean air temperatures of the warmest quarter 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.77562    -0.00299  0.00112             23.3          <2e-16 ***
+    ## 2 (335)  0.48539    -0.00299  0.00062             19.7          <2e-16 ***
+    ## 3 (335)  0.29498    -0.00299  0.00045             14.1          <2e-16 ***
+    ## 4 (335)  0.18885    -0.00299  0.00037             10.0          <2e-16 ***
+    ## 5 (335)  0.09567    -0.00299  0.00032              5.5           2e-07 ***
+    ## 6 (335) -0.00246    -0.00299  0.00030              0.0           0.976    
+    ## 7 (335) -0.06346    -0.00299  0.00028             -3.6           1e-03 ***
+    ## 8 (335) -0.05947    -0.00299  0.00027             -3.4           0.001 ** 
+    ## 9 (335) -0.06358    -0.00299  0.00027             -3.7           8e-04 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`CH-BIO bio11 mean daily mean air temperatures of the coldest quarter`
+    ## Spatial correlogram for CH-BIO bio11 mean daily mean air temperatures of the coldest quarter 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.77023    -0.00299  0.00112             23.1          <2e-16 ***
+    ## 2 (335)  0.48027    -0.00299  0.00062             19.5          <2e-16 ***
+    ## 3 (335)  0.29864    -0.00299  0.00045             14.3          <2e-16 ***
+    ## 4 (335)  0.20786    -0.00299  0.00037             11.0          <2e-16 ***
+    ## 5 (335)  0.13286    -0.00299  0.00032              7.6           2e-13 ***
+    ## 6 (335)  0.04359    -0.00299  0.00030              2.7            0.02 *  
+    ## 7 (335) -0.02085    -0.00299  0.00028             -1.1            0.29    
+    ## 8 (335) -0.02805    -0.00299  0.00027             -1.5            0.26    
+    ## 9 (335) -0.05000    -0.00299  0.00027             -2.9            0.02 *  
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`CH-BIO bio12 annual precipitation amount`
+    ## Spatial correlogram for CH-BIO bio12 annual precipitation amount 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.89778    -0.00299  0.00113             26.8          <2e-16 ***
+    ## 2 (335)  0.74942    -0.00299  0.00062             30.1          <2e-16 ***
+    ## 3 (335)  0.60941    -0.00299  0.00045             28.8          <2e-16 ***
+    ## 4 (335)  0.48047    -0.00299  0.00037             25.1          <2e-16 ***
+    ## 5 (335)  0.36793    -0.00299  0.00032             20.6          <2e-16 ***
+    ## 6 (335)  0.27061    -0.00299  0.00030             15.8          <2e-16 ***
+    ## 7 (335)  0.18057    -0.00299  0.00029             10.9          <2e-16 ***
+    ## 8 (335)  0.10152    -0.00299  0.00028              6.3           6e-10 ***
+    ## 9 (335)  0.02173    -0.00299  0.00027              1.5             0.1    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`CH-BIO bio13 precipitation amount of the wettest month`
+    ## Spatial correlogram for CH-BIO bio13 precipitation amount of the wettest month 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.86965    -0.00299  0.00113             26.0          <2e-16 ***
+    ## 2 (335)  0.68350    -0.00299  0.00062             27.5          <2e-16 ***
+    ## 3 (335)  0.51850    -0.00299  0.00045             24.5          <2e-16 ***
+    ## 4 (335)  0.37601    -0.00299  0.00037             19.7          <2e-16 ***
+    ## 5 (335)  0.24766    -0.00299  0.00032             13.9          <2e-16 ***
+    ## 6 (335)  0.13490    -0.00299  0.00030              8.0           7e-15 ***
+    ## 7 (335)  0.04300    -0.00299  0.00029              2.7            0.01 *  
+    ## 8 (335) -0.01625    -0.00299  0.00028             -0.8            0.42    
+    ## 9 (335) -0.07099    -0.00299  0.00027             -4.1           1e-04 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`CH-BIO bio14 precipitation amount of the driest month`
+    ## Spatial correlogram for CH-BIO bio14 precipitation amount of the driest month 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.94721    -0.00299  0.00113             28.3          <2e-16 ***
+    ## 2 (335)  0.85383    -0.00299  0.00062             34.3          <2e-16 ***
+    ## 3 (335)  0.73866    -0.00299  0.00045             34.9          <2e-16 ***
+    ## 4 (335)  0.62858    -0.00299  0.00037             32.8          <2e-16 ***
+    ## 5 (335)  0.53703    -0.00299  0.00032             30.0          <2e-16 ***
+    ## 6 (335)  0.45159    -0.00299  0.00030             26.2          <2e-16 ***
+    ## 7 (335)  0.35123    -0.00299  0.00029             20.9          <2e-16 ***
+    ## 8 (335)  0.23073    -0.00299  0.00028             14.1          <2e-16 ***
+    ## 9 (335)  0.09942    -0.00299  0.00027              6.2           5e-10 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`CH-BIO bio15 precipitation seasonality`
+    ## Spatial correlogram for CH-BIO bio15 precipitation seasonality 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.96326    -0.00299  0.00113             28.7          <2e-16 ***
+    ## 2 (335)  0.87459    -0.00299  0.00062             35.1          <2e-16 ***
+    ## 3 (335)  0.73515    -0.00299  0.00045             34.7          <2e-16 ***
+    ## 4 (335)  0.58861    -0.00299  0.00037             30.7          <2e-16 ***
+    ## 5 (335)  0.46658    -0.00299  0.00032             26.1          <2e-16 ***
+    ## 6 (335)  0.36853    -0.00299  0.00030             21.4          <2e-16 ***
+    ## 7 (335)  0.28039    -0.00299  0.00029             16.7          <2e-16 ***
+    ## 8 (335)  0.18754    -0.00299  0.00028             11.5          <2e-16 ***
+    ## 9 (335)  0.08814    -0.00299  0.00027              5.5           3e-08 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`CH-BIO bio16 mean monthly precipitation amount of the wettest quarter`
+    ## Spatial correlogram for CH-BIO bio16 mean monthly precipitation amount of the wettest quarter 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.86962    -0.00299  0.00113             26.0          <2e-16 ***
+    ## 2 (335)  0.68489    -0.00299  0.00062             27.6          <2e-16 ***
+    ## 3 (335)  0.51596    -0.00299  0.00045             24.4          <2e-16 ***
+    ## 4 (335)  0.36203    -0.00299  0.00037             19.0          <2e-16 ***
+    ## 5 (335)  0.22384    -0.00299  0.00032             12.6          <2e-16 ***
+    ## 6 (335)  0.10819    -0.00299  0.00030              6.4           6e-10 ***
+    ## 7 (335)  0.02522    -0.00299  0.00029              1.7            0.19    
+    ## 8 (335) -0.01779    -0.00299  0.00028             -0.9            0.37    
+    ## 9 (335) -0.04727    -0.00299  0.00027             -2.7            0.02 *  
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`CH-BIO bio17 mean monthly precipitation amount of the driest quarter`
+    ## Spatial correlogram for CH-BIO bio17 mean monthly precipitation amount of the driest quarter 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.94595    -0.00299  0.00113             28.2          <2e-16 ***
+    ## 2 (335)  0.85257    -0.00299  0.00062             34.3          <2e-16 ***
+    ## 3 (335)  0.73942    -0.00299  0.00045             34.9          <2e-16 ***
+    ## 4 (335)  0.62585    -0.00299  0.00037             32.7          <2e-16 ***
+    ## 5 (335)  0.52743    -0.00299  0.00032             29.4          <2e-16 ***
+    ## 6 (335)  0.43661    -0.00299  0.00030             25.3          <2e-16 ***
+    ## 7 (335)  0.33319    -0.00299  0.00029             19.9          <2e-16 ***
+    ## 8 (335)  0.21254    -0.00299  0.00028             13.0          <2e-16 ***
+    ## 9 (335)  0.08295    -0.00299  0.00027              5.2           2e-07 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`CH-BIO bio18 mean monthly precipitation amount of the warmest quarter`
+    ## Spatial correlogram for CH-BIO bio18 mean monthly precipitation amount of the warmest quarter 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.88584    -0.00299  0.00113             26.5          <2e-16 ***
+    ## 2 (335)  0.71166    -0.00299  0.00062             28.6          <2e-16 ***
+    ## 3 (335)  0.54967    -0.00299  0.00045             26.0          <2e-16 ***
+    ## 4 (335)  0.39803    -0.00299  0.00037             20.8          <2e-16 ***
+    ## 5 (335)  0.24469    -0.00299  0.00032             13.8          <2e-16 ***
+    ## 6 (335)  0.10233    -0.00299  0.00030              6.1           4e-09 ***
+    ## 7 (335) -0.01474    -0.00299  0.00029             -0.7             0.5    
+    ## 8 (335) -0.08957    -0.00299  0.00028             -5.2           4e-07 ***
+    ## 9 (335) -0.13984    -0.00299  0.00027             -8.3           3e-16 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`CH-BIO bio19 mean monthly precipitation amount of the coldest quarter`
+    ## Spatial correlogram for CH-BIO bio19 mean monthly precipitation amount of the coldest quarter 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.95245    -0.00299  0.00113             28.4          <2e-16 ***
+    ## 2 (335)  0.86407    -0.00299  0.00062             34.7          <2e-16 ***
+    ## 3 (335)  0.74453    -0.00299  0.00045             35.1          <2e-16 ***
+    ## 4 (335)  0.62098    -0.00299  0.00037             32.4          <2e-16 ***
+    ## 5 (335)  0.51858    -0.00299  0.00032             29.0          <2e-16 ***
+    ## 6 (335)  0.42251    -0.00299  0.00030             24.5          <2e-16 ***
+    ## 7 (335)  0.31770    -0.00299  0.00029             19.0          <2e-16 ***
+    ## 8 (335)  0.19856    -0.00299  0.00028             12.1          <2e-16 ***
+    ## 9 (335)  0.07330    -0.00299  0.00027              4.6           3e-06 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`G90 Compound Topographic Index`
+    ## Spatial correlogram for G90 Compound Topographic Index 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.60692    -0.00299  0.00113             18.2          <2e-16 ***
+    ## 2 (335)  0.32802    -0.00299  0.00062             13.3          <2e-16 ***
+    ## 3 (335)  0.18441    -0.00299  0.00045              8.8          <2e-16 ***
+    ## 4 (335)  0.11890    -0.00299  0.00037              6.3           1e-09 ***
+    ## 5 (335)  0.09140    -0.00299  0.00032              5.2           8e-07 ***
+    ## 6 (335)  0.05576    -0.00299  0.00030              3.4           0.003 ** 
+    ## 7 (335)  0.03885    -0.00299  0.00029              2.5           0.040 *  
+    ## 8 (335)  0.02021    -0.00299  0.00028              1.4           0.324    
+    ## 9 (335)  0.00083    -0.00299  0.00027              0.2           0.816    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`G90 Roughness`
+    ## Spatial correlogram for G90 Roughness 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.70731    -0.00299  0.00113             21.2          <2e-16 ***
+    ## 2 (335)  0.45777    -0.00299  0.00062             18.5          <2e-16 ***
+    ## 3 (335)  0.31091    -0.00299  0.00045             14.8          <2e-16 ***
+    ## 4 (335)  0.22082    -0.00299  0.00037             11.6          <2e-16 ***
+    ## 5 (335)  0.14808    -0.00299  0.00032              8.4           2e-16 ***
+    ## 6 (335)  0.09883    -0.00299  0.00030              5.9           2e-08 ***
+    ## 7 (335)  0.09240    -0.00299  0.00029              5.6           5e-08 ***
+    ## 8 (335)  0.06753    -0.00299  0.00027              4.3           4e-05 ***
+    ## 9 (335)  0.00320    -0.00299  0.00027              0.4             0.7    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`G90 Slope`
+    ## Spatial correlogram for G90 Slope 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.70766    -0.00299  0.00113             21.2          <2e-16 ***
+    ## 2 (335)  0.45764    -0.00299  0.00062             18.5          <2e-16 ***
+    ## 3 (335)  0.31154    -0.00299  0.00045             14.8          <2e-16 ***
+    ## 4 (335)  0.22505    -0.00299  0.00037             11.9          <2e-16 ***
+    ## 5 (335)  0.15431    -0.00299  0.00032              8.7          <2e-16 ***
+    ## 6 (335)  0.10520    -0.00299  0.00030              6.2           2e-09 ***
+    ## 7 (335)  0.09676    -0.00299  0.00029              5.9           1e-08 ***
+    ## 8 (335)  0.07159    -0.00299  0.00027              4.5           1e-05 ***
+    ## 9 (335)  0.00836    -0.00299  0.00027              0.7             0.5    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`G90 Stream Power Index`
+    ## Spatial correlogram for G90 Stream Power Index 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  3.1e-01    -3.0e-03  1.0e-03              9.6          <2e-16 ***
+    ## 2 (335)  9.4e-02    -3.0e-03  5.7e-04              4.1           3e-04 ***
+    ## 3 (335)  3.4e-02    -3.0e-03  4.1e-04              1.8            0.21    
+    ## 4 (335) -3.2e-05    -3.0e-03  3.4e-04              0.2            1.00    
+    ## 5 (335)  3.5e-02    -3.0e-03  3.0e-04              2.2            0.10    
+    ## 6 (335)  7.1e-02    -3.0e-03  2.7e-04              4.4           6e-05 ***
+    ## 7 (335)  8.8e-02    -3.0e-03  2.6e-04              5.6           2e-07 ***
+    ## 8 (335)  4.4e-02    -3.0e-03  2.5e-04              3.0            0.02 *  
+    ## 9 (335)  6.8e-03    -3.0e-03  2.5e-04              0.6            1.00    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`G90 Terrain Ruggedness Index`
+    ## Spatial correlogram for G90 Terrain Ruggedness Index 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.70638    -0.00299  0.00113             21.1          <2e-16 ***
+    ## 2 (335)  0.45621    -0.00299  0.00062             18.4          <2e-16 ***
+    ## 3 (335)  0.30912    -0.00299  0.00045             14.7          <2e-16 ***
+    ## 4 (335)  0.21900    -0.00299  0.00037             11.5          <2e-16 ***
+    ## 5 (335)  0.14599    -0.00299  0.00032              8.3           6e-16 ***
+    ## 6 (335)  0.09673    -0.00299  0.00030              5.8           3e-08 ***
+    ## 7 (335)  0.09141    -0.00299  0.00029              5.6           7e-08 ***
+    ## 8 (335)  0.06710    -0.00299  0.00027              4.2           5e-05 ***
+    ## 9 (335)  0.00277    -0.00299  0.00027              0.4             0.7    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`G90 Topographic Position Index`
+    ## Spatial correlogram for G90 Topographic Position Index 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.28641    -0.00299  0.00093              9.5          <2e-16 ***
+    ## 2 (335)  0.10244    -0.00299  0.00052              4.6           3e-05 ***
+    ## 3 (335)  0.07612    -0.00299  0.00037              4.1           3e-04 ***
+    ## 4 (335)  0.01646    -0.00299  0.00031              1.1             0.9    
+    ## 5 (335) -0.00658    -0.00299  0.00027             -0.2             0.9    
+    ## 6 (335) -0.02436    -0.00299  0.00025             -1.4             0.9    
+    ## 7 (335) -0.02173    -0.00299  0.00024             -1.2             0.9    
+    ## 8 (335) -0.03567    -0.00299  0.00023             -2.2             0.2    
+    ## 9 (335) -0.01536    -0.00299  0.00022             -0.8             0.9    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`G90 Vector Ruggedness Measure`
+    ## Spatial correlogram for G90 Vector Ruggedness Measure 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.70735    -0.00299  0.00112             21.2          <2e-16 ***
+    ## 2 (335)  0.45936    -0.00299  0.00062             18.6          <2e-16 ***
+    ## 3 (335)  0.31478    -0.00299  0.00045             15.0          <2e-16 ***
+    ## 4 (335)  0.20678    -0.00299  0.00037             10.9          <2e-16 ***
+    ## 5 (335)  0.11404    -0.00299  0.00032              6.5           3e-10 ***
+    ## 6 (335)  0.05436    -0.00299  0.00030              3.3           0.004 ** 
+    ## 7 (335)  0.05163    -0.00299  0.00028              3.2           0.004 ** 
+    ## 8 (335)  0.02183    -0.00299  0.00027              1.5           0.133    
+    ## 9 (335) -0.05008    -0.00299  0.00027             -2.9           0.008 ** 
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`G90-GEOM flat`
+    ## Spatial correlogram for G90-GEOM flat 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.56289    -0.00299  0.00113             16.9          <2e-16 ***
+    ## 2 (335)  0.30554    -0.00299  0.00062             12.4          <2e-16 ***
+    ## 3 (335)  0.13825    -0.00299  0.00045              6.6           2e-10 ***
+    ## 4 (335)  0.06749    -0.00299  0.00037              3.7           5e-04 ***
+    ## 5 (335)  0.09267    -0.00299  0.00032              5.3           5e-07 ***
+    ## 6 (335)  0.10492    -0.00299  0.00030              6.2           3e-09 ***
+    ## 7 (335)  0.08235    -0.00299  0.00029              5.1           2e-06 ***
+    ## 8 (335)  0.06605    -0.00299  0.00027              4.2           9e-05 ***
+    ## 9 (335)  0.04356    -0.00299  0.00027              2.8           0.005 ** 
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`G90-GEOM pit`
+    ## Spatial correlogram for G90-GEOM pit 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.51423    -0.00299  0.00100             16.3          <2e-16 ***
+    ## 2 (335)  0.22969    -0.00299  0.00056              9.9          <2e-16 ***
+    ## 3 (335)  0.11284    -0.00299  0.00040              5.8           6e-08 ***
+    ## 4 (335)  0.02510    -0.00299  0.00033              1.5           0.611    
+    ## 5 (335) -0.01616    -0.00299  0.00029             -0.8           1.000    
+    ## 6 (335) -0.00408    -0.00299  0.00027             -0.1           1.000    
+    ## 7 (335)  0.00968    -0.00299  0.00025              0.8           1.000    
+    ## 8 (335) -0.02234    -0.00299  0.00025             -1.2           0.867    
+    ## 9 (335) -0.05572    -0.00299  0.00024             -3.4           0.004 ** 
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`G90-GEOM peak`
+    ## Spatial correlogram for G90-GEOM peak 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.32732    -0.00299  0.00085             11.4          <2e-16 ***
+    ## 2 (335)  0.13433    -0.00299  0.00047              6.3           2e-09 ***
+    ## 3 (335)  0.08959    -0.00299  0.00034              5.0           4e-06 ***
+    ## 4 (335)  0.08056    -0.00299  0.00028              5.0           4e-06 ***
+    ## 5 (335)  0.04915    -0.00299  0.00024              3.3           0.003 ** 
+    ## 6 (335)  0.00972    -0.00299  0.00023              0.8           0.795    
+    ## 7 (335) -0.00575    -0.00299  0.00021             -0.2           0.851    
+    ## 8 (335) -0.04509    -0.00299  0.00021             -2.9           0.010 *  
+    ## 9 (335) -0.06444    -0.00299  0.00020             -4.3           8e-05 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`G90-GEOM ridge`
+    ## Spatial correlogram for G90-GEOM ridge 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.51401    -0.00299  0.00111             15.5          <2e-16 ***
+    ## 2 (335)  0.27104    -0.00299  0.00061             11.1          <2e-16 ***
+    ## 3 (335)  0.13569    -0.00299  0.00045              6.6           4e-10 ***
+    ## 4 (335)  0.08721    -0.00299  0.00037              4.7           1e-05 ***
+    ## 5 (335)  0.08199    -0.00299  0.00032              4.8           1e-05 ***
+    ## 6 (335)  0.06850    -0.00299  0.00030              4.2           1e-04 ***
+    ## 7 (335)  0.03933    -0.00299  0.00028              2.5            0.02 *  
+    ## 8 (335) -0.02578    -0.00299  0.00027             -1.4            0.17    
+    ## 9 (335) -0.06323    -0.00299  0.00027             -3.7           7e-04 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`G90-GEOM shoulder`
+    ## Spatial correlogram for G90-GEOM shoulder 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.44340    -0.00299  0.00112             13.3          <2e-16 ***
+    ## 2 (335)  0.24921    -0.00299  0.00062             10.1          <2e-16 ***
+    ## 3 (335)  0.14911    -0.00299  0.00045              7.2           5e-12 ***
+    ## 4 (335)  0.12938    -0.00299  0.00037              6.9           3e-11 ***
+    ## 5 (335)  0.08674    -0.00299  0.00032              5.0           3e-06 ***
+    ## 6 (335)  0.05822    -0.00299  0.00030              3.5           0.002 ** 
+    ## 7 (335)  0.03325    -0.00299  0.00028              2.2           0.094 .  
+    ## 8 (335)  0.00507    -0.00299  0.00027              0.5           1.000    
+    ## 9 (335) -0.00814    -0.00299  0.00027             -0.3           1.000    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`G90-GEOM spur`
+    ## Spatial correlogram for G90-GEOM spur 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.59770    -0.00299  0.00113             17.9          <2e-16 ***
+    ## 2 (335)  0.36240    -0.00299  0.00062             14.6          <2e-16 ***
+    ## 3 (335)  0.22922    -0.00299  0.00045             10.9          <2e-16 ***
+    ## 4 (335)  0.15566    -0.00299  0.00037              8.2           7e-16 ***
+    ## 5 (335)  0.14943    -0.00299  0.00032              8.5          <2e-16 ***
+    ## 6 (335)  0.14894    -0.00299  0.00030              8.8          <2e-16 ***
+    ## 7 (335)  0.12593    -0.00299  0.00029              7.6           7e-14 ***
+    ## 8 (335)  0.06834    -0.00299  0.00028              4.3           3e-05 ***
+    ## 9 (335)  0.04845    -0.00299  0.00027              3.1           0.002 ** 
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`G90-GEOM slope`
+    ## Spatial correlogram for G90-GEOM slope 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.53430    -0.00299  0.00113             16.0          <2e-16 ***
+    ## 2 (335)  0.33561    -0.00299  0.00062             13.6          <2e-16 ***
+    ## 3 (335)  0.24981    -0.00299  0.00045             11.9          <2e-16 ***
+    ## 4 (335)  0.21653    -0.00299  0.00037             11.4          <2e-16 ***
+    ## 5 (335)  0.19291    -0.00299  0.00032             10.9          <2e-16 ***
+    ## 6 (335)  0.19764    -0.00299  0.00030             11.6          <2e-16 ***
+    ## 7 (335)  0.16082    -0.00299  0.00029              9.7          <2e-16 ***
+    ## 8 (335)  0.11758    -0.00299  0.00028              7.3           7e-13 ***
+    ## 9 (335)  0.10025    -0.00299  0.00027              6.3           3e-10 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`G90-GEOM hollow`
+    ## Spatial correlogram for G90-GEOM hollow 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.66791    -0.00299  0.00113             20.0          <2e-16 ***
+    ## 2 (335)  0.42258    -0.00299  0.00062             17.0          <2e-16 ***
+    ## 3 (335)  0.26493    -0.00299  0.00045             12.6          <2e-16 ***
+    ## 4 (335)  0.17793    -0.00299  0.00037              9.4          <2e-16 ***
+    ## 5 (335)  0.14506    -0.00299  0.00033              8.2           1e-15 ***
+    ## 6 (335)  0.12546    -0.00299  0.00030              7.4           5e-13 ***
+    ## 7 (335)  0.09832    -0.00299  0.00029              6.0           6e-09 ***
+    ## 8 (335)  0.06562    -0.00299  0.00028              4.1           7e-05 ***
+    ## 9 (335)  0.02407    -0.00299  0.00027              1.6             0.1    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`G90-GEOM footslope`
+    ## Spatial correlogram for G90-GEOM footslope 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.44035    -0.00299  0.00112             13.2          <2e-16 ***
+    ## 2 (335)  0.19572    -0.00299  0.00062              8.0           1e-14 ***
+    ## 3 (335)  0.10191    -0.00299  0.00045              4.9           5e-06 ***
+    ## 4 (335)  0.06383    -0.00299  0.00037              3.5           0.003 ** 
+    ## 5 (335)  0.03946    -0.00299  0.00032              2.4           0.091 .  
+    ## 6 (335)  0.02738    -0.00299  0.00030              1.8           0.317    
+    ## 7 (335)  0.02583    -0.00299  0.00028              1.7           0.317    
+    ## 8 (335)  0.01363    -0.00299  0.00027              1.0           0.631    
+    ## 9 (335)  0.00337    -0.00299  0.00027              0.4           0.698    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`G90-GEOM valley`
+    ## Spatial correlogram for G90-GEOM valley 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.58727    -0.00299  0.00113             17.6          <2e-16 ***
+    ## 2 (335)  0.31283    -0.00299  0.00062             12.6          <2e-16 ***
+    ## 3 (335)  0.15988    -0.00299  0.00045              7.7           1e-13 ***
+    ## 4 (335)  0.06949    -0.00299  0.00037              3.8           8e-04 ***
+    ## 5 (335)  0.05862    -0.00299  0.00032              3.4           0.002 ** 
+    ## 6 (335)  0.06426    -0.00299  0.00030              3.9           6e-04 ***
+    ## 7 (335)  0.05583    -0.00299  0.00029              3.5           0.002 ** 
+    ## 8 (335)  0.02218    -0.00299  0.00028              1.5           0.259    
+    ## 9 (335) -0.01783    -0.00299  0.00027             -0.9           0.367    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`CGIAR-ELE mean`
+    ## Spatial correlogram for CGIAR-ELE mean 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.79238    -0.00299  0.00112             23.8          <2e-16 ***
+    ## 2 (335)  0.53467    -0.00299  0.00062             21.7          <2e-16 ***
+    ## 3 (335)  0.36011    -0.00299  0.00045             17.2          <2e-16 ***
+    ## 4 (335)  0.25973    -0.00299  0.00037             13.7          <2e-16 ***
+    ## 5 (335)  0.17775    -0.00299  0.00032             10.1          <2e-16 ***
+    ## 6 (335)  0.09282    -0.00299  0.00030              5.6           1e-07 ***
+    ## 7 (335)  0.03359    -0.00299  0.00028              2.2            0.09 .  
+    ## 8 (335)  0.02430    -0.00299  0.00027              1.7            0.20    
+    ## 9 (335) -0.00160    -0.00299  0.00027              0.1            0.93    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`GFC-PTC YEAR 2000 mean`
+    ## Spatial correlogram for GFC-PTC YEAR 2000 mean 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.55703    -0.00299  0.00113             16.7          <2e-16 ***
+    ## 2 (335)  0.26794    -0.00299  0.00062             10.8          <2e-16 ***
+    ## 3 (335)  0.12746    -0.00299  0.00045              6.1           6e-09 ***
+    ## 4 (335)  0.04852    -0.00299  0.00037              2.7            0.04 *  
+    ## 5 (335)  0.03000    -0.00299  0.00032              1.8            0.24    
+    ## 6 (335)  0.03235    -0.00299  0.00030              2.0            0.21    
+    ## 7 (335)  0.02177    -0.00299  0.00029              1.5            0.29    
+    ## 8 (335) -0.01019    -0.00299  0.00028             -0.4            0.66    
+    ## 9 (335) -0.03380    -0.00299  0.00027             -1.9            0.24    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`GFC-LOSS year 2001`
+    ## Spatial correlogram for GFC-LOSS year 2001 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.19906    -0.00299  0.00101              6.4           2e-09 ***
+    ## 2 (335)  0.07663    -0.00299  0.00056              3.4           0.006 ** 
+    ## 3 (335)  0.04260    -0.00299  0.00040              2.3           0.163    
+    ## 4 (335)  0.03550    -0.00299  0.00033              2.1           0.207    
+    ## 5 (335)  0.01721    -0.00299  0.00029              1.2           0.942    
+    ## 6 (335)  0.00923    -0.00299  0.00027              0.7           1.000    
+    ## 7 (335) -0.00760    -0.00299  0.00026             -0.3           1.000    
+    ## 8 (335) -0.00648    -0.00299  0.00025             -0.2           1.000    
+    ## 9 (335) -0.02824    -0.00299  0.00024             -1.6           0.522    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`GFC-LOSS year 2002`
+    ## Spatial correlogram for GFC-LOSS year 2002 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided  
+    ## 1 (335)  0.06408    -0.00299  0.00086              2.3            0.13  
+    ## 2 (335)  0.03598    -0.00299  0.00048              1.8            0.37  
+    ## 3 (335) -0.01045    -0.00299  0.00035             -0.4            0.90  
+    ## 4 (335) -0.04523    -0.00299  0.00028             -2.5            0.09 .
+    ## 5 (335) -0.02833    -0.00299  0.00025             -1.6            0.43  
+    ## 6 (335) -0.02201    -0.00299  0.00023             -1.3            0.63  
+    ## 7 (335) -0.01419    -0.00299  0.00022             -0.8            0.90  
+    ## 8 (335)  0.03750    -0.00299  0.00021              2.8            0.04 *
+    ## 9 (335)  0.04160    -0.00299  0.00021              3.1            0.02 *
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`GFC-LOSS year 2003`
+    ## Spatial correlogram for GFC-LOSS year 2003 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.31985    -0.00299  0.00111              9.7          <2e-16 ***
+    ## 2 (335)  0.19465    -0.00299  0.00061              8.0           1e-14 ***
+    ## 3 (335)  0.10921    -0.00299  0.00044              5.3           7e-07 ***
+    ## 4 (335)  0.00294    -0.00299  0.00036              0.3            1.00    
+    ## 5 (335) -0.03293    -0.00299  0.00032             -1.7            0.47    
+    ## 6 (335) -0.02781    -0.00299  0.00030             -1.4            0.49    
+    ## 7 (335) -0.02897    -0.00299  0.00028             -1.5            0.49    
+    ## 8 (335)  0.00770    -0.00299  0.00027              0.6            1.00    
+    ## 9 (335) -0.04689    -0.00299  0.00027             -2.7            0.04 *  
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`GFC-LOSS year 2004`
+    ## Spatial correlogram for GFC-LOSS year 2004 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.25703    -0.00299  0.00108              7.9           3e-14 ***
+    ## 2 (335)  0.12115    -0.00299  0.00060              5.1           2e-06 ***
+    ## 3 (335)  0.11496    -0.00299  0.00043              5.7           1e-07 ***
+    ## 4 (335)  0.09110    -0.00299  0.00036              5.0           3e-06 ***
+    ## 5 (335)  0.08995    -0.00299  0.00031              5.3           1e-06 ***
+    ## 6 (335)  0.06287    -0.00299  0.00029              3.9           4e-04 ***
+    ## 7 (335)  0.02226    -0.00299  0.00028              1.5             0.3    
+    ## 8 (335)  0.00862    -0.00299  0.00026              0.7             0.5    
+    ## 9 (335) -0.03053    -0.00299  0.00026             -1.7             0.3    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`GFC-LOSS year 2005`
+    ## Spatial correlogram for GFC-LOSS year 2005 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.46238    -0.00299  0.00097             15.0          <2e-16 ***
+    ## 2 (335)  0.13176    -0.00299  0.00053              5.8           4e-08 ***
+    ## 3 (335)  0.01347    -0.00299  0.00039              0.8           1.000    
+    ## 4 (335) -0.01304    -0.00299  0.00032             -0.6           1.000    
+    ## 5 (335) -0.03079    -0.00299  0.00028             -1.7           0.382    
+    ## 6 (335) -0.04516    -0.00299  0.00026             -2.6           0.052 .  
+    ## 7 (335) -0.05874    -0.00299  0.00025             -3.6           0.003 ** 
+    ## 8 (335) -0.04029    -0.00299  0.00024             -2.4           0.076 .  
+    ## 9 (335) -0.01292    -0.00299  0.00023             -0.7           1.000    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`GFC-LOSS year 2006`
+    ## Spatial correlogram for GFC-LOSS year 2006 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.32160    -0.00299  0.00106             10.0          <2e-16 ***
+    ## 2 (335)  0.19811    -0.00299  0.00059              8.3           8e-16 ***
+    ## 3 (335)  0.11027    -0.00299  0.00043              5.5           3e-07 ***
+    ## 4 (335)  0.09376    -0.00299  0.00035              5.2           1e-06 ***
+    ## 5 (335)  0.05177    -0.00299  0.00030              3.1           0.009 ** 
+    ## 6 (335)  0.04439    -0.00299  0.00028              2.8           0.019 *  
+    ## 7 (335)  0.00797    -0.00299  0.00027              0.7           0.986    
+    ## 8 (335) -0.01403    -0.00299  0.00026             -0.7           0.986    
+    ## 9 (335) -0.03560    -0.00299  0.00025             -2.0           0.123    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`GFC-LOSS year 2007`
+    ## Spatial correlogram for GFC-LOSS year 2007 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided   
+    ## 1 (335)  0.10702    -0.00299  0.00108              3.3           0.007 **
+    ## 2 (335)  0.09129    -0.00299  0.00060              3.9           0.001 **
+    ## 3 (335)  0.02527    -0.00299  0.00043              1.4           0.524   
+    ## 4 (335)  0.03184    -0.00299  0.00036              1.8           0.323   
+    ## 5 (335)  0.04759    -0.00299  0.00031              2.9           0.029 * 
+    ## 6 (335) -0.01056    -0.00299  0.00029             -0.4           0.656   
+    ## 7 (335) -0.03168    -0.00299  0.00027             -1.7           0.333   
+    ## 8 (335) -0.01948    -0.00299  0.00026             -1.0           0.621   
+    ## 9 (335) -0.04924    -0.00299  0.00026             -2.9           0.029 * 
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`GFC-LOSS year 2008`
+    ## Spatial correlogram for GFC-LOSS year 2008 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.13780    -0.00299  0.00065              5.5           3e-07 ***
+    ## 2 (335)  0.02923    -0.00299  0.00036              1.7             0.4    
+    ## 3 (335)  0.00961    -0.00299  0.00026              0.8             1.0    
+    ## 4 (335)  0.01054    -0.00299  0.00021              0.9             1.0    
+    ## 5 (335)  0.03017    -0.00299  0.00019              2.4             0.1    
+    ## 6 (335)  0.02627    -0.00299  0.00017              2.2             0.2    
+    ## 7 (335) -0.02970    -0.00299  0.00017             -2.1             0.2    
+    ## 8 (335) -0.02112    -0.00299  0.00016             -1.4             0.6    
+    ## 9 (335) -0.01481    -0.00299  0.00016             -0.9             1.0    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`GFC-LOSS year 2009`
+    ## Spatial correlogram for GFC-LOSS year 2009 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.29907    -0.00299  0.00110              9.1          <2e-16 ***
+    ## 2 (335)  0.17784    -0.00299  0.00061              7.3           2e-12 ***
+    ## 3 (335)  0.11759    -0.00299  0.00044              5.8           6e-08 ***
+    ## 4 (335)  0.05461    -0.00299  0.00036              3.0           0.010 ** 
+    ## 5 (335)  0.04475    -0.00299  0.00032              2.7           0.021 *  
+    ## 6 (335) -0.01028    -0.00299  0.00029             -0.4           0.670    
+    ## 7 (335) -0.02668    -0.00299  0.00028             -1.4           0.311    
+    ## 8 (335) -0.05481    -0.00299  0.00027             -3.2           0.009 ** 
+    ## 9 (335) -0.05420    -0.00299  0.00026             -3.2           0.009 ** 
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`GFC-LOSS year 2010`
+    ## Spatial correlogram for GFC-LOSS year 2010 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.38462    -0.00299  0.00110             11.7          <2e-16 ***
+    ## 2 (335)  0.14429    -0.00299  0.00061              6.0           2e-08 ***
+    ## 3 (335)  0.01763    -0.00299  0.00044              1.0             1.0    
+    ## 4 (335) -0.02641    -0.00299  0.00036             -1.2             1.0    
+    ## 5 (335) -0.04066    -0.00299  0.00032             -2.1             0.2    
+    ## 6 (335) -0.01416    -0.00299  0.00029             -0.7             1.0    
+    ## 7 (335)  0.00151    -0.00299  0.00028              0.3             1.0    
+    ## 8 (335)  0.01094    -0.00299  0.00027              0.8             1.0    
+    ## 9 (335) -0.01380    -0.00299  0.00026             -0.7             1.0    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`GFC-LOSS year 2011`
+    ## Spatial correlogram for GFC-LOSS year 2011 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.23600    -0.00299  0.00100              7.6           3e-13 ***
+    ## 2 (335)  0.06770    -0.00299  0.00055              3.0            0.02 *  
+    ## 3 (335)  0.07959    -0.00299  0.00040              4.1           3e-04 ***
+    ## 4 (335)  0.02448    -0.00299  0.00033              1.5            0.64    
+    ## 5 (335)  0.00458    -0.00299  0.00029              0.4            1.00    
+    ## 6 (335) -0.01537    -0.00299  0.00027             -0.8            1.00    
+    ## 7 (335) -0.02356    -0.00299  0.00025             -1.3            0.78    
+    ## 8 (335) -0.03331    -0.00299  0.00024             -1.9            0.31    
+    ## 9 (335) -0.00775    -0.00299  0.00024             -0.3            1.00    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`GFC-LOSS year 2012`
+    ## Spatial correlogram for GFC-LOSS year 2012 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.26908    -0.00299  0.00107              8.3           9e-16 ***
+    ## 2 (335)  0.13218    -0.00299  0.00059              5.6           2e-07 ***
+    ## 3 (335)  0.06320    -0.00299  0.00043              3.2           0.009 ** 
+    ## 4 (335)  0.02651    -0.00299  0.00035              1.6           0.348    
+    ## 5 (335) -0.00489    -0.00299  0.00031             -0.1           1.000    
+    ## 6 (335)  0.03090    -0.00299  0.00029              2.0           0.180    
+    ## 7 (335)  0.05639    -0.00299  0.00027              3.6           0.002 ** 
+    ## 8 (335)  0.03124    -0.00299  0.00026              2.1           0.172    
+    ## 9 (335)  0.00469    -0.00299  0.00026              0.5           1.000    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`GFC-LOSS year 2013`
+    ## Spatial correlogram for GFC-LOSS year 2013 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.23296    -0.00299  0.00101              7.4           9e-13 ***
+    ## 2 (335)  0.13157    -0.00299  0.00056              5.7           9e-08 ***
+    ## 3 (335)  0.08690    -0.00299  0.00040              4.5           5e-05 ***
+    ## 4 (335)  0.02653    -0.00299  0.00033              1.6            0.42    
+    ## 5 (335)  0.01775    -0.00299  0.00029              1.2            0.59    
+    ## 6 (335)  0.01815    -0.00299  0.00027              1.3            0.59    
+    ## 7 (335) -0.00999    -0.00299  0.00026             -0.4            0.66    
+    ## 8 (335) -0.04043    -0.00299  0.00025             -2.4            0.09 .  
+    ## 9 (335) -0.04489    -0.00299  0.00024             -2.7            0.04 *  
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`GFC-LOSS year 2014`
+    ## Spatial correlogram for GFC-LOSS year 2014 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.18435    -0.00299  0.00095              6.1           1e-08 ***
+    ## 2 (335)  0.01511    -0.00299  0.00052              0.8             1.0    
+    ## 3 (335) -0.01160    -0.00299  0.00038             -0.4             1.0    
+    ## 4 (335) -0.00994    -0.00299  0.00031             -0.4             1.0    
+    ## 5 (335) -0.01564    -0.00299  0.00027             -0.8             1.0    
+    ## 6 (335) -0.02552    -0.00299  0.00025             -1.4             1.0    
+    ## 7 (335) -0.01840    -0.00299  0.00024             -1.0             1.0    
+    ## 8 (335) -0.03875    -0.00299  0.00023             -2.3             0.2    
+    ## 9 (335) -0.02229    -0.00299  0.00023             -1.3             1.0    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`GFC-LOSS year 2015`
+    ## Spatial correlogram for GFC-LOSS year 2015 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.09675    -0.00299  0.00100              3.1           0.010 ** 
+    ## 2 (335)  0.02905    -0.00299  0.00055              1.4           0.676    
+    ## 3 (335)  0.06283    -0.00299  0.00040              3.3           0.007 ** 
+    ## 4 (335)  0.11163    -0.00299  0.00033              6.3           3e-09 ***
+    ## 5 (335)  0.07457    -0.00299  0.00029              4.6           4e-05 ***
+    ## 6 (335)  0.03469    -0.00299  0.00027              2.3           0.106    
+    ## 7 (335)  0.00572    -0.00299  0.00025              0.5           0.676    
+    ## 8 (335)  0.01856    -0.00299  0.00025              1.4           0.676    
+    ## 9 (335) -0.02089    -0.00299  0.00024             -1.2           0.676    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`GFC-LOSS year 2016`
+    ## Spatial correlogram for GFC-LOSS year 2016 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.15791    -0.00299  0.00100              5.1           3e-06 ***
+    ## 2 (335)  0.12710    -0.00299  0.00055              5.5           3e-07 ***
+    ## 3 (335)  0.02228    -0.00299  0.00040              1.3           0.621    
+    ## 4 (335) -0.02937    -0.00299  0.00033             -1.5           0.583    
+    ## 5 (335) -0.02041    -0.00299  0.00029             -1.0           0.621    
+    ## 6 (335) -0.06117    -0.00299  0.00027             -3.6           0.003 ** 
+    ## 7 (335) -0.04185    -0.00299  0.00025             -2.4           0.088 .  
+    ## 8 (335) -0.03426    -0.00299  0.00024             -2.0           0.227    
+    ## 9 (335) -0.00231    -0.00299  0.00024              0.0           0.965    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`GFC-LOSS year 2017`
+    ## Spatial correlogram for GFC-LOSS year 2017 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided   
+    ## 1 (335)  0.11685    -0.00299  0.00097              3.9           0.001 **
+    ## 2 (335)  0.05430    -0.00299  0.00053              2.5           0.092 . 
+    ## 3 (335)  0.00207    -0.00299  0.00039              0.3           1.000   
+    ## 4 (335)  0.04924    -0.00299  0.00032              2.9           0.027 * 
+    ## 5 (335)  0.01873    -0.00299  0.00028              1.3           0.770   
+    ## 6 (335)  0.01146    -0.00299  0.00026              0.9           1.000   
+    ## 7 (335)  0.00542    -0.00299  0.00025              0.5           1.000   
+    ## 8 (335) -0.03991    -0.00299  0.00024             -2.4           0.098 . 
+    ## 9 (335) -0.03050    -0.00299  0.00023             -1.8           0.354   
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`GFC-LOSS year 2018`
+    ## Spatial correlogram for GFC-LOSS year 2018 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.30854    -0.00299  0.00112              9.3          <2e-16 ***
+    ## 2 (335)  0.13925    -0.00299  0.00062              5.7           9e-08 ***
+    ## 3 (335)  0.07158    -0.00299  0.00045              3.5           0.003 ** 
+    ## 4 (335)  0.06741    -0.00299  0.00037              3.7           0.002 ** 
+    ## 5 (335)  0.05383    -0.00299  0.00032              3.2           0.008 ** 
+    ## 6 (335)  0.03214    -0.00299  0.00030              2.0           0.126    
+    ## 7 (335)  0.04659    -0.00299  0.00028              2.9           0.013 *  
+    ## 8 (335)  0.02446    -0.00299  0.00027              1.7           0.194    
+    ## 9 (335) -0.00105    -0.00299  0.00027              0.1           0.906    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`GFC-LOSS year 2019`
+    ## Spatial correlogram for GFC-LOSS year 2019 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.29702    -0.00299  0.00107              9.2          <2e-16 ***
+    ## 2 (335)  0.16003    -0.00299  0.00059              6.7           1e-10 ***
+    ## 3 (335)  0.05172    -0.00299  0.00043              2.6            0.06 .  
+    ## 4 (335)  0.00265    -0.00299  0.00035              0.3            1.00    
+    ## 5 (335) -0.00358    -0.00299  0.00031              0.0            1.00    
+    ## 6 (335)  0.02774    -0.00299  0.00028              1.8            0.27    
+    ## 7 (335)  0.03893    -0.00299  0.00027              2.5            0.06 .  
+    ## 8 (335)  0.03123    -0.00299  0.00026              2.1            0.17    
+    ## 9 (335)  0.00804    -0.00299  0.00026              0.7            1.00    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`GFC-LOSS year 2020`
+    ## Spatial correlogram for GFC-LOSS year 2020 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.26119    -0.00299  0.00103              8.2           2e-15 ***
+    ## 2 (335)  0.12741    -0.00299  0.00057              5.5           4e-07 ***
+    ## 3 (335)  0.09491    -0.00299  0.00041              4.8           1e-05 ***
+    ## 4 (335)  0.01541    -0.00299  0.00034              1.0             1.0    
+    ## 5 (335) -0.03195    -0.00299  0.00030             -1.7             0.6    
+    ## 6 (335) -0.02362    -0.00299  0.00028             -1.2             0.9    
+    ## 7 (335) -0.02730    -0.00299  0.00026             -1.5             0.7    
+    ## 8 (335) -0.00877    -0.00299  0.00025             -0.4             1.0    
+    ## 9 (335) -0.01240    -0.00299  0.00025             -0.6             1.0    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`GFC-LOSS year 2021`
+    ## Spatial correlogram for GFC-LOSS year 2021 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.29964    -0.00299  0.00112              9.0          <2e-16 ***
+    ## 2 (335)  0.18556    -0.00299  0.00062              7.6           3e-13 ***
+    ## 3 (335)  0.03105    -0.00299  0.00045              1.6             0.8    
+    ## 4 (335) -0.01507    -0.00299  0.00037             -0.6             1.0    
+    ## 5 (335) -0.02366    -0.00299  0.00032             -1.2             1.0    
+    ## 6 (335) -0.02695    -0.00299  0.00030             -1.4             1.0    
+    ## 7 (335) -0.01271    -0.00299  0.00028             -0.6             1.0    
+    ## 8 (335)  0.00072    -0.00299  0.00027              0.2             1.0    
+    ## 9 (335) -0.00436    -0.00299  0.00027             -0.1             1.0    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`OSM-DIST mean`
+    ## Spatial correlogram for OSM-DIST mean 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.65455    -0.00299  0.00091             21.8          <2e-16 ***
+    ## 2 (335)  0.28411    -0.00299  0.00050             12.8          <2e-16 ***
+    ## 3 (335)  0.10061    -0.00299  0.00037              5.4           4e-07 ***
+    ## 4 (335)  0.02045    -0.00299  0.00030              1.4            0.60    
+    ## 5 (335)  0.00512    -0.00299  0.00026              0.5            0.86    
+    ## 6 (335)  0.00932    -0.00299  0.00024              0.8            0.86    
+    ## 7 (335)  0.01895    -0.00299  0.00023              1.4            0.60    
+    ## 8 (335)  0.03901    -0.00299  0.00022              2.8            0.02 *  
+    ## 9 (335)  0.04091    -0.00299  0.00022              3.0            0.02 *  
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $`GP-CONSUNadj YEAR 2020 sum`
+    ## Spatial correlogram for GP-CONSUNadj YEAR 2020 sum 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.26947    -0.00299  0.00073             10.1          <2e-16 ***
+    ## 2 (335)  0.06038    -0.00299  0.00041              3.1            0.01 *  
+    ## 3 (335)  0.01562    -0.00299  0.00029              1.1            1.00    
+    ## 4 (335)  0.00122    -0.00299  0.00024              0.3            1.00    
+    ## 5 (335) -0.00566    -0.00299  0.00021             -0.2            1.00    
+    ## 6 (335) -0.01096    -0.00299  0.00020             -0.6            1.00    
+    ## 7 (335) -0.00701    -0.00299  0.00019             -0.3            1.00    
+    ## 8 (335) -0.01092    -0.00299  0.00018             -0.6            1.00    
+    ## 9 (335) -0.00695    -0.00299  0.00018             -0.3            1.00    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## $riqueza
+    ## Spatial correlogram for riqueza 
+    ## method: Moran's I
+    ##         estimate expectation variance standard deviate Pr(I) two sided    
+    ## 1 (335)  0.18434    -0.00299  0.00110              5.6           1e-07 ***
+    ## 2 (335)  0.05363    -0.00299  0.00061              2.3             0.2    
+    ## 3 (335)  0.04066    -0.00299  0.00044              2.1             0.3    
+    ## 4 (335)  0.03334    -0.00299  0.00036              1.9             0.3    
+    ## 5 (335) -0.01374    -0.00299  0.00032             -0.6             1.0    
+    ## 6 (335)  0.00029    -0.00299  0.00029              0.2             1.0    
+    ## 7 (335)  0.00712    -0.00299  0.00028              0.6             1.0    
+    ## 8 (335) -0.00707    -0.00299  0.00027             -0.2             1.0    
+    ## 9 (335) -0.01132    -0.00299  0.00026             -0.5             1.0    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+``` r
+# Necesitaremos los prefijos de variables para graficarlas:
+prefijos_disponibles <- c('ESA', 'CGL', 'GSL', 'GHH', 'WCL', 'CH-BIO', 'G90', 'G90-GEOM',
+              'CGIAR-ELE', 'GFC-PTC YEAR 2000', 'GFC-LOSS', 'OSM-DIST', 'GP-CONSUNadj YEAR 2020')
+suppressWarnings(invisible(lapply(prefijos_disponibles, 
+       function(x) {
+         dim_panel <- rev(n2mfrow(ncol(env_num %>% select(matches(paste0('^', x))))))
+         par(mfrow = dim_panel)
+         suppressWarnings(invisible(lapply(
+           auto_amb[grep(paste0('^', x), names(auto_amb), value=T)],
+           function(x) plot(x, main = x$var))))
+       })))
+```
+
+![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-53-1.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-53-2.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-53-3.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-53-4.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-53-5.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-53-6.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-53-7.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-53-8.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-53-9.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-53-10.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-53-11.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-53-12.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-53-13.png)<!-- -->
+
+I de Moran local, por medio de mapas LISA de *hotspots* y *coldspots*
+(los explico en el vídeo referido). Aquí descubirás los *hotspots* de
+las variables ambientales y de las especies. La coincidencia de
+*hotspots* es un indicador, a priori, de que existe algún grado de
+asociación.
+
+``` r
+env_sf_num <- env_sf %>%
+  select_if(is.numeric) %>% 
+  replace(is.na(.), 0)
+env_sf_num %>% tibble
+```
+
+    ## # A tibble: 335 × 138
+    ##    `ESA Trees` `ESA Shrubland` `ESA Grassland` `ESA Cropland` `ESA Built-up`
+    ##          <dbl>           <dbl>           <dbl>          <dbl>          <dbl>
+    ##  1  12.6                18.4            25.1          7.22          0.622   
+    ##  2  17.3                 6.25           20.7         51.9           2.83    
+    ##  3   1.23                7.35           12.9          0.118         0.454   
+    ##  4  24.2                10.5            36.3         13.9           0.738   
+    ##  5   0.702               6.58            5.26         0.0529        2.55    
+    ##  6   9.32               58.2            10.3         17.7           1.44    
+    ##  7   0.0000434           0.560           0.249        0.00174       0.000608
+    ##  8   1.29               16.8             0.657        0.0435        0.0155  
+    ##  9  60.7                17.2            14.3          3.39          2.13    
+    ## 10  66.4                 6.22           26.2          0.229         0.941   
+    ## # … with 325 more rows, and 133 more variables:
+    ## #   `ESA Barren / sparse vegetation` <dbl>, `ESA Open water` <dbl>,
+    ## #   `ESA Herbaceous wetland` <dbl>, `ESA Mangroves` <dbl>,
+    ## #   `CGL Closed forest, evergreen needle leaf` <dbl>,
+    ## #   `CGL Closed forest, evergreen broad leaf` <dbl>,
+    ## #   `CGL Closed forest, deciduous broad leaf` <dbl>,
+    ## #   `CGL Closed forest, mixed` <dbl>, …
+
+``` r
+lisamaps_amb <- sapply(
+  grep('geom', names(env_sf_num %>% select(matches('^ESA'))), invert = T, value = T),
+  function(x) {
+    m <- lisamap(
+      objesp = env_sf_num[x],
+      var = x,
+      pesos = pesos_b,
+      tituloleyenda = 'Significancia ("x-y", léase como "x" rodeado de "y")',
+      leyenda = F,
+      anchuratitulo = 50,
+      tamanotitulo = 10,
+      fuentedatos = '',
+      titulomapa = paste0('Clusters LISA de "', x, '"'))
+    return(m$grafico)}, simplify = F)
+lisamaps_amb$leyenda <- gtable_filter(ggplot_gtable(ggplot_build(lisamaps_amb[[1]] + theme(legend.position="bottom"))), "guide-box")
+grid.arrange(do.call('arrangeGrob', c(lisamaps_amb[1:length(lisamaps_amb)], nrow = 3)),
+             lisamaps_amb$leyenda, heights=c(1.1, 0.1), nrow = 2)
+```
+
+![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-54-1.png)<!-- -->
+
+¡¡¡IMPORTANTE!!! Sólo coloqué los mapas LISA de las variables con el
+prefijo `ESA`. Te toca hacer los demás mapas a ti, pues recuerda que hay
+una batería de variables adicionales, concretamente, todas estas . Para
+hacer los restantes mapas, ejecuta el mismo bloque anterior,
+sustituyendo `ESA` por la que corresponda, en la línea de
+`...select(matches('^OTROPREFIJO'))...` por ejemplo,
+`...select(matches('^CGL'))...`.
+
+Finalmente, haré lo propio con los datos de la matriz de comunidad, para
+calcular la autocorrelación de los datos de incidencia a partir de la
+matriz transformada. El objetivo es comparar los resultados de los mapas
+LISA
+
+``` r
+mi_fam_t_sf <- env_sf %>% select(hex_id) %>%
+  left_join(mi_fam_t %>% rownames_to_column('hex_id'), by = 'hex_id') %>%
+  replace(is.na(.), 0) %>% 
+  select(-hex_id)
+lisamaps_mifam <- sapply(
+  grep('geom', names(mi_fam_t_sf), invert = T, value = T),
+  function(x) {
+    m <- lisamap(
+      objesp = mi_fam_t_sf[x],
+      var = x,
+      pesos = pesos_b,
+      tituloleyenda = 'Significancia ("x-y", léase como "x" rodeado de "y")',
+      leyenda = F,
+      anchuratitulo = 50,
+      tamanotitulo = 10,
+      fuentedatos = '',
+      titulomapa = paste0('Clusters LISA de "', x, '"'))
+    # dev.new();print(m$grafico)
+    return(m$grafico)
+    }, simplify = F)
+lisamaps_mifam$leyenda <- gtable_filter(ggplot_gtable(ggplot_build(lisamaps_mifam[[1]] + theme(legend.position="bottom"))), "guide-box")
+grid.arrange(do.call('arrangeGrob', c(lisamaps_mifam[1:8], nrow = 3)), lisamaps_mifam$leyenda, heights=c(1.1, 0.1), nrow = 2)
+```
+
+![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-55-1.png)<!-- -->
+
+¡¡¡IMPORTANTE!!! Fíjate en la última línea de código, donde pone
+`...c(lisamaps_mifam[1:8],...`. El 1:8 significa “representa desde la
+especie que ocupa la columna 1 hasta la que ocupa la columna 8. Sin
+embargo, hay más mapas que debo representar, en concreto 44. Por lo
+tanto, dependiendo del número de especies que tenga mi matriz de
+comunidad (lo puedes saber ejecutando
+`length(grep('leyenda', names(lisamaps_mifam), invert=T))` directamente
+en la consola), tendrás que repetir el código del bloque anterior varias
+veces, de 8 en 8, o si quieres de 12 en 12, o como te salga mejor; por
+ejemplo, en mi caso, yo debería repetirlo con
+`...c(lisamaps_mifam[9:16],...`, luego con
+`...c(lisamaps_mifam[17:24],...`, hasta llegar al número de especies
+disponibles.
 
 # Referencias

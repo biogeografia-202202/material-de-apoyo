@@ -100,6 +100,8 @@ res <- 4 #Resolución H3, puedes elegir entre 4, 5, 6 o 7, pero cuidado con valo
 # usando resolución 4, cámbiale el nombre a "matriz_de_comunidad_res_5.RDS". Recuerda,
 # puedes usar cualquier resolución, lo único importante es que las resolución usada en la
 # creación de la matriz de comunidad, debe ser la misma que en la ambiental.
+# Prueba distintas resoluciones, no te enfrasques en quedarte con la misma que
+# uso en este ejemplo. Prueba con resolución 5, por ejemplo.
 mc_orig <- readRDS(paste0("matriz_de_comunidad_res_", res, ".RDS"))
 nrow(mc_orig) #Número de filas, equivale a número de hexágonos con registros de presencia
 ncol(mc_orig)  #Número de columnas, equivale a número de especies, riqueza
@@ -673,7 +675,7 @@ mi_fam_t_rda <- rda(mi_fam_t_sel %>% rename_all(~ gsub('^ESPECIE ', '', .)) ~ .,
 summary(mi_fam_t_rda)
 RsquareAdj(mi_fam_t_rda)$adj.r.squared
 vif.cca(mi_fam_t_rda)
-escalado <- 2
+escalado <- 1
 plot(mi_fam_t_rda,
      scaling = escalado,
      display = c("sp", "lc", "cn"),
@@ -973,6 +975,7 @@ acumulacion_especies
 
 ## Ecología espacial
 
+Me basaré en el script que comienza por `ee_` de este [repo](https://github.com/biogeografia-master/scripts-de-analisis-BCI), el cual explico en el vídeo de "Ecología espacial" (vídeos 21) de la lista de reproducción ["Ecología Numérica con R" de mi canal](https://www.youtube.com/playlist?list=PLDcT2n8UzsCRDqjqSeqHI1wsiNOqpYmsJ).
 
 > INICIA texto+código común entre secciones
 
@@ -1002,7 +1005,7 @@ devtools::source_url(paste0(gh_content, repo_sem202202, 'funciones.R'))
 Carga tu matriz de comunidad, que habrás generado en la práctica 2, y elige un umbral para especies raras o rangos de registros de presencia para seleccionar especies en una nueva matriz de comunidad.
 
 ```{r}
-res <- 4 #Resolución H3, puedes elegir entre 4, 5, 6 o 7, pero cuidado con valores >=6
+res <- 5 #Resolución H3, puedes elegir entre 4, 5, 6 o 7, pero cuidado con valores >=6
 # IMPORTANTE: la resolución de las celdas H3, debe coincidir con la resolución
 # a la cual generaste tu matriz de comunidad. De lo contrario, obtendrás error. Si tu 
 # archivo RDS de matriz de comunidad se denomina "matriz_de_comunidad.RDS", y lo creaste
@@ -1050,7 +1053,7 @@ data.frame(`Número de especies por hexágono` = sort(rowSums(mc_orig), decreasi
   kable(booktabs=T) %>%
   kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
   gsub(' NA ', '', .) # Número de hexágonos en los que está presente cada especie
-min_especies_por_hex <- 2
+min_especies_por_hex <- 1
 # Explicación: "min_especies_por_hex <- Y", donde Y es el número mínimo (inclusive) de especies
 # que debe existir en cada hexágono. Por debajo de dicho valor, el hexágono es excluido.
 mi_fam <- mc_orig_seleccionadas[rowSums(mc_orig_seleccionadas)>=min_especies_por_hex, ]
@@ -1126,13 +1129,24 @@ Se puede probar con un subconjunto de variables, generando una matriz ambiental 
 
 Desde aquí, la parte correspondiente a ecología espacial propiamente.
 
-Dado que Has elegido trabajar con ecología espacial, te tengo dos observaciones de bienvenida:
+Dado que Has elegido trabajar con ecología espacial, te tengo algunas observaciones de bienvenida:
 
 1. Una de las aplicaciones más comunes, dentro de esta rama, es la generación de modelos de distribución de especies. Aclaro que no he incluido esta herramienta en esta sección, y he preferido presentarte material sobre el análisis de "núcleo duro" de patrones espaciales de especies y variables ambientales.
 
 2. Considera trabajar a distintas resoluciones de hexágonos H3, por ejemplo, a resoluciones 4 y 5, porque verás patrones claramente diferenciados, y descubrirás efectos que probablemente podrías ocultar o sobreexponer si trabajaras sólo con una resolución. Crea resultados para dos resoluciones, y compara las salidas.
 
+3. Para evitar discontinuidades y garantizar la integridad de la vecindad, es necesario trabajar con un objeto espacial que cubra todo el país, con independencia de que contenga hexágonos sin registros de presencia de GBIF. La continuidad en los análisis de ecología espacial, es fundamental para garantizar la vecindad. Un hexágono sin registros de presencia es un hábitat potencial de las especies de la comunidad, no un vacío de discontinuidades. En esta sección, "el territorio manda", por lo que oportunamente le adosaremos una columna con los registros de presencia al objeto de estadística zonal (`za`) traído del repo correspondiente.
 
+4. Nota que los objetos `min_especies_por_hex` y `en_cuantos_hex` tienen asignados valor 1 (sólo en esta sección de ecología espacial), lo cual significa que, en pocas palabras, el objeto `mi_fam`, que es con el que hacemos la mayor parte de los análisis en secciones anteriores, es exactamente igual a la matriz de comunidad original (si ejecutas `all(mc_orig == mi_fam)` recibirás `TRUE`, es decir,  iguales). En otras secciones, filtramos la matriz original para quitar hexágonos con pocos registros o especies que están poco representadas. y así producir una matriz de comunidad de la cual poder extraer patrones específicos, algo necesario en los análisis anteriores. En este caso, nos interesa conservar la matriz íntegra.
+
+5. Nos interesa conservar los nombres largos en la matriz de comunidad `mi_fam`, así que los restablezco aquí:
+
+```{r}
+colnames(mi_fam) <- colnames(mc_orig_seleccionadas)
+colnames(mi_fam_t) <- colnames(mc_orig_seleccionadas)
+```
+
+Cargaré algunos paquetes específicos:
 
 ```{r}
 library(ape)
@@ -1140,16 +1154,135 @@ library(spdep)
 library(ade4)
 library(adegraphics)
 library(adespatial)
-library(vegan)
-library(tidyverse)
-library(sf)
 library(gridExtra)
 library(grid)
 library(gtable)
-source('biodata/funciones.R')
 source('https://raw.githubusercontent.com/maestria-geotel-master/unidad-3-asignacion-1-vecindad-autocorrelacion-espacial/master/lisaclusters.R')
 ```
 
+Comienza el análisis espacial. Lo primero que necesitamos es crear un objeto de vecindad. Como ya señalé, necesitamos una superficie continua del territorio en cuestión, además de que la transformaremos a objeto clase `sp`.
+
+```{r}
+# Transformar matriz ambiental en objeto sp, clase del paquete sp, para generar vecindad.
+# Este paquete será retirado del CRAN en 2023; es importante tenerlo presente.
+# Retomo el objeto za de arriba, y genero objetos de clase sf y sp a partir de él
+za_sf <- za %>%
+  select(-matches(c(' base'))) %>% 
+  column_to_rownames('hex_id') %>% st_as_sf
+riq_hex <- mi_fam %>% mutate(riqueza = rowSums(.)) %>%
+  rownames_to_column('hex_id') %>% select (riqueza, hex_id)
+env_sf <- za_sf %>%
+  rownames_to_column('hex_id') %>% 
+  left_join(riq_hex, by = 'hex_id')
+env_sp <- env_sf %>% as_Spatial
+centroides <- env_sf %>% st_centroid
+env_xy <- centroides %>% st_coordinates %>% as.data.frame
+(vecindad <- env_sp %>% poly2nb)
+(pesos_b <- nb2listw(vecindad, style = 'B'))
+plot(env_sp)
+plot(vecindad, coords = env_xy, add =T , col = 'red')
+```
+
+Igualmente, será necesario una matriz de comunidad transformada "espacial", con la cual hacer los cálculos de autocorrelación. En este caso, calcularé la autocorrelación por especies, usando la matriz transformada Hellinger. Normalmente, cuando se trata de territorios tan grandes como nuestro país, los datos de incidencia (o abudancia, si los tuviéramos), no están fuertemente autocorrelacionados espacialmente. No obstante, los datos ambientales suelen estar autocorrelacionados; lo veremos más adelante.
+
+```{r, fig.width=9, fig.height=12, dpi=300}
+mi_fam_t_all <- env_sf %>% select(hex_id) %>%
+  left_join(mi_fam_t %>% rownames_to_column('hex_id'), by = 'hex_id') %>%
+  replace(is.na(.), 0) %>% 
+  st_drop_geometry %>% select(-hex_id)
+suppressWarnings(auto_spp_hel <- calcular_autocorrelacion(
+  df_fuente = mi_fam_t_all,
+  orden = 9,
+  obj_vecindad = vecindad,
+  pos_var = '(matriz Hellinger)'))
+print(auto_spp_hel, digits = 2, p.adj.method = 'holm')
+dim_panel <- rev(n2mfrow(ncol(mi_fam_t_all)))
+par(mfrow = dim_panel)
+suppressWarnings(invisible(lapply(auto_spp_hel, function(x) plot(x, main = x$var))))
+```
+
+Ahora exploraré la autocorrelación de las variables ambientales. Entre estas, como verás, muchas están autocorrelacionadas, al tratarse de variables continuas. Te interesa explorar qué variables están autocorrelacionadas espacialmente, y qué especies también lo están, para comprobar posteriormente si tanto especies como variables ambientales tienen *coldspots* y *hotspots* coincidentes espacialmente, lo cual sugeriría que existe asociación entre ellas.
+
+```{r, fig.width=9, fig.height=12, dpi=300}
+env_num <- env_sf %>%
+  st_drop_geometry %>% 
+  select_if(is.numeric) %>% 
+  replace(is.na(.), 0)
+suppressWarnings(auto_amb <- calcular_autocorrelacion(
+  df_fuente = env_num,
+  orden = 9,
+  obj_vecindad = vecindad))
+print(auto_amb, digits = 2, p.adj.method = 'holm')
+# Necesitaremos los prefijos de variables para graficarlas:
+prefijos_disponibles <- c('ESA', 'CGL', 'GSL', 'GHH', 'WCL', 'CH-BIO', 'G90', 'G90-GEOM',
+              'CGIAR-ELE', 'GFC-PTC YEAR 2000', 'GFC-LOSS', 'OSM-DIST', 'GP-CONSUNadj YEAR 2020')
+suppressWarnings(invisible(lapply(prefijos_disponibles, 
+       function(x) {
+         dim_panel <- rev(n2mfrow(ncol(env_num %>% select(matches(paste0('^', x))))))
+         par(mfrow = dim_panel)
+         suppressWarnings(invisible(lapply(
+           auto_amb[grep(paste0('^', x), names(auto_amb), value=T)],
+           function(x) plot(x, main = x$var))))
+       })))
+```
+
+I de Moran local, por medio de mapas LISA de *hotspots* y *coldspots* (los explico en el vídeo referido). Aquí descubirás los *hotspots* de las variables ambientales y de las especies. La coincidencia de *hotspots* es un indicador, a priori, de que existe algún grado de asociación.
+
+```{r, fig.width=9, fig.height=12, dpi=300}
+env_sf_num <- env_sf %>%
+  select_if(is.numeric) %>% 
+  replace(is.na(.), 0)
+env_sf_num %>% tibble
+lisamaps_amb <- sapply(
+  grep('geom', names(env_sf_num %>% select(matches('^ESA'))), invert = T, value = T),
+  function(x) {
+    m <- lisamap(
+      objesp = env_sf_num[x],
+      var = x,
+      pesos = pesos_b,
+      tituloleyenda = 'Significancia ("x-y", léase como "x" rodeado de "y")',
+      leyenda = F,
+      anchuratitulo = 50,
+      tamanotitulo = 10,
+      fuentedatos = '',
+      titulomapa = paste0('Clusters LISA de "', x, '"'))
+    return(m$grafico)}, simplify = F)
+lisamaps_amb$leyenda <- gtable_filter(ggplot_gtable(ggplot_build(lisamaps_amb[[1]] + theme(legend.position="bottom"))), "guide-box")
+grid.arrange(do.call('arrangeGrob', c(lisamaps_amb[1:length(lisamaps_amb)], nrow = 3)),
+             lisamaps_amb$leyenda, heights=c(1.1, 0.1), nrow = 2)
+```
+
+¡¡¡IMPORTANTE!!! Sólo coloqué los mapas LISA de las variables con el prefijo `ESA`. Te toca hacer los demás mapas a ti, pues recuerda que hay una batería de variables adicionales, concretamente, todas estas `r cat(prefijos_disponibles, sep=', ')`. Para hacer los restantes mapas, ejecuta el mismo bloque anterior, sustituyendo `ESA` por la que corresponda, en la línea de `...select(matches('^OTROPREFIJO'))...` por ejemplo, `...select(matches('^CGL'))...`.
+
+Finalmente, haré lo propio con los datos de la matriz de comunidad, para calcular la autocorrelación de los datos de incidencia a partir de la matriz transformada. El objetivo es comparar los resultados de los mapas LISA 
+
+
+```{r, fig.width=9, fig.height=12, dpi=300}
+mi_fam_t_sf <- env_sf %>% select(hex_id) %>%
+  left_join(mi_fam_t %>% rownames_to_column('hex_id'), by = 'hex_id') %>%
+  replace(is.na(.), 0) %>% 
+  select(-hex_id)
+lisamaps_mifam <- sapply(
+  grep('geom', names(mi_fam_t_sf), invert = T, value = T),
+  function(x) {
+    m <- lisamap(
+      objesp = mi_fam_t_sf[x],
+      var = x,
+      pesos = pesos_b,
+      tituloleyenda = 'Significancia ("x-y", léase como "x" rodeado de "y")',
+      leyenda = F,
+      anchuratitulo = 50,
+      tamanotitulo = 10,
+      fuentedatos = '',
+      titulomapa = paste0('Clusters LISA de "', x, '"'))
+    # dev.new();print(m$grafico)
+    return(m$grafico)
+    }, simplify = F)
+lisamaps_mifam$leyenda <- gtable_filter(ggplot_gtable(ggplot_build(lisamaps_mifam[[1]] + theme(legend.position="bottom"))), "guide-box")
+grid.arrange(do.call('arrangeGrob', c(lisamaps_mifam[1:8], nrow = 3)), lisamaps_mifam$leyenda, heights=c(1.1, 0.1), nrow = 2)
+```
+
+¡¡¡IMPORTANTE!!! Fíjate en la última línea de código, donde pone `...c(lisamaps_mifam[1:8],...`. El 1:8 significa "representa desde la especie que ocupa la columna 1 hasta la que ocupa la columna 8. Sin embargo, hay más mapas que debo representar, en concreto `r length(grep('leyenda', names(lisamaps_mifam), invert=T))`. Por lo tanto, dependiendo del número de especies que tenga mi matriz de comunidad (lo puedes saber ejecutando `length(grep('leyenda', names(lisamaps_mifam), invert=T))` directamente en la consola), tendrás que repetir el código del bloque anterior varias veces, de 8 en 8, o si quieres de 12 en 12, o como te salga mejor; por ejemplo, en mi caso, yo debería repetirlo con `...c(lisamaps_mifam[9:16],...`, luego con `...c(lisamaps_mifam[17:24],...`, hasta llegar al número de especies disponibles.
 
 
 # Referencias
