@@ -155,11 +155,18 @@ elige un umbral para especies raras o rangos de registros de presencia
 para seleccionar especies en una nueva matriz de comunidad.
 
 ``` r
-mc_orig <- readRDS("matriz_de_comunidad.RDS")
+res <- 4 #Resolución H3, puedes elegir entre 4, 5, 6 o 7, pero cuidado con valores >=6
+# IMPORTANTE: la resolución de las celdas H3, debe coincidir con la resolución
+# a la cual generaste tu matriz de comunidad. De lo contrario, obtendrás error. Si tu 
+# archivo RDS de matriz de comunidad se denomina "matriz_de_comunidad.RDS", y lo creaste
+# usando resolución 4, cámbiale el nombre a "matriz_de_comunidad_res_5.RDS". Recuerda,
+# puedes usar cualquier resolución, lo único importante es que las resolución usada en la
+# creación de la matriz de comunidad, debe ser la misma que en la ambiental.
+mc_orig <- readRDS(paste0("matriz_de_comunidad_res_", res, ".RDS"))
 nrow(mc_orig) #Número de filas, equivale a número de hexágonos con registros de presencia
 ```
 
-    ## [1] 149
+    ## [1] 39
 
 ``` r
 ncol(mc_orig)  #Número de columnas, equivale a número de especies, riqueza
@@ -195,17 +202,17 @@ Antigonon leptopus Hook. & Arn.
 </tr>
 <tr>
 <td style="text-align:left;">
-Coccoloba pubescens L.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
 Coccoloba diversifolia Jacq.
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 Coccoloba P.Browne
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba pubescens L.
 </td>
 </tr>
 <tr>
@@ -400,7 +407,7 @@ Rumex obtusifolius L.
 </tr>
 <tr>
 <td style="text-align:left;">
-Coccoloba fawcettii O.Schmidt
+Coccoloba obtusifolia Jacq.
 </td>
 </tr>
 </tbody>
@@ -446,28 +453,12 @@ Número de hexágonos
 Coccoloba uvifera (L.) L.
 </td>
 <td style="text-align:right;">
-54
+24
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 Coccoloba diversifolia Jacq.
-</td>
-<td style="text-align:right;">
-31
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Coccoloba wrightii Lindau
-</td>
-<td style="text-align:right;">
-20
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Coccoloba costata Wright
 </td>
 <td style="text-align:right;">
 18
@@ -478,39 +469,23 @@ Coccoloba costata Wright
 Antigonon leptopus Hook. & Arn.
 </td>
 <td style="text-align:right;">
-17
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Coccoloba pubescens L.
-</td>
-<td style="text-align:right;">
 15
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Coccoloba incrassata Urb.
+Coccoloba wrightii Lindau
 </td>
 <td style="text-align:right;">
-13
+14
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Coccoloba leoganensis Jacq.
+Coccoloba costata Wright
 </td>
 <td style="text-align:right;">
 13
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Coccoloba P.Browne
-</td>
-<td style="text-align:right;">
-12
 </td>
 </tr>
 <tr>
@@ -518,12 +493,12 @@ Coccoloba P.Browne
 Persicaria punctata (Elliott) Small
 </td>
 <td style="text-align:right;">
-12
+11
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Coccoloba fuertesii Urb.
+Coccoloba P.Browne
 </td>
 <td style="text-align:right;">
 10
@@ -531,34 +506,26 @@ Coccoloba fuertesii Urb.
 </tr>
 <tr>
 <td style="text-align:left;">
-Leptogonum domingensis var. molle (Urb.) Brandbyge
+Coccoloba incrassata Urb.
 </td>
 <td style="text-align:right;">
-8
+10
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Leptogonum domingense Benth.
+Coccoloba leoganensis Jacq.
 </td>
 <td style="text-align:right;">
-8
+10
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Rumex crispus L.
+Coccoloba pubescens L.
 </td>
 <td style="text-align:right;">
-8
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Coccoloba ceibensis O.C.Schmidt
-</td>
-<td style="text-align:right;">
-8
+9
 </td>
 </tr>
 <tr>
@@ -571,7 +538,7 @@ Coccoloba buchii O.Schmidt
 </tr>
 <tr>
 <td style="text-align:left;">
-Coccoloba nodosa Lindau
+Coccoloba fuertesii Urb.
 </td>
 <td style="text-align:right;">
 8
@@ -579,23 +546,15 @@ Coccoloba nodosa Lindau
 </tr>
 <tr>
 <td style="text-align:left;">
-Coccoloba pauciflora Urb.
+Leptogonum domingensis var. molle (Urb.) Brandbyge
 </td>
 <td style="text-align:right;">
-8
+6
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Coccoloba picardae Urb.
-</td>
-<td style="text-align:right;">
-7
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Coccoloba flavescens Jacq.
+Leptogonum domingense Benth.
 </td>
 <td style="text-align:right;">
 6
@@ -611,7 +570,7 @@ Leptogonum domingensis Benth.
 </tr>
 <tr>
 <td style="text-align:left;">
-Polygonum L.
+Coccoloba picardae Urb.
 </td>
 <td style="text-align:right;">
 6
@@ -619,7 +578,23 @@ Polygonum L.
 </tr>
 <tr>
 <td style="text-align:left;">
-Coccoloba krugii Lindau
+Rumex crispus L.
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba ceibensis O.C.Schmidt
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba flavescens Jacq.
 </td>
 <td style="text-align:right;">
 5
@@ -627,31 +602,39 @@ Coccoloba krugii Lindau
 </tr>
 <tr>
 <td style="text-align:left;">
-Persicaria hydropiperoides (Michx.) Small
+Polygonum L.
 </td>
 <td style="text-align:right;">
 5
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Coccoloba jimenezii Alain
-</td>
-<td style="text-align:right;">
-4
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Coccoloba microstachya Willd.
-</td>
-<td style="text-align:right;">
-4
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 Rumex L.
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba krugii Lindau
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba nodosa Lindau
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Persicaria hydropiperoides (Michx.) Small
 </td>
 <td style="text-align:right;">
 4
@@ -667,7 +650,15 @@ Polygonum punctatum Kit., 1864
 </tr>
 <tr>
 <td style="text-align:left;">
-Coccoloba venosa L.
+Coccoloba microstachya Willd.
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba pauciflora Urb.
 </td>
 <td style="text-align:right;">
 3
@@ -691,15 +682,7 @@ Coccoloba swartzii Meisn.
 </tr>
 <tr>
 <td style="text-align:left;">
-Rumex obtusifolius L.
-</td>
-<td style="text-align:right;">
-3
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Coccoloba leonardii Howard
+Coccoloba venosa L.
 </td>
 <td style="text-align:right;">
 2
@@ -723,7 +706,7 @@ Persicaria ferruginea (Wedd.) Soják
 </tr>
 <tr>
 <td style="text-align:left;">
-Coccoloba subcordata Lindau
+Rumex obtusifolius L.
 </td>
 <td style="text-align:right;">
 2
@@ -731,15 +714,23 @@ Coccoloba subcordata Lindau
 </tr>
 <tr>
 <td style="text-align:left;">
-Persicaria glabra (Willd.) M.Gómez
+Coccoloba jimenezii Alain
 </td>
 <td style="text-align:right;">
-2
+1
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 Rumex acetosella L.
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba leonardii Howard
 </td>
 <td style="text-align:right;">
 1
@@ -771,6 +762,14 @@ Ruprechtia C.A.Mey.
 </tr>
 <tr>
 <td style="text-align:left;">
+Coccoloba subcordata Lindau
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
 Persicaria segetum (Kunth) Small
 </td>
 <td style="text-align:right;">
@@ -787,7 +786,15 @@ Persicaria lapathifolia subsp. lapathifolia
 </tr>
 <tr>
 <td style="text-align:left;">
-Coccoloba fawcettii O.Schmidt
+Persicaria glabra (Willd.) M.Gómez
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba obtusifolia Jacq.
 </td>
 <td style="text-align:right;">
 1
@@ -809,9 +816,9 @@ Coccoloba fawcettii O.Schmidt
 # que están presentes en m hexágonos o más. Si eliges un rango, por ejemplo [m,n], el script generará
 # una matriz de comunidad que representadas un mínimo de m hexágonos y un máximo de n hexágonos.
 # (ambos extremos inclusive).
-en_cuantos_hex <- 10
-# En este caso, 15 significa 15 o más (hasta el límite superior). IMPORTANTE: elige TU PROPIO umbral.
-# en_cuantos_hex <- 10:20
+en_cuantos_hex <- 1
+# Explicación: "en_cuantos_hex <- X", donde X es el número de hexágonos mínimo donde cada especie
+# debe estar presente. IMPORTANTE: elige TU PROPIO umbral.
 {if(length(en_cuantos_hex)==1) selector <- en_cuantos_hex:max(colSums(mc_orig)) else
   if(length(en_cuantos_hex)==2)
     selector <- min(en_cuantos_hex):max(en_cuantos_hex) else
@@ -819,12 +826,356 @@ en_cuantos_hex <- 10
 selector
 ```
 
-    ##  [1] 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34
-    ## [26] 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54
+    ##  [1]  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24
 
 ``` r
 mc_orig_seleccionadas <- mc_orig[, colSums(mc_orig) %in% selector]
-mi_fam <- mc_orig_seleccionadas[!rowSums(mc_orig_seleccionadas)==0, ] #Elimina filas sin registros
+
+# Mínimo número de especies por hexágono
+data.frame(`Número de especies por hexágono` = sort(rowSums(mc_orig), decreasing = T), check.names = F) %>% 
+  kable(booktabs=T) %>%
+  kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
+  gsub(' NA ', '', .) # Número de hexágonos en los que está presente cada especie
+```
+
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+Número de especies por hexágono
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+844cd43ffffffff
+</td>
+<td style="text-align:right;">
+18
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd45ffffffff
+</td>
+<td style="text-align:right;">
+18
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd0dffffffff
+</td>
+<td style="text-align:right;">
+13
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cf35ffffffff
+</td>
+<td style="text-align:right;">
+9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844c899ffffffff
+</td>
+<td style="text-align:right;">
+9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cf37ffffffff
+</td>
+<td style="text-align:right;">
+9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+846725bffffffff
+</td>
+<td style="text-align:right;">
+9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd47ffffffff
+</td>
+<td style="text-align:right;">
+9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd59ffffffff
+</td>
+<td style="text-align:right;">
+8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cf31ffffffff
+</td>
+<td style="text-align:right;">
+8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd5dffffffff
+</td>
+<td style="text-align:right;">
+8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd69ffffffff
+</td>
+<td style="text-align:right;">
+8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844c895ffffffff
+</td>
+<td style="text-align:right;">
+7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844c883ffffffff
+</td>
+<td style="text-align:right;">
+7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd67ffffffff
+</td>
+<td style="text-align:right;">
+7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd41ffffffff
+</td>
+<td style="text-align:right;">
+7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd6bffffffff
+</td>
+<td style="text-align:right;">
+7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cf33ffffffff
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844c89bffffffff
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd63ffffffff
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd4bffffffff
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd09ffffffff
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd2dffffffff
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cc65ffffffff
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd65ffffffff
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cf25ffffffff
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cc6dffffffff
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+8467259ffffffff
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844c893ffffffff
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cc61ffffffff
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844c891ffffffff
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd25ffffffff
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd4dffffffff
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cf27ffffffff
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844c8bbffffffff
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844c89dffffffff
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cf23ffffffff
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd61ffffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844c897ffffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+</tbody>
+</table>
+
+``` r
+min_especies_por_hex <- 2
+# Explicación: "min_especies_por_hex <- Y", donde Y es el número mínimo (inclusive) de especies
+# que debe existir en cada hexágono. Por debajo de dicho valor, el hexágono es excluido.
+mi_fam <- mc_orig_seleccionadas[rowSums(mc_orig_seleccionadas)>=min_especies_por_hex, ]
+nrow(mi_fam)
+```
+
+    ## [1] 37
+
+``` r
+# mi_fam <- mc_orig_seleccionadas[!rowSums(mc_orig_seleccionadas)==0, ] #Elimina filas sin registros
 # rowSums(mi_fam) #Riqueza por hexágonos con especies seleccionadas. Comentado por extenso
 all(rowSums(mi_fam)>0) #Debe ser TRUE: todos los hexágonos tienen al menos 1 registro
 ```
@@ -835,7 +1186,7 @@ all(rowSums(mi_fam)>0) #Debe ser TRUE: todos los hexágonos tienen al menos 1 re
 ncol(mi_fam) #Riqueza de especies
 ```
 
-    ## [1] 11
+    ## [1] 44
 
 ``` r
 # Usar nombres cortos o abreviados para las especies
@@ -843,27 +1194,67 @@ nombres_largos <- colnames(mi_fam)
 (colnames(mi_fam) <- make.cepnames(word(colnames(mi_fam), 1, 2)))
 ```
 
-    ##  [1] "Coccuvif" "Antilept" "Coccpube" "Coccdive" "CoccBrow" "Perspunc"
-    ##  [7] "Cocccost" "Coccincr" "Coccwrig" "Coccleog" "Coccfuer"
+    ##  [1] "Coccuvif"   "Antilept"   "Coccdive"   "CoccBrow"   "Coccpube"  
+    ##  [6] "Coccjime"   "Perspunc"   "Coccflav"   "Leptdomi"   "Leptdomi.1"
+    ## [11] "Leptdomi.2" "Cocccost"   "Coccincr"   "Coccwrig"   "Coccpica"  
+    ## [16] "Rumeacet"   "Rumecris"   "Coccleon"   "Coccceib"   "Coccveno"  
+    ## [21] "Coccleog"   "Coccmicr"   "Cocckrug"   "Coccbuch"   "Coccfuer"  
+    ## [26] "Coccnodo"   "Coccpauc"   "PolyL"      "RumeL"      "Perspens"  
+    ## [31] "Pershydr"   "Coccsama"   "Persferr"   "Brunovat"   "RuprMey"   
+    ## [36] "Coccsubc"   "Polypunc"   "Perssege"   "Persacum"   "Coccswar"  
+    ## [41] "Perslapa"   "Persglab"   "Rumeobtu"   "Coccobtu"
 
 ``` r
 (df_equivalencias <- data.frame(
   nombre_original = nombres_largos,
-  colnames(mi_fam)))
+  abreviado = colnames(mi_fam)))
 ```
 
-    ##                        nombre_original colnames.mi_fam.
-    ## 1            Coccoloba uvifera (L.) L.         Coccuvif
-    ## 2      Antigonon leptopus Hook. & Arn.         Antilept
-    ## 3               Coccoloba pubescens L.         Coccpube
-    ## 4         Coccoloba diversifolia Jacq.         Coccdive
-    ## 5                   Coccoloba P.Browne         CoccBrow
-    ## 6  Persicaria punctata (Elliott) Small         Perspunc
-    ## 7             Coccoloba costata Wright         Cocccost
-    ## 8            Coccoloba incrassata Urb.         Coccincr
-    ## 9            Coccoloba wrightii Lindau         Coccwrig
-    ## 10         Coccoloba leoganensis Jacq.         Coccleog
-    ## 11            Coccoloba fuertesii Urb.         Coccfuer
+    ##                                       nombre_original  abreviado
+    ## 1                           Coccoloba uvifera (L.) L.   Coccuvif
+    ## 2                     Antigonon leptopus Hook. & Arn.   Antilept
+    ## 3                        Coccoloba diversifolia Jacq.   Coccdive
+    ## 4                                  Coccoloba P.Browne   CoccBrow
+    ## 5                              Coccoloba pubescens L.   Coccpube
+    ## 6                           Coccoloba jimenezii Alain   Coccjime
+    ## 7                 Persicaria punctata (Elliott) Small   Perspunc
+    ## 8                          Coccoloba flavescens Jacq.   Coccflav
+    ## 9  Leptogonum domingensis var. molle (Urb.) Brandbyge   Leptdomi
+    ## 10                       Leptogonum domingense Benth. Leptdomi.1
+    ## 11                      Leptogonum domingensis Benth. Leptdomi.2
+    ## 12                           Coccoloba costata Wright   Cocccost
+    ## 13                          Coccoloba incrassata Urb.   Coccincr
+    ## 14                          Coccoloba wrightii Lindau   Coccwrig
+    ## 15                            Coccoloba picardae Urb.   Coccpica
+    ## 16                                Rumex acetosella L.   Rumeacet
+    ## 17                                   Rumex crispus L.   Rumecris
+    ## 18                         Coccoloba leonardii Howard   Coccleon
+    ## 19                    Coccoloba ceibensis O.C.Schmidt   Coccceib
+    ## 20                                Coccoloba venosa L.   Coccveno
+    ## 21                        Coccoloba leoganensis Jacq.   Coccleog
+    ## 22                      Coccoloba microstachya Willd.   Coccmicr
+    ## 23                            Coccoloba krugii Lindau   Cocckrug
+    ## 24                         Coccoloba buchii O.Schmidt   Coccbuch
+    ## 25                           Coccoloba fuertesii Urb.   Coccfuer
+    ## 26                            Coccoloba nodosa Lindau   Coccnodo
+    ## 27                          Coccoloba pauciflora Urb.   Coccpauc
+    ## 28                                       Polygonum L.      PolyL
+    ## 29                                           Rumex L.      RumeL
+    ## 30               Persicaria pensylvanica (L.) M.Gómez   Perspens
+    ## 31          Persicaria hydropiperoides (Michx.) Small   Pershydr
+    ## 32                   Coccoloba samanensis O.C.Schmidt   Coccsama
+    ## 33                Persicaria ferruginea (Wedd.) Soják   Persferr
+    ## 34                 Brunnichia ovata (Walter) Shinners   Brunovat
+    ## 35                                Ruprechtia C.A.Mey.    RuprMey
+    ## 36                        Coccoloba subcordata Lindau   Coccsubc
+    ## 37                     Polygonum punctatum Kit., 1864   Polypunc
+    ## 38                   Persicaria segetum (Kunth) Small   Perssege
+    ## 39               Persicaria acuminata (Kunth) M.Gómez   Persacum
+    ## 40                          Coccoloba swartzii Meisn.   Coccswar
+    ## 41        Persicaria lapathifolia subsp. lapathifolia   Perslapa
+    ## 42                 Persicaria glabra (Willd.) M.Gómez   Persglab
+    ## 43                              Rumex obtusifolius L.   Rumeobtu
+    ## 44                        Coccoloba obtusifolia Jacq.   Coccobtu
 
 Transforma la matriz de comunidad. Este paso es importante, lo explico
 [aquí](https://www.youtube.com/watch?v=yQ10lp0-nHc&list=PLDcT2n8UzsCRDqjqSeqHI1wsiNOqpYmsJ&index=10)
@@ -890,18 +1281,17 @@ repo para poder citarlo apropiadamente.
 
 ``` r
 #Matriz ambiental
-res <- 5 #Resolución H3
 tmpfile <- tempfile()
 download.file(paste0(gh_zonal_stats, 'all_sources_all_variables_res_', res, '.gpkg'), tmpfile)
 za <- st_read(tmpfile, optional = T)
 ```
 
-    ## Reading layer `all_sources_all_variables_res_5' from data source 
-    ##   `/tmp/RtmpqTTkzf/file36657277bab532' using driver `GPKG'
-    ## Simple feature collection with 335 features and 142 fields
+    ## Reading layer `all_sources_all_variables_res_4' from data source 
+    ##   `/tmp/RtmpxezfiL/file3ce0353f249a54' using driver `GPKG'
+    ## Simple feature collection with 64 features and 142 fields
     ## Geometry type: POLYGON
     ## Dimension:     XY
-    ## Bounding box:  xmin: -72.13564 ymin: 17.40413 xmax: -68.20998 ymax: 20.04043
+    ## Bounding box:  xmin: -72.12371 ymin: 17.2322 xmax: -68.21971 ymax: 20.2506
     ## Geodetic CRS:  WGS 84
 
 ``` r
@@ -1013,15 +1403,17 @@ map_df(lista_cl, function(x) {
     ## # A tibble: 1 × 4
     ##   cl_single cl_complete cl_upgma cl_ward
     ##       <dbl>       <dbl>    <dbl>   <dbl>
-    ## 1     0.790       0.865    0.889   0.675
+    ## 1     0.463       0.546    0.622   0.508
 
 Ahora, calcularé las anchuras de silueta, una métrica que ayuda a
 determinar en cuántos grupos se organiza la comunidad. En el ejemplo,
 dado que muchas especies de Polygonaceae están ausentes en muchos
 hexágonos, es esperable que el procedimiento sugiera un número de grupos
 alto denominados (ver objeto impreso `n_grupos_optimos`). Considera la
-siguiente regla general: muchos grupos, y 6 o más se considera mucho, es
-un resultado poco útil; 1 grupo es un resultado sin sentido.
+siguiente regla general: muchos grupos: el número ideal es 3 grupos, de
+4 a 6 grupos es aceptable, 7 o más grupos se considera mucho y difícil
+de interpretar, es un resultado poco útil; 1 grupo es un resultado sin
+sentido.
 
 ``` r
 # UPGMA
@@ -1033,29 +1425,16 @@ anch_sil_upgma
 ```
 
     ## $anchuras_siluetas
-    ##   [1] 0.00000000 0.20548565 0.24186424 0.29826779 0.31244609 0.32393766
-    ##   [7] 0.32595780 0.34797419 0.34769118 0.33739209 0.33426175 0.33541292
-    ##  [13] 0.41004353 0.40456093 0.41044820 0.44670838 0.45893657 0.46873555
-    ##  [19] 0.48851601 0.49917502 0.51602018 0.52246575 0.52787291 0.57905459
-    ##  [25] 0.58068626 0.58165200 0.57905117 0.58391342 0.60644992 0.60755720
-    ##  [31] 0.61001916 0.63669012 0.64441008 0.65266796 0.65189314 0.65157312
-    ##  [37] 0.64993443 0.65840901 0.66758141 0.67849364 0.67766946 0.67499187
-    ##  [43] 0.69797585 0.69620915 0.70291704 0.69896360 0.69430638 0.69430638
-    ##  [49] 0.68994487 0.72384317 0.72033898 0.70338983 0.64406780 0.64406780
-    ##  [55] 0.64406780 0.64406780 0.64406780 0.64406780 0.61864407 0.61864407
-    ##  [61] 0.56779661 0.56779661 0.56779661 0.56779661 0.56779661 0.53389831
-    ##  [67] 0.53389831 0.53389831 0.51694915 0.50000000 0.48305085 0.41525424
-    ##  [73] 0.41525424 0.41525424 0.41525424 0.41525424 0.41525424 0.41525424
-    ##  [79] 0.38135593 0.38135593 0.38135593 0.36440678 0.34745763 0.33050847
-    ##  [85] 0.31355932 0.11864407 0.11864407 0.11864407 0.11864407 0.11864407
-    ##  [91] 0.11864407 0.11864407 0.11864407 0.11864407 0.11864407 0.11864407
-    ##  [97] 0.11864407 0.11864407 0.11864407 0.11864407 0.11864407 0.11864407
-    ## [103] 0.11864407 0.11864407 0.11864407 0.11864407 0.11864407 0.09322034
-    ## [109] 0.09322034 0.03389831 0.03389831 0.03389831 0.03389831 0.03389831
-    ## [115] 0.03389831 0.00000000 0.00000000 0.00000000
+    ##  [1] 0.000000000 0.074958547 0.075966342 0.082556084 0.056807619 0.042999536
+    ##  [7] 0.044854338 0.032559260 0.045140261 0.043900271 0.060227771 0.062214639
+    ## [13] 0.061646669 0.059373073 0.056467486 0.060045461 0.056464519 0.055083787
+    ## [19] 0.054298980 0.052364009 0.053493570 0.045274415 0.046959608 0.045526533
+    ## [25] 0.043581982 0.038911658 0.043649637 0.039862149 0.037029470 0.032909110
+    ## [31] 0.030730777 0.032244672 0.027950840 0.022850839 0.018742172 0.006973952
+    ## [37] 0.000000000
     ## 
     ## $n_grupos_optimo
-    ## [1] 50
+    ## [1] 4
 
 ``` r
 u_dend_reord <- reorder.hclust(lista_cl$cl_upgma, mi_fam_d)
@@ -1079,29 +1458,16 @@ anch_sil_ward
 ```
 
     ## $anchuras_siluetas
-    ##   [1] 0.00000000 0.22406550 0.24089982 0.28879860 0.31129975 0.32852845
-    ##   [7] 0.35361529 0.38178946 0.41238113 0.42917215 0.44794622 0.46466856
-    ##  [13] 0.47638292 0.49618873 0.52459001 0.53788426 0.54197043 0.54953045
-    ##  [19] 0.56673121 0.58159094 0.59047333 0.60344251 0.61758841 0.62541886
-    ##  [25] 0.64728956 0.65387202 0.67460832 0.68009130 0.68336552 0.68853514
-    ##  [31] 0.68990505 0.69837963 0.70368657 0.71025999 0.71873456 0.72492061
-    ##  [37] 0.73527315 0.73527315 0.73120461 0.73120461 0.73095915 0.72932046
-    ##  [43] 0.72849628 0.73520416 0.73422052 0.73245383 0.72850039 0.72384317
-    ##  [49] 0.72384317 0.72384317 0.72033898 0.70338983 0.64406780 0.64406780
-    ##  [55] 0.64406780 0.64406780 0.64406780 0.64406780 0.61864407 0.61864407
-    ##  [61] 0.56779661 0.56779661 0.56779661 0.56779661 0.56779661 0.53389831
-    ##  [67] 0.53389831 0.53389831 0.51694915 0.50000000 0.48305085 0.41525424
-    ##  [73] 0.41525424 0.41525424 0.41525424 0.41525424 0.41525424 0.41525424
-    ##  [79] 0.38135593 0.38135593 0.38135593 0.36440678 0.34745763 0.33050847
-    ##  [85] 0.31355932 0.11864407 0.11864407 0.11864407 0.11864407 0.11864407
-    ##  [91] 0.11864407 0.11864407 0.11864407 0.11864407 0.11864407 0.11864407
-    ##  [97] 0.11864407 0.11864407 0.11864407 0.11864407 0.11864407 0.11864407
-    ## [103] 0.11864407 0.11864407 0.11864407 0.11864407 0.11864407 0.09322034
-    ## [109] 0.09322034 0.03389831 0.03389831 0.03389831 0.03389831 0.03389831
-    ## [115] 0.03389831 0.00000000 0.00000000 0.00000000
+    ##  [1] 0.000000000 0.083701761 0.086495121 0.071976618 0.067441188 0.068984906
+    ##  [7] 0.063718075 0.063842442 0.067816476 0.070579387 0.068359937 0.067817357
+    ## [13] 0.069554991 0.067545242 0.067646465 0.065221082 0.066434142 0.067303850
+    ## [19] 0.064519013 0.063721555 0.061109286 0.061058618 0.055478695 0.054644157
+    ## [25] 0.051963937 0.048319961 0.043649637 0.039862149 0.037029470 0.032909110
+    ## [31] 0.030730777 0.032244672 0.027950840 0.022850839 0.018742172 0.006973952
+    ## [37] 0.000000000
     ## 
     ## $n_grupos_optimo
-    ## [1] 37
+    ## [1] 3
 
 ``` r
 w_dend_reord <- reorder.hclust(lista_cl$cl_ward, mi_fam_d)
@@ -1113,21 +1479,23 @@ rect.hclust(
 
 ![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
 
-Por los resultados obtenidos, tanto por el método UPGMA como por Ward,
-parecería interesante explorar dos estrategias adicionales: 1) Reducir
-el umbral de registros de presencia de especies raras; 2) Probar métodos
+Por los resultados obtenidos (muchos grupos sugeridos), tanto por el
+método UPGMA como por Ward, parecería interesante explorar dos
+estrategias adicionales: 1) Cambiar (preferiblemente, aumentar) el
+umbral de registros de presencia de especies raras; 2) Probar métodos
 “aproximadamente insesgados”, basados en remuestreos y permutaciones.
 
 Probaré lo segundo, pero te animo a que pruebes también la estrategia 1)
-en tu caso, para lo cual, debes elegir un umbral (ya sea un valor mínimo
-o un rango) diferente al que elegiste en primera instancia.
+(elegir un umbral diferente al que elegiste en primera instancia). Ten
+presente que todos los casos son diferentes. Al elegir un umbral (ya sea
+un valor mínimo o un rango)
 
 ``` r
 cl_pvclust_upgma <-
         pvclust(t(mi_fam_t),
                 method.hclust = "average",
                 method.dist = "euc",
-                iseed = 91, # Resultado reproducible
+                iseed = 999, # Resultado reproducible
                 parallel = TRUE)
 ```
 
@@ -1149,8 +1517,8 @@ Para UPGMA nos sugiere que hay más de 6 grupos, y esto se debe al gran
 número de hexágonos con pocos registros de presencia. No obstante,
 tratándose de muestras sesgadas, como es el caso de GBIF, es esperable
 obtener este tipo de resultados donde la comunidad luce muy atomizada.
-Veremos que aplicando el remuestreo multiescalar por bootstrap al árbol
-Ward, no mejora mucho el resultado, pero se sugieren menos grupos.
+Veremos que, aplicando el remuestreo multiescalar por bootstrap al árbol
+Ward, el resultado no mejora mucho, pero se sugieren menos grupos.
 
 ``` r
 # Ward
@@ -1158,7 +1526,7 @@ cl_pvclust_ward <-
         pvclust(t(mi_fam_t),
                 method.hclust = "ward.D2",
                 method.dist = "euc",
-                iseed = 191, # Resultado reproducible
+                iseed = 999, # Resultado reproducible
                 parallel = TRUE)
 ```
 
@@ -1178,66 +1546,69 @@ pvrect(cl_pvclust_ward, alpha = 0.91, border = 4)
 
 Generaré agrupamientos y los exportaré a archivos, para reutilizarlos
 más adelante. Elegir un número de grupos no es tarea sencilla, por el
-momento probaré con 6 (`k=6`).
+momento probaré con el número de grupos `k` del siguiente bloque de
+código, el cual me permitirá caracterízar los distintos hábitats más
+fácilmente en función de las variables ambientales.
 
 ``` r
+k <- 3
 # UPGMA
-grupos_upgma_k6 <- as.factor(cutree(lista_cl$cl_upgma, k = 6))
-set.seed(999);sample(grupos_upgma_k6, 10) #¿A qué grupo pertenecen 10 hexágonos seleccionados al azar?
+grupos_upgma <- as.factor(cutree(lista_cl$cl_upgma, k = k))
+set.seed(999);sample(grupos_upgma, 10) #¿A qué grupo pertenecen 10 hexágonos seleccionados al azar?
 ```
 
-    ## 854c8993fffffff 854cf233fffffff 854cd453fffffff 854cd407fffffff 854cc673fffffff 
-    ##               1               2               3               1               1 
-    ## 854cf20ffffffff 854c8927fffffff 854cf347fffffff 854cc60ffffffff 856725a7fffffff 
-    ##               1               3               2               1               2 
-    ## Levels: 1 2 3 4 5 6
+    ## 844c89dffffffff 844c895ffffffff 844cd59ffffffff 844cd5dffffffff 844cf25ffffffff 
+    ##               1               1               1               1               1 
+    ## 844cc65ffffffff 844c891ffffffff 844cf27ffffffff 844cf35ffffffff 844cd67ffffffff 
+    ##               1               1               1               2               2 
+    ## Levels: 1 2 3
 
 ``` r
-table(grupos_upgma_k6) #¿Cuántos hexágonos hay en cada grupo?
+table(grupos_upgma) #¿Cuántos hexágonos hay en cada grupo?
 ```
 
-    ## grupos_upgma_k6
-    ##  1  2  3  4  5  6 
-    ## 60 15 19 11  5  8
+    ## grupos_upgma
+    ##  1  2  3 
+    ## 19 16  2
 
 ``` r
 plot(u_dend_reord, hang = -1)
-rect.hclust(tree = u_dend_reord, k = 6)
+rect.hclust(tree = u_dend_reord, k = k)
 ```
 
 ![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
 
 ``` r
 # Ward
-grupos_ward_k6 <- as.factor(cutree(lista_cl$cl_ward, k = 6))
-set.seed(999);sample(grupos_ward_k6, 10) #¿A qué grupo pertenecen 10 hexágonos seleccionados al azar?
+grupos_ward <- as.factor(cutree(lista_cl$cl_ward, k = k))
+set.seed(999);sample(grupos_ward, 10) #¿A qué grupo pertenecen 10 hexágonos seleccionados al azar?
 ```
 
-    ## 854c8993fffffff 854cf233fffffff 854cd453fffffff 854cd407fffffff 854cc673fffffff 
-    ##               2               3               5               3               2 
-    ## 854cf20ffffffff 854c8927fffffff 854cf347fffffff 854cc60ffffffff 856725a7fffffff 
-    ##               1               4               3               2               3 
-    ## Levels: 1 2 3 4 5 6
+    ## 844c89dffffffff 844c895ffffffff 844cd59ffffffff 844cd5dffffffff 844cf25ffffffff 
+    ##               1               1               1               1               1 
+    ## 844cc65ffffffff 844c891ffffffff 844cf27ffffffff 844cf35ffffffff 844cd67ffffffff 
+    ##               1               1               1               2               2 
+    ## Levels: 1 2 3
 
 ``` r
-table(grupos_ward_k6) #¿Cuántos hexágonos hay en cada grupo?
+table(grupos_ward) #¿Cuántos hexágonos hay en cada grupo?
 ```
 
-    ## grupos_ward_k6
-    ##  1  2  3  4  5  6 
-    ## 29 27 33 14  8  7
+    ## grupos_ward
+    ##  1  2  3 
+    ## 20 11  6
 
 ``` r
 plot(w_dend_reord, hang = -1)
-rect.hclust(tree = w_dend_reord, k = 6)
+rect.hclust(tree = w_dend_reord, k = k)
 ```
 
 ![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-14-2.png)<!-- -->
 
 ``` r
 # Guardaré estos vectores en archivos para reutilizarlos en *scripts* posteriores: 
-saveRDS(grupos_upgma_k6, 'grupos_upgma_k6.RDS')
-saveRDS(grupos_ward_k6, 'grupos_ward_k6.RDS')
+saveRDS(grupos_upgma, 'grupos_upgma.RDS')
+saveRDS(grupos_ward, 'grupos_ward.RDS')
 ```
 
 ### Grupos (clústers), variables ambientales y mapas
@@ -1256,60 +1627,58 @@ significa que existe algún grado de asociación.
 Cargar paquetes necesarios para esta subsección.
 
 ``` r
-# library(mapview)
 library(RColorBrewer)
 library(leaflet)
 library(leaflet.extras)
-leaflet_map_view <- . %>% setView(lat = 18.7, lng = -70.3, zoom = 8)
 ```
 
 Agrupar los hexágonos de la matriz ambiental.
 
 ``` r
-(m_amb_upgma_k6 <- env %>%
+(m_amb_upgma <- env %>%
    rownames_to_column('hex_id') %>% 
-   mutate(grupos_upgma_k6) %>%
-   pivot_longer(-c(grupos_upgma_k6, hex_id), names_to = "variable", values_to = "valor") %>% 
+   mutate(grupos_upgma) %>%
+   pivot_longer(-c(grupos_upgma, hex_id), names_to = "variable", values_to = "valor") %>% 
    inner_join(za %>% select(hex_id)))
 ```
 
-    ## # A tibble: 16,048 × 5
-    ##    hex_id          grupos_upgma_k6 variable      valor                      geom
-    ##    <chr>           <fct>           <chr>         <dbl>             <POLYGON [°]>
-    ##  1 854cf243fffffff 1               ESA Trees   4.54e+1 ((-70.54282 19.83173, -7…
-    ##  2 854cf243fffffff 1               ESA Shrubl… 4.82e-2 ((-70.54282 19.83173, -7…
-    ##  3 854cf243fffffff 1               ESA Grassl… 8.38e+0 ((-70.54282 19.83173, -7…
-    ##  4 854cf243fffffff 1               ESA Cropla… 9.47e-3 ((-70.54282 19.83173, -7…
-    ##  5 854cf243fffffff 1               ESA Built-… 2.79e+0 ((-70.54282 19.83173, -7…
-    ##  6 854cf243fffffff 1               ESA Barren… 1.97e-1 ((-70.54282 19.83173, -7…
-    ##  7 854cf243fffffff 1               ESA Open w… 4.23e+1 ((-70.54282 19.83173, -7…
-    ##  8 854cf243fffffff 1               ESA Herbac… 8.15e-1 ((-70.54282 19.83173, -7…
-    ##  9 854cf243fffffff 1               ESA Mangro… 0       ((-70.54282 19.83173, -7…
-    ## 10 854cf243fffffff 1               CGL Closed… 0       ((-70.54282 19.83173, -7…
-    ## # … with 16,038 more rows
+    ## # A tibble: 5,032 × 5
+    ##    hex_id          grupos_upgma variable         valor                      geom
+    ##    <chr>           <fct>        <chr>            <dbl>             <POLYGON [°]>
+    ##  1 844cf25ffffffff 1            ESA Trees      31.9    ((-70.53184 19.95335, -7…
+    ##  2 844cf25ffffffff 1            ESA Shrubland   0.0191 ((-70.53184 19.95335, -7…
+    ##  3 844cf25ffffffff 1            ESA Grassland  12.1    ((-70.53184 19.95335, -7…
+    ##  4 844cf25ffffffff 1            ESA Cropland    0.0599 ((-70.53184 19.95335, -7…
+    ##  5 844cf25ffffffff 1            ESA Built-up    1.49   ((-70.53184 19.95335, -7…
+    ##  6 844cf25ffffffff 1            ESA Barren / …  0.109  ((-70.53184 19.95335, -7…
+    ##  7 844cf25ffffffff 1            ESA Open water 53.3    ((-70.53184 19.95335, -7…
+    ##  8 844cf25ffffffff 1            ESA Herbaceou…  0.666  ((-70.53184 19.95335, -7…
+    ##  9 844cf25ffffffff 1            ESA Mangroves   0.378  ((-70.53184 19.95335, -7…
+    ## 10 844cf25ffffffff 1            CGL Closed fo…  0      ((-70.53184 19.95335, -7…
+    ## # … with 5,022 more rows
 
 ``` r
-(m_amb_ward_k6 <- env %>%
+(m_amb_ward <- env %>%
     rownames_to_column('hex_id') %>% 
-    mutate(grupos_ward_k6) %>%
-    pivot_longer(-c(grupos_ward_k6, hex_id), names_to = "variable", values_to = "valor") %>% 
+    mutate(grupos_ward) %>%
+    pivot_longer(-c(grupos_ward, hex_id), names_to = "variable", values_to = "valor") %>% 
     inner_join(za %>% select(hex_id)))
 ```
 
-    ## # A tibble: 16,048 × 5
-    ##    hex_id          grupos_ward_k6 variable       valor                      geom
-    ##    <chr>           <fct>          <chr>          <dbl>             <POLYGON [°]>
-    ##  1 854cf243fffffff 1              ESA Trees    4.54e+1 ((-70.54282 19.83173, -7…
-    ##  2 854cf243fffffff 1              ESA Shrubla… 4.82e-2 ((-70.54282 19.83173, -7…
-    ##  3 854cf243fffffff 1              ESA Grassla… 8.38e+0 ((-70.54282 19.83173, -7…
-    ##  4 854cf243fffffff 1              ESA Cropland 9.47e-3 ((-70.54282 19.83173, -7…
-    ##  5 854cf243fffffff 1              ESA Built-up 2.79e+0 ((-70.54282 19.83173, -7…
-    ##  6 854cf243fffffff 1              ESA Barren … 1.97e-1 ((-70.54282 19.83173, -7…
-    ##  7 854cf243fffffff 1              ESA Open wa… 4.23e+1 ((-70.54282 19.83173, -7…
-    ##  8 854cf243fffffff 1              ESA Herbace… 8.15e-1 ((-70.54282 19.83173, -7…
-    ##  9 854cf243fffffff 1              ESA Mangrov… 0       ((-70.54282 19.83173, -7…
-    ## 10 854cf243fffffff 1              CGL Closed … 0       ((-70.54282 19.83173, -7…
-    ## # … with 16,038 more rows
+    ## # A tibble: 5,032 × 5
+    ##    hex_id          grupos_ward variable          valor                      geom
+    ##    <chr>           <fct>       <chr>             <dbl>             <POLYGON [°]>
+    ##  1 844cf25ffffffff 1           ESA Trees       31.9    ((-70.53184 19.95335, -7…
+    ##  2 844cf25ffffffff 1           ESA Shrubland    0.0191 ((-70.53184 19.95335, -7…
+    ##  3 844cf25ffffffff 1           ESA Grassland   12.1    ((-70.53184 19.95335, -7…
+    ##  4 844cf25ffffffff 1           ESA Cropland     0.0599 ((-70.53184 19.95335, -7…
+    ##  5 844cf25ffffffff 1           ESA Built-up     1.49   ((-70.53184 19.95335, -7…
+    ##  6 844cf25ffffffff 1           ESA Barren / s…  0.109  ((-70.53184 19.95335, -7…
+    ##  7 844cf25ffffffff 1           ESA Open water  53.3    ((-70.53184 19.95335, -7…
+    ##  8 844cf25ffffffff 1           ESA Herbaceous…  0.666  ((-70.53184 19.95335, -7…
+    ##  9 844cf25ffffffff 1           ESA Mangroves    0.378  ((-70.53184 19.95335, -7…
+    ## 10 844cf25ffffffff 1           CGL Closed for…  0      ((-70.53184 19.95335, -7…
+    ## # … with 5,022 more rows
 
 Evaluar efectos entre los grupos (“diferencias significativas”) de los
 agrupamientos UPGMA y Ward. Al tratarse de 6 grupos, se utilizan las
@@ -1320,14 +1689,14 @@ p-valores de la prueba ANOVA.
 
 ``` r
 # UPGMA
-m_amb_upgma_k6_ak <- m_amb_upgma_k6 %>%
+m_amb_upgma_ak <- m_amb_upgma %>%
   group_by(variable) %>%
   summarise(
-    p_valor_a = tryCatch(oneway.test(valor ~ grupos_upgma_k6)$p.value, error = function(e) NA),
-    p_valor_k = tryCatch(kruskal.test(valor ~ grupos_upgma_k6)$p.value, error = function(e) NA)
+    p_valor_a = tryCatch(oneway.test(valor ~ grupos_upgma)$p.value, error = function(e) NA),
+    p_valor_k = tryCatch(kruskal.test(valor ~ grupos_upgma)$p.value, error = function(e) NA)
     ) %>%
   arrange(p_valor_a)
-m_amb_upgma_k6_ak %>%
+m_amb_upgma_ak %>%
   kable(booktabs=T) %>%
   kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
   gsub(' NA ', '', .)
@@ -1350,959 +1719,13 @@ p_valor_k
 <tbody>
 <tr>
 <td style="text-align:left;">
-G90-GEOM flat
-</td>
-<td style="text-align:right;">
-0.0000095
-</td>
-<td style="text-align:right;">
-0.0000318
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-ESA Open water
-</td>
-<td style="text-align:right;">
-0.0000379
-</td>
-<td style="text-align:right;">
-0.0000002
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GSL Lower slope (flat)
-</td>
-<td style="text-align:right;">
-0.0000794
-</td>
-<td style="text-align:right;">
-0.0000386
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CGL Oceans, seas
-</td>
-<td style="text-align:right;">
-0.0000882
-</td>
-<td style="text-align:right;">
-0.0000010
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WCL bio02 Mean diurnal range mean of monthly max temp - min temp
-</td>
-<td style="text-align:right;">
-0.0000901
-</td>
-<td style="text-align:right;">
-0.0000009
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GFC-PTC YEAR 2000 mean
-</td>
-<td style="text-align:right;">
-0.0001016
-</td>
-<td style="text-align:right;">
-0.0000046
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CH-BIO bio06 mean daily minimum air temperature of the coldest month
-</td>
-<td style="text-align:right;">
-0.0001018
+WCL bio14 Precipitation of driest month
 </td>
 <td style="text-align:right;">
 0.0000000
 </td>
-</tr>
-<tr>
-<td style="text-align:left;">
-G90-GEOM shoulder
-</td>
 <td style="text-align:right;">
-0.0001042
-</td>
-<td style="text-align:right;">
-0.0000075
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CH-BIO bio03 isothermality
-</td>
-<td style="text-align:right;">
-0.0001108
-</td>
-<td style="text-align:right;">
-0.0000198
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WCL bio12 Annual precipitation
-</td>
-<td style="text-align:right;">
-0.0001516
-</td>
-<td style="text-align:right;">
-0.0010873
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-G90-GEOM footslope
-</td>
-<td style="text-align:right;">
-0.0001519
-</td>
-<td style="text-align:right;">
-0.0000014
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GSL Upper slope (warm)
-</td>
-<td style="text-align:right;">
-0.0001572
-</td>
-<td style="text-align:right;">
-0.0002105
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GSL Upper slope (flat)
-</td>
-<td style="text-align:right;">
-0.0001795
-</td>
-<td style="text-align:right;">
-0.0004960
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CH-BIO bio19 mean monthly precipitation amount of the coldest quarter
-</td>
-<td style="text-align:right;">
-0.0001936
-</td>
-<td style="text-align:right;">
-0.0307487
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CH-BIO bio11 mean daily mean air temperatures of the coldest quarter
-</td>
-<td style="text-align:right;">
-0.0002316
-</td>
-<td style="text-align:right;">
-0.0000003
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CGL Open forest, evergreen broad leaf
-</td>
-<td style="text-align:right;">
-0.0002511
-</td>
-<td style="text-align:right;">
-0.0000051
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WCL bio07 Temperature annual range bio05-bio06
-</td>
-<td style="text-align:right;">
-0.0002757
-</td>
-<td style="text-align:right;">
-0.0000071
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-ESA Trees
-</td>
-<td style="text-align:right;">
-0.0002881
-</td>
-<td style="text-align:right;">
-0.0000218
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WCL bio13 Precipitation of wettest month
-</td>
-<td style="text-align:right;">
-0.0002904
-</td>
-<td style="text-align:right;">
-0.0004049
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CH-BIO bio08 mean daily mean air temperatures of the wettest quarter
-</td>
-<td style="text-align:right;">
-0.0003002
-</td>
-<td style="text-align:right;">
-0.0000056
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CH-BIO bio02 mean diurnal air temperature range
-</td>
-<td style="text-align:right;">
-0.0003450
-</td>
-<td style="text-align:right;">
-0.0000337
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CH-BIO bio09 mean daily mean air temperatures of the driest quarter
-</td>
-<td style="text-align:right;">
-0.0003481
-</td>
-<td style="text-align:right;">
-0.0000001
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CH-BIO bio01 mean annual air temperature
-</td>
-<td style="text-align:right;">
-0.0003528
-</td>
-<td style="text-align:right;">
-0.0000002
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-G90-GEOM hollow
-</td>
-<td style="text-align:right;">
-0.0004124
-</td>
-<td style="text-align:right;">
-0.0000838
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GFC-LOSS year 2012
-</td>
-<td style="text-align:right;">
-0.0004904
-</td>
-<td style="text-align:right;">
-0.1393377
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GHH contrast_1km
-</td>
-<td style="text-align:right;">
-0.0005201
-</td>
-<td style="text-align:right;">
-0.0000264
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WCL bio08 Mean temperature of wettest quarter
-</td>
-<td style="text-align:right;">
-0.0005350
-</td>
-<td style="text-align:right;">
-0.0001184
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CH-BIO bio10 mean daily mean air temperatures of the warmest quarter
-</td>
-<td style="text-align:right;">
-0.0005795
-</td>
-<td style="text-align:right;">
-0.0000003
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WCL bio11 Mean temperature of coldest quarter
-</td>
-<td style="text-align:right;">
-0.0006272
-</td>
-<td style="text-align:right;">
-0.0000036
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CH-BIO bio14 precipitation amount of the driest month
-</td>
-<td style="text-align:right;">
-0.0007067
-</td>
-<td style="text-align:right;">
-0.0389600
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WCL bio19 Precipitation of coldest quarter
-</td>
-<td style="text-align:right;">
-0.0007285
-</td>
-<td style="text-align:right;">
-0.0256852
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WCL bio14 Precipitation of driest month
-</td>
-<td style="text-align:right;">
-0.0007350
-</td>
-<td style="text-align:right;">
-0.0322685
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CH-BIO bio07 annual range of air temperature
-</td>
-<td style="text-align:right;">
-0.0007479
-</td>
-<td style="text-align:right;">
-0.0000634
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WCL bio09 Mean temperature of driest quarter
-</td>
-<td style="text-align:right;">
-0.0008317
-</td>
-<td style="text-align:right;">
-0.0000003
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CH-BIO bio17 mean monthly precipitation amount of the driest quarter
-</td>
-<td style="text-align:right;">
-0.0008427
-</td>
-<td style="text-align:right;">
-0.0343759
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WCL bio01 Annual mean temperature
-</td>
-<td style="text-align:right;">
-0.0008450
-</td>
-<td style="text-align:right;">
-0.0000016
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CH-BIO bio12 annual precipitation amount
-</td>
-<td style="text-align:right;">
-0.0008531
-</td>
-<td style="text-align:right;">
-0.0078083
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GHH variance_1km
-</td>
-<td style="text-align:right;">
-0.0009578
-</td>
-<td style="text-align:right;">
-0.0001426
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CGL Closed forest, evergreen broad leaf
-</td>
-<td style="text-align:right;">
-0.0009774
-</td>
-<td style="text-align:right;">
-0.0000062
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WCL bio06 Min temperature of coldest month
-</td>
-<td style="text-align:right;">
-0.0009823
-</td>
-<td style="text-align:right;">
-0.0000013
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WCL bio10 Mean temperature of warmest quarter
-</td>
-<td style="text-align:right;">
-0.0009882
-</td>
-<td style="text-align:right;">
-0.0000004
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WCL bio17 Precipitation of driest quarter
-</td>
-<td style="text-align:right;">
-0.0009946
-</td>
-<td style="text-align:right;">
-0.0315620
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-G90-GEOM spur
-</td>
-<td style="text-align:right;">
-0.0010619
-</td>
-<td style="text-align:right;">
-0.0003300
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CGL Herbaceous wetland
-</td>
-<td style="text-align:right;">
-0.0010625
-</td>
-<td style="text-align:right;">
-0.0000502
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WCL bio16 Precipitation of wettest quarter
-</td>
-<td style="text-align:right;">
-0.0012437
-</td>
-<td style="text-align:right;">
-0.0013960
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WCL bio05 Max temperature of warmest month
-</td>
-<td style="text-align:right;">
-0.0014332
-</td>
-<td style="text-align:right;">
-0.0000068
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GSL Lower slope (warm)
-</td>
-<td style="text-align:right;">
-0.0015609
-</td>
-<td style="text-align:right;">
-0.0146956
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GHH dissimilarity_1km
-</td>
-<td style="text-align:right;">
-0.0016683
-</td>
-<td style="text-align:right;">
-0.0003042
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CGIAR-ELE mean
-</td>
-<td style="text-align:right;">
-0.0018348
-</td>
-<td style="text-align:right;">
-0.0000023
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GHH range_1km
-</td>
-<td style="text-align:right;">
-0.0025517
-</td>
-<td style="text-align:right;">
-0.0008836
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-G90 Terrain Ruggedness Index
-</td>
-<td style="text-align:right;">
-0.0027944
-</td>
-<td style="text-align:right;">
-0.0002635
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-G90 Slope
-</td>
-<td style="text-align:right;">
-0.0028600
-</td>
-<td style="text-align:right;">
-0.0003133
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-G90 Roughness
-</td>
-<td style="text-align:right;">
-0.0029360
-</td>
-<td style="text-align:right;">
-0.0002885
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GHH standard_deviation_1km
-</td>
-<td style="text-align:right;">
-0.0029933
-</td>
-<td style="text-align:right;">
-0.0008356
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-ESA Shrubland
-</td>
-<td style="text-align:right;">
-0.0030278
-</td>
-<td style="text-align:right;">
-0.0077612
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GHH coefficient_of_variation_1km
-</td>
-<td style="text-align:right;">
-0.0035539
-</td>
-<td style="text-align:right;">
-0.0122806
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WCL bio18 Precipitation of warmest quarter
-</td>
-<td style="text-align:right;">
-0.0040614
-</td>
-<td style="text-align:right;">
-0.0016710
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-G90 Compound Topographic Index
-</td>
-<td style="text-align:right;">
-0.0041490
-</td>
-<td style="text-align:right;">
-0.0005913
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CH-BIO bio16 mean monthly precipitation amount of the wettest quarter
-</td>
-<td style="text-align:right;">
-0.0052983
-</td>
-<td style="text-align:right;">
-0.0157159
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-G90 Vector Ruggedness Measure
-</td>
-<td style="text-align:right;">
-0.0061357
-</td>
-<td style="text-align:right;">
-0.0007103
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CH-BIO bio18 mean monthly precipitation amount of the warmest quarter
-</td>
-<td style="text-align:right;">
-0.0062867
-</td>
-<td style="text-align:right;">
-0.0095817
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CH-BIO bio13 precipitation amount of the wettest month
-</td>
-<td style="text-align:right;">
-0.0081172
-</td>
-<td style="text-align:right;">
-0.0086750
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WCL bio03 Isothermality bio02 div/bio07
-</td>
-<td style="text-align:right;">
-0.0085166
-</td>
-<td style="text-align:right;">
-0.0042410
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-G90-GEOM slope
-</td>
-<td style="text-align:right;">
-0.0138546
-</td>
-<td style="text-align:right;">
-0.0028560
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-G90-GEOM valley
-</td>
-<td style="text-align:right;">
-0.0165002
-</td>
-<td style="text-align:right;">
-0.0024408
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CH-BIO bio15 precipitation seasonality
-</td>
-<td style="text-align:right;">
-0.0172000
-</td>
-<td style="text-align:right;">
-0.0354157
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-ESA Herbaceous wetland
-</td>
-<td style="text-align:right;">
-0.0177109
-</td>
-<td style="text-align:right;">
-0.0008187
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-G90 Topographic Position Index
-</td>
-<td style="text-align:right;">
-0.0184985
-</td>
-<td style="text-align:right;">
-0.1084105
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CH-BIO bio05 mean daily maximum air temperature of the warmest month
-</td>
-<td style="text-align:right;">
-0.0238778
-</td>
-<td style="text-align:right;">
-0.0070673
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CGL Closed forest, mixed
-</td>
-<td style="text-align:right;">
-0.0328907
-</td>
-<td style="text-align:right;">
-0.0016017
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GFC-LOSS year 2017
-</td>
-<td style="text-align:right;">
-0.0330876
-</td>
-<td style="text-align:right;">
-0.3769078
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CGL Cultivated and managed vegetation / agriculture
-</td>
-<td style="text-align:right;">
-0.0361590
-</td>
-<td style="text-align:right;">
-0.0048182
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GHH homogeneity_1km
-</td>
-<td style="text-align:right;">
-0.0367150
-</td>
-<td style="text-align:right;">
-0.0180555
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CH-BIO bio04 temperature seasonality
-</td>
-<td style="text-align:right;">
-0.0400479
-</td>
-<td style="text-align:right;">
-0.0911143
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-ESA Mangroves
-</td>
-<td style="text-align:right;">
-0.0421931
-</td>
-<td style="text-align:right;">
-0.0056949
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CGL Herbaceous vegetation
-</td>
-<td style="text-align:right;">
-0.0466690
-</td>
-<td style="text-align:right;">
-0.2522948
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GSL Upper slope
-</td>
-<td style="text-align:right;">
-0.0466783
-</td>
-<td style="text-align:right;">
-0.0006552
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-ESA Barren / sparse vegetation
-</td>
-<td style="text-align:right;">
-0.0476369
-</td>
-<td style="text-align:right;">
-0.0017413
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CGL Permanent water bodies
-</td>
-<td style="text-align:right;">
-0.0496439
-</td>
-<td style="text-align:right;">
-0.0000103
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-G90-GEOM ridge
-</td>
-<td style="text-align:right;">
-0.0604275
-</td>
-<td style="text-align:right;">
-0.0238985
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-G90-GEOM pit
-</td>
-<td style="text-align:right;">
-0.0652414
-</td>
-<td style="text-align:right;">
-0.0354232
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GSL Peak/ridge
-</td>
-<td style="text-align:right;">
-0.0692977
-</td>
-<td style="text-align:right;">
-0.0274910
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GSL Lower slope
-</td>
-<td style="text-align:right;">
-0.0791661
-</td>
-<td style="text-align:right;">
-0.0009651
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-ESA Cropland
-</td>
-<td style="text-align:right;">
-0.1057609
-</td>
-<td style="text-align:right;">
-0.0102378
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GHH uniformity_1km
-</td>
-<td style="text-align:right;">
-0.1078891
-</td>
-<td style="text-align:right;">
-0.5669570
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GFC-LOSS year 2013
-</td>
-<td style="text-align:right;">
-0.1116295
-</td>
-<td style="text-align:right;">
-0.0858680
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-G90 Stream Power Index
-</td>
-<td style="text-align:right;">
-0.1275033
-</td>
-<td style="text-align:right;">
-0.0336791
+0.0093832
 </td>
 </tr>
 <tr>
@@ -2310,285 +1733,10 @@ G90 Stream Power Index
 GHH mean_1km
 </td>
 <td style="text-align:right;">
-0.1387883
+0.0000001
 </td>
 <td style="text-align:right;">
-0.0708636
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GHH maximum_1km
-</td>
-<td style="text-align:right;">
-0.1499738
-</td>
-<td style="text-align:right;">
-0.2205745
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GSL Peak/ridge (warm)
-</td>
-<td style="text-align:right;">
-0.1562898
-</td>
-<td style="text-align:right;">
-0.0819545
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-G90-GEOM peak
-</td>
-<td style="text-align:right;">
-0.1581233
-</td>
-<td style="text-align:right;">
-0.1952392
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GFC-LOSS year 2005
-</td>
-<td style="text-align:right;">
-0.1703232
-</td>
-<td style="text-align:right;">
-0.1019421
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CGL Shrubs
-</td>
-<td style="text-align:right;">
-0.1860588
-</td>
-<td style="text-align:right;">
-0.0015921
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GHH pielou_1km
-</td>
-<td style="text-align:right;">
-0.1868296
-</td>
-<td style="text-align:right;">
-0.1216415
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GHH entropy_1km
-</td>
-<td style="text-align:right;">
-0.1885791
-</td>
-<td style="text-align:right;">
-0.5818542
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GHH shannon_1km
-</td>
-<td style="text-align:right;">
-0.1906710
-</td>
-<td style="text-align:right;">
-0.0868520
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GFC-LOSS year 2020
-</td>
-<td style="text-align:right;">
-0.2536205
-</td>
-<td style="text-align:right;">
-0.3058444
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-ESA Built-up
-</td>
-<td style="text-align:right;">
-0.2649183
-</td>
-<td style="text-align:right;">
-0.0096752
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CGL Open forest, not matching any of the other definitions
-</td>
-<td style="text-align:right;">
-0.2702855
-</td>
-<td style="text-align:right;">
-0.1696096
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GHH simpson_1km
-</td>
-<td style="text-align:right;">
-0.2714408
-</td>
-<td style="text-align:right;">
-0.1439733
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-OSM-DIST mean
-</td>
-<td style="text-align:right;">
-0.2718621
-</td>
-<td style="text-align:right;">
-0.0010776
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GFC-LOSS year 2008
-</td>
-<td style="text-align:right;">
-0.2834678
-</td>
-<td style="text-align:right;">
-0.7125014
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CGL Closed forest, deciduous broad leaf
-</td>
-<td style="text-align:right;">
-0.2904761
-</td>
-<td style="text-align:right;">
-0.2078040
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GFC-LOSS year 2002
-</td>
-<td style="text-align:right;">
-0.2910488
-</td>
-<td style="text-align:right;">
-0.1396681
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WCL bio04 Temperature seasonality Standard deviation times 100
-</td>
-<td style="text-align:right;">
-0.3071294
-</td>
-<td style="text-align:right;">
-0.6295961
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CGL Urban / built up
-</td>
-<td style="text-align:right;">
-0.3137481
-</td>
-<td style="text-align:right;">
-0.0114119
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GSL Mountain/divide
-</td>
-<td style="text-align:right;">
-0.3193948
-</td>
-<td style="text-align:right;">
-0.0004758
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GFC-LOSS year 2006
-</td>
-<td style="text-align:right;">
-0.3380009
-</td>
-<td style="text-align:right;">
-0.8609193
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GHH correlation_1km
-</td>
-<td style="text-align:right;">
-0.3631014
-</td>
-<td style="text-align:right;">
-0.3548053
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GFC-LOSS year 2016
-</td>
-<td style="text-align:right;">
-0.3732874
-</td>
-<td style="text-align:right;">
-0.1681581
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GFC-LOSS year 2004
-</td>
-<td style="text-align:right;">
-0.3790540
-</td>
-<td style="text-align:right;">
-0.4491735
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GP-CONSUNadj YEAR 2020 sum
-</td>
-<td style="text-align:right;">
-0.3844657
-</td>
-<td style="text-align:right;">
-0.0714123
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GFC-LOSS year 2018
-</td>
-<td style="text-align:right;">
-0.3870642
-</td>
-<td style="text-align:right;">
-0.5653674
+0.0020373
 </td>
 </tr>
 <tr>
@@ -2596,87 +1744,32 @@ GFC-LOSS year 2018
 GFC-LOSS year 2003
 </td>
 <td style="text-align:right;">
-0.4001996
+0.0000411
 </td>
 <td style="text-align:right;">
-0.4819670
+0.0257689
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-GFC-LOSS year 2014
+CH-BIO bio12 annual precipitation amount
 </td>
 <td style="text-align:right;">
-0.4093290
+0.0000944
 </td>
 <td style="text-align:right;">
-0.1667971
+0.3468284
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-GFC-LOSS year 2009
+GFC-LOSS year 2002
 </td>
 <td style="text-align:right;">
-0.4102557
+0.0001831
 </td>
 <td style="text-align:right;">
-0.5641925
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CGL Open forest, deciduous broad leaf
-</td>
-<td style="text-align:right;">
-0.4329391
-</td>
-<td style="text-align:right;">
-0.0861070
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GSL Valley
-</td>
-<td style="text-align:right;">
-0.4342844
-</td>
-<td style="text-align:right;">
-0.5375177
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GFC-LOSS year 2011
-</td>
-<td style="text-align:right;">
-0.4462196
-</td>
-<td style="text-align:right;">
-0.8857747
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GFC-LOSS year 2019
-</td>
-<td style="text-align:right;">
-0.4503203
-</td>
-<td style="text-align:right;">
-0.3799300
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GFC-LOSS year 2010
-</td>
-<td style="text-align:right;">
-0.5031903
-</td>
-<td style="text-align:right;">
-0.2052970
+0.0366315
 </td>
 </tr>
 <tr>
@@ -2684,65 +1777,10 @@ GFC-LOSS year 2010
 WCL bio15 Precipitation seasonality
 </td>
 <td style="text-align:right;">
-0.5359544
+0.0005920
 </td>
 <td style="text-align:right;">
-0.5223846
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-ESA Grassland
-</td>
-<td style="text-align:right;">
-0.5462576
-</td>
-<td style="text-align:right;">
-0.3207627
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CGL Closed forest, not matching any of the other definitions
-</td>
-<td style="text-align:right;">
-0.5492138
-</td>
-<td style="text-align:right;">
-0.2692957
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GSL Valley (narrow)
-</td>
-<td style="text-align:right;">
-0.6755083
-</td>
-<td style="text-align:right;">
-0.3394405
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GFC-LOSS year 2021
-</td>
-<td style="text-align:right;">
-0.6955910
-</td>
-<td style="text-align:right;">
-0.8370568
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GSL Cliff
-</td>
-<td style="text-align:right;">
-0.7465045
-</td>
-<td style="text-align:right;">
-0.0131859
+0.0124903
 </td>
 </tr>
 <tr>
@@ -2750,32 +1788,725 @@ GSL Cliff
 GFC-LOSS year 2015
 </td>
 <td style="text-align:right;">
-0.7739963
+0.0010610
 </td>
 <td style="text-align:right;">
-0.7057696
+0.0603920
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-GFC-LOSS year 2007
+WCL bio17 Precipitation of driest quarter
 </td>
 <td style="text-align:right;">
-0.8044858
+0.0014866
 </td>
 <td style="text-align:right;">
-0.6168874
+0.0119645
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-GFC-LOSS year 2001
+ESA Shrubland
 </td>
 <td style="text-align:right;">
-0.9053759
+0.0019570
 </td>
 <td style="text-align:right;">
-0.8584550
+0.0383247
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2013
+</td>
+<td style="text-align:right;">
+0.0021208
+</td>
+<td style="text-align:right;">
+0.6499254
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CH-BIO bio08 mean daily mean air temperatures of the wettest quarter
+</td>
+<td style="text-align:right;">
+0.0035539
+</td>
+<td style="text-align:right;">
+0.0052884
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2009
+</td>
+<td style="text-align:right;">
+0.0037546
+</td>
+<td style="text-align:right;">
+0.2210973
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CGL Closed forest, deciduous broad leaf
+</td>
+<td style="text-align:right;">
+0.0057378
+</td>
+<td style="text-align:right;">
+0.0020769
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CH-BIO bio16 mean monthly precipitation amount of the wettest quarter
+</td>
+<td style="text-align:right;">
+0.0066566
+</td>
+<td style="text-align:right;">
+0.5993506
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WCL bio13 Precipitation of wettest month
+</td>
+<td style="text-align:right;">
+0.0127117
+</td>
+<td style="text-align:right;">
+0.1924671
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2019
+</td>
+<td style="text-align:right;">
+0.0136776
+</td>
+<td style="text-align:right;">
+0.1858612
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CGL Closed forest, mixed
+</td>
+<td style="text-align:right;">
+0.0150754
+</td>
+<td style="text-align:right;">
+0.0004476
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WCL bio12 Annual precipitation
+</td>
+<td style="text-align:right;">
+0.0168523
+</td>
+<td style="text-align:right;">
+0.0864384
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CH-BIO bio14 precipitation amount of the driest month
+</td>
+<td style="text-align:right;">
+0.0171498
+</td>
+<td style="text-align:right;">
+0.0536633
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+OSM-DIST mean
+</td>
+<td style="text-align:right;">
+0.0189205
+</td>
+<td style="text-align:right;">
+0.0027742
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CH-BIO bio19 mean monthly precipitation amount of the coldest quarter
+</td>
+<td style="text-align:right;">
+0.0231912
+</td>
+<td style="text-align:right;">
+0.0891595
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WCL bio09 Mean temperature of driest quarter
+</td>
+<td style="text-align:right;">
+0.0301545
+</td>
+<td style="text-align:right;">
+0.0003821
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WCL bio05 Max temperature of warmest month
+</td>
+<td style="text-align:right;">
+0.0319509
+</td>
+<td style="text-align:right;">
+0.0021501
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CGL Shrubs
+</td>
+<td style="text-align:right;">
+0.0367943
+</td>
+<td style="text-align:right;">
+0.1516233
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WCL bio10 Mean temperature of warmest quarter
+</td>
+<td style="text-align:right;">
+0.0379048
+</td>
+<td style="text-align:right;">
+0.0003127
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WCL bio08 Mean temperature of wettest quarter
+</td>
+<td style="text-align:right;">
+0.0385847
+</td>
+<td style="text-align:right;">
+0.0027707
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+G90-GEOM footslope
+</td>
+<td style="text-align:right;">
+0.0404666
+</td>
+<td style="text-align:right;">
+0.0001220
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WCL bio16 Precipitation of wettest quarter
+</td>
+<td style="text-align:right;">
+0.0454585
+</td>
+<td style="text-align:right;">
+0.1186098
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+G90 Stream Power Index
+</td>
+<td style="text-align:right;">
+0.0477200
+</td>
+<td style="text-align:right;">
+0.0628024
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CH-BIO bio17 mean monthly precipitation amount of the driest quarter
+</td>
+<td style="text-align:right;">
+0.0478013
+</td>
+<td style="text-align:right;">
+0.0823358
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GSL Lower slope
+</td>
+<td style="text-align:right;">
+0.0482160
+</td>
+<td style="text-align:right;">
+0.0000142
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CH-BIO bio05 mean daily maximum air temperature of the warmest month
+</td>
+<td style="text-align:right;">
+0.0508416
+</td>
+<td style="text-align:right;">
+0.1031220
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CGIAR-ELE mean
+</td>
+<td style="text-align:right;">
+0.0529140
+</td>
+<td style="text-align:right;">
+0.0001136
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WCL bio01 Annual mean temperature
+</td>
+<td style="text-align:right;">
+0.0547069
+</td>
+<td style="text-align:right;">
+0.0007349
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2006
+</td>
+<td style="text-align:right;">
+0.0583226
+</td>
+<td style="text-align:right;">
+0.1181794
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GSL Upper slope
+</td>
+<td style="text-align:right;">
+0.0588041
+</td>
+<td style="text-align:right;">
+0.0000668
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WCL bio06 Min temperature of coldest month
+</td>
+<td style="text-align:right;">
+0.0614242
+</td>
+<td style="text-align:right;">
+0.0005740
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+G90-GEOM shoulder
+</td>
+<td style="text-align:right;">
+0.0617641
+</td>
+<td style="text-align:right;">
+0.0004140
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+G90 Slope
+</td>
+<td style="text-align:right;">
+0.0628422
+</td>
+<td style="text-align:right;">
+0.0010443
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+G90 Roughness
+</td>
+<td style="text-align:right;">
+0.0643511
+</td>
+<td style="text-align:right;">
+0.0010443
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+G90 Terrain Ruggedness Index
+</td>
+<td style="text-align:right;">
+0.0644861
+</td>
+<td style="text-align:right;">
+0.0011718
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CH-BIO bio09 mean daily mean air temperatures of the driest quarter
+</td>
+<td style="text-align:right;">
+0.0651070
+</td>
+<td style="text-align:right;">
+0.0025561
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CH-BIO bio06 mean daily minimum air temperature of the coldest month
+</td>
+<td style="text-align:right;">
+0.0664850
+</td>
+<td style="text-align:right;">
+0.0008460
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WCL bio11 Mean temperature of coldest quarter
+</td>
+<td style="text-align:right;">
+0.0672564
+</td>
+<td style="text-align:right;">
+0.0014710
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CH-BIO bio10 mean daily mean air temperatures of the warmest quarter
+</td>
+<td style="text-align:right;">
+0.0685737
+</td>
+<td style="text-align:right;">
+0.0005168
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CGL Cultivated and managed vegetation / agriculture
+</td>
+<td style="text-align:right;">
+0.0713045
+</td>
+<td style="text-align:right;">
+0.8734344
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CH-BIO bio01 mean annual air temperature
+</td>
+<td style="text-align:right;">
+0.0743793
+</td>
+<td style="text-align:right;">
+0.0028654
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+G90 Vector Ruggedness Measure
+</td>
+<td style="text-align:right;">
+0.0774130
+</td>
+<td style="text-align:right;">
+0.0009298
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CGL Herbaceous vegetation
+</td>
+<td style="text-align:right;">
+0.0791858
+</td>
+<td style="text-align:right;">
+0.0075192
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CH-BIO bio11 mean daily mean air temperatures of the coldest quarter
+</td>
+<td style="text-align:right;">
+0.0808617
+</td>
+<td style="text-align:right;">
+0.0029752
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WCL bio19 Precipitation of coldest quarter
+</td>
+<td style="text-align:right;">
+0.0880363
+</td>
+<td style="text-align:right;">
+0.0107647
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CH-BIO bio15 precipitation seasonality
+</td>
+<td style="text-align:right;">
+0.0881680
+</td>
+<td style="text-align:right;">
+0.0596179
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WCL bio02 Mean diurnal range mean of monthly max temp - min temp
+</td>
+<td style="text-align:right;">
+0.0910766
+</td>
+<td style="text-align:right;">
+0.0027532
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CH-BIO bio03 isothermality
+</td>
+<td style="text-align:right;">
+0.1231189
+</td>
+<td style="text-align:right;">
+0.0062938
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WCL bio07 Temperature annual range bio05-bio06
+</td>
+<td style="text-align:right;">
+0.1285546
+</td>
+<td style="text-align:right;">
+0.0106216
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GSL Mountain/divide
+</td>
+<td style="text-align:right;">
+0.1305909
+</td>
+<td style="text-align:right;">
+0.0055717
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GSL Valley
+</td>
+<td style="text-align:right;">
+0.1333601
+</td>
+<td style="text-align:right;">
+0.0139903
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2018
+</td>
+<td style="text-align:right;">
+0.1523975
+</td>
+<td style="text-align:right;">
+0.0837533
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+G90-GEOM spur
+</td>
+<td style="text-align:right;">
+0.1630749
+</td>
+<td style="text-align:right;">
+0.0148468
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WCL bio03 Isothermality bio02 div/bio07
+</td>
+<td style="text-align:right;">
+0.1631541
+</td>
+<td style="text-align:right;">
+0.0331882
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2008
+</td>
+<td style="text-align:right;">
+0.1669956
+</td>
+<td style="text-align:right;">
+0.3298989
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+G90 Compound Topographic Index
+</td>
+<td style="text-align:right;">
+0.1675030
+</td>
+<td style="text-align:right;">
+0.0290395
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+G90-GEOM hollow
+</td>
+<td style="text-align:right;">
+0.1783105
+</td>
+<td style="text-align:right;">
+0.0323433
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2017
+</td>
+<td style="text-align:right;">
+0.2012877
+</td>
+<td style="text-align:right;">
+0.1494656
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CGL Closed forest, evergreen broad leaf
+</td>
+<td style="text-align:right;">
+0.2095372
+</td>
+<td style="text-align:right;">
+0.0177234
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GSL Upper slope (flat)
+</td>
+<td style="text-align:right;">
+0.2225277
+</td>
+<td style="text-align:right;">
+0.0541525
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CGL Open forest, evergreen broad leaf
+</td>
+<td style="text-align:right;">
+0.2231401
+</td>
+<td style="text-align:right;">
+0.0430708
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CH-BIO bio02 mean diurnal air temperature range
+</td>
+<td style="text-align:right;">
+0.2344500
+</td>
+<td style="text-align:right;">
+0.0557574
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+G90-GEOM slope
+</td>
+<td style="text-align:right;">
+0.2377763
+</td>
+<td style="text-align:right;">
+0.0241660
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GHH coefficient_of_variation_1km
+</td>
+<td style="text-align:right;">
+0.2514440
+</td>
+<td style="text-align:right;">
+0.1698723
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2010
+</td>
+<td style="text-align:right;">
+0.2608078
+</td>
+<td style="text-align:right;">
+0.1016118
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GHH correlation_1km
+</td>
+<td style="text-align:right;">
+0.2666053
+</td>
+<td style="text-align:right;">
+0.1772262
 </td>
 </tr>
 <tr>
@@ -2783,10 +2514,626 @@ GFC-LOSS year 2001
 CGL Bare / sparse vegetation
 </td>
 <td style="text-align:right;">
-NaN
+0.2772314
 </td>
 <td style="text-align:right;">
-0.0910126
+0.3171192
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CH-BIO bio13 precipitation amount of the wettest month
+</td>
+<td style="text-align:right;">
+0.2808475
+</td>
+<td style="text-align:right;">
+0.5040165
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ESA Grassland
+</td>
+<td style="text-align:right;">
+0.3011294
+</td>
+<td style="text-align:right;">
+0.6379576
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ESA Trees
+</td>
+<td style="text-align:right;">
+0.3097435
+</td>
+<td style="text-align:right;">
+0.1053637
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ESA Built-up
+</td>
+<td style="text-align:right;">
+0.3182437
+</td>
+<td style="text-align:right;">
+0.6757993
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CH-BIO bio07 annual range of air temperature
+</td>
+<td style="text-align:right;">
+0.3368721
+</td>
+<td style="text-align:right;">
+0.1050934
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2011
+</td>
+<td style="text-align:right;">
+0.3379961
+</td>
+<td style="text-align:right;">
+0.2474336
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CGL Oceans, seas
+</td>
+<td style="text-align:right;">
+0.3452604
+</td>
+<td style="text-align:right;">
+0.0192970
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CH-BIO bio18 mean monthly precipitation amount of the warmest quarter
+</td>
+<td style="text-align:right;">
+0.3573690
+</td>
+<td style="text-align:right;">
+0.6328557
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GSL Upper slope (warm)
+</td>
+<td style="text-align:right;">
+0.3604284
+</td>
+<td style="text-align:right;">
+0.5228471
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CGL Permanent water bodies
+</td>
+<td style="text-align:right;">
+0.3641469
+</td>
+<td style="text-align:right;">
+0.7726897
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2004
+</td>
+<td style="text-align:right;">
+0.3714100
+</td>
+<td style="text-align:right;">
+0.3066240
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GSL Lower slope (warm)
+</td>
+<td style="text-align:right;">
+0.3848969
+</td>
+<td style="text-align:right;">
+0.2160442
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ESA Mangroves
+</td>
+<td style="text-align:right;">
+0.3852120
+</td>
+<td style="text-align:right;">
+0.1160103
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GHH homogeneity_1km
+</td>
+<td style="text-align:right;">
+0.3925181
+</td>
+<td style="text-align:right;">
+0.6726193
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WCL bio04 Temperature seasonality Standard deviation times 100
+</td>
+<td style="text-align:right;">
+0.4022534
+</td>
+<td style="text-align:right;">
+0.1839792
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2001
+</td>
+<td style="text-align:right;">
+0.4122135
+</td>
+<td style="text-align:right;">
+0.4627840
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-PTC YEAR 2000 mean
+</td>
+<td style="text-align:right;">
+0.4161512
+</td>
+<td style="text-align:right;">
+0.3134831
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GHH uniformity_1km
+</td>
+<td style="text-align:right;">
+0.4188737
+</td>
+<td style="text-align:right;">
+0.6711103
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ESA Open water
+</td>
+<td style="text-align:right;">
+0.4201508
+</td>
+<td style="text-align:right;">
+0.1544915
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CGL Urban / built up
+</td>
+<td style="text-align:right;">
+0.4269281
+</td>
+<td style="text-align:right;">
+0.6498160
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2020
+</td>
+<td style="text-align:right;">
+0.4446605
+</td>
+<td style="text-align:right;">
+0.4890527
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GHH dissimilarity_1km
+</td>
+<td style="text-align:right;">
+0.4478995
+</td>
+<td style="text-align:right;">
+0.5217327
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GHH simpson_1km
+</td>
+<td style="text-align:right;">
+0.4517271
+</td>
+<td style="text-align:right;">
+0.7772972
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GHH standard_deviation_1km
+</td>
+<td style="text-align:right;">
+0.4520286
+</td>
+<td style="text-align:right;">
+0.5028010
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GHH maximum_1km
+</td>
+<td style="text-align:right;">
+0.4683755
+</td>
+<td style="text-align:right;">
+0.7598949
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GSL Valley (narrow)
+</td>
+<td style="text-align:right;">
+0.4743315
+</td>
+<td style="text-align:right;">
+0.4362696
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+G90-GEOM flat
+</td>
+<td style="text-align:right;">
+0.4896346
+</td>
+<td style="text-align:right;">
+0.2570061
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GHH range_1km
+</td>
+<td style="text-align:right;">
+0.4940378
+</td>
+<td style="text-align:right;">
+0.5605405
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GHH pielou_1km
+</td>
+<td style="text-align:right;">
+0.5014666
+</td>
+<td style="text-align:right;">
+0.9269989
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GHH variance_1km
+</td>
+<td style="text-align:right;">
+0.5036342
+</td>
+<td style="text-align:right;">
+0.4175746
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GSL Peak/ridge
+</td>
+<td style="text-align:right;">
+0.5097334
+</td>
+<td style="text-align:right;">
+0.4264875
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CH-BIO bio04 temperature seasonality
+</td>
+<td style="text-align:right;">
+0.5368985
+</td>
+<td style="text-align:right;">
+0.5039316
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GSL Lower slope (flat)
+</td>
+<td style="text-align:right;">
+0.5605818
+</td>
+<td style="text-align:right;">
+0.3360876
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GHH entropy_1km
+</td>
+<td style="text-align:right;">
+0.5608338
+</td>
+<td style="text-align:right;">
+0.7274544
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GHH shannon_1km
+</td>
+<td style="text-align:right;">
+0.5677405
+</td>
+<td style="text-align:right;">
+0.7943171
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GHH contrast_1km
+</td>
+<td style="text-align:right;">
+0.5874150
+</td>
+<td style="text-align:right;">
+0.4832859
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2016
+</td>
+<td style="text-align:right;">
+0.6133434
+</td>
+<td style="text-align:right;">
+0.8577361
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2005
+</td>
+<td style="text-align:right;">
+0.6270369
+</td>
+<td style="text-align:right;">
+0.0398230
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WCL bio18 Precipitation of warmest quarter
+</td>
+<td style="text-align:right;">
+0.6303534
+</td>
+<td style="text-align:right;">
+0.4055072
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GP-CONSUNadj YEAR 2020 sum
+</td>
+<td style="text-align:right;">
+0.6444177
+</td>
+<td style="text-align:right;">
+0.4307381
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2007
+</td>
+<td style="text-align:right;">
+0.6867999
+</td>
+<td style="text-align:right;">
+0.5075736
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CGL Closed forest, not matching any of the other definitions
+</td>
+<td style="text-align:right;">
+0.7094468
+</td>
+<td style="text-align:right;">
+0.9731482
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ESA Barren / sparse vegetation
+</td>
+<td style="text-align:right;">
+0.7097479
+</td>
+<td style="text-align:right;">
+0.6571915
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CGL Herbaceous wetland
+</td>
+<td style="text-align:right;">
+0.8120115
+</td>
+<td style="text-align:right;">
+0.4314643
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+G90-GEOM valley
+</td>
+<td style="text-align:right;">
+0.8127601
+</td>
+<td style="text-align:right;">
+0.9010948
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+G90 Topographic Position Index
+</td>
+<td style="text-align:right;">
+0.8521739
+</td>
+<td style="text-align:right;">
+0.9385212
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GSL Peak/ridge (warm)
+</td>
+<td style="text-align:right;">
+0.8566274
+</td>
+<td style="text-align:right;">
+0.9138203
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+G90-GEOM ridge
+</td>
+<td style="text-align:right;">
+0.8684893
+</td>
+<td style="text-align:right;">
+0.9832546
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2012
+</td>
+<td style="text-align:right;">
+0.8761916
+</td>
+<td style="text-align:right;">
+0.9438058
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2014
+</td>
+<td style="text-align:right;">
+0.8863523
+</td>
+<td style="text-align:right;">
+0.9438058
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ESA Cropland
+</td>
+<td style="text-align:right;">
+0.8957637
+</td>
+<td style="text-align:right;">
+0.6316930
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2021
+</td>
+<td style="text-align:right;">
+0.8978834
+</td>
+<td style="text-align:right;">
+0.6726193
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ESA Herbaceous wetland
+</td>
+<td style="text-align:right;">
+0.8984743
+</td>
+<td style="text-align:right;">
+0.2729360
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+G90-GEOM pit
+</td>
+<td style="text-align:right;">
+0.9410879
+</td>
+<td style="text-align:right;">
+0.7921791
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+G90-GEOM peak
+</td>
+<td style="text-align:right;">
+0.9602185
+</td>
+<td style="text-align:right;">
+0.8125533
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CGL Open forest, not matching any of the other definitions
+</td>
+<td style="text-align:right;">
+0.9943909
+</td>
+<td style="text-align:right;">
+0.9645393
 </td>
 </tr>
 <tr>
@@ -2797,7 +3144,18 @@ CGL Closed forest, evergreen needle leaf
 NaN
 </td>
 <td style="text-align:right;">
-0.0144004
+0.0255624
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CGL Open forest, deciduous broad leaf
+</td>
+<td style="text-align:right;">
+NaN
+</td>
+<td style="text-align:right;">
+0.0000411
 </td>
 </tr>
 <tr>
@@ -2808,7 +3166,7 @@ CGL Open forest, evergreen needle leaf
 NaN
 </td>
 <td style="text-align:right;">
-NaN
+0.5187932
 </td>
 </tr>
 <tr>
@@ -2819,7 +3177,18 @@ CGL Open forest, mixed
 NaN
 </td>
 <td style="text-align:right;">
-0.0110613
+0.0005587
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GSL Cliff
+</td>
+<td style="text-align:right;">
+NaN
+</td>
+<td style="text-align:right;">
+0.0004644
 </td>
 </tr>
 <tr>
@@ -2830,7 +3199,7 @@ GSL Lower slope (cool)
 NaN
 </td>
 <td style="text-align:right;">
-0.2307468
+0.0255624
 </td>
 </tr>
 <tr>
@@ -2841,7 +3210,7 @@ GSL Upper slope (cool)
 NaN
 </td>
 <td style="text-align:right;">
-0.4042380
+0.0043649
 </td>
 </tr>
 </tbody>
@@ -2849,14 +3218,14 @@ NaN
 
 ``` r
 # Ward
-m_amb_ward_k6_ak <- m_amb_ward_k6 %>%
+m_amb_ward_ak <- m_amb_ward %>%
   group_by(variable) %>%
   summarise(
-    p_valor_a = tryCatch(oneway.test(valor ~ grupos_upgma_k6)$p.value, error = function(e) NA),
-    p_valor_k = tryCatch(kruskal.test(valor ~ grupos_upgma_k6)$p.value, error = function(e) NA)
+    p_valor_a = tryCatch(oneway.test(valor ~ grupos_upgma)$p.value, error = function(e) NA),
+    p_valor_k = tryCatch(kruskal.test(valor ~ grupos_upgma)$p.value, error = function(e) NA)
     ) %>%
   arrange(p_valor_a)
-m_amb_ward_k6_ak %>%
+m_amb_ward_ak %>%
   kable(booktabs=T) %>%
   kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
   gsub(' NA ', '', .)
@@ -2879,959 +3248,13 @@ p_valor_k
 <tbody>
 <tr>
 <td style="text-align:left;">
-G90-GEOM flat
-</td>
-<td style="text-align:right;">
-0.0000095
-</td>
-<td style="text-align:right;">
-0.0000318
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-ESA Open water
-</td>
-<td style="text-align:right;">
-0.0000379
-</td>
-<td style="text-align:right;">
-0.0000002
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GSL Lower slope (flat)
-</td>
-<td style="text-align:right;">
-0.0000794
-</td>
-<td style="text-align:right;">
-0.0000386
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CGL Oceans, seas
-</td>
-<td style="text-align:right;">
-0.0000882
-</td>
-<td style="text-align:right;">
-0.0000010
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WCL bio02 Mean diurnal range mean of monthly max temp - min temp
-</td>
-<td style="text-align:right;">
-0.0000901
-</td>
-<td style="text-align:right;">
-0.0000009
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GFC-PTC YEAR 2000 mean
-</td>
-<td style="text-align:right;">
-0.0001016
-</td>
-<td style="text-align:right;">
-0.0000046
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CH-BIO bio06 mean daily minimum air temperature of the coldest month
-</td>
-<td style="text-align:right;">
-0.0001018
+WCL bio14 Precipitation of driest month
 </td>
 <td style="text-align:right;">
 0.0000000
 </td>
-</tr>
-<tr>
-<td style="text-align:left;">
-G90-GEOM shoulder
-</td>
 <td style="text-align:right;">
-0.0001042
-</td>
-<td style="text-align:right;">
-0.0000075
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CH-BIO bio03 isothermality
-</td>
-<td style="text-align:right;">
-0.0001108
-</td>
-<td style="text-align:right;">
-0.0000198
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WCL bio12 Annual precipitation
-</td>
-<td style="text-align:right;">
-0.0001516
-</td>
-<td style="text-align:right;">
-0.0010873
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-G90-GEOM footslope
-</td>
-<td style="text-align:right;">
-0.0001519
-</td>
-<td style="text-align:right;">
-0.0000014
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GSL Upper slope (warm)
-</td>
-<td style="text-align:right;">
-0.0001572
-</td>
-<td style="text-align:right;">
-0.0002105
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GSL Upper slope (flat)
-</td>
-<td style="text-align:right;">
-0.0001795
-</td>
-<td style="text-align:right;">
-0.0004960
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CH-BIO bio19 mean monthly precipitation amount of the coldest quarter
-</td>
-<td style="text-align:right;">
-0.0001936
-</td>
-<td style="text-align:right;">
-0.0307487
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CH-BIO bio11 mean daily mean air temperatures of the coldest quarter
-</td>
-<td style="text-align:right;">
-0.0002316
-</td>
-<td style="text-align:right;">
-0.0000003
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CGL Open forest, evergreen broad leaf
-</td>
-<td style="text-align:right;">
-0.0002511
-</td>
-<td style="text-align:right;">
-0.0000051
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WCL bio07 Temperature annual range bio05-bio06
-</td>
-<td style="text-align:right;">
-0.0002757
-</td>
-<td style="text-align:right;">
-0.0000071
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-ESA Trees
-</td>
-<td style="text-align:right;">
-0.0002881
-</td>
-<td style="text-align:right;">
-0.0000218
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WCL bio13 Precipitation of wettest month
-</td>
-<td style="text-align:right;">
-0.0002904
-</td>
-<td style="text-align:right;">
-0.0004049
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CH-BIO bio08 mean daily mean air temperatures of the wettest quarter
-</td>
-<td style="text-align:right;">
-0.0003002
-</td>
-<td style="text-align:right;">
-0.0000056
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CH-BIO bio02 mean diurnal air temperature range
-</td>
-<td style="text-align:right;">
-0.0003450
-</td>
-<td style="text-align:right;">
-0.0000337
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CH-BIO bio09 mean daily mean air temperatures of the driest quarter
-</td>
-<td style="text-align:right;">
-0.0003481
-</td>
-<td style="text-align:right;">
-0.0000001
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CH-BIO bio01 mean annual air temperature
-</td>
-<td style="text-align:right;">
-0.0003528
-</td>
-<td style="text-align:right;">
-0.0000002
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-G90-GEOM hollow
-</td>
-<td style="text-align:right;">
-0.0004124
-</td>
-<td style="text-align:right;">
-0.0000838
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GFC-LOSS year 2012
-</td>
-<td style="text-align:right;">
-0.0004904
-</td>
-<td style="text-align:right;">
-0.1393377
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GHH contrast_1km
-</td>
-<td style="text-align:right;">
-0.0005201
-</td>
-<td style="text-align:right;">
-0.0000264
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WCL bio08 Mean temperature of wettest quarter
-</td>
-<td style="text-align:right;">
-0.0005350
-</td>
-<td style="text-align:right;">
-0.0001184
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CH-BIO bio10 mean daily mean air temperatures of the warmest quarter
-</td>
-<td style="text-align:right;">
-0.0005795
-</td>
-<td style="text-align:right;">
-0.0000003
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WCL bio11 Mean temperature of coldest quarter
-</td>
-<td style="text-align:right;">
-0.0006272
-</td>
-<td style="text-align:right;">
-0.0000036
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CH-BIO bio14 precipitation amount of the driest month
-</td>
-<td style="text-align:right;">
-0.0007067
-</td>
-<td style="text-align:right;">
-0.0389600
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WCL bio19 Precipitation of coldest quarter
-</td>
-<td style="text-align:right;">
-0.0007285
-</td>
-<td style="text-align:right;">
-0.0256852
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WCL bio14 Precipitation of driest month
-</td>
-<td style="text-align:right;">
-0.0007350
-</td>
-<td style="text-align:right;">
-0.0322685
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CH-BIO bio07 annual range of air temperature
-</td>
-<td style="text-align:right;">
-0.0007479
-</td>
-<td style="text-align:right;">
-0.0000634
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WCL bio09 Mean temperature of driest quarter
-</td>
-<td style="text-align:right;">
-0.0008317
-</td>
-<td style="text-align:right;">
-0.0000003
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CH-BIO bio17 mean monthly precipitation amount of the driest quarter
-</td>
-<td style="text-align:right;">
-0.0008427
-</td>
-<td style="text-align:right;">
-0.0343759
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WCL bio01 Annual mean temperature
-</td>
-<td style="text-align:right;">
-0.0008450
-</td>
-<td style="text-align:right;">
-0.0000016
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CH-BIO bio12 annual precipitation amount
-</td>
-<td style="text-align:right;">
-0.0008531
-</td>
-<td style="text-align:right;">
-0.0078083
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GHH variance_1km
-</td>
-<td style="text-align:right;">
-0.0009578
-</td>
-<td style="text-align:right;">
-0.0001426
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CGL Closed forest, evergreen broad leaf
-</td>
-<td style="text-align:right;">
-0.0009774
-</td>
-<td style="text-align:right;">
-0.0000062
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WCL bio06 Min temperature of coldest month
-</td>
-<td style="text-align:right;">
-0.0009823
-</td>
-<td style="text-align:right;">
-0.0000013
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WCL bio10 Mean temperature of warmest quarter
-</td>
-<td style="text-align:right;">
-0.0009882
-</td>
-<td style="text-align:right;">
-0.0000004
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WCL bio17 Precipitation of driest quarter
-</td>
-<td style="text-align:right;">
-0.0009946
-</td>
-<td style="text-align:right;">
-0.0315620
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-G90-GEOM spur
-</td>
-<td style="text-align:right;">
-0.0010619
-</td>
-<td style="text-align:right;">
-0.0003300
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CGL Herbaceous wetland
-</td>
-<td style="text-align:right;">
-0.0010625
-</td>
-<td style="text-align:right;">
-0.0000502
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WCL bio16 Precipitation of wettest quarter
-</td>
-<td style="text-align:right;">
-0.0012437
-</td>
-<td style="text-align:right;">
-0.0013960
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WCL bio05 Max temperature of warmest month
-</td>
-<td style="text-align:right;">
-0.0014332
-</td>
-<td style="text-align:right;">
-0.0000068
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GSL Lower slope (warm)
-</td>
-<td style="text-align:right;">
-0.0015609
-</td>
-<td style="text-align:right;">
-0.0146956
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GHH dissimilarity_1km
-</td>
-<td style="text-align:right;">
-0.0016683
-</td>
-<td style="text-align:right;">
-0.0003042
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CGIAR-ELE mean
-</td>
-<td style="text-align:right;">
-0.0018348
-</td>
-<td style="text-align:right;">
-0.0000023
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GHH range_1km
-</td>
-<td style="text-align:right;">
-0.0025517
-</td>
-<td style="text-align:right;">
-0.0008836
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-G90 Terrain Ruggedness Index
-</td>
-<td style="text-align:right;">
-0.0027944
-</td>
-<td style="text-align:right;">
-0.0002635
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-G90 Slope
-</td>
-<td style="text-align:right;">
-0.0028600
-</td>
-<td style="text-align:right;">
-0.0003133
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-G90 Roughness
-</td>
-<td style="text-align:right;">
-0.0029360
-</td>
-<td style="text-align:right;">
-0.0002885
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GHH standard_deviation_1km
-</td>
-<td style="text-align:right;">
-0.0029933
-</td>
-<td style="text-align:right;">
-0.0008356
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-ESA Shrubland
-</td>
-<td style="text-align:right;">
-0.0030278
-</td>
-<td style="text-align:right;">
-0.0077612
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GHH coefficient_of_variation_1km
-</td>
-<td style="text-align:right;">
-0.0035539
-</td>
-<td style="text-align:right;">
-0.0122806
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WCL bio18 Precipitation of warmest quarter
-</td>
-<td style="text-align:right;">
-0.0040614
-</td>
-<td style="text-align:right;">
-0.0016710
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-G90 Compound Topographic Index
-</td>
-<td style="text-align:right;">
-0.0041490
-</td>
-<td style="text-align:right;">
-0.0005913
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CH-BIO bio16 mean monthly precipitation amount of the wettest quarter
-</td>
-<td style="text-align:right;">
-0.0052983
-</td>
-<td style="text-align:right;">
-0.0157159
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-G90 Vector Ruggedness Measure
-</td>
-<td style="text-align:right;">
-0.0061357
-</td>
-<td style="text-align:right;">
-0.0007103
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CH-BIO bio18 mean monthly precipitation amount of the warmest quarter
-</td>
-<td style="text-align:right;">
-0.0062867
-</td>
-<td style="text-align:right;">
-0.0095817
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CH-BIO bio13 precipitation amount of the wettest month
-</td>
-<td style="text-align:right;">
-0.0081172
-</td>
-<td style="text-align:right;">
-0.0086750
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WCL bio03 Isothermality bio02 div/bio07
-</td>
-<td style="text-align:right;">
-0.0085166
-</td>
-<td style="text-align:right;">
-0.0042410
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-G90-GEOM slope
-</td>
-<td style="text-align:right;">
-0.0138546
-</td>
-<td style="text-align:right;">
-0.0028560
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-G90-GEOM valley
-</td>
-<td style="text-align:right;">
-0.0165002
-</td>
-<td style="text-align:right;">
-0.0024408
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CH-BIO bio15 precipitation seasonality
-</td>
-<td style="text-align:right;">
-0.0172000
-</td>
-<td style="text-align:right;">
-0.0354157
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-ESA Herbaceous wetland
-</td>
-<td style="text-align:right;">
-0.0177109
-</td>
-<td style="text-align:right;">
-0.0008187
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-G90 Topographic Position Index
-</td>
-<td style="text-align:right;">
-0.0184985
-</td>
-<td style="text-align:right;">
-0.1084105
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CH-BIO bio05 mean daily maximum air temperature of the warmest month
-</td>
-<td style="text-align:right;">
-0.0238778
-</td>
-<td style="text-align:right;">
-0.0070673
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CGL Closed forest, mixed
-</td>
-<td style="text-align:right;">
-0.0328907
-</td>
-<td style="text-align:right;">
-0.0016017
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GFC-LOSS year 2017
-</td>
-<td style="text-align:right;">
-0.0330876
-</td>
-<td style="text-align:right;">
-0.3769078
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CGL Cultivated and managed vegetation / agriculture
-</td>
-<td style="text-align:right;">
-0.0361590
-</td>
-<td style="text-align:right;">
-0.0048182
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GHH homogeneity_1km
-</td>
-<td style="text-align:right;">
-0.0367150
-</td>
-<td style="text-align:right;">
-0.0180555
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CH-BIO bio04 temperature seasonality
-</td>
-<td style="text-align:right;">
-0.0400479
-</td>
-<td style="text-align:right;">
-0.0911143
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-ESA Mangroves
-</td>
-<td style="text-align:right;">
-0.0421931
-</td>
-<td style="text-align:right;">
-0.0056949
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CGL Herbaceous vegetation
-</td>
-<td style="text-align:right;">
-0.0466690
-</td>
-<td style="text-align:right;">
-0.2522948
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GSL Upper slope
-</td>
-<td style="text-align:right;">
-0.0466783
-</td>
-<td style="text-align:right;">
-0.0006552
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-ESA Barren / sparse vegetation
-</td>
-<td style="text-align:right;">
-0.0476369
-</td>
-<td style="text-align:right;">
-0.0017413
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CGL Permanent water bodies
-</td>
-<td style="text-align:right;">
-0.0496439
-</td>
-<td style="text-align:right;">
-0.0000103
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-G90-GEOM ridge
-</td>
-<td style="text-align:right;">
-0.0604275
-</td>
-<td style="text-align:right;">
-0.0238985
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-G90-GEOM pit
-</td>
-<td style="text-align:right;">
-0.0652414
-</td>
-<td style="text-align:right;">
-0.0354232
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GSL Peak/ridge
-</td>
-<td style="text-align:right;">
-0.0692977
-</td>
-<td style="text-align:right;">
-0.0274910
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GSL Lower slope
-</td>
-<td style="text-align:right;">
-0.0791661
-</td>
-<td style="text-align:right;">
-0.0009651
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-ESA Cropland
-</td>
-<td style="text-align:right;">
-0.1057609
-</td>
-<td style="text-align:right;">
-0.0102378
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GHH uniformity_1km
-</td>
-<td style="text-align:right;">
-0.1078891
-</td>
-<td style="text-align:right;">
-0.5669570
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GFC-LOSS year 2013
-</td>
-<td style="text-align:right;">
-0.1116295
-</td>
-<td style="text-align:right;">
-0.0858680
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-G90 Stream Power Index
-</td>
-<td style="text-align:right;">
-0.1275033
-</td>
-<td style="text-align:right;">
-0.0336791
+0.0093832
 </td>
 </tr>
 <tr>
@@ -3839,285 +3262,10 @@ G90 Stream Power Index
 GHH mean_1km
 </td>
 <td style="text-align:right;">
-0.1387883
+0.0000001
 </td>
 <td style="text-align:right;">
-0.0708636
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GHH maximum_1km
-</td>
-<td style="text-align:right;">
-0.1499738
-</td>
-<td style="text-align:right;">
-0.2205745
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GSL Peak/ridge (warm)
-</td>
-<td style="text-align:right;">
-0.1562898
-</td>
-<td style="text-align:right;">
-0.0819545
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-G90-GEOM peak
-</td>
-<td style="text-align:right;">
-0.1581233
-</td>
-<td style="text-align:right;">
-0.1952392
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GFC-LOSS year 2005
-</td>
-<td style="text-align:right;">
-0.1703232
-</td>
-<td style="text-align:right;">
-0.1019421
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CGL Shrubs
-</td>
-<td style="text-align:right;">
-0.1860588
-</td>
-<td style="text-align:right;">
-0.0015921
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GHH pielou_1km
-</td>
-<td style="text-align:right;">
-0.1868296
-</td>
-<td style="text-align:right;">
-0.1216415
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GHH entropy_1km
-</td>
-<td style="text-align:right;">
-0.1885791
-</td>
-<td style="text-align:right;">
-0.5818542
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GHH shannon_1km
-</td>
-<td style="text-align:right;">
-0.1906710
-</td>
-<td style="text-align:right;">
-0.0868520
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GFC-LOSS year 2020
-</td>
-<td style="text-align:right;">
-0.2536205
-</td>
-<td style="text-align:right;">
-0.3058444
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-ESA Built-up
-</td>
-<td style="text-align:right;">
-0.2649183
-</td>
-<td style="text-align:right;">
-0.0096752
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CGL Open forest, not matching any of the other definitions
-</td>
-<td style="text-align:right;">
-0.2702855
-</td>
-<td style="text-align:right;">
-0.1696096
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GHH simpson_1km
-</td>
-<td style="text-align:right;">
-0.2714408
-</td>
-<td style="text-align:right;">
-0.1439733
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-OSM-DIST mean
-</td>
-<td style="text-align:right;">
-0.2718621
-</td>
-<td style="text-align:right;">
-0.0010776
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GFC-LOSS year 2008
-</td>
-<td style="text-align:right;">
-0.2834678
-</td>
-<td style="text-align:right;">
-0.7125014
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CGL Closed forest, deciduous broad leaf
-</td>
-<td style="text-align:right;">
-0.2904761
-</td>
-<td style="text-align:right;">
-0.2078040
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GFC-LOSS year 2002
-</td>
-<td style="text-align:right;">
-0.2910488
-</td>
-<td style="text-align:right;">
-0.1396681
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WCL bio04 Temperature seasonality Standard deviation times 100
-</td>
-<td style="text-align:right;">
-0.3071294
-</td>
-<td style="text-align:right;">
-0.6295961
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CGL Urban / built up
-</td>
-<td style="text-align:right;">
-0.3137481
-</td>
-<td style="text-align:right;">
-0.0114119
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GSL Mountain/divide
-</td>
-<td style="text-align:right;">
-0.3193948
-</td>
-<td style="text-align:right;">
-0.0004758
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GFC-LOSS year 2006
-</td>
-<td style="text-align:right;">
-0.3380009
-</td>
-<td style="text-align:right;">
-0.8609193
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GHH correlation_1km
-</td>
-<td style="text-align:right;">
-0.3631014
-</td>
-<td style="text-align:right;">
-0.3548053
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GFC-LOSS year 2016
-</td>
-<td style="text-align:right;">
-0.3732874
-</td>
-<td style="text-align:right;">
-0.1681581
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GFC-LOSS year 2004
-</td>
-<td style="text-align:right;">
-0.3790540
-</td>
-<td style="text-align:right;">
-0.4491735
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GP-CONSUNadj YEAR 2020 sum
-</td>
-<td style="text-align:right;">
-0.3844657
-</td>
-<td style="text-align:right;">
-0.0714123
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GFC-LOSS year 2018
-</td>
-<td style="text-align:right;">
-0.3870642
-</td>
-<td style="text-align:right;">
-0.5653674
+0.0020373
 </td>
 </tr>
 <tr>
@@ -4125,87 +3273,32 @@ GFC-LOSS year 2018
 GFC-LOSS year 2003
 </td>
 <td style="text-align:right;">
-0.4001996
+0.0000411
 </td>
 <td style="text-align:right;">
-0.4819670
+0.0257689
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-GFC-LOSS year 2014
+CH-BIO bio12 annual precipitation amount
 </td>
 <td style="text-align:right;">
-0.4093290
+0.0000944
 </td>
 <td style="text-align:right;">
-0.1667971
+0.3468284
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-GFC-LOSS year 2009
+GFC-LOSS year 2002
 </td>
 <td style="text-align:right;">
-0.4102557
+0.0001831
 </td>
 <td style="text-align:right;">
-0.5641925
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CGL Open forest, deciduous broad leaf
-</td>
-<td style="text-align:right;">
-0.4329391
-</td>
-<td style="text-align:right;">
-0.0861070
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GSL Valley
-</td>
-<td style="text-align:right;">
-0.4342844
-</td>
-<td style="text-align:right;">
-0.5375177
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GFC-LOSS year 2011
-</td>
-<td style="text-align:right;">
-0.4462196
-</td>
-<td style="text-align:right;">
-0.8857747
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GFC-LOSS year 2019
-</td>
-<td style="text-align:right;">
-0.4503203
-</td>
-<td style="text-align:right;">
-0.3799300
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GFC-LOSS year 2010
-</td>
-<td style="text-align:right;">
-0.5031903
-</td>
-<td style="text-align:right;">
-0.2052970
+0.0366315
 </td>
 </tr>
 <tr>
@@ -4213,65 +3306,10 @@ GFC-LOSS year 2010
 WCL bio15 Precipitation seasonality
 </td>
 <td style="text-align:right;">
-0.5359544
+0.0005920
 </td>
 <td style="text-align:right;">
-0.5223846
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-ESA Grassland
-</td>
-<td style="text-align:right;">
-0.5462576
-</td>
-<td style="text-align:right;">
-0.3207627
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CGL Closed forest, not matching any of the other definitions
-</td>
-<td style="text-align:right;">
-0.5492138
-</td>
-<td style="text-align:right;">
-0.2692957
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GSL Valley (narrow)
-</td>
-<td style="text-align:right;">
-0.6755083
-</td>
-<td style="text-align:right;">
-0.3394405
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GFC-LOSS year 2021
-</td>
-<td style="text-align:right;">
-0.6955910
-</td>
-<td style="text-align:right;">
-0.8370568
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GSL Cliff
-</td>
-<td style="text-align:right;">
-0.7465045
-</td>
-<td style="text-align:right;">
-0.0131859
+0.0124903
 </td>
 </tr>
 <tr>
@@ -4279,32 +3317,725 @@ GSL Cliff
 GFC-LOSS year 2015
 </td>
 <td style="text-align:right;">
-0.7739963
+0.0010610
 </td>
 <td style="text-align:right;">
-0.7057696
+0.0603920
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-GFC-LOSS year 2007
+WCL bio17 Precipitation of driest quarter
 </td>
 <td style="text-align:right;">
-0.8044858
+0.0014866
 </td>
 <td style="text-align:right;">
-0.6168874
+0.0119645
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-GFC-LOSS year 2001
+ESA Shrubland
 </td>
 <td style="text-align:right;">
-0.9053759
+0.0019570
 </td>
 <td style="text-align:right;">
-0.8584550
+0.0383247
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2013
+</td>
+<td style="text-align:right;">
+0.0021208
+</td>
+<td style="text-align:right;">
+0.6499254
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CH-BIO bio08 mean daily mean air temperatures of the wettest quarter
+</td>
+<td style="text-align:right;">
+0.0035539
+</td>
+<td style="text-align:right;">
+0.0052884
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2009
+</td>
+<td style="text-align:right;">
+0.0037546
+</td>
+<td style="text-align:right;">
+0.2210973
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CGL Closed forest, deciduous broad leaf
+</td>
+<td style="text-align:right;">
+0.0057378
+</td>
+<td style="text-align:right;">
+0.0020769
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CH-BIO bio16 mean monthly precipitation amount of the wettest quarter
+</td>
+<td style="text-align:right;">
+0.0066566
+</td>
+<td style="text-align:right;">
+0.5993506
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WCL bio13 Precipitation of wettest month
+</td>
+<td style="text-align:right;">
+0.0127117
+</td>
+<td style="text-align:right;">
+0.1924671
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2019
+</td>
+<td style="text-align:right;">
+0.0136776
+</td>
+<td style="text-align:right;">
+0.1858612
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CGL Closed forest, mixed
+</td>
+<td style="text-align:right;">
+0.0150754
+</td>
+<td style="text-align:right;">
+0.0004476
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WCL bio12 Annual precipitation
+</td>
+<td style="text-align:right;">
+0.0168523
+</td>
+<td style="text-align:right;">
+0.0864384
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CH-BIO bio14 precipitation amount of the driest month
+</td>
+<td style="text-align:right;">
+0.0171498
+</td>
+<td style="text-align:right;">
+0.0536633
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+OSM-DIST mean
+</td>
+<td style="text-align:right;">
+0.0189205
+</td>
+<td style="text-align:right;">
+0.0027742
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CH-BIO bio19 mean monthly precipitation amount of the coldest quarter
+</td>
+<td style="text-align:right;">
+0.0231912
+</td>
+<td style="text-align:right;">
+0.0891595
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WCL bio09 Mean temperature of driest quarter
+</td>
+<td style="text-align:right;">
+0.0301545
+</td>
+<td style="text-align:right;">
+0.0003821
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WCL bio05 Max temperature of warmest month
+</td>
+<td style="text-align:right;">
+0.0319509
+</td>
+<td style="text-align:right;">
+0.0021501
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CGL Shrubs
+</td>
+<td style="text-align:right;">
+0.0367943
+</td>
+<td style="text-align:right;">
+0.1516233
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WCL bio10 Mean temperature of warmest quarter
+</td>
+<td style="text-align:right;">
+0.0379048
+</td>
+<td style="text-align:right;">
+0.0003127
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WCL bio08 Mean temperature of wettest quarter
+</td>
+<td style="text-align:right;">
+0.0385847
+</td>
+<td style="text-align:right;">
+0.0027707
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+G90-GEOM footslope
+</td>
+<td style="text-align:right;">
+0.0404666
+</td>
+<td style="text-align:right;">
+0.0001220
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WCL bio16 Precipitation of wettest quarter
+</td>
+<td style="text-align:right;">
+0.0454585
+</td>
+<td style="text-align:right;">
+0.1186098
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+G90 Stream Power Index
+</td>
+<td style="text-align:right;">
+0.0477200
+</td>
+<td style="text-align:right;">
+0.0628024
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CH-BIO bio17 mean monthly precipitation amount of the driest quarter
+</td>
+<td style="text-align:right;">
+0.0478013
+</td>
+<td style="text-align:right;">
+0.0823358
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GSL Lower slope
+</td>
+<td style="text-align:right;">
+0.0482160
+</td>
+<td style="text-align:right;">
+0.0000142
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CH-BIO bio05 mean daily maximum air temperature of the warmest month
+</td>
+<td style="text-align:right;">
+0.0508416
+</td>
+<td style="text-align:right;">
+0.1031220
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CGIAR-ELE mean
+</td>
+<td style="text-align:right;">
+0.0529140
+</td>
+<td style="text-align:right;">
+0.0001136
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WCL bio01 Annual mean temperature
+</td>
+<td style="text-align:right;">
+0.0547069
+</td>
+<td style="text-align:right;">
+0.0007349
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2006
+</td>
+<td style="text-align:right;">
+0.0583226
+</td>
+<td style="text-align:right;">
+0.1181794
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GSL Upper slope
+</td>
+<td style="text-align:right;">
+0.0588041
+</td>
+<td style="text-align:right;">
+0.0000668
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WCL bio06 Min temperature of coldest month
+</td>
+<td style="text-align:right;">
+0.0614242
+</td>
+<td style="text-align:right;">
+0.0005740
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+G90-GEOM shoulder
+</td>
+<td style="text-align:right;">
+0.0617641
+</td>
+<td style="text-align:right;">
+0.0004140
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+G90 Slope
+</td>
+<td style="text-align:right;">
+0.0628422
+</td>
+<td style="text-align:right;">
+0.0010443
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+G90 Roughness
+</td>
+<td style="text-align:right;">
+0.0643511
+</td>
+<td style="text-align:right;">
+0.0010443
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+G90 Terrain Ruggedness Index
+</td>
+<td style="text-align:right;">
+0.0644861
+</td>
+<td style="text-align:right;">
+0.0011718
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CH-BIO bio09 mean daily mean air temperatures of the driest quarter
+</td>
+<td style="text-align:right;">
+0.0651070
+</td>
+<td style="text-align:right;">
+0.0025561
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CH-BIO bio06 mean daily minimum air temperature of the coldest month
+</td>
+<td style="text-align:right;">
+0.0664850
+</td>
+<td style="text-align:right;">
+0.0008460
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WCL bio11 Mean temperature of coldest quarter
+</td>
+<td style="text-align:right;">
+0.0672564
+</td>
+<td style="text-align:right;">
+0.0014710
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CH-BIO bio10 mean daily mean air temperatures of the warmest quarter
+</td>
+<td style="text-align:right;">
+0.0685737
+</td>
+<td style="text-align:right;">
+0.0005168
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CGL Cultivated and managed vegetation / agriculture
+</td>
+<td style="text-align:right;">
+0.0713045
+</td>
+<td style="text-align:right;">
+0.8734344
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CH-BIO bio01 mean annual air temperature
+</td>
+<td style="text-align:right;">
+0.0743793
+</td>
+<td style="text-align:right;">
+0.0028654
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+G90 Vector Ruggedness Measure
+</td>
+<td style="text-align:right;">
+0.0774130
+</td>
+<td style="text-align:right;">
+0.0009298
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CGL Herbaceous vegetation
+</td>
+<td style="text-align:right;">
+0.0791858
+</td>
+<td style="text-align:right;">
+0.0075192
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CH-BIO bio11 mean daily mean air temperatures of the coldest quarter
+</td>
+<td style="text-align:right;">
+0.0808617
+</td>
+<td style="text-align:right;">
+0.0029752
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WCL bio19 Precipitation of coldest quarter
+</td>
+<td style="text-align:right;">
+0.0880363
+</td>
+<td style="text-align:right;">
+0.0107647
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CH-BIO bio15 precipitation seasonality
+</td>
+<td style="text-align:right;">
+0.0881680
+</td>
+<td style="text-align:right;">
+0.0596179
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WCL bio02 Mean diurnal range mean of monthly max temp - min temp
+</td>
+<td style="text-align:right;">
+0.0910766
+</td>
+<td style="text-align:right;">
+0.0027532
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CH-BIO bio03 isothermality
+</td>
+<td style="text-align:right;">
+0.1231189
+</td>
+<td style="text-align:right;">
+0.0062938
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WCL bio07 Temperature annual range bio05-bio06
+</td>
+<td style="text-align:right;">
+0.1285546
+</td>
+<td style="text-align:right;">
+0.0106216
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GSL Mountain/divide
+</td>
+<td style="text-align:right;">
+0.1305909
+</td>
+<td style="text-align:right;">
+0.0055717
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GSL Valley
+</td>
+<td style="text-align:right;">
+0.1333601
+</td>
+<td style="text-align:right;">
+0.0139903
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2018
+</td>
+<td style="text-align:right;">
+0.1523975
+</td>
+<td style="text-align:right;">
+0.0837533
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+G90-GEOM spur
+</td>
+<td style="text-align:right;">
+0.1630749
+</td>
+<td style="text-align:right;">
+0.0148468
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WCL bio03 Isothermality bio02 div/bio07
+</td>
+<td style="text-align:right;">
+0.1631541
+</td>
+<td style="text-align:right;">
+0.0331882
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2008
+</td>
+<td style="text-align:right;">
+0.1669956
+</td>
+<td style="text-align:right;">
+0.3298989
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+G90 Compound Topographic Index
+</td>
+<td style="text-align:right;">
+0.1675030
+</td>
+<td style="text-align:right;">
+0.0290395
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+G90-GEOM hollow
+</td>
+<td style="text-align:right;">
+0.1783105
+</td>
+<td style="text-align:right;">
+0.0323433
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2017
+</td>
+<td style="text-align:right;">
+0.2012877
+</td>
+<td style="text-align:right;">
+0.1494656
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CGL Closed forest, evergreen broad leaf
+</td>
+<td style="text-align:right;">
+0.2095372
+</td>
+<td style="text-align:right;">
+0.0177234
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GSL Upper slope (flat)
+</td>
+<td style="text-align:right;">
+0.2225277
+</td>
+<td style="text-align:right;">
+0.0541525
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CGL Open forest, evergreen broad leaf
+</td>
+<td style="text-align:right;">
+0.2231401
+</td>
+<td style="text-align:right;">
+0.0430708
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CH-BIO bio02 mean diurnal air temperature range
+</td>
+<td style="text-align:right;">
+0.2344500
+</td>
+<td style="text-align:right;">
+0.0557574
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+G90-GEOM slope
+</td>
+<td style="text-align:right;">
+0.2377763
+</td>
+<td style="text-align:right;">
+0.0241660
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GHH coefficient_of_variation_1km
+</td>
+<td style="text-align:right;">
+0.2514440
+</td>
+<td style="text-align:right;">
+0.1698723
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2010
+</td>
+<td style="text-align:right;">
+0.2608078
+</td>
+<td style="text-align:right;">
+0.1016118
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GHH correlation_1km
+</td>
+<td style="text-align:right;">
+0.2666053
+</td>
+<td style="text-align:right;">
+0.1772262
 </td>
 </tr>
 <tr>
@@ -4312,10 +4043,626 @@ GFC-LOSS year 2001
 CGL Bare / sparse vegetation
 </td>
 <td style="text-align:right;">
-NaN
+0.2772314
 </td>
 <td style="text-align:right;">
-0.0910126
+0.3171192
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CH-BIO bio13 precipitation amount of the wettest month
+</td>
+<td style="text-align:right;">
+0.2808475
+</td>
+<td style="text-align:right;">
+0.5040165
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ESA Grassland
+</td>
+<td style="text-align:right;">
+0.3011294
+</td>
+<td style="text-align:right;">
+0.6379576
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ESA Trees
+</td>
+<td style="text-align:right;">
+0.3097435
+</td>
+<td style="text-align:right;">
+0.1053637
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ESA Built-up
+</td>
+<td style="text-align:right;">
+0.3182437
+</td>
+<td style="text-align:right;">
+0.6757993
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CH-BIO bio07 annual range of air temperature
+</td>
+<td style="text-align:right;">
+0.3368721
+</td>
+<td style="text-align:right;">
+0.1050934
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2011
+</td>
+<td style="text-align:right;">
+0.3379961
+</td>
+<td style="text-align:right;">
+0.2474336
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CGL Oceans, seas
+</td>
+<td style="text-align:right;">
+0.3452604
+</td>
+<td style="text-align:right;">
+0.0192970
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CH-BIO bio18 mean monthly precipitation amount of the warmest quarter
+</td>
+<td style="text-align:right;">
+0.3573690
+</td>
+<td style="text-align:right;">
+0.6328557
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GSL Upper slope (warm)
+</td>
+<td style="text-align:right;">
+0.3604284
+</td>
+<td style="text-align:right;">
+0.5228471
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CGL Permanent water bodies
+</td>
+<td style="text-align:right;">
+0.3641469
+</td>
+<td style="text-align:right;">
+0.7726897
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2004
+</td>
+<td style="text-align:right;">
+0.3714100
+</td>
+<td style="text-align:right;">
+0.3066240
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GSL Lower slope (warm)
+</td>
+<td style="text-align:right;">
+0.3848969
+</td>
+<td style="text-align:right;">
+0.2160442
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ESA Mangroves
+</td>
+<td style="text-align:right;">
+0.3852120
+</td>
+<td style="text-align:right;">
+0.1160103
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GHH homogeneity_1km
+</td>
+<td style="text-align:right;">
+0.3925181
+</td>
+<td style="text-align:right;">
+0.6726193
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WCL bio04 Temperature seasonality Standard deviation times 100
+</td>
+<td style="text-align:right;">
+0.4022534
+</td>
+<td style="text-align:right;">
+0.1839792
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2001
+</td>
+<td style="text-align:right;">
+0.4122135
+</td>
+<td style="text-align:right;">
+0.4627840
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-PTC YEAR 2000 mean
+</td>
+<td style="text-align:right;">
+0.4161512
+</td>
+<td style="text-align:right;">
+0.3134831
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GHH uniformity_1km
+</td>
+<td style="text-align:right;">
+0.4188737
+</td>
+<td style="text-align:right;">
+0.6711103
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ESA Open water
+</td>
+<td style="text-align:right;">
+0.4201508
+</td>
+<td style="text-align:right;">
+0.1544915
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CGL Urban / built up
+</td>
+<td style="text-align:right;">
+0.4269281
+</td>
+<td style="text-align:right;">
+0.6498160
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2020
+</td>
+<td style="text-align:right;">
+0.4446605
+</td>
+<td style="text-align:right;">
+0.4890527
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GHH dissimilarity_1km
+</td>
+<td style="text-align:right;">
+0.4478995
+</td>
+<td style="text-align:right;">
+0.5217327
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GHH simpson_1km
+</td>
+<td style="text-align:right;">
+0.4517271
+</td>
+<td style="text-align:right;">
+0.7772972
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GHH standard_deviation_1km
+</td>
+<td style="text-align:right;">
+0.4520286
+</td>
+<td style="text-align:right;">
+0.5028010
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GHH maximum_1km
+</td>
+<td style="text-align:right;">
+0.4683755
+</td>
+<td style="text-align:right;">
+0.7598949
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GSL Valley (narrow)
+</td>
+<td style="text-align:right;">
+0.4743315
+</td>
+<td style="text-align:right;">
+0.4362696
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+G90-GEOM flat
+</td>
+<td style="text-align:right;">
+0.4896346
+</td>
+<td style="text-align:right;">
+0.2570061
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GHH range_1km
+</td>
+<td style="text-align:right;">
+0.4940378
+</td>
+<td style="text-align:right;">
+0.5605405
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GHH pielou_1km
+</td>
+<td style="text-align:right;">
+0.5014666
+</td>
+<td style="text-align:right;">
+0.9269989
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GHH variance_1km
+</td>
+<td style="text-align:right;">
+0.5036342
+</td>
+<td style="text-align:right;">
+0.4175746
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GSL Peak/ridge
+</td>
+<td style="text-align:right;">
+0.5097334
+</td>
+<td style="text-align:right;">
+0.4264875
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CH-BIO bio04 temperature seasonality
+</td>
+<td style="text-align:right;">
+0.5368985
+</td>
+<td style="text-align:right;">
+0.5039316
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GSL Lower slope (flat)
+</td>
+<td style="text-align:right;">
+0.5605818
+</td>
+<td style="text-align:right;">
+0.3360876
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GHH entropy_1km
+</td>
+<td style="text-align:right;">
+0.5608338
+</td>
+<td style="text-align:right;">
+0.7274544
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GHH shannon_1km
+</td>
+<td style="text-align:right;">
+0.5677405
+</td>
+<td style="text-align:right;">
+0.7943171
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GHH contrast_1km
+</td>
+<td style="text-align:right;">
+0.5874150
+</td>
+<td style="text-align:right;">
+0.4832859
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2016
+</td>
+<td style="text-align:right;">
+0.6133434
+</td>
+<td style="text-align:right;">
+0.8577361
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2005
+</td>
+<td style="text-align:right;">
+0.6270369
+</td>
+<td style="text-align:right;">
+0.0398230
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WCL bio18 Precipitation of warmest quarter
+</td>
+<td style="text-align:right;">
+0.6303534
+</td>
+<td style="text-align:right;">
+0.4055072
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GP-CONSUNadj YEAR 2020 sum
+</td>
+<td style="text-align:right;">
+0.6444177
+</td>
+<td style="text-align:right;">
+0.4307381
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2007
+</td>
+<td style="text-align:right;">
+0.6867999
+</td>
+<td style="text-align:right;">
+0.5075736
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CGL Closed forest, not matching any of the other definitions
+</td>
+<td style="text-align:right;">
+0.7094468
+</td>
+<td style="text-align:right;">
+0.9731482
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ESA Barren / sparse vegetation
+</td>
+<td style="text-align:right;">
+0.7097479
+</td>
+<td style="text-align:right;">
+0.6571915
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CGL Herbaceous wetland
+</td>
+<td style="text-align:right;">
+0.8120115
+</td>
+<td style="text-align:right;">
+0.4314643
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+G90-GEOM valley
+</td>
+<td style="text-align:right;">
+0.8127601
+</td>
+<td style="text-align:right;">
+0.9010948
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+G90 Topographic Position Index
+</td>
+<td style="text-align:right;">
+0.8521739
+</td>
+<td style="text-align:right;">
+0.9385212
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GSL Peak/ridge (warm)
+</td>
+<td style="text-align:right;">
+0.8566274
+</td>
+<td style="text-align:right;">
+0.9138203
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+G90-GEOM ridge
+</td>
+<td style="text-align:right;">
+0.8684893
+</td>
+<td style="text-align:right;">
+0.9832546
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2012
+</td>
+<td style="text-align:right;">
+0.8761916
+</td>
+<td style="text-align:right;">
+0.9438058
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2014
+</td>
+<td style="text-align:right;">
+0.8863523
+</td>
+<td style="text-align:right;">
+0.9438058
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ESA Cropland
+</td>
+<td style="text-align:right;">
+0.8957637
+</td>
+<td style="text-align:right;">
+0.6316930
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2021
+</td>
+<td style="text-align:right;">
+0.8978834
+</td>
+<td style="text-align:right;">
+0.6726193
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ESA Herbaceous wetland
+</td>
+<td style="text-align:right;">
+0.8984743
+</td>
+<td style="text-align:right;">
+0.2729360
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+G90-GEOM pit
+</td>
+<td style="text-align:right;">
+0.9410879
+</td>
+<td style="text-align:right;">
+0.7921791
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+G90-GEOM peak
+</td>
+<td style="text-align:right;">
+0.9602185
+</td>
+<td style="text-align:right;">
+0.8125533
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CGL Open forest, not matching any of the other definitions
+</td>
+<td style="text-align:right;">
+0.9943909
+</td>
+<td style="text-align:right;">
+0.9645393
 </td>
 </tr>
 <tr>
@@ -4326,7 +4673,18 @@ CGL Closed forest, evergreen needle leaf
 NaN
 </td>
 <td style="text-align:right;">
-0.0144004
+0.0255624
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CGL Open forest, deciduous broad leaf
+</td>
+<td style="text-align:right;">
+NaN
+</td>
+<td style="text-align:right;">
+0.0000411
 </td>
 </tr>
 <tr>
@@ -4337,7 +4695,7 @@ CGL Open forest, evergreen needle leaf
 NaN
 </td>
 <td style="text-align:right;">
-NaN
+0.5187932
 </td>
 </tr>
 <tr>
@@ -4348,7 +4706,18 @@ CGL Open forest, mixed
 NaN
 </td>
 <td style="text-align:right;">
-0.0110613
+0.0005587
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GSL Cliff
+</td>
+<td style="text-align:right;">
+NaN
+</td>
+<td style="text-align:right;">
+0.0004644
 </td>
 </tr>
 <tr>
@@ -4359,7 +4728,7 @@ GSL Lower slope (cool)
 NaN
 </td>
 <td style="text-align:right;">
-0.2307468
+0.0255624
 </td>
 </tr>
 <tr>
@@ -4370,7 +4739,7 @@ GSL Upper slope (cool)
 NaN
 </td>
 <td style="text-align:right;">
-0.4042380
+0.0043649
 </td>
 </tr>
 </tbody>
@@ -4406,30 +4775,53 @@ lo que podríamos seguir explorando dicha variable para determinar si
 explica algo de la varianza en la comunidad.
 
 ``` r
-m_amb_upgma_k6 %>% 
-  group_by(variable) %>% 
-  ggplot() + aes(x = grupos_upgma_k6, y = valor, fill = grupos_upgma_k6) + 
-  geom_boxplot(lwd = 0.2) + 
-  scale_fill_brewer(palette = 'Set1') +
-  theme_bw(base_size=8) +
-  theme(legend.position="none") +
-  facet_wrap(~ variable, scales = 'free_y', ncol = 6)
+remesas <- list(primera = colnames(env)[1:68], segunda = colnames(env)[69:136])
+map(1:2,
+    function(x) {
+      m_amb_upgma %>% 
+        filter(variable %in% remesas[[x]]) %>% 
+        group_by(variable) %>% 
+        ggplot() + aes(x = grupos_upgma, y = valor, fill = grupos_upgma) + 
+        geom_boxplot(lwd = 0.2) + 
+        scale_fill_brewer(palette = 'Set1') +
+        theme_bw(base_size=6) +
+        theme(legend.position="none") +
+        facet_wrap(~ variable, scales = 'free_y', ncol = 8)
+    })
 ```
+
+    ## [[1]]
 
 ![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
 
-``` r
-m_amb_ward_k6 %>% 
-  group_by(variable) %>% 
-  ggplot() + aes(x = grupos_ward_k6, y = valor, fill = grupos_ward_k6) + 
-  geom_boxplot(lwd = 0.2) + 
-  scale_fill_brewer(palette = 'Set1') +
-  theme_bw(base_size=8) +
-  theme(legend.position="none") +
-  facet_wrap(~ variable, scales = 'free_y', ncol = 6)
-```
+    ## 
+    ## [[2]]
 
 ![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-18-2.png)<!-- -->
+
+``` r
+map(1:2,
+    function(x) {
+      m_amb_ward %>% 
+        filter(variable %in% remesas[[x]]) %>% 
+        group_by(variable) %>% 
+        ggplot() + aes(x = grupos_ward, y = valor, fill = grupos_ward) + 
+        geom_boxplot(lwd = 0.2) + 
+        scale_fill_brewer(palette = 'Set1') +
+        theme_bw(base_size=6) +
+        theme(legend.position="none") +
+        facet_wrap(~ variable, scales = 'free_y', ncol = 8)
+    })
+```
+
+    ## [[1]]
+
+![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-18-3.png)<!-- -->
+
+    ## 
+    ## [[2]]
+
+![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-18-4.png)<!-- -->
 
 En los diagramas de caja, notarás que, las variables que aparecen en las
 primeras filas de las tablas anteriores, son las mismas que presentan
@@ -4445,16 +4837,24 @@ según su composición. Observando los resultados de las pruebas
 estadísticas, de los diagramas de caja, una evaluación rápida sugiere
 que los grupos se caracterizan, ambientalmente, de la siguiente manera:
 
-1.  Hábitats 2 y 3. Terrenos a distintas elevaciones, en zonas de
-    vertiente, espolones o valles fluviales, con predominio del bosque,
-    con dosel cerrado y/o importante cobertura arbórea, normalmente con
-    especies latifoliadas, con temperaturas promedio moderadas a bajas y
-    precipitaciones elevadas,
+1.  Hábitat del grupo 1. Terrenos predominantemente bajos, en zonas
+    costeras o próximos a ella (salvo algún *outlier*), áreas
+    construidas con categoría urbanística, o área con coberturas de
+    matorral y/o uso agrícola, temperaturas elevadas y precipitaciones
+    bajas a moderadas.
 
-2.  Hábitats , en áreas de cultivo, de matorral o construidas,
-    temperaturas elevadas y precipitaciones bajas a moderadas,
+2.  Hábitat del grupo 2. Terrenos a elevaciones moderadas y altas, en
+    zonas de vertiente, espolones o valles fluviales, con predominio del
+    bosque, con dosel cerrado y/o importante cobertura arbórea,
+    normalmente con especies latifoliadas, con temperaturas promedio
+    moderadas a bajas y precipitaciones elevadas,
 
-3.  
+3.  Hábitats del grup 3. Terrenos a elevaciones moderadas y altas, pero
+    con mayor proporción de zonas llanas que en el grupo 2, con uso
+    agrícola o cobertura de herbazal, pero también con porciones de
+    bosques, de temperaturas bajas a moderadas, precipitaciones
+    moderadas, situados tanto en zonas costeras como moderamente de
+    interior, pero no extremadamente continental.
 
 A continuación, muestro mapas de los dos agrupamientos, tanto UPGMA como
 Ward, y comparo con algunas de las variables que presentaron efecto.
@@ -4470,15 +4870,15 @@ variables seleccionadas.
 m_amb_clusters_sf <- env %>%
   rownames_to_column('hex_id') %>% 
   mutate(
-    grupos_upgma_k6 = as.character(grupos_upgma_k6),
-    grupos_ward_k6 = as.character(grupos_ward_k6)) %>%
+    grupos_upgma = as.character(grupos_upgma),
+    grupos_ward = as.character(grupos_ward)) %>%
   inner_join(za %>% select(hex_id)) %>%
   st_as_sf()
-mapa_upgma_k6 <- mapa_leaflet(
+mapa_upgma <- mapa_leaflet(
   mapa = m_amb_clusters_sf,
-  variable = 'grupos_upgma_k6',
-  titulo_leyenda = 'UPGMA, k=6')
-mapa_upgma_k6
+  variable = 'grupos_upgma',
+  titulo_leyenda = paste0('UPGMA, k=', k))
+mapa_upgma
 ```
 
 ![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
@@ -4486,11 +4886,11 @@ mapa_upgma_k6
 Ídem anterior, pero según Ward.
 
 ``` r
-mapa_ward_k6 <- mapa_leaflet(
+mapa_ward <- mapa_leaflet(
   mapa = m_amb_clusters_sf,
-  variable = 'grupos_ward_k6',
-  titulo_leyenda = 'Ward, k=6')
-mapa_ward_k6
+  variable = 'grupos_ward',
+  titulo_leyenda = paste0('Ward, k=', k))
+mapa_ward
 ```
 
 ![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-20-1.png)<!-- -->
@@ -4503,25 +4903,25 @@ diferencias significativas podrían ayudar a explicar la varianza de la
 composición de la comunidad.
 
 ``` r
-m_amb_upgma_k6_ak$variable[1:10]
+m_amb_upgma_ak$variable[1:10]
 ```
 
-    ##  [1] "G90-GEOM flat"                                                       
-    ##  [2] "ESA Open water"                                                      
-    ##  [3] "GSL Lower slope (flat)"                                              
-    ##  [4] "CGL Oceans, seas"                                                    
-    ##  [5] "WCL bio02 Mean diurnal range mean of monthly max temp - min temp"    
-    ##  [6] "GFC-PTC YEAR 2000 mean"                                              
-    ##  [7] "CH-BIO bio06 mean daily minimum air temperature of the coldest month"
-    ##  [8] "G90-GEOM shoulder"                                                   
-    ##  [9] "CH-BIO bio03 isothermality"                                          
-    ## [10] "WCL bio12 Annual precipitation"
+    ##  [1] "WCL bio14 Precipitation of driest month"  
+    ##  [2] "GHH mean_1km"                             
+    ##  [3] "GFC-LOSS year 2003"                       
+    ##  [4] "CH-BIO bio12 annual precipitation amount" 
+    ##  [5] "GFC-LOSS year 2002"                       
+    ##  [6] "WCL bio15 Precipitation seasonality"      
+    ##  [7] "GFC-LOSS year 2015"                       
+    ##  [8] "WCL bio17 Precipitation of driest quarter"
+    ##  [9] "ESA Shrubland"                            
+    ## [10] "GFC-LOSS year 2013"
 
 ``` r
 mapa_upgma_v3 <- mapa_leaflet(
   mapa = m_amb_clusters_sf,
-  variable = m_amb_upgma_k6_ak$variable[3],
-  titulo_leyenda = m_amb_upgma_k6_ak$variable[3])
+  variable = m_amb_upgma_ak$variable[3],
+  titulo_leyenda = gsub('(.{1,25})(\\s|$)', '\\1<br>', m_amb_upgma_ak$variable[3]))
 mapa_upgma_v3
 ```
 
@@ -4530,8 +4930,8 @@ mapa_upgma_v3
 ``` r
 mapa_upgma_v4 <- mapa_leaflet(
   mapa = m_amb_clusters_sf,
-  variable = m_amb_upgma_k6_ak$variable[4],
-  titulo_leyenda = m_amb_upgma_k6_ak$variable[4])
+  variable = m_amb_upgma_ak$variable[4],
+  titulo_leyenda = m_amb_upgma_ak$variable[4])
 mapa_upgma_v4
 ```
 
@@ -4581,11 +4981,18 @@ elige un umbral para especies raras o rangos de registros de presencia
 para seleccionar especies en una nueva matriz de comunidad.
 
 ``` r
-mc_orig <- readRDS("matriz_de_comunidad.RDS")
+res <- 4 #Resolución H3, puedes elegir entre 4, 5, 6 o 7, pero cuidado con valores >=6
+# IMPORTANTE: la resolución de las celdas H3, debe coincidir con la resolución
+# a la cual generaste tu matriz de comunidad. De lo contrario, obtendrás error. Si tu 
+# archivo RDS de matriz de comunidad se denomina "matriz_de_comunidad.RDS", y lo creaste
+# usando resolución 4, cámbiale el nombre a "matriz_de_comunidad_res_5.RDS". Recuerda,
+# puedes usar cualquier resolución, lo único importante es que las resolución usada en la
+# creación de la matriz de comunidad, debe ser la misma que en la ambiental.
+mc_orig <- readRDS(paste0("matriz_de_comunidad_res_", res, ".RDS"))
 nrow(mc_orig) #Número de filas, equivale a número de hexágonos con registros de presencia
 ```
 
-    ## [1] 149
+    ## [1] 39
 
 ``` r
 ncol(mc_orig)  #Número de columnas, equivale a número de especies, riqueza
@@ -4621,17 +5028,17 @@ Antigonon leptopus Hook. & Arn.
 </tr>
 <tr>
 <td style="text-align:left;">
-Coccoloba pubescens L.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
 Coccoloba diversifolia Jacq.
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 Coccoloba P.Browne
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba pubescens L.
 </td>
 </tr>
 <tr>
@@ -4826,7 +5233,7 @@ Rumex obtusifolius L.
 </tr>
 <tr>
 <td style="text-align:left;">
-Coccoloba fawcettii O.Schmidt
+Coccoloba obtusifolia Jacq.
 </td>
 </tr>
 </tbody>
@@ -4872,28 +5279,12 @@ Número de hexágonos
 Coccoloba uvifera (L.) L.
 </td>
 <td style="text-align:right;">
-54
+24
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 Coccoloba diversifolia Jacq.
-</td>
-<td style="text-align:right;">
-31
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Coccoloba wrightii Lindau
-</td>
-<td style="text-align:right;">
-20
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Coccoloba costata Wright
 </td>
 <td style="text-align:right;">
 18
@@ -4904,39 +5295,23 @@ Coccoloba costata Wright
 Antigonon leptopus Hook. & Arn.
 </td>
 <td style="text-align:right;">
-17
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Coccoloba pubescens L.
-</td>
-<td style="text-align:right;">
 15
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Coccoloba incrassata Urb.
+Coccoloba wrightii Lindau
 </td>
 <td style="text-align:right;">
-13
+14
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Coccoloba leoganensis Jacq.
+Coccoloba costata Wright
 </td>
 <td style="text-align:right;">
 13
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Coccoloba P.Browne
-</td>
-<td style="text-align:right;">
-12
 </td>
 </tr>
 <tr>
@@ -4944,12 +5319,12 @@ Coccoloba P.Browne
 Persicaria punctata (Elliott) Small
 </td>
 <td style="text-align:right;">
-12
+11
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Coccoloba fuertesii Urb.
+Coccoloba P.Browne
 </td>
 <td style="text-align:right;">
 10
@@ -4957,34 +5332,26 @@ Coccoloba fuertesii Urb.
 </tr>
 <tr>
 <td style="text-align:left;">
-Leptogonum domingensis var. molle (Urb.) Brandbyge
+Coccoloba incrassata Urb.
 </td>
 <td style="text-align:right;">
-8
+10
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Leptogonum domingense Benth.
+Coccoloba leoganensis Jacq.
 </td>
 <td style="text-align:right;">
-8
+10
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Rumex crispus L.
+Coccoloba pubescens L.
 </td>
 <td style="text-align:right;">
-8
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Coccoloba ceibensis O.C.Schmidt
-</td>
-<td style="text-align:right;">
-8
+9
 </td>
 </tr>
 <tr>
@@ -4997,7 +5364,7 @@ Coccoloba buchii O.Schmidt
 </tr>
 <tr>
 <td style="text-align:left;">
-Coccoloba nodosa Lindau
+Coccoloba fuertesii Urb.
 </td>
 <td style="text-align:right;">
 8
@@ -5005,23 +5372,15 @@ Coccoloba nodosa Lindau
 </tr>
 <tr>
 <td style="text-align:left;">
-Coccoloba pauciflora Urb.
+Leptogonum domingensis var. molle (Urb.) Brandbyge
 </td>
 <td style="text-align:right;">
-8
+6
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Coccoloba picardae Urb.
-</td>
-<td style="text-align:right;">
-7
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Coccoloba flavescens Jacq.
+Leptogonum domingense Benth.
 </td>
 <td style="text-align:right;">
 6
@@ -5037,7 +5396,7 @@ Leptogonum domingensis Benth.
 </tr>
 <tr>
 <td style="text-align:left;">
-Polygonum L.
+Coccoloba picardae Urb.
 </td>
 <td style="text-align:right;">
 6
@@ -5045,7 +5404,23 @@ Polygonum L.
 </tr>
 <tr>
 <td style="text-align:left;">
-Coccoloba krugii Lindau
+Rumex crispus L.
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba ceibensis O.C.Schmidt
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba flavescens Jacq.
 </td>
 <td style="text-align:right;">
 5
@@ -5053,31 +5428,39 @@ Coccoloba krugii Lindau
 </tr>
 <tr>
 <td style="text-align:left;">
-Persicaria hydropiperoides (Michx.) Small
+Polygonum L.
 </td>
 <td style="text-align:right;">
 5
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Coccoloba jimenezii Alain
-</td>
-<td style="text-align:right;">
-4
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Coccoloba microstachya Willd.
-</td>
-<td style="text-align:right;">
-4
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 Rumex L.
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba krugii Lindau
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba nodosa Lindau
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Persicaria hydropiperoides (Michx.) Small
 </td>
 <td style="text-align:right;">
 4
@@ -5093,7 +5476,15 @@ Polygonum punctatum Kit., 1864
 </tr>
 <tr>
 <td style="text-align:left;">
-Coccoloba venosa L.
+Coccoloba microstachya Willd.
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba pauciflora Urb.
 </td>
 <td style="text-align:right;">
 3
@@ -5117,15 +5508,7 @@ Coccoloba swartzii Meisn.
 </tr>
 <tr>
 <td style="text-align:left;">
-Rumex obtusifolius L.
-</td>
-<td style="text-align:right;">
-3
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Coccoloba leonardii Howard
+Coccoloba venosa L.
 </td>
 <td style="text-align:right;">
 2
@@ -5149,7 +5532,7 @@ Persicaria ferruginea (Wedd.) Soják
 </tr>
 <tr>
 <td style="text-align:left;">
-Coccoloba subcordata Lindau
+Rumex obtusifolius L.
 </td>
 <td style="text-align:right;">
 2
@@ -5157,15 +5540,23 @@ Coccoloba subcordata Lindau
 </tr>
 <tr>
 <td style="text-align:left;">
-Persicaria glabra (Willd.) M.Gómez
+Coccoloba jimenezii Alain
 </td>
 <td style="text-align:right;">
-2
+1
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 Rumex acetosella L.
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba leonardii Howard
 </td>
 <td style="text-align:right;">
 1
@@ -5197,6 +5588,14 @@ Ruprechtia C.A.Mey.
 </tr>
 <tr>
 <td style="text-align:left;">
+Coccoloba subcordata Lindau
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
 Persicaria segetum (Kunth) Small
 </td>
 <td style="text-align:right;">
@@ -5213,7 +5612,15 @@ Persicaria lapathifolia subsp. lapathifolia
 </tr>
 <tr>
 <td style="text-align:left;">
-Coccoloba fawcettii O.Schmidt
+Persicaria glabra (Willd.) M.Gómez
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba obtusifolia Jacq.
 </td>
 <td style="text-align:right;">
 1
@@ -5235,9 +5642,9 @@ Coccoloba fawcettii O.Schmidt
 # que están presentes en m hexágonos o más. Si eliges un rango, por ejemplo [m,n], el script generará
 # una matriz de comunidad que representadas un mínimo de m hexágonos y un máximo de n hexágonos.
 # (ambos extremos inclusive).
-en_cuantos_hex <- 15
-# En este caso, 15 significa 15 o más (hasta el límite superior). IMPORTANTE: elige TU PROPIO umbral.
-# en_cuantos_hex <- 10:20
+en_cuantos_hex <- 1
+# Explicación: "en_cuantos_hex <- X", donde X es el número de hexágonos mínimo donde cada especie
+# debe estar presente. IMPORTANTE: elige TU PROPIO umbral.
 {if(length(en_cuantos_hex)==1) selector <- en_cuantos_hex:max(colSums(mc_orig)) else
   if(length(en_cuantos_hex)==2)
     selector <- min(en_cuantos_hex):max(en_cuantos_hex) else
@@ -5245,12 +5652,356 @@ en_cuantos_hex <- 15
 selector
 ```
 
-    ##  [1] 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39
-    ## [26] 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54
+    ##  [1]  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24
 
 ``` r
-mc_orig_sin_raras <- mc_orig[, colSums(mc_orig) %in% selector]
-mi_fam <- mc_orig_sin_raras[!rowSums(mc_orig_sin_raras)==0, ]
+mc_orig_seleccionadas <- mc_orig[, colSums(mc_orig) %in% selector]
+
+# Mínimo número de especies por hexágono
+data.frame(`Número de especies por hexágono` = sort(rowSums(mc_orig), decreasing = T), check.names = F) %>% 
+  kable(booktabs=T) %>%
+  kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
+  gsub(' NA ', '', .) # Número de hexágonos en los que está presente cada especie
+```
+
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+Número de especies por hexágono
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+844cd43ffffffff
+</td>
+<td style="text-align:right;">
+18
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd45ffffffff
+</td>
+<td style="text-align:right;">
+18
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd0dffffffff
+</td>
+<td style="text-align:right;">
+13
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cf35ffffffff
+</td>
+<td style="text-align:right;">
+9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844c899ffffffff
+</td>
+<td style="text-align:right;">
+9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cf37ffffffff
+</td>
+<td style="text-align:right;">
+9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+846725bffffffff
+</td>
+<td style="text-align:right;">
+9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd47ffffffff
+</td>
+<td style="text-align:right;">
+9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd59ffffffff
+</td>
+<td style="text-align:right;">
+8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cf31ffffffff
+</td>
+<td style="text-align:right;">
+8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd5dffffffff
+</td>
+<td style="text-align:right;">
+8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd69ffffffff
+</td>
+<td style="text-align:right;">
+8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844c895ffffffff
+</td>
+<td style="text-align:right;">
+7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844c883ffffffff
+</td>
+<td style="text-align:right;">
+7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd67ffffffff
+</td>
+<td style="text-align:right;">
+7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd41ffffffff
+</td>
+<td style="text-align:right;">
+7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd6bffffffff
+</td>
+<td style="text-align:right;">
+7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cf33ffffffff
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844c89bffffffff
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd63ffffffff
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd4bffffffff
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd09ffffffff
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd2dffffffff
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cc65ffffffff
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd65ffffffff
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cf25ffffffff
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cc6dffffffff
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+8467259ffffffff
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844c893ffffffff
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cc61ffffffff
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844c891ffffffff
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd25ffffffff
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd4dffffffff
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cf27ffffffff
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844c8bbffffffff
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844c89dffffffff
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cf23ffffffff
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd61ffffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844c897ffffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+</tbody>
+</table>
+
+``` r
+min_especies_por_hex <- 2
+# Explicación: "min_especies_por_hex <- Y", donde Y es el número mínimo (inclusive) de especies
+# que debe existir en cada hexágono. Por debajo de dicho valor, el hexágono es excluido.
+mi_fam <- mc_orig_seleccionadas[rowSums(mc_orig_seleccionadas)>=min_especies_por_hex, ]
+nrow(mi_fam)
+```
+
+    ## [1] 37
+
+``` r
+# mi_fam <- mc_orig_seleccionadas[!rowSums(mc_orig_seleccionadas)==0, ] #Elimina filas sin registros
 # rowSums(mi_fam) #Riqueza por hexágonos con especies seleccionadas. Comentado por extenso
 all(rowSums(mi_fam)>0) #Debe ser TRUE: todos los hexágonos tienen al menos 1 registro
 ```
@@ -5261,7 +6012,7 @@ all(rowSums(mi_fam)>0) #Debe ser TRUE: todos los hexágonos tienen al menos 1 re
 ncol(mi_fam) #Riqueza de especies
 ```
 
-    ## [1] 6
+    ## [1] 44
 
 ``` r
 # Usar nombres cortos o abreviados para las especies
@@ -5269,21 +6020,67 @@ nombres_largos <- colnames(mi_fam)
 (colnames(mi_fam) <- make.cepnames(word(colnames(mi_fam), 1, 2)))
 ```
 
-    ## [1] "Coccuvif" "Antilept" "Coccpube" "Coccdive" "Cocccost" "Coccwrig"
+    ##  [1] "Coccuvif"   "Antilept"   "Coccdive"   "CoccBrow"   "Coccpube"  
+    ##  [6] "Coccjime"   "Perspunc"   "Coccflav"   "Leptdomi"   "Leptdomi.1"
+    ## [11] "Leptdomi.2" "Cocccost"   "Coccincr"   "Coccwrig"   "Coccpica"  
+    ## [16] "Rumeacet"   "Rumecris"   "Coccleon"   "Coccceib"   "Coccveno"  
+    ## [21] "Coccleog"   "Coccmicr"   "Cocckrug"   "Coccbuch"   "Coccfuer"  
+    ## [26] "Coccnodo"   "Coccpauc"   "PolyL"      "RumeL"      "Perspens"  
+    ## [31] "Pershydr"   "Coccsama"   "Persferr"   "Brunovat"   "RuprMey"   
+    ## [36] "Coccsubc"   "Polypunc"   "Perssege"   "Persacum"   "Coccswar"  
+    ## [41] "Perslapa"   "Persglab"   "Rumeobtu"   "Coccobtu"
 
 ``` r
 (df_equivalencias <- data.frame(
   nombre_original = nombres_largos,
-  colnames(mi_fam)))
+  abreviado = colnames(mi_fam)))
 ```
 
-    ##                   nombre_original colnames.mi_fam.
-    ## 1       Coccoloba uvifera (L.) L.         Coccuvif
-    ## 2 Antigonon leptopus Hook. & Arn.         Antilept
-    ## 3          Coccoloba pubescens L.         Coccpube
-    ## 4    Coccoloba diversifolia Jacq.         Coccdive
-    ## 5        Coccoloba costata Wright         Cocccost
-    ## 6       Coccoloba wrightii Lindau         Coccwrig
+    ##                                       nombre_original  abreviado
+    ## 1                           Coccoloba uvifera (L.) L.   Coccuvif
+    ## 2                     Antigonon leptopus Hook. & Arn.   Antilept
+    ## 3                        Coccoloba diversifolia Jacq.   Coccdive
+    ## 4                                  Coccoloba P.Browne   CoccBrow
+    ## 5                              Coccoloba pubescens L.   Coccpube
+    ## 6                           Coccoloba jimenezii Alain   Coccjime
+    ## 7                 Persicaria punctata (Elliott) Small   Perspunc
+    ## 8                          Coccoloba flavescens Jacq.   Coccflav
+    ## 9  Leptogonum domingensis var. molle (Urb.) Brandbyge   Leptdomi
+    ## 10                       Leptogonum domingense Benth. Leptdomi.1
+    ## 11                      Leptogonum domingensis Benth. Leptdomi.2
+    ## 12                           Coccoloba costata Wright   Cocccost
+    ## 13                          Coccoloba incrassata Urb.   Coccincr
+    ## 14                          Coccoloba wrightii Lindau   Coccwrig
+    ## 15                            Coccoloba picardae Urb.   Coccpica
+    ## 16                                Rumex acetosella L.   Rumeacet
+    ## 17                                   Rumex crispus L.   Rumecris
+    ## 18                         Coccoloba leonardii Howard   Coccleon
+    ## 19                    Coccoloba ceibensis O.C.Schmidt   Coccceib
+    ## 20                                Coccoloba venosa L.   Coccveno
+    ## 21                        Coccoloba leoganensis Jacq.   Coccleog
+    ## 22                      Coccoloba microstachya Willd.   Coccmicr
+    ## 23                            Coccoloba krugii Lindau   Cocckrug
+    ## 24                         Coccoloba buchii O.Schmidt   Coccbuch
+    ## 25                           Coccoloba fuertesii Urb.   Coccfuer
+    ## 26                            Coccoloba nodosa Lindau   Coccnodo
+    ## 27                          Coccoloba pauciflora Urb.   Coccpauc
+    ## 28                                       Polygonum L.      PolyL
+    ## 29                                           Rumex L.      RumeL
+    ## 30               Persicaria pensylvanica (L.) M.Gómez   Perspens
+    ## 31          Persicaria hydropiperoides (Michx.) Small   Pershydr
+    ## 32                   Coccoloba samanensis O.C.Schmidt   Coccsama
+    ## 33                Persicaria ferruginea (Wedd.) Soják   Persferr
+    ## 34                 Brunnichia ovata (Walter) Shinners   Brunovat
+    ## 35                                Ruprechtia C.A.Mey.    RuprMey
+    ## 36                        Coccoloba subcordata Lindau   Coccsubc
+    ## 37                     Polygonum punctatum Kit., 1864   Polypunc
+    ## 38                   Persicaria segetum (Kunth) Small   Perssege
+    ## 39               Persicaria acuminata (Kunth) M.Gómez   Persacum
+    ## 40                          Coccoloba swartzii Meisn.   Coccswar
+    ## 41        Persicaria lapathifolia subsp. lapathifolia   Perslapa
+    ## 42                 Persicaria glabra (Willd.) M.Gómez   Persglab
+    ## 43                              Rumex obtusifolius L.   Rumeobtu
+    ## 44                        Coccoloba obtusifolia Jacq.   Coccobtu
 
 Transforma la matriz de comunidad. Este paso es importante, lo explico
 [aquí](https://www.youtube.com/watch?v=yQ10lp0-nHc&list=PLDcT2n8UzsCRDqjqSeqHI1wsiNOqpYmsJ&index=10)
@@ -5310,30 +6107,25 @@ repo para poder citarlo apropiadamente.
 
 ``` r
 #Matriz ambiental
-res <- 5 #Resolución H3
 tmpfile <- tempfile()
 download.file(paste0(gh_zonal_stats, 'all_sources_all_variables_res_', res, '.gpkg'), tmpfile)
 za <- st_read(tmpfile, optional = T)
 ```
 
-    ## Reading layer `all_sources_all_variables_res_5' from data source 
-    ##   `/tmp/RtmpqTTkzf/file366572d061f14' using driver `GPKG'
-    ## Simple feature collection with 335 features and 142 fields
+    ## Reading layer `all_sources_all_variables_res_4' from data source 
+    ##   `/tmp/RtmpxezfiL/file3ce0352fb60183' using driver `GPKG'
+    ## Simple feature collection with 64 features and 142 fields
     ## Geometry type: POLYGON
     ## Dimension:     XY
-    ## Bounding box:  xmin: -72.13564 ymin: 17.40413 xmax: -68.20998 ymax: 20.04043
+    ## Bounding box:  xmin: -72.12371 ymin: 17.2322 xmax: -68.21971 ymax: 20.2506
     ## Geodetic CRS:  WGS 84
 
 ``` r
-za %>% st_as_sf('geom') %>%
-  pivot_longer(cols = -matches('base|hex_id|geom')) %>% 
-  tm_shape() + tm_fill(col = 'value') +
-  tm_facets(by = 'name', free.scales = T)
-```
-
-![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-26-1.png)<!-- -->
-
-``` r
+# Las siguientes líneas están comentadas, porque producen muchos mapas. Descoméntalas y ejecútalas si quieres verlos
+# za %>% st_as_sf('geom') %>%
+#   pivot_longer(cols = -matches('base|hex_id|geom')) %>% 
+#   tm_shape() + tm_fill(col = 'value') +
+#   tm_facets(by = 'name', free.scales = T)
 za_intermedia <- za %>%
   st_drop_geometry() %>% 
   select(-matches(c(' base'))) %>% 
@@ -5465,167 +6257,125 @@ print_my_train(mod)
     ## `CH-BIO bio19 mean monthly precipitation amount of the coldest quarter`      FALSE
     ## `ESA Mangroves`                                                              FALSE
     ## `CH-BIO bio07 annual range of air temperature`                               FALSE
-    ## 1 subsets of each size up to 6
+    ## 1 subsets of each size up to 4
     ## Selection Algorithm: 'sequential replacement'
     ##          `ESA Trees` `ESA Shrubland` `ESA Grassland` `ESA Cropland`
     ## 1  ( 1 ) " "         " "             " "             " "           
     ## 2  ( 1 ) " "         " "             " "             " "           
-    ## 3  ( 1 ) "*"         " "             " "             " "           
+    ## 3  ( 1 ) " "         " "             " "             " "           
     ## 4  ( 1 ) "*"         " "             " "             " "           
-    ## 5  ( 1 ) "*"         " "             " "             " "           
-    ## 6  ( 1 ) "*"         " "             " "             " "           
     ##          `ESA Built-up` `ESA Barren / sparse vegetation` `ESA Open water`
     ## 1  ( 1 ) "*"            " "                              " "             
     ## 2  ( 1 ) "*"            " "                              " "             
     ## 3  ( 1 ) "*"            " "                              " "             
     ## 4  ( 1 ) "*"            " "                              " "             
-    ## 5  ( 1 ) "*"            " "                              " "             
-    ## 6  ( 1 ) "*"            " "                              " "             
     ##          `ESA Herbaceous wetland` `ESA Mangroves`
     ## 1  ( 1 ) " "                      " "            
     ## 2  ( 1 ) " "                      " "            
-    ## 3  ( 1 ) " "                      " "            
-    ## 4  ( 1 ) " "                      " "            
-    ## 5  ( 1 ) "*"                      " "            
-    ## 6  ( 1 ) " "                      " "            
+    ## 3  ( 1 ) " "                      "*"            
+    ## 4  ( 1 ) " "                      "*"            
     ##          `CH-BIO bio01 mean annual air temperature`
     ## 1  ( 1 ) " "                                       
     ## 2  ( 1 ) " "                                       
     ## 3  ( 1 ) " "                                       
     ## 4  ( 1 ) " "                                       
-    ## 5  ( 1 ) " "                                       
-    ## 6  ( 1 ) " "                                       
     ##          `CH-BIO bio02 mean diurnal air temperature range`
     ## 1  ( 1 ) " "                                              
     ## 2  ( 1 ) " "                                              
     ## 3  ( 1 ) " "                                              
     ## 4  ( 1 ) " "                                              
-    ## 5  ( 1 ) " "                                              
-    ## 6  ( 1 ) " "                                              
     ##          `CH-BIO bio03 isothermality` `CH-BIO bio04 temperature seasonality`
     ## 1  ( 1 ) " "                          " "                                   
-    ## 2  ( 1 ) " "                          "*"                                   
+    ## 2  ( 1 ) " "                          " "                                   
     ## 3  ( 1 ) " "                          " "                                   
     ## 4  ( 1 ) " "                          "*"                                   
-    ## 5  ( 1 ) " "                          "*"                                   
-    ## 6  ( 1 ) " "                          "*"                                   
     ##          `CH-BIO bio05 mean daily maximum air temperature of the warmest month`
+    ## 1  ( 1 ) " "                                                                   
+    ## 2  ( 1 ) "*"                                                                   
+    ## 3  ( 1 ) "*"                                                                   
+    ## 4  ( 1 ) " "                                                                   
+    ##          `CH-BIO bio06 mean daily minimum air temperature of the coldest month`
     ## 1  ( 1 ) " "                                                                   
     ## 2  ( 1 ) " "                                                                   
     ## 3  ( 1 ) " "                                                                   
     ## 4  ( 1 ) " "                                                                   
-    ## 5  ( 1 ) " "                                                                   
-    ## 6  ( 1 ) " "                                                                   
-    ##          `CH-BIO bio06 mean daily minimum air temperature of the coldest month`
-    ## 1  ( 1 ) " "                                                                   
-    ## 2  ( 1 ) " "                                                                   
-    ## 3  ( 1 ) "*"                                                                   
-    ## 4  ( 1 ) " "                                                                   
-    ## 5  ( 1 ) " "                                                                   
-    ## 6  ( 1 ) " "                                                                   
     ##          `CH-BIO bio07 annual range of air temperature`
     ## 1  ( 1 ) " "                                           
     ## 2  ( 1 ) " "                                           
     ## 3  ( 1 ) " "                                           
     ## 4  ( 1 ) " "                                           
-    ## 5  ( 1 ) " "                                           
-    ## 6  ( 1 ) " "                                           
     ##          `CH-BIO bio08 mean daily mean air temperatures of the wettest quarter`
     ## 1  ( 1 ) " "                                                                   
     ## 2  ( 1 ) " "                                                                   
     ## 3  ( 1 ) " "                                                                   
     ## 4  ( 1 ) " "                                                                   
-    ## 5  ( 1 ) " "                                                                   
-    ## 6  ( 1 ) " "                                                                   
     ##          `CH-BIO bio09 mean daily mean air temperatures of the driest quarter`
     ## 1  ( 1 ) " "                                                                  
     ## 2  ( 1 ) " "                                                                  
     ## 3  ( 1 ) " "                                                                  
-    ## 4  ( 1 ) "*"                                                                  
-    ## 5  ( 1 ) "*"                                                                  
-    ## 6  ( 1 ) "*"                                                                  
+    ## 4  ( 1 ) " "                                                                  
     ##          `CH-BIO bio10 mean daily mean air temperatures of the warmest quarter`
     ## 1  ( 1 ) " "                                                                   
     ## 2  ( 1 ) " "                                                                   
     ## 3  ( 1 ) " "                                                                   
     ## 4  ( 1 ) " "                                                                   
-    ## 5  ( 1 ) " "                                                                   
-    ## 6  ( 1 ) " "                                                                   
     ##          `CH-BIO bio11 mean daily mean air temperatures of the coldest quarter`
     ## 1  ( 1 ) " "                                                                   
     ## 2  ( 1 ) " "                                                                   
     ## 3  ( 1 ) " "                                                                   
     ## 4  ( 1 ) " "                                                                   
-    ## 5  ( 1 ) " "                                                                   
-    ## 6  ( 1 ) " "                                                                   
     ##          `CH-BIO bio12 annual precipitation amount`
     ## 1  ( 1 ) " "                                       
     ## 2  ( 1 ) " "                                       
     ## 3  ( 1 ) " "                                       
     ## 4  ( 1 ) " "                                       
-    ## 5  ( 1 ) " "                                       
-    ## 6  ( 1 ) "*"                                       
     ##          `CH-BIO bio13 precipitation amount of the wettest month`
     ## 1  ( 1 ) " "                                                     
     ## 2  ( 1 ) " "                                                     
     ## 3  ( 1 ) " "                                                     
     ## 4  ( 1 ) " "                                                     
-    ## 5  ( 1 ) " "                                                     
-    ## 6  ( 1 ) " "                                                     
     ##          `CH-BIO bio14 precipitation amount of the driest month`
     ## 1  ( 1 ) " "                                                    
     ## 2  ( 1 ) " "                                                    
     ## 3  ( 1 ) " "                                                    
     ## 4  ( 1 ) " "                                                    
-    ## 5  ( 1 ) " "                                                    
-    ## 6  ( 1 ) " "                                                    
     ##          `CH-BIO bio15 precipitation seasonality`
     ## 1  ( 1 ) " "                                     
     ## 2  ( 1 ) " "                                     
     ## 3  ( 1 ) " "                                     
     ## 4  ( 1 ) " "                                     
-    ## 5  ( 1 ) " "                                     
-    ## 6  ( 1 ) " "                                     
     ##          `CH-BIO bio16 mean monthly precipitation amount of the wettest quarter`
     ## 1  ( 1 ) " "                                                                    
     ## 2  ( 1 ) " "                                                                    
     ## 3  ( 1 ) " "                                                                    
     ## 4  ( 1 ) " "                                                                    
-    ## 5  ( 1 ) " "                                                                    
-    ## 6  ( 1 ) "*"                                                                    
     ##          `CH-BIO bio17 mean monthly precipitation amount of the driest quarter`
     ## 1  ( 1 ) " "                                                                   
     ## 2  ( 1 ) " "                                                                   
     ## 3  ( 1 ) " "                                                                   
     ## 4  ( 1 ) " "                                                                   
-    ## 5  ( 1 ) " "                                                                   
-    ## 6  ( 1 ) " "                                                                   
     ##          `CH-BIO bio18 mean monthly precipitation amount of the warmest quarter`
     ## 1  ( 1 ) " "                                                                    
     ## 2  ( 1 ) " "                                                                    
     ## 3  ( 1 ) " "                                                                    
     ## 4  ( 1 ) " "                                                                    
-    ## 5  ( 1 ) " "                                                                    
-    ## 6  ( 1 ) " "                                                                    
     ##          `CH-BIO bio19 mean monthly precipitation amount of the coldest quarter`
     ## 1  ( 1 ) " "                                                                    
     ## 2  ( 1 ) " "                                                                    
     ## 3  ( 1 ) " "                                                                    
     ## 4  ( 1 ) " "                                                                    
-    ## 5  ( 1 ) " "                                                                    
-    ## 6  ( 1 ) " "                                                                    
     ## 
     ## $resultados_nvmax
     ##   nvmax      RMSE   Rsquared       MAE     RMSESD RsquaredSD      MAESD
-    ## 1     3 0.2782446 0.07712254 0.2482342 0.02187688 0.11697077 0.02524720
-    ## 2     4 0.2592516 0.18402728 0.2272899 0.02669490 0.16217200 0.03438348
-    ## 3     5 0.2535144 0.21494145 0.2182233 0.01399875 0.11390824 0.01342251
-    ## 4     6 0.2706875 0.12692746 0.2315806 0.01499445 0.08724651 0.01260305
-    ## 5     7 0.2907409 0.05923691 0.2550900 0.02280903 0.08419471 0.01697484
+    ## 1     3 0.7999866 0.07544859 0.5784300 0.16439443 0.09074784 0.07580773
+    ## 2     4 0.8262392 0.13980107 0.6294719 0.09455403 0.18216802 0.06295804
+    ## 3     5 0.8533424 0.11231091 0.6430185 0.19739461 0.12502265 0.12722654
+    ## 4     6 0.9263943 0.07535670 0.7104167 0.26703887 0.11081899 0.18146219
+    ## 5     7 0.8635522 0.17129296 0.6662080 0.27877946 0.18482096 0.17301539
     ## 
     ## $mejor_ajuste
     ##   nvmax
-    ## 3     5
+    ## 1     3
 
 ``` r
 (covar <- grep(
@@ -5634,11 +6384,9 @@ print_my_train(mod)
   invert = T, value = T))
 ```
 
-    ## [1] "`ESA Trees`"                                                           
-    ## [2] "`ESA Built-up`"                                                        
-    ## [3] "`ESA Herbaceous wetland`"                                              
-    ## [4] "`CH-BIO bio05 mean daily maximum air temperature of the warmest month`"
-    ## [5] "`CH-BIO bio11 mean daily mean air temperatures of the coldest quarter`"
+    ## [1] "`ESA Built-up`"                                                        
+    ## [2] "`CH-BIO bio01 mean annual air temperature`"                            
+    ## [3] "`CH-BIO bio06 mean daily minimum air temperature of the coldest month`"
 
 ``` r
 mi_fam_t_rda <- rda(mi_fam_t_sel %>% rename_all(~ gsub('^ESPECIE ', '', .)) ~ .,
@@ -5648,321 +6396,227 @@ summary(mi_fam_t_rda)
 
     ## 
     ## Call:
-    ## rda(formula = mi_fam_t_sel %>% rename_all(~gsub("^ESPECIE ",      "", .)) ~ `ESA Trees` + `ESA Built-up` + `ESA Herbaceous wetland` +      `CH-BIO bio05 mean daily maximum air temperature of the warmest month` +      `CH-BIO bio11 mean daily mean air temperatures of the coldest quarter`,      data = env %>% select_at(all_of(gsub("\\`", "", covar))),      scale = T) 
+    ## rda(formula = mi_fam_t_sel %>% rename_all(~gsub("^ESPECIE ",      "", .)) ~ `ESA Built-up` + `CH-BIO bio01 mean annual air temperature` +      `CH-BIO bio06 mean daily minimum air temperature of the coldest month`,      data = env %>% select_at(all_of(gsub("\\`", "", covar))),      scale = T) 
     ## 
     ## Partitioning of correlations:
     ##               Inertia Proportion
-    ## Total          6.0000     1.0000
-    ## Constrained    0.8418     0.1403
-    ## Unconstrained  5.1582     0.8597
+    ## Total          44.000     1.0000
+    ## Constrained     6.956     0.1581
+    ## Unconstrained  37.044     0.8419
     ## 
     ## Eigenvalues, and their contribution to the correlations 
     ## 
     ## Importance of components:
-    ##                         RDA1    RDA2     RDA3     RDA4      RDA5    PC1    PC2
-    ## Eigenvalue            0.6782 0.09938 0.044722 0.014118 0.0054064 1.2027 1.0945
-    ## Proportion Explained  0.1130 0.01656 0.007454 0.002353 0.0009011 0.2005 0.1824
-    ## Cumulative Proportion 0.1130 0.12960 0.137050 0.139403 0.1403041 0.3408 0.5232
-    ##                          PC3    PC4    PC5     PC6
-    ## Eigenvalue            1.0360 0.9732 0.7843 0.06743
-    ## Proportion Explained  0.1727 0.1622 0.1307 0.01124
-    ## Cumulative Proportion 0.6958 0.8580 0.9888 1.00000
+    ##                          RDA1    RDA2    RDA3     PC1     PC2     PC3     PC4
+    ## Eigenvalue            3.30250 2.75620 0.89702 3.40345 3.18442 2.84171 2.61845
+    ## Proportion Explained  0.07506 0.06264 0.02039 0.07735 0.07237 0.06458 0.05951
+    ## Cumulative Proportion 0.07506 0.13770 0.15808 0.23544 0.30781 0.37239 0.43190
+    ##                           PC5     PC6     PC7    PC8     PC9    PC10    PC11
+    ## Eigenvalue            2.20121 2.02078 1.87761 1.7686 1.65797 1.57770 1.40982
+    ## Proportion Explained  0.05003 0.04593 0.04267 0.0402 0.03768 0.03586 0.03204
+    ## Cumulative Proportion 0.48193 0.52786 0.57053 0.6107 0.64841 0.68426 0.71631
+    ##                          PC12    PC13    PC14    PC15    PC16    PC17    PC18
+    ## Eigenvalue            1.31019 1.25244 1.16474 1.09472 0.94043 0.91889 0.87743
+    ## Proportion Explained  0.02978 0.02846 0.02647 0.02488 0.02137 0.02088 0.01994
+    ## Cumulative Proportion 0.74608 0.77455 0.80102 0.82590 0.84727 0.86816 0.88810
+    ##                          PC19    PC20   PC21    PC22    PC23     PC24     PC25
+    ## Eigenvalue            0.84226 0.75703 0.5763 0.53128 0.46678 0.407329 0.305472
+    ## Proportion Explained  0.01914 0.01721 0.0131 0.01207 0.01061 0.009257 0.006943
+    ## Cumulative Proportion 0.90724 0.92444 0.9375 0.94962 0.96023 0.969484 0.976426
+    ##                           PC26     PC27    PC28     PC29     PC30     PC31
+    ## Eigenvalue            0.282831 0.214864 0.18568 0.119979 0.109629 0.080031
+    ## Proportion Explained  0.006428 0.004883 0.00422 0.002727 0.002492 0.001819
+    ## Cumulative Proportion 0.982854 0.987738 0.99196 0.994685 0.997176 0.998995
+    ##                           PC32     PC33
+    ## Eigenvalue            0.028466 0.015752
+    ## Proportion Explained  0.000647 0.000358
+    ## Cumulative Proportion 0.999642 1.000000
     ## 
     ## Accumulated constrained eigenvalues
     ## Importance of components:
-    ##                         RDA1    RDA2    RDA3    RDA4     RDA5
-    ## Eigenvalue            0.6782 0.09938 0.04472 0.01412 0.005406
-    ## Proportion Explained  0.8056 0.11805 0.05313 0.01677 0.006422
-    ## Cumulative Proportion 0.8056 0.92368 0.97681 0.99358 1.000000
+    ##                         RDA1   RDA2  RDA3
+    ## Eigenvalue            3.3025 2.7562 0.897
+    ## Proportion Explained  0.4748 0.3962 0.129
+    ## Cumulative Proportion 0.4748 0.8710 1.000
     ## 
     ## Scaling 2 for species and site scores
     ## * Species are scaled proportional to eigenvalues
     ## * Sites are unscaled: weighted dispersion equal on all dimensions
-    ## * General scaling constant of scores:  4.949232 
+    ## * General scaling constant of scores:  6.308684 
     ## 
     ## 
     ## Species scores
     ## 
-    ##             RDA1     RDA2     RDA3     RDA4      RDA5     PC1
-    ## Coccuvif -1.1350 -0.09779  0.06252 -0.09015 -0.029856  1.0316
-    ## Antilept -0.3119  0.09194 -0.28618  0.13455 -0.052555 -0.4774
-    ## Coccpube -0.1470  0.15696 -0.20089 -0.05914  0.116028 -0.9960
-    ## Coccdive -0.1987  0.40175 -0.08022 -0.11977 -0.056628 -1.4052
-    ## Cocccost  0.5237  0.40762  0.16754  0.03795 -0.003441 -0.1178
-    ## Coccwrig  1.0237 -0.18842 -0.14801 -0.11011 -0.041678  0.7985
+    ##                RDA1      RDA2     RDA3        PC1      PC2       PC3
+    ## Coccuvif   -0.58198  0.324459 -0.09000 -0.0769338 -0.03109  0.162810
+    ## Antilept   -0.33149 -0.022429 -0.07849 -0.2412475 -0.29637 -0.271445
+    ## Coccdive   -0.19348 -0.090260 -0.08553  0.3120001  0.34272 -0.102529
+    ## CoccBrow    0.05633 -0.166619  0.20963  0.5119792  0.32211 -0.080188
+    ## Coccpube   -0.08353  0.018379 -0.18338 -0.1228527 -0.50088  0.288539
+    ## Coccjime   -0.44599 -0.683226  0.01270  0.0978082 -0.16347  0.060068
+    ## Perspunc    0.14889 -0.274585 -0.22312 -0.4800538 -0.12364 -0.393444
+    ## Coccflav    0.11503  0.113479  0.24746  0.4723304  0.22079 -0.028984
+    ## Leptdomi   -0.01093 -0.138654  0.02460  0.1143475 -0.28616  0.154972
+    ## Leptdomi.1 -0.07499 -0.148382  0.20633 -0.1175629 -0.40594  0.347016
+    ## Leptdomi.2 -0.13362 -0.290560  0.09435 -0.0342322 -0.31769  0.383492
+    ## Cocccost    0.06711 -0.001120 -0.11463  0.5763717 -0.26243 -0.110713
+    ## Coccincr    0.50735 -0.136415 -0.08993 -0.0841737 -0.18633 -0.067550
+    ## Coccwrig    0.07447 -0.272917  0.03944 -0.1282115  0.30434 -0.117305
+    ## Coccpica    0.29032 -0.053049  0.19013  0.1813158  0.14640 -0.033572
+    ## Rumeacet    0.37481 -0.254924 -0.13928 -0.0007047 -0.06541  0.230852
+    ## Rumecris    0.55432 -0.272228 -0.11738 -0.2355424  0.11060 -0.110883
+    ## Coccleon   -0.12843  0.132976  0.02474 -0.0069115  0.26397  0.040012
+    ## Coccceib   -0.04505 -0.211241  0.02948 -0.4640758 -0.03528 -0.143115
+    ## Coccveno   -0.10808  0.145476 -0.20643 -0.0354590 -0.16795  0.414343
+    ## Coccleog   -0.07562  0.226974  0.24132 -0.1277979  0.22106  0.126644
+    ## Coccmicr   -0.06493  0.158175 -0.12953  0.1750219  0.04759  0.050666
+    ## Cocckrug   -0.28401 -0.068969 -0.03540 -0.1433355  0.18479  0.044920
+    ## Coccbuch    0.05328  0.060538 -0.02355 -0.4491303  0.18337  0.003851
+    ## Coccfuer    0.07444  0.121583  0.06251 -0.0140717 -0.16335  0.214340
+    ## Coccnodo   -0.12165 -0.134746  0.15690 -0.0521014 -0.64789  0.120621
+    ## Coccpauc    0.22824 -0.075988  0.10350  0.3741644  0.16009  0.124982
+    ## PolyL       0.15407 -0.201385 -0.07902 -0.4963533  0.14987 -0.170814
+    ## RumeL       0.49229 -0.209667  0.01259  0.2205257  0.18053  0.001646
+    ## Perspens   -0.44599 -0.683226  0.01270  0.0978082 -0.16347  0.060068
+    ## Pershydr    0.44780 -0.242197 -0.11277 -0.0118557  0.04575 -0.012041
+    ## Coccsama   -0.03495  0.147690 -0.11159  0.1913844 -0.54294 -0.540176
+    ## Persferr   -0.15855 -0.002509 -0.13174 -0.3502184  0.14322 -0.225181
+    ## Brunovat    0.37481 -0.254924 -0.13928 -0.0007047 -0.06541  0.230852
+    ## RuprMey    -0.44599 -0.683226  0.01270  0.0978082 -0.16347  0.060068
+    ## Coccsubc    0.19478 -0.045653  0.03183  0.3547679  0.21698  0.013104
+    ## Polypunc    0.15348 -0.084799 -0.15978 -0.3807183  0.14947 -0.044074
+    ## Perssege   -0.09481  0.049218 -0.17398 -0.3360823  0.19503 -0.143669
+    ## Persacum   -0.19514 -0.104961 -0.10664 -0.0335173 -0.34939  0.368624
+    ## Coccswar   -0.16358  0.121753 -0.06358 -0.3239358  0.04892 -0.040104
+    ## Perslapa   -0.13706  0.022852 -0.28660  0.1367555  0.19069  0.080352
+    ## Persglab   -0.05613  0.112981 -0.18994  0.2108472 -0.35909 -0.679290
+    ## Rumeobtu    0.21427 -0.031794  0.03932  0.0692351  0.02366 -0.097853
+    ## Coccobtu   -0.05613  0.112981 -0.18994  0.2108472 -0.35909 -0.679290
     ## 
     ## 
     ## Site scores (weighted sums of species scores)
     ## 
-    ##                     RDA1     RDA2     RDA3    RDA4    RDA5       PC1
-    ## 854cf243fffffff -0.64632  0.91943 -2.61266  2.4771 -8.2445 -0.332387
-    ## 854cf24bfffffff -0.64320  0.13054 -4.26505  3.6709  7.2966 -0.282471
-    ## 854cc2d3fffffff -0.55295  0.72207  0.71475 -3.8027 -4.4536 -0.153920
-    ## 854cd423fffffff  0.17108 -1.07612 -2.13085 -4.3221  9.5244  0.182829
-    ## 854cd5b7fffffff -0.55295  0.72207  0.71475 -3.8027 -4.4536 -0.145582
-    ## 854cd427fffffff -0.62348  1.40216 -4.17874  0.6228  3.0681 -0.340286
-    ## 854cd42ffffffff -0.62348  1.40216 -4.17874  0.6228  3.0681 -0.295080
-    ## 854cd58ffffffff -0.64632  0.91943 -2.61266  2.4771 -8.2445 -0.350740
-    ## 854cf313fffffff -0.70692 -0.66632 -2.55029  6.5453 -5.6027  0.184363
-    ## 854cc60ffffffff -0.68776 -1.42980  1.82972 -0.6951 -0.2232  0.576723
-    ## 854cf3cffffffff  0.02140  1.01957  3.68412  1.8667  0.3424  0.294264
-    ## 854cc613fffffff -0.68776 -1.42980  1.82972 -0.6951 -0.2232  0.515395
-    ## 854cd553fffffff -0.68776 -1.42980  1.82972 -0.6951 -0.2232  0.591231
-    ## 854cf20ffffffff -0.51748  1.26415 -1.59916 -4.7782  8.2348 -0.632781
-    ## 854c8997fffffff  0.02140  1.01957  3.68412  1.8667  0.3424  0.384056
-    ## 854cd623fffffff -0.05164  2.29595  2.47772 -1.3430 -3.3903 -0.138005
-    ## 854cf353fffffff -0.68776 -1.42980  1.82972 -0.6951 -0.2232  0.479358
-    ## 854cd28bfffffff -0.64632  0.91943 -2.61266  2.4771 -8.2445 -0.265055
-    ## 854cd51bfffffff -0.55295  0.72207  0.71475 -3.8027 -4.4536 -0.172310
-    ## 854cd0cffffffff -0.68776 -1.42980  1.82972 -0.6951 -0.2232  0.489013
-    ## 85672527fffffff -0.54913 -0.24412 -1.30901 -2.3407 14.5802 -0.298728
-    ## 856725a7fffffff  0.06063  1.94134 -0.21304 -2.9618 -4.3654 -0.851700
-    ## 854cd083fffffff -0.70692 -0.66632 -2.55029  6.5453 -5.6027  0.176613
-    ## 854cf26ffffffff -0.68776 -1.42980  1.82972 -0.6951 -0.2232  0.587207
-    ## 854cd2dbfffffff  0.39662  2.01495 -1.02537 10.6119 -3.7356 -0.308206
-    ## 854cd513fffffff -0.68776 -1.42980  1.82972 -0.6951 -0.2232  0.540779
-    ## 854c8993fffffff -0.68776 -1.42980  1.82972 -0.6951 -0.2232  0.497063
-    ## 854c8833fffffff -0.55295  0.72207  0.71475 -3.8027 -4.4536 -0.289198
-    ## 854cf32ffffffff -0.68776 -1.42980  1.82972 -0.6951 -0.2232  0.436534
-    ## 854cd5b3fffffff -0.64632  0.91943 -2.61266  2.4771 -8.2445 -0.301883
-    ## 854c890ffffffff -0.15712 -0.02213 -4.83050 11.6726 -5.9904 -0.433496
-    ## 854cf373fffffff  0.02140  1.01957  3.68412  1.8667  0.3424  0.381112
-    ## 854cd293fffffff -0.70692 -0.66632 -2.55029  6.5453 -5.6027  0.111508
-    ## 854cc6c7fffffff -0.55295  0.72207  0.71475 -3.8027 -4.4536 -0.307955
-    ## 854cd4a7fffffff -0.51748  1.26415 -1.59916 -4.7782  8.2348 -0.544072
-    ## 854c898ffffffff  0.29037 -2.14416  0.06356 -3.2440 -2.8743  0.672016
-    ## 854c89c7fffffff -0.68776 -1.42980  1.82972 -0.6951 -0.2232  0.376471
-    ## 854c8913fffffff -0.68776 -1.42980  1.82972 -0.6951 -0.2232  0.465253
-    ## 854c8953fffffff -0.15712 -0.02213 -4.83050 11.6726 -5.9904 -0.531895
-    ## 854cd667fffffff -0.64632  0.91943 -2.61266  2.4771 -8.2445 -0.307091
-    ## 854c882ffffffff -0.68776 -1.42980  1.82972 -0.6951 -0.2232  0.287381
-    ## 854c88affffffff -0.68776 -1.42980  1.82972 -0.6951 -0.2232  0.398037
-    ## 854cc657fffffff -0.68776 -1.42980  1.82972 -0.6951 -0.2232  0.532950
-    ## 854cc6c3fffffff -0.68776 -1.42980  1.82972 -0.6951 -0.2232  0.186085
-    ## 854c89abfffffff -0.68776 -1.42980  1.82972 -0.6951 -0.2232  0.471938
-    ## 854cf31bfffffff -0.05164  2.29595  2.47772 -1.3430 -3.3903 -0.060751
-    ## 854cc6cffffffff -0.68776 -1.42980  1.82972 -0.6951 -0.2232  0.548943
-    ## 854cd5cbfffffff -0.68776 -1.42980  1.82972 -0.6951 -0.2232  0.510422
-    ## 854cc617fffffff -0.68776 -1.42980  1.82972 -0.6951 -0.2232  0.452295
-    ## 854cf247fffffff -0.68776 -1.42980  1.82972 -0.6951 -0.2232  0.426302
-    ## 854cc66bfffffff  0.06063  1.94134 -0.21304 -2.9618 -4.3654 -0.745383
-    ## 854cf333fffffff -0.68776 -1.42980  1.82972 -0.6951 -0.2232  0.473447
-    ## 854c89a3fffffff -0.55295  0.72207  0.71475 -3.8027 -4.4536 -0.026164
-    ## 854c89d7fffffff -0.68776 -1.42980  1.82972 -0.6951 -0.2232  0.413760
-    ## 854cd40bfffffff  0.87289  2.36208  3.98629  5.0560  2.4171 -0.031396
-    ## 854c883bfffffff -0.68776 -1.42980  1.82972 -0.6951 -0.2232  0.426290
-    ## 854cf347fffffff  0.87289  2.36208  3.98629  5.0560  2.4171 -0.107306
-    ## 854cd5c3fffffff  0.66558 -1.14879 -4.64593  5.5012 -6.9523 -0.002613
-    ## 854cd453fffffff  1.25326 -2.11212 -1.13396 -2.1716 -2.1319  0.439345
-    ## 854c89bbfffffff  1.25326 -2.11212 -1.13396 -2.1716 -2.1319  0.449564
-    ## 854cd44bfffffff  1.25326 -2.11212 -1.13396 -2.1716 -2.1319  0.365784
-    ## 854c8927fffffff  1.25326 -2.11212 -1.13396 -2.1716 -2.1319  0.449575
-    ## 854cd43bfffffff  0.55441  2.43715  0.21591  1.7260 16.4473 -0.508531
-    ## 854cd583fffffff -0.01994  2.13964 -2.75347 -3.9434 11.6513 -1.130657
-    ## 854cf233fffffff  0.87289  2.36208  3.98629  5.0560  2.4171 -0.088781
-    ## 854cc6cbfffffff  1.25326 -2.11212 -1.13396 -2.1716 -2.1319  0.573364
-    ## 854cd407fffffff  0.06603  0.57495 -3.07507 -0.8941 22.5525 -0.667527
-    ## 854cd4cbfffffff  1.25326 -2.11212 -1.13396 -2.1716 -2.1319  0.475069
-    ## 85672587fffffff  0.06063  1.94134 -0.21304 -2.9618 -4.3654 -0.864859
-    ## 854cd0d7fffffff -0.17773  1.71744 -3.99474  4.9425 -8.5316 -0.671121
-    ## 854cd0d3fffffff  1.25326 -2.11212 -1.13396 -2.1716 -2.1319  0.588377
-    ## 854cf303fffffff  0.06063  1.94134 -0.21304 -2.9618 -4.3654 -0.788440
-    ## 854cd46bfffffff  0.55059  3.40333  2.23967  0.2639 -2.5866 -0.553139
-    ## 854cd6b7fffffff  0.87289  2.36208  3.98629  5.0560  2.4171 -0.124751
-    ## 854cd29bfffffff  0.55059  3.40333  2.23967  0.2639 -2.5866 -0.497155
-    ## 854cd693fffffff  0.06603  0.57495 -3.07507 -0.8941 22.5525 -0.813569
-    ## 854c89b7fffffff  1.25326 -2.11212 -1.13396 -2.1716 -2.1319  0.465983
-    ## 854cf36bfffffff  0.55441  2.43715  0.21591  1.7260 16.4473 -0.481139
-    ## 854cd5bbfffffff -0.01994  2.13964 -2.75347 -3.9434 11.6513 -1.094821
-    ## 854cf37bfffffff  0.87289  2.36208  3.98629  5.0560  2.4171  0.053410
-    ## 854cd243fffffff  0.06603  0.57495 -3.07507 -0.8941 22.5525 -0.777797
-    ## 854cd457fffffff  1.39391  0.53710  1.58849  0.8226 -1.0072  0.355319
-    ## 854cd247fffffff  0.06603  0.57495 -3.07507 -0.8941 22.5525 -0.733775
-    ## 854cd633fffffff  0.06063  1.94134 -0.21304 -2.9618 -4.3654 -0.792728
-    ## 854cd473fffffff  1.25326 -2.11212 -1.13396 -2.1716 -2.1319  0.461189
-    ## 854cd63bfffffff  1.25326 -2.11212 -1.13396 -2.1716 -2.1319  0.453487
-    ## 854cd0c7fffffff -0.68776 -1.42980  1.82972 -0.6951 -0.2232  0.562529
-    ## 854c890bfffffff  0.06063  1.94134 -0.21304 -2.9618 -4.3654 -0.838262
-    ## 856725a3fffffff  1.39391  0.53710  1.58849  0.8226 -1.0072  0.213069
-    ## 854cd6a7fffffff  0.87289  2.36208  3.98629  5.0560  2.4171  0.025660
-    ## 854cf343fffffff  1.25326 -2.11212 -1.13396 -2.1716 -2.1319 -0.148346
-    ## 854cd46ffffffff  1.25326 -2.11212 -1.13396 -2.1716 -2.1319  0.521036
-    ## 854cc673fffffff -0.68776 -1.42980  1.82972 -0.6951 -0.2232  0.618119
-    ## 854cd697fffffff  1.25326 -2.11212 -1.13396 -2.1716 -2.1319  0.355403
-    ## 854cd21bfffffff -0.68776 -1.42980  1.82972 -0.6951 -0.2232  0.559698
-    ## 854cd443fffffff  0.06063  1.94134 -0.21304 -2.9618 -4.3654 -0.805561
-    ## 854cd6affffffff -0.55295  0.72207  0.71475 -3.8027 -4.4536 -0.068188
-    ## 854cc643fffffff -0.15712 -0.02213 -4.83050 11.6726 -5.9904 -0.419917
-    ## 854c899bfffffff  0.06063  1.94134 -0.21304 -2.9618 -4.3654 -0.812249
-    ## 854cd647fffffff  1.25326 -2.11212 -1.13396 -2.1716 -2.1319  0.484864
-    ## 854cd45bfffffff  1.25326 -2.11212 -1.13396 -2.1716 -2.1319  0.397287
+    ##                     RDA1      RDA2     RDA3       PC1       PC2      PC3
+    ## 844cf25ffffffff -0.70167  0.729781 -0.52055  0.180306 -0.255212  0.59510
+    ## 844cc61ffffffff -0.86196  0.695043 -2.20004  0.894791  1.247661  0.52574
+    ## 844cf35ffffffff  0.10274  0.284211  0.56762  0.905017 -0.020975 -0.13208
+    ## 844c895ffffffff -0.59877  0.455817  1.91358 -1.051503 -0.942610  0.76054
+    ## 844c899ffffffff -0.25133  0.239639  0.46094  0.027196 -0.571861  0.83728
+    ## 844cd43ffffffff -3.51521 -5.673195  0.79622  0.639959 -1.069581  0.39302
+    ## 844cd59ffffffff -1.02630  0.907286 -0.40848 -0.544000 -0.533226  1.12821
+    ## 844c883ffffffff -0.88851  0.891987  1.16373 -0.045222  1.727131  0.26180
+    ## 844cc6dffffffff -0.97399  0.379290 -1.17314  0.104261 -0.951113  2.47881
+    ## 844c891ffffffff -0.65357  0.893594  0.77930 -0.030612  0.588028 -0.07854
+    ## 844cf31ffffffff -0.66983  1.117090 -4.32366  1.379573 -2.349511 -4.44460
+    ## 844cf33ffffffff -0.48645  0.691615 -0.05235 -0.380480  0.677521  0.55231
+    ## 844c89bffffffff -0.67167 -0.167020  0.89168  0.357033  0.767155 -0.31835
+    ## 844cd5dffffffff -0.82270  0.052300 -1.34174 -1.422223  0.623811 -0.99599
+    ## 844cf37ffffffff -0.17690  0.553420 -0.48582  0.336675 -2.614221 -0.36605
+    ## 844cd63ffffffff -0.14467  0.312907  1.24838  1.380789  0.907293 -0.07867
+    ## 844cd4bffffffff -1.00783  0.044534 -0.08593 -0.857121 -1.969771  0.69589
+    ## 844cd0dffffffff  0.41276 -0.284467 -2.39663 -2.198986  1.276075 -0.94003
+    ## 844cd25ffffffff -0.56485  1.020780  0.31478  0.028230 -0.033235  1.06018
+    ## 846725bffffffff  1.25156 -0.155027  2.51384  2.321246  1.419687  0.08574
+    ## 844cd09ffffffff -0.42602  0.174008 -1.68855 -1.757698  0.682212 -1.05954
+    ## 844cf27ffffffff -0.52764  0.554333  0.32584  0.159139 -0.414168  0.51900
+    ## 844cd67ffffffff  0.42702  0.605639  1.94181  1.463069  0.515513  0.15400
+    ## 844cd2dffffffff  0.95990 -0.006305  1.13577  0.911336 -0.159630 -0.43670
+    ## 844c8bbffffffff  0.33268  0.372670  2.82587  1.116533  0.512334 -0.27380
+    ## 844cc65ffffffff -0.72829  0.313437 -1.82082 -1.554709  0.413446 -0.51779
+    ## 844c89dffffffff -0.59705  1.126972  1.20093 -0.292819  0.325766  0.23941
+    ## 844cd41ffffffff  0.25483 -0.643356  0.63711 -0.367393 -2.325965  0.70863
+    ## 844cd45ffffffff  3.35238 -2.459593 -1.92538 -0.004611 -0.427964  1.51046
+    ## 844cd65ffffffff  1.67061 -0.222625  1.37740 -0.279651  0.375525 -0.45609
+    ## 8467259ffffffff  0.95801 -0.247743  1.80266  1.041076  0.963957 -0.36394
+    ## 844c893ffffffff  1.67513 -1.052537 -1.33806 -0.822569  0.265999 -0.65330
+    ## 844cf23ffffffff  0.06695  0.728097 -0.79339  1.187219 -0.002177  0.14698
+    ## 844cd69ffffffff  1.58697 -0.798523 -1.33081 -1.484254 -0.261630 -0.32068
+    ## 844cd4dffffffff  0.32728 -0.602791  0.40633 -1.439500  0.643444 -0.81956
+    ## 844cd47ffffffff  0.93700 -0.028124  0.13161 -0.857107  0.538131 -0.18358
+    ## 844cd6bffffffff  1.97939 -0.803144 -0.55006  0.957012  0.432161 -0.21381
     ## 
     ## 
     ## Site constraints (linear combinations of constraining variables)
     ## 
-    ##                     RDA1     RDA2       RDA3      RDA4      RDA5       PC1
-    ## 854cf243fffffff -0.17740  0.23544  2.249e-01 -0.311502  0.108510 -0.332387
-    ## 854cf24bfffffff -0.01607  0.31723  1.005e-01 -0.039508 -0.222924 -0.282471
-    ## 854cc2d3fffffff -0.40740  0.33501  5.030e-01 -0.322795  0.295711 -0.153920
-    ## 854cd423fffffff -0.08600  0.22129 -1.964e-01  0.107470 -0.270988  0.182829
-    ## 854cd5b7fffffff -0.27571  0.36409  3.608e-01  0.044803 -0.116282 -0.145582
-    ## 854cd427fffffff -0.92766  0.64310 -2.519e+00 -1.102733  0.005682 -0.340286
-    ## 854cd42ffffffff -0.90063  0.78452 -2.722e+00 -0.928747 -0.054587 -0.295080
-    ## 854cd58ffffffff -0.36063  0.10713  2.026e-01  0.083248  0.108596 -0.350740
-    ## 854cf313fffffff -0.14499  0.45317  4.306e-01 -0.332824  0.191366  0.184363
-    ## 854cc60ffffffff -0.25571  0.41349  4.425e-01 -0.530872  0.126287  0.576723
-    ## 854cf3cffffffff -0.37901 -0.10439  1.888e-01  0.150113  0.176831  0.294264
-    ## 854cc613fffffff -0.53983 -0.08752  1.819e-02 -0.364220  0.440912  0.515395
-    ## 854cd553fffffff -0.65968  0.08716 -4.027e-01 -0.123947  0.491227  0.591231
-    ## 854cf20ffffffff -0.27339 -0.16199  1.594e-01  0.135137  0.301081 -0.632781
-    ## 854c8997fffffff -0.09976  0.31023 -1.401e-02  0.038606 -0.219679  0.384056
-    ## 854cd623fffffff -0.07590  0.43206  3.476e-01 -0.076515 -0.027640 -0.138005
-    ## 854cf353fffffff -0.24676 -0.14628  1.733e-01  0.281147  0.120770  0.479358
-    ## 854cd28bfffffff  0.01029  0.62338  3.934e-01 -0.327890  0.261696 -0.265055
-    ## 854cd51bfffffff -0.49081  0.14065  2.770e-01 -0.028517  0.451817 -0.172310
-    ## 854cd0cffffffff -0.67940 -0.14935  2.985e-01  0.023884  0.584454  0.489013
-    ## 85672527fffffff -0.60053 -0.64632  2.030e-01  0.204411  0.124346 -0.298728
-    ## 856725a7fffffff  1.05020 -0.29449 -3.226e-01  0.093372  0.551228 -0.851700
-    ## 854cd083fffffff -0.22436  0.32061  1.827e-01 -0.035059  0.063554  0.176613
-    ## 854cf26ffffffff  0.34901  0.33834 -2.860e-01  0.172860 -0.703220  0.587207
-    ## 854cd2dbfffffff  0.67264 -0.05222 -9.282e-02  0.083309  0.269614 -0.308206
-    ## 854cd513fffffff -0.60968 -0.06946 -2.380e-01 -0.252399  0.379800  0.540779
-    ## 854c8993fffffff -0.23945 -0.03719  2.227e-01  0.218531  0.013503  0.497063
-    ## 854c8833fffffff -0.60510 -0.52044 -3.814e-05  0.392416  0.421689 -0.289198
-    ## 854cf32ffffffff -0.30742 -0.42802 -1.662e-02  0.478635  0.174867  0.436534
-    ## 854cd5b3fffffff -0.53099  0.07758 -4.801e-01  0.094852 -0.062652 -0.301883
-    ## 854c890ffffffff  0.33643 -0.43537 -1.858e-01  0.696155 -0.462965 -0.433496
-    ## 854cf373fffffff  0.11719  0.43660  2.345e-01 -0.025114 -0.481179  0.381112
-    ## 854cd293fffffff -0.43734 -0.01342  2.476e-01  0.119459  0.368997  0.111508
-    ## 854cc6c7fffffff -0.39743 -0.45650  2.607e-01 -0.395951  0.270020 -0.307955
-    ## 854cd4a7fffffff  0.11336  0.38260  2.242e-01  0.146571 -0.479304 -0.544072
-    ## 854c898ffffffff  0.42355  0.07601 -1.597e-02  0.462332 -0.781030  0.672016
-    ## 854c89c7fffffff -0.10984 -0.71844 -2.691e-01  1.008325 -0.645667  0.376471
-    ## 854c8913fffffff -0.02968 -0.31968 -4.073e-01  0.795319 -0.951358  0.465253
-    ## 854c8953fffffff -0.15617 -0.98593 -2.732e-01  1.171274 -0.721861 -0.531895
-    ## 854cd667fffffff -0.11825  0.30780 -1.260e-02 -0.088209 -0.396513 -0.307091
-    ## 854c882ffffffff -0.08469 -1.00817 -8.556e-03  0.135180 -0.747336  0.287381
-    ## 854c88affffffff -0.55853 -0.61330  9.757e-02  0.563304  0.297693  0.398037
-    ## 854cc657fffffff -0.48755 -0.13991 -3.789e-01  0.129595  0.305447  0.532950
-    ## 854cc6c3fffffff -0.04992 -1.31784  3.751e-01 -1.766133 -0.417638  0.186085
-    ## 854c89abfffffff  0.07375 -0.34864 -5.680e-01  0.650024 -0.643620  0.471938
-    ## 854cf31bfffffff  0.11262  0.87449  4.403e-01 -0.274690 -0.324253 -0.060751
-    ## 854cc6cffffffff -0.09596  0.27854  3.435e-01 -0.151429 -0.049124  0.548943
-    ## 854cd5cbfffffff -0.38636 -0.05494  9.126e-02  0.089108  0.208587  0.510422
-    ## 854cc617fffffff -0.56996 -0.27639  3.635e-01 -0.340383  0.650843  0.452295
-    ## 854cf247fffffff  0.04198 -0.24620  3.137e-01 -0.832214 -0.287030  0.426302
-    ## 854cc66bfffffff  0.03913  0.49907  6.693e-01 -1.100147 -0.572921 -0.745383
-    ## 854cf333fffffff -0.30365 -0.13015  3.010e-01 -0.260375  0.186465  0.473447
-    ## 854c89a3fffffff -0.18428  0.21925 -1.756e+00 -0.012825 -0.645784 -0.026164
-    ## 854c89d7fffffff -0.08193 -0.45140 -3.096e-03  0.570837 -0.468753  0.413760
-    ## 854cd40bfffffff  0.32933  0.15901 -3.563e-03  0.181588 -0.279936 -0.031396
-    ## 854c883bfffffff -0.60482 -0.48375  1.660e-01  0.373236  0.612709  0.426290
-    ## 854cf347fffffff -0.14006 -0.23730  1.102e-01  0.439561 -0.129901 -0.107306
-    ## 854cd5c3fffffff -0.44764 -0.40537  1.496e-01  0.308544  0.346028 -0.002613
-    ## 854cd453fffffff  0.94163 -0.05573 -2.125e-01  0.010779  0.364121  0.439345
-    ## 854c89bbfffffff  0.29048 -0.07726 -3.071e-01  0.480728 -0.665291  0.449564
-    ## 854cd44bfffffff  0.98282 -0.57413 -5.701e-01 -0.014823  1.211089  0.365784
-    ## 854c8927fffffff  0.61440 -0.05156 -2.507e-01  0.153397  0.043567  0.449575
-    ## 854cd43bfffffff  0.39878  0.41333  1.727e-01  0.101739 -0.480944 -0.508531
-    ## 854cd583fffffff -0.33803 -0.21951  1.556e-01  0.391017  0.071499 -1.130657
-    ## 854cf233fffffff -0.42492 -0.21936  1.631e-01  0.176450  0.570863 -0.088781
-    ## 854cc6cbfffffff  0.10288  0.70148  4.222e-01 -0.213754 -0.141248  0.573364
-    ## 854cd407fffffff  0.39280  0.44154  1.255e-01  0.119326 -0.593151 -0.667527
-    ## 854cd4cbfffffff  0.61805  0.17185 -4.524e-02  0.218441 -0.441631  0.475069
-    ## 85672587fffffff -0.37462 -0.35478  1.192e-01  0.504889 -0.395932 -0.864859
-    ## 854cd0d7fffffff  0.24761  0.79696  3.414e-01 -0.326338 -0.105871 -0.671121
-    ## 854cd0d3fffffff  0.32866  0.77995  3.536e-01 -0.314245 -0.105464  0.588377
-    ## 854cf303fffffff -0.31360  0.01382  2.544e-01  0.053041  0.323790 -0.788440
-    ## 854cd46bfffffff  0.49103  0.29687  3.758e-03 -0.145374  0.219285 -0.553139
-    ## 854cd6b7fffffff  1.01044 -0.38373 -3.457e-01 -0.089287  1.129886 -0.124751
-    ## 854cd29bfffffff  0.58787  0.66307  2.420e-01 -0.366646  0.154431 -0.497155
-    ## 854cd693fffffff  1.39749 -0.42814 -4.887e-01 -0.191089  1.344749 -0.813569
-    ## 854c89b7fffffff  0.62724  0.13429 -3.680e-02  0.261971 -0.454789  0.465983
-    ## 854cf36bfffffff  0.30892  0.57536  2.892e-01  0.040166 -0.575818 -0.481139
-    ## 854cd5bbfffffff -0.44851 -0.05910  1.870e-01  0.214755  0.117365 -1.094821
-    ## 854cf37bfffffff  0.46564  0.70588  2.929e-01 -0.038142 -0.647447  0.053410
-    ## 854cd243fffffff -0.72819 -0.26193  3.008e-01  0.223779  0.641564 -0.777797
-    ## 854cd457fffffff  0.45493  0.34627 -2.666e-01 -0.054070 -0.215504  0.355319
-    ## 854cd247fffffff -0.48056  0.08079  4.872e-01 -0.399220  0.306083 -0.733775
-    ## 854cd633fffffff -0.31045 -0.04121  9.820e-02  0.279927 -0.022140 -0.792728
-    ## 854cd473fffffff  0.70138  0.07672 -6.394e-02  0.041991  0.138861  0.461189
-    ## 854cd63bfffffff  0.24340  0.03350  8.705e-02  0.190940 -0.013915  0.453487
-    ## 854cd0c7fffffff -0.57443  0.13108  4.646e-02 -0.049220  0.398909  0.562529
-    ## 854c890bfffffff  0.33349 -0.17667 -1.254e-01  0.719703 -0.971074 -0.838262
-    ## 856725a3fffffff  0.68684 -0.29917 -2.060e-01  0.223817  0.346188  0.213069
-    ## 854cd6a7fffffff  0.43560  0.49641  2.139e-01 -0.211382  0.103975  0.025660
-    ## 854cf343fffffff  0.41525 -2.49040  2.561e-01 -2.654750 -1.549697 -0.148346
-    ## 854cd46ffffffff  0.73478  0.41165  8.372e-02 -0.221339  0.195098  0.521036
-    ## 854cc673fffffff -0.18209  0.62695  4.782e-01 -0.213957  0.048246  0.618119
-    ## 854cd697fffffff  0.84167 -0.56463 -3.632e-01  0.067257  1.108816  0.355403
-    ## 854cd21bfffffff -0.39916  0.30043  4.523e-01 -0.271638  0.283443  0.559698
-    ## 854cd443fffffff  1.02658 -0.04213 -2.086e-01 -0.091342  0.568098 -0.805561
-    ## 854cd6affffffff -0.04642  0.68746  1.195e-01 -0.188363 -0.291397 -0.068188
-    ## 854cc643fffffff -0.38297 -0.43161  6.839e-02  0.498541  0.180952 -0.419917
-    ## 854c899bfffffff -0.17983 -0.10251  8.738e-02  0.406286 -0.246172 -0.812249
-    ## 854cd647fffffff  0.23334  0.17583 -1.540e-02  0.264256 -0.539029  0.484864
-    ## 854cd45bfffffff  0.95864 -0.32538 -3.404e-01 -0.006424  0.839451  0.397287
+    ##                     RDA1      RDA2     RDA3       PC1       PC2      PC3
+    ## 844cf25ffffffff -0.49056  0.346697 -1.46350  0.180306 -0.255212  0.59510
+    ## 844cc61ffffffff -0.89681  0.149517 -1.87524  0.894791  1.247661  0.52574
+    ## 844cf35ffffffff -0.26006  0.740888  0.18021  0.905017 -0.020975 -0.13208
+    ## 844c895ffffffff -0.12363  0.810756  2.38636 -1.051503 -0.942610  0.76054
+    ## 844c899ffffffff -0.26363  0.513628  0.15546  0.027196 -0.571861  0.83728
+    ## 844cd43ffffffff -2.91808 -4.470345  0.08309  0.639959 -1.069581  0.39302
+    ## 844cd59ffffffff -0.63180  0.526559 -0.14526 -0.544000 -0.533226  1.12821
+    ## 844c883ffffffff -0.84033  0.870059  0.16190 -0.045222  1.727131  0.26180
+    ## 844cc6dffffffff -0.40796  0.778073 -1.52973  0.104261 -0.951113  2.47881
+    ## 844c891ffffffff -0.43380  0.187431  1.87245 -0.030612  0.588028 -0.07854
+    ## 844cf31ffffffff -0.36723  0.739232 -1.24279  1.379573 -2.349511 -4.44460
+    ## 844cf33ffffffff -0.13317  0.628170 -0.53989 -0.380480  0.677521  0.55231
+    ## 844c89bffffffff -1.17618 -2.238167  0.69866  0.357033  0.767155 -0.31835
+    ## 844cd5dffffffff -0.58712  0.455637 -0.52948 -1.422223  0.623811 -0.99599
+    ## 844cf37ffffffff  0.06077  0.604924  0.26874  0.336675 -2.614221 -0.36605
+    ## 844cd63ffffffff -0.41206  0.729937 -0.51225  1.380789  0.907293 -0.07867
+    ## 844cd4bffffffff  0.08874  0.500819  0.68031 -0.857121 -1.969771  0.69589
+    ## 844cd0dffffffff -0.62035  0.322035 -1.13832 -2.198986  1.276075 -0.94003
+    ## 844cd25ffffffff -0.69798  1.083111 -1.75981  0.028230 -0.033235  1.06018
+    ## 846725bffffffff  1.27444 -0.298707  0.20826  2.321246  1.419687  0.08574
+    ## 844cd09ffffffff -0.84492 -0.416011 -0.66594 -1.757698  0.682212 -1.05954
+    ## 844cf27ffffffff  0.28082 -0.005518  0.19964  0.159139 -0.414168  0.51900
+    ## 844cd67ffffffff -0.51378  0.591298  1.35485  1.463069  0.515513  0.15400
+    ## 844cd2dffffffff  0.91336  0.022344 -0.64236  0.911336 -0.159630 -0.43670
+    ## 844c8bbffffffff  1.06122  0.067125  1.59758  1.116533  0.512334 -0.27380
+    ## 844cc65ffffffff -0.58937  0.373745 -0.05498 -1.554709  0.413446 -0.51779
+    ## 844c89dffffffff -0.72250  0.904787  1.32316 -0.292819  0.325766  0.23941
+    ## 844cd41ffffffff  0.27593  0.168854  0.77476 -0.367393 -2.325965  0.70863
+    ## 844cd45ffffffff  2.45235 -1.667968 -0.91133 -0.004611 -0.427964  1.51046
+    ## 844cd65ffffffff  1.04159 -0.312427  1.00112 -0.279651  0.375525 -0.45609
+    ## 8467259ffffffff  0.07739  0.344585  1.48280  1.041076  0.963957 -0.36394
+    ## 844c893ffffffff  1.49121 -0.632815  0.01145 -0.822569  0.265999 -0.65330
+    ## 844cf23ffffffff -0.31777  0.548045 -0.80500  1.187219 -0.002177  0.14698
+    ## 844cd69ffffffff  2.52211 -1.212893 -0.73192 -1.484254 -0.261630 -0.32068
+    ## 844cd4dffffffff -0.20694 -0.323302  1.09777 -1.439500  0.643444 -0.81956
+    ## 844cd47ffffffff  1.35602 -0.569542 -0.26919 -0.857107  0.538131 -0.18358
+    ## 844cd6bffffffff  1.56009 -0.860563 -0.72158  0.957012  0.432161 -0.21381
     ## 
     ## 
     ## Biplot scores for constraining variables
     ## 
-    ##                                                                            RDA1
-    ## `ESA Trees`                                                             0.86223
-    ## `ESA Built-up`                                                         -0.32860
-    ## `ESA Herbaceous wetland`                                               -0.03196
-    ## `CH-BIO bio05 mean daily maximum air temperature of the warmest month` -0.61358
-    ## `CH-BIO bio11 mean daily mean air temperatures of the coldest quarter` -0.89250
-    ##                                                                            RDA2
-    ## `ESA Trees`                                                             0.47489
-    ## `ESA Built-up`                                                          0.21731
-    ## `ESA Herbaceous wetland`                                               -0.58212
-    ## `CH-BIO bio05 mean daily maximum air temperature of the warmest month` -0.09599
-    ## `CH-BIO bio11 mean daily mean air temperatures of the coldest quarter`  0.03286
-    ##                                                                             RDA3
-    ## `ESA Trees`                                                             0.008245
-    ## `ESA Built-up`                                                         -0.885236
-    ## `ESA Herbaceous wetland`                                                0.138977
-    ## `CH-BIO bio05 mean daily maximum air temperature of the warmest month`  0.017455
-    ## `CH-BIO bio11 mean daily mean air temperatures of the coldest quarter`  0.243817
-    ##                                                                            RDA4
-    ## `ESA Trees`                                                            -0.04283
-    ## `ESA Built-up`                                                         -0.23124
-    ## `ESA Herbaceous wetland`                                               -0.73450
-    ## `CH-BIO bio05 mean daily maximum air temperature of the warmest month`  0.28812
-    ## `CH-BIO bio11 mean daily mean air temperatures of the coldest quarter` -0.01778
-    ##                                                                            RDA5
-    ## `ESA Trees`                                                            -0.17070
-    ## `ESA Built-up`                                                         -0.08764
-    ## `ESA Herbaceous wetland`                                               -0.31828
-    ## `CH-BIO bio05 mean daily maximum air temperature of the warmest month` -0.72869
-    ## `CH-BIO bio11 mean daily mean air temperatures of the coldest quarter` -0.37763
-    ##                                                                        PC1
-    ## `ESA Trees`                                                              0
+    ##                                                                           RDA1
+    ## `ESA Built-up`                                                         -0.5814
+    ## `CH-BIO bio01 mean annual air temperature`                             -0.8746
+    ## `CH-BIO bio06 mean daily minimum air temperature of the coldest month` -0.8049
+    ##                                                                           RDA2
+    ## `ESA Built-up`                                                         -0.8101
+    ## `CH-BIO bio01 mean annual air temperature`                              0.4847
+    ## `CH-BIO bio06 mean daily minimum air temperature of the coldest month`  0.4730
+    ##                                                                            RDA3
+    ## `ESA Built-up`                                                          0.07566
+    ## `CH-BIO bio01 mean annual air temperature`                              0.01110
+    ## `CH-BIO bio06 mean daily minimum air temperature of the coldest month` -0.35842
+    ##                                                                        PC1 PC2
+    ## `ESA Built-up`                                                           0   0
+    ## `CH-BIO bio01 mean annual air temperature`                               0   0
+    ## `CH-BIO bio06 mean daily minimum air temperature of the coldest month`   0   0
+    ##                                                                        PC3
     ## `ESA Built-up`                                                           0
-    ## `ESA Herbaceous wetland`                                                 0
-    ## `CH-BIO bio05 mean daily maximum air temperature of the warmest month`   0
-    ## `CH-BIO bio11 mean daily mean air temperatures of the coldest quarter`   0
+    ## `CH-BIO bio01 mean annual air temperature`                               0
+    ## `CH-BIO bio06 mean daily minimum air temperature of the coldest month`   0
 
 ``` r
 RsquareAdj(mi_fam_t_rda)$adj.r.squared
 ```
 
-    ## [1] 0.09505697
+    ## [1] 0.081547
 
 ``` r
 vif.cca(mi_fam_t_rda)
 ```
 
-    ##                                                            `ESA Trees` 
-    ##                                                               2.081484 
     ##                                                         `ESA Built-up` 
-    ##                                                               1.054005 
-    ##                                               `ESA Herbaceous wetland` 
-    ##                                                               1.059607 
-    ## `CH-BIO bio05 mean daily maximum air temperature of the warmest month` 
-    ##                                                               3.289066 
-    ## `CH-BIO bio11 mean daily mean air temperatures of the coldest quarter` 
-    ##                                                               4.852811
+    ##                                                               1.033593 
+    ##                             `CH-BIO bio01 mean annual air temperature` 
+    ##                                                               7.544628 
+    ## `CH-BIO bio06 mean daily minimum air temperature of the coldest month` 
+    ##                                                               7.466655
 
 ``` r
 escalado <- 2
@@ -6030,11 +6684,18 @@ elige un umbral para especies raras o rangos de registros de presencia
 para seleccionar especies en una nueva matriz de comunidad.
 
 ``` r
-mc_orig <- readRDS("matriz_de_comunidad.RDS")
+res <- 4 #Resolución H3, puedes elegir entre 4, 5, 6 o 7, pero cuidado con valores >=6
+# IMPORTANTE: la resolución de las celdas H3, debe coincidir con la resolución
+# a la cual generaste tu matriz de comunidad. De lo contrario, obtendrás error. Si tu 
+# archivo RDS de matriz de comunidad se denomina "matriz_de_comunidad.RDS", y lo creaste
+# usando resolución 4, cámbiale el nombre a "matriz_de_comunidad_res_5.RDS". Recuerda,
+# puedes usar cualquier resolución, lo único importante es que las resolución usada en la
+# creación de la matriz de comunidad, debe ser la misma que en la ambiental.
+mc_orig <- readRDS(paste0("matriz_de_comunidad_res_", res, ".RDS"))
 nrow(mc_orig) #Número de filas, equivale a número de hexágonos con registros de presencia
 ```
 
-    ## [1] 149
+    ## [1] 39
 
 ``` r
 ncol(mc_orig)  #Número de columnas, equivale a número de especies, riqueza
@@ -6070,17 +6731,17 @@ Antigonon leptopus Hook. & Arn.
 </tr>
 <tr>
 <td style="text-align:left;">
-Coccoloba pubescens L.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
 Coccoloba diversifolia Jacq.
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 Coccoloba P.Browne
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba pubescens L.
 </td>
 </tr>
 <tr>
@@ -6275,7 +6936,7 @@ Rumex obtusifolius L.
 </tr>
 <tr>
 <td style="text-align:left;">
-Coccoloba fawcettii O.Schmidt
+Coccoloba obtusifolia Jacq.
 </td>
 </tr>
 </tbody>
@@ -6321,28 +6982,12 @@ Número de hexágonos
 Coccoloba uvifera (L.) L.
 </td>
 <td style="text-align:right;">
-54
+24
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 Coccoloba diversifolia Jacq.
-</td>
-<td style="text-align:right;">
-31
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Coccoloba wrightii Lindau
-</td>
-<td style="text-align:right;">
-20
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Coccoloba costata Wright
 </td>
 <td style="text-align:right;">
 18
@@ -6353,39 +6998,23 @@ Coccoloba costata Wright
 Antigonon leptopus Hook. & Arn.
 </td>
 <td style="text-align:right;">
-17
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Coccoloba pubescens L.
-</td>
-<td style="text-align:right;">
 15
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Coccoloba incrassata Urb.
+Coccoloba wrightii Lindau
 </td>
 <td style="text-align:right;">
-13
+14
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Coccoloba leoganensis Jacq.
+Coccoloba costata Wright
 </td>
 <td style="text-align:right;">
 13
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Coccoloba P.Browne
-</td>
-<td style="text-align:right;">
-12
 </td>
 </tr>
 <tr>
@@ -6393,12 +7022,12 @@ Coccoloba P.Browne
 Persicaria punctata (Elliott) Small
 </td>
 <td style="text-align:right;">
-12
+11
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Coccoloba fuertesii Urb.
+Coccoloba P.Browne
 </td>
 <td style="text-align:right;">
 10
@@ -6406,34 +7035,26 @@ Coccoloba fuertesii Urb.
 </tr>
 <tr>
 <td style="text-align:left;">
-Leptogonum domingensis var. molle (Urb.) Brandbyge
+Coccoloba incrassata Urb.
 </td>
 <td style="text-align:right;">
-8
+10
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Leptogonum domingense Benth.
+Coccoloba leoganensis Jacq.
 </td>
 <td style="text-align:right;">
-8
+10
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Rumex crispus L.
+Coccoloba pubescens L.
 </td>
 <td style="text-align:right;">
-8
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Coccoloba ceibensis O.C.Schmidt
-</td>
-<td style="text-align:right;">
-8
+9
 </td>
 </tr>
 <tr>
@@ -6446,7 +7067,7 @@ Coccoloba buchii O.Schmidt
 </tr>
 <tr>
 <td style="text-align:left;">
-Coccoloba nodosa Lindau
+Coccoloba fuertesii Urb.
 </td>
 <td style="text-align:right;">
 8
@@ -6454,23 +7075,15 @@ Coccoloba nodosa Lindau
 </tr>
 <tr>
 <td style="text-align:left;">
-Coccoloba pauciflora Urb.
+Leptogonum domingensis var. molle (Urb.) Brandbyge
 </td>
 <td style="text-align:right;">
-8
+6
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Coccoloba picardae Urb.
-</td>
-<td style="text-align:right;">
-7
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Coccoloba flavescens Jacq.
+Leptogonum domingense Benth.
 </td>
 <td style="text-align:right;">
 6
@@ -6486,7 +7099,7 @@ Leptogonum domingensis Benth.
 </tr>
 <tr>
 <td style="text-align:left;">
-Polygonum L.
+Coccoloba picardae Urb.
 </td>
 <td style="text-align:right;">
 6
@@ -6494,7 +7107,23 @@ Polygonum L.
 </tr>
 <tr>
 <td style="text-align:left;">
-Coccoloba krugii Lindau
+Rumex crispus L.
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba ceibensis O.C.Schmidt
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba flavescens Jacq.
 </td>
 <td style="text-align:right;">
 5
@@ -6502,31 +7131,39 @@ Coccoloba krugii Lindau
 </tr>
 <tr>
 <td style="text-align:left;">
-Persicaria hydropiperoides (Michx.) Small
+Polygonum L.
 </td>
 <td style="text-align:right;">
 5
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Coccoloba jimenezii Alain
-</td>
-<td style="text-align:right;">
-4
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Coccoloba microstachya Willd.
-</td>
-<td style="text-align:right;">
-4
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 Rumex L.
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba krugii Lindau
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba nodosa Lindau
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Persicaria hydropiperoides (Michx.) Small
 </td>
 <td style="text-align:right;">
 4
@@ -6542,7 +7179,15 @@ Polygonum punctatum Kit., 1864
 </tr>
 <tr>
 <td style="text-align:left;">
-Coccoloba venosa L.
+Coccoloba microstachya Willd.
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba pauciflora Urb.
 </td>
 <td style="text-align:right;">
 3
@@ -6566,15 +7211,7 @@ Coccoloba swartzii Meisn.
 </tr>
 <tr>
 <td style="text-align:left;">
-Rumex obtusifolius L.
-</td>
-<td style="text-align:right;">
-3
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Coccoloba leonardii Howard
+Coccoloba venosa L.
 </td>
 <td style="text-align:right;">
 2
@@ -6598,7 +7235,7 @@ Persicaria ferruginea (Wedd.) Soják
 </tr>
 <tr>
 <td style="text-align:left;">
-Coccoloba subcordata Lindau
+Rumex obtusifolius L.
 </td>
 <td style="text-align:right;">
 2
@@ -6606,15 +7243,23 @@ Coccoloba subcordata Lindau
 </tr>
 <tr>
 <td style="text-align:left;">
-Persicaria glabra (Willd.) M.Gómez
+Coccoloba jimenezii Alain
 </td>
 <td style="text-align:right;">
-2
+1
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 Rumex acetosella L.
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba leonardii Howard
 </td>
 <td style="text-align:right;">
 1
@@ -6646,6 +7291,14 @@ Ruprechtia C.A.Mey.
 </tr>
 <tr>
 <td style="text-align:left;">
+Coccoloba subcordata Lindau
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
 Persicaria segetum (Kunth) Small
 </td>
 <td style="text-align:right;">
@@ -6662,7 +7315,15 @@ Persicaria lapathifolia subsp. lapathifolia
 </tr>
 <tr>
 <td style="text-align:left;">
-Coccoloba fawcettii O.Schmidt
+Persicaria glabra (Willd.) M.Gómez
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccoloba obtusifolia Jacq.
 </td>
 <td style="text-align:right;">
 1
@@ -6684,9 +7345,9 @@ Coccoloba fawcettii O.Schmidt
 # que están presentes en m hexágonos o más. Si eliges un rango, por ejemplo [m,n], el script generará
 # una matriz de comunidad que representadas un mínimo de m hexágonos y un máximo de n hexágonos.
 # (ambos extremos inclusive).
-en_cuantos_hex <- 10 #En análisis de diversidad, uso "1" para conservar todas las especies.
-# En este caso, 15 significa 15 o más (hasta el límite superior). IMPORTANTE: elige TU PROPIO umbral.
-# en_cuantos_hex <- 10:20
+en_cuantos_hex <- 1
+# Explicación: "en_cuantos_hex <- X", donde X es el número de hexágonos mínimo donde cada especie
+# debe estar presente. IMPORTANTE: elige TU PROPIO umbral.
 {if(length(en_cuantos_hex)==1) selector <- en_cuantos_hex:max(colSums(mc_orig)) else
   if(length(en_cuantos_hex)==2)
     selector <- min(en_cuantos_hex):max(en_cuantos_hex) else
@@ -6694,12 +7355,356 @@ en_cuantos_hex <- 10 #En análisis de diversidad, uso "1" para conservar todas l
 selector
 ```
 
-    ##  [1] 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34
-    ## [26] 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54
+    ##  [1]  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24
 
 ``` r
 mc_orig_seleccionadas <- mc_orig[, colSums(mc_orig) %in% selector]
-mi_fam <- mc_orig_seleccionadas[!rowSums(mc_orig_seleccionadas)==0, ] #Elimina filas sin registros
+
+# Mínimo número de especies por hexágono
+data.frame(`Número de especies por hexágono` = sort(rowSums(mc_orig), decreasing = T), check.names = F) %>% 
+  kable(booktabs=T) %>%
+  kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
+  gsub(' NA ', '', .) # Número de hexágonos en los que está presente cada especie
+```
+
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+Número de especies por hexágono
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+844cd43ffffffff
+</td>
+<td style="text-align:right;">
+18
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd45ffffffff
+</td>
+<td style="text-align:right;">
+18
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd0dffffffff
+</td>
+<td style="text-align:right;">
+13
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cf35ffffffff
+</td>
+<td style="text-align:right;">
+9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844c899ffffffff
+</td>
+<td style="text-align:right;">
+9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cf37ffffffff
+</td>
+<td style="text-align:right;">
+9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+846725bffffffff
+</td>
+<td style="text-align:right;">
+9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd47ffffffff
+</td>
+<td style="text-align:right;">
+9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd59ffffffff
+</td>
+<td style="text-align:right;">
+8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cf31ffffffff
+</td>
+<td style="text-align:right;">
+8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd5dffffffff
+</td>
+<td style="text-align:right;">
+8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd69ffffffff
+</td>
+<td style="text-align:right;">
+8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844c895ffffffff
+</td>
+<td style="text-align:right;">
+7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844c883ffffffff
+</td>
+<td style="text-align:right;">
+7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd67ffffffff
+</td>
+<td style="text-align:right;">
+7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd41ffffffff
+</td>
+<td style="text-align:right;">
+7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd6bffffffff
+</td>
+<td style="text-align:right;">
+7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cf33ffffffff
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844c89bffffffff
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd63ffffffff
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd4bffffffff
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd09ffffffff
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd2dffffffff
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cc65ffffffff
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd65ffffffff
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cf25ffffffff
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cc6dffffffff
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+8467259ffffffff
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844c893ffffffff
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cc61ffffffff
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844c891ffffffff
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd25ffffffff
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd4dffffffff
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cf27ffffffff
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844c8bbffffffff
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844c89dffffffff
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cf23ffffffff
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd61ffffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844c897ffffffff
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+</tbody>
+</table>
+
+``` r
+min_especies_por_hex <- 2
+# Explicación: "min_especies_por_hex <- Y", donde Y es el número mínimo (inclusive) de especies
+# que debe existir en cada hexágono. Por debajo de dicho valor, el hexágono es excluido.
+mi_fam <- mc_orig_seleccionadas[rowSums(mc_orig_seleccionadas)>=min_especies_por_hex, ]
+nrow(mi_fam)
+```
+
+    ## [1] 37
+
+``` r
+# mi_fam <- mc_orig_seleccionadas[!rowSums(mc_orig_seleccionadas)==0, ] #Elimina filas sin registros
 # rowSums(mi_fam) #Riqueza por hexágonos con especies seleccionadas. Comentado por extenso
 all(rowSums(mi_fam)>0) #Debe ser TRUE: todos los hexágonos tienen al menos 1 registro
 ```
@@ -6710,7 +7715,7 @@ all(rowSums(mi_fam)>0) #Debe ser TRUE: todos los hexágonos tienen al menos 1 re
 ncol(mi_fam) #Riqueza de especies
 ```
 
-    ## [1] 11
+    ## [1] 44
 
 ``` r
 # Usar nombres cortos o abreviados para las especies
@@ -6718,35 +7723,73 @@ nombres_largos <- colnames(mi_fam)
 (colnames(mi_fam) <- make.cepnames(word(colnames(mi_fam), 1, 2)))
 ```
 
-    ##  [1] "Coccuvif" "Antilept" "Coccpube" "Coccdive" "CoccBrow" "Perspunc"
-    ##  [7] "Cocccost" "Coccincr" "Coccwrig" "Coccleog" "Coccfuer"
+    ##  [1] "Coccuvif"   "Antilept"   "Coccdive"   "CoccBrow"   "Coccpube"  
+    ##  [6] "Coccjime"   "Perspunc"   "Coccflav"   "Leptdomi"   "Leptdomi.1"
+    ## [11] "Leptdomi.2" "Cocccost"   "Coccincr"   "Coccwrig"   "Coccpica"  
+    ## [16] "Rumeacet"   "Rumecris"   "Coccleon"   "Coccceib"   "Coccveno"  
+    ## [21] "Coccleog"   "Coccmicr"   "Cocckrug"   "Coccbuch"   "Coccfuer"  
+    ## [26] "Coccnodo"   "Coccpauc"   "PolyL"      "RumeL"      "Perspens"  
+    ## [31] "Pershydr"   "Coccsama"   "Persferr"   "Brunovat"   "RuprMey"   
+    ## [36] "Coccsubc"   "Polypunc"   "Perssege"   "Persacum"   "Coccswar"  
+    ## [41] "Perslapa"   "Persglab"   "Rumeobtu"   "Coccobtu"
 
 ``` r
 (df_equivalencias <- data.frame(
   nombre_original = nombres_largos,
-  colnames(mi_fam)))
+  abreviado = colnames(mi_fam)))
 ```
 
-    ##                        nombre_original colnames.mi_fam.
-    ## 1            Coccoloba uvifera (L.) L.         Coccuvif
-    ## 2      Antigonon leptopus Hook. & Arn.         Antilept
-    ## 3               Coccoloba pubescens L.         Coccpube
-    ## 4         Coccoloba diversifolia Jacq.         Coccdive
-    ## 5                   Coccoloba P.Browne         CoccBrow
-    ## 6  Persicaria punctata (Elliott) Small         Perspunc
-    ## 7             Coccoloba costata Wright         Cocccost
-    ## 8            Coccoloba incrassata Urb.         Coccincr
-    ## 9            Coccoloba wrightii Lindau         Coccwrig
-    ## 10         Coccoloba leoganensis Jacq.         Coccleog
-    ## 11            Coccoloba fuertesii Urb.         Coccfuer
+    ##                                       nombre_original  abreviado
+    ## 1                           Coccoloba uvifera (L.) L.   Coccuvif
+    ## 2                     Antigonon leptopus Hook. & Arn.   Antilept
+    ## 3                        Coccoloba diversifolia Jacq.   Coccdive
+    ## 4                                  Coccoloba P.Browne   CoccBrow
+    ## 5                              Coccoloba pubescens L.   Coccpube
+    ## 6                           Coccoloba jimenezii Alain   Coccjime
+    ## 7                 Persicaria punctata (Elliott) Small   Perspunc
+    ## 8                          Coccoloba flavescens Jacq.   Coccflav
+    ## 9  Leptogonum domingensis var. molle (Urb.) Brandbyge   Leptdomi
+    ## 10                       Leptogonum domingense Benth. Leptdomi.1
+    ## 11                      Leptogonum domingensis Benth. Leptdomi.2
+    ## 12                           Coccoloba costata Wright   Cocccost
+    ## 13                          Coccoloba incrassata Urb.   Coccincr
+    ## 14                          Coccoloba wrightii Lindau   Coccwrig
+    ## 15                            Coccoloba picardae Urb.   Coccpica
+    ## 16                                Rumex acetosella L.   Rumeacet
+    ## 17                                   Rumex crispus L.   Rumecris
+    ## 18                         Coccoloba leonardii Howard   Coccleon
+    ## 19                    Coccoloba ceibensis O.C.Schmidt   Coccceib
+    ## 20                                Coccoloba venosa L.   Coccveno
+    ## 21                        Coccoloba leoganensis Jacq.   Coccleog
+    ## 22                      Coccoloba microstachya Willd.   Coccmicr
+    ## 23                            Coccoloba krugii Lindau   Cocckrug
+    ## 24                         Coccoloba buchii O.Schmidt   Coccbuch
+    ## 25                           Coccoloba fuertesii Urb.   Coccfuer
+    ## 26                            Coccoloba nodosa Lindau   Coccnodo
+    ## 27                          Coccoloba pauciflora Urb.   Coccpauc
+    ## 28                                       Polygonum L.      PolyL
+    ## 29                                           Rumex L.      RumeL
+    ## 30               Persicaria pensylvanica (L.) M.Gómez   Perspens
+    ## 31          Persicaria hydropiperoides (Michx.) Small   Pershydr
+    ## 32                   Coccoloba samanensis O.C.Schmidt   Coccsama
+    ## 33                Persicaria ferruginea (Wedd.) Soják   Persferr
+    ## 34                 Brunnichia ovata (Walter) Shinners   Brunovat
+    ## 35                                Ruprechtia C.A.Mey.    RuprMey
+    ## 36                        Coccoloba subcordata Lindau   Coccsubc
+    ## 37                     Polygonum punctatum Kit., 1864   Polypunc
+    ## 38                   Persicaria segetum (Kunth) Small   Perssege
+    ## 39               Persicaria acuminata (Kunth) M.Gómez   Persacum
+    ## 40                          Coccoloba swartzii Meisn.   Coccswar
+    ## 41        Persicaria lapathifolia subsp. lapathifolia   Perslapa
+    ## 42                 Persicaria glabra (Willd.) M.Gómez   Persglab
+    ## 43                              Rumex obtusifolius L.   Rumeobtu
+    ## 44                        Coccoloba obtusifolia Jacq.   Coccobtu
 
-Transforma la matriz de comunidad. Este paso es importante (pero sólo
-para análisis de agrupamiento y de ordenación, no para análisis de
-diversidad), lo explico
+Transforma la matriz de comunidad. Este paso es importante, lo explico
 [aquí](https://www.youtube.com/watch?v=yQ10lp0-nHc&list=PLDcT2n8UzsCRDqjqSeqHI1wsiNOqpYmsJ&index=10)
 
 ``` r
-# mi_fam_t <- decostand(mi_fam, 'hellinger') #Hellinger
+mi_fam_t <- decostand(mi_fam, 'hellinger') #Hellinger
 # Otras transformaciones posibles con datos de presencia/ausencia
 # mi_fam_t <- decostand(mi_fam, 'normalize') #Chord
 # mi_fam_t <- decostand(log1p(mi_fam), 'normalize') #Chord
@@ -6767,18 +7810,17 @@ repo para poder citarlo apropiadamente.
 
 ``` r
 #Matriz ambiental
-res <- 5 #Resolución H3
 tmpfile <- tempfile()
 download.file(paste0(gh_zonal_stats, 'all_sources_all_variables_res_', res, '.gpkg'), tmpfile)
 za <- st_read(tmpfile, optional = T)
 ```
 
-    ## Reading layer `all_sources_all_variables_res_5' from data source 
-    ##   `/tmp/RtmpqTTkzf/file36657224886dd9' using driver `GPKG'
-    ## Simple feature collection with 335 features and 142 fields
+    ## Reading layer `all_sources_all_variables_res_4' from data source 
+    ##   `/tmp/RtmpxezfiL/file3ce03552458445' using driver `GPKG'
+    ## Simple feature collection with 64 features and 142 fields
     ## Geometry type: POLYGON
     ## Dimension:     XY
-    ## Bounding box:  xmin: -72.13564 ymin: 17.40413 xmax: -68.20998 ymax: 20.04043
+    ## Bounding box:  xmin: -72.12371 ymin: 17.2322 xmax: -68.21971 ymax: 20.2506
     ## Geodetic CRS:  WGS 84
 
 ``` r
@@ -6859,17 +7901,19 @@ esta sección), aprovechan sustancialmente los registros de presencia.
 > función de los hábitats. Para obtenerlo, no te pido que ejecutes toda
 > la sección de “Análisis de agrupamiento”, sino tan sólo la primera
 > parte, y que generes un vector de agrupamiento, como el que creé en la
-> sección de análisis clúster denominado `grupos_upgma_k6`. Asegúrate
-> que tu análisis cluster se basó en la misma matriz de comunidad que
-> usarás en el análisis de diversidad (si en clúster usaste una matriz
-> con umbral 5, asegúrate de usar la misma matriz aquí).
+> sección de análisis clúster denominado `grupos_upgma`. Asegúrate que
+> tu análisis cluster se basó en la misma matriz de comunidad que usarás
+> en el análisis de diversidad (si en clúster usaste una matriz con
+> umbral 5, asegúrate de usar la misma matriz aquí).
 
 ``` r
-indices <- alpha_div(mi_fam) # Mi fam fue definida justa arriba por "especies en 5 o más hexágonos",
+indices <- alpha_div(mi_fam) # mi_fam es la matriz de comunidad definida más arriba
+# por criterio "especies presentes en un número determinado de hexágonos",
 # lo cual coincide con el criterio usado en el análisis clúster.
-# Con datos de abundancia, todos estos índices serían útiles.
-# Con registros de presencia, como es nuestro caso, sólo N0 nos aportará algún resultado.
-# Imprimiré sólo 10 para no desbordar la consola
+# Con datos de abundancia, los índices que calcula la función "alpha_div" serían útiles,
+# pero con registros de presencia, como es nuestro caso, sólo la columna N0
+# nos aportará algún resultado. Imprimiré sólo 10 filas elegidas aleatoriamente
+# de la tabla resultante para no desbordar la consola
 set.seed(999); indices[sample(1:nrow(indices), 10), ] %>% 
   kable(booktabs=T) %>%
   kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
@@ -6913,194 +7957,7 @@ E20
 <tbody>
 <tr>
 <td style="text-align:left;">
-854c8993fffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0.0000000
-</td>
-<td style="text-align:right;">
-0.000000
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-854cf233fffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0.0000000
-</td>
-<td style="text-align:right;">
-0.000000
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-854cd453fffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0.0000000
-</td>
-<td style="text-align:right;">
-0.000000
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-854cd407fffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0.0000000
-</td>
-<td style="text-align:right;">
-0.000000
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-854cc673fffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0.0000000
-</td>
-<td style="text-align:right;">
-0.000000
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-854cf20ffffffff
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-1.0986123
-</td>
-<td style="text-align:right;">
-1.584963
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-854c8927fffffff
+844c89dffffffff
 </td>
 <td style="text-align:right;">
 2
@@ -7132,7 +7989,167 @@ E20
 </tr>
 <tr>
 <td style="text-align:left;">
-854cf347fffffff
+844c895ffffffff
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+1.9459101
+</td>
+<td style="text-align:right;">
+2.807355
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd59ffffffff
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+2.0794415
+</td>
+<td style="text-align:right;">
+3.000000
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd5dffffffff
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+2.0794415
+</td>
+<td style="text-align:right;">
+3.000000
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cf25ffffffff
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+1.6094379
+</td>
+<td style="text-align:right;">
+2.321928
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cc65ffffffff
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+1.7917595
+</td>
+<td style="text-align:right;">
+2.584963
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844c891ffffffff
 </td>
 <td style="text-align:right;">
 3
@@ -7164,38 +8181,7 @@ E20
 </tr>
 <tr>
 <td style="text-align:left;">
-854cc60ffffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-0.0000000
-</td>
-<td style="text-align:right;">
-0.000000
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-856725a7fffffff
+844cf27ffffffff
 </td>
 <td style="text-align:right;">
 2
@@ -7214,6 +8200,70 @@ E20
 </td>
 <td style="text-align:right;">
 2
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cf35ffffffff
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+2.1972246
+</td>
+<td style="text-align:right;">
+3.169925
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd67ffffffff
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+1.9459101
+</td>
+<td style="text-align:right;">
+2.807355
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+7
 </td>
 <td style="text-align:right;">
 1
@@ -7275,7 +8325,551 @@ E20
 <tbody>
 <tr>
 <td style="text-align:left;">
-854cd46bfffffff
+844cd43ffffffff
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+2.890372
+</td>
+<td style="text-align:right;">
+4.169925
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd45ffffffff
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+2.890372
+</td>
+<td style="text-align:right;">
+4.169925
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd0dffffffff
+</td>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:right;">
+2.564949
+</td>
+<td style="text-align:right;">
+3.700440
+</td>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cf35ffffffff
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+2.197225
+</td>
+<td style="text-align:right;">
+3.169925
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844c899ffffffff
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+2.197225
+</td>
+<td style="text-align:right;">
+3.169925
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cf37ffffffff
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+2.197225
+</td>
+<td style="text-align:right;">
+3.169925
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+846725bffffffff
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+2.197225
+</td>
+<td style="text-align:right;">
+3.169925
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd47ffffffff
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+2.197225
+</td>
+<td style="text-align:right;">
+3.169925
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd59ffffffff
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+2.079442
+</td>
+<td style="text-align:right;">
+3.000000
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cf31ffffffff
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+2.079442
+</td>
+<td style="text-align:right;">
+3.000000
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd5dffffffff
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+2.079442
+</td>
+<td style="text-align:right;">
+3.000000
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd69ffffffff
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+2.079442
+</td>
+<td style="text-align:right;">
+3.000000
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844c895ffffffff
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+1.945910
+</td>
+<td style="text-align:right;">
+2.807355
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844c883ffffffff
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+1.945910
+</td>
+<td style="text-align:right;">
+2.807355
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd67ffffffff
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+1.945910
+</td>
+<td style="text-align:right;">
+2.807355
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd41ffffffff
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+1.945910
+</td>
+<td style="text-align:right;">
+2.807355
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd6bffffffff
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+1.945910
+</td>
+<td style="text-align:right;">
+2.807355
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cf33ffffffff
 </td>
 <td style="text-align:right;">
 6
@@ -7307,57 +8901,25 @@ E20
 </tr>
 <tr>
 <td style="text-align:left;">
-854cd427fffffff
+844c89bffffffff
 </td>
 <td style="text-align:right;">
-5
+6
 </td>
 <td style="text-align:right;">
-1.609438
+1.791759
 </td>
 <td style="text-align:right;">
-2.321928
+2.584963
 </td>
 <td style="text-align:right;">
-5
+6
 </td>
 <td style="text-align:right;">
-5
+6
 </td>
 <td style="text-align:right;">
-5
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-854cd42ffffffff
-</td>
-<td style="text-align:right;">
-5
-</td>
-<td style="text-align:right;">
-1.609438
-</td>
-<td style="text-align:right;">
-2.321928
-</td>
-<td style="text-align:right;">
-5
-</td>
-<td style="text-align:right;">
-5
-</td>
-<td style="text-align:right;">
-5
+6
 </td>
 <td style="text-align:right;">
 1
@@ -7371,7 +8933,199 @@ E20
 </tr>
 <tr>
 <td style="text-align:left;">
-854cd28bfffffff
+844cd63ffffffff
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+1.791759
+</td>
+<td style="text-align:right;">
+2.584963
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd4bffffffff
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+1.791759
+</td>
+<td style="text-align:right;">
+2.584963
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd09ffffffff
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+1.791759
+</td>
+<td style="text-align:right;">
+2.584963
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd2dffffffff
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+1.791759
+</td>
+<td style="text-align:right;">
+2.584963
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cc65ffffffff
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+1.791759
+</td>
+<td style="text-align:right;">
+2.584963
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cd65ffffffff
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+1.791759
+</td>
+<td style="text-align:right;">
+2.584963
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+844cf25ffffffff
 </td>
 <td style="text-align:right;">
 5
@@ -7483,43 +9237,149 @@ seguramente serán muy diferentes a los tuyos. Además, estoy
 simplificando para evitar hacer la demostración demasiado larga, pero te
 recomiendo probar con todos los prefijos disponibles.
 
-<!-- Uno de los problemas de trabajar con la matriz de comunidad original, es que los hexágonos con pocos registros, o con solo una especie, alteran el análisis de correlación. Además, otro problema asociado a nuestros datos es que no son independientes (están autocorrelacionados espacialmente), por lo que se viola un supuesto fundamental. En cualquier caso, la exploración sigue siendo válida. Probemos a excluir los hexágonos con una especie, que son mayoría, 101 de hecho, unamos la matriz de comunidad con una matriz ambiental que coincidente (los hexágonos excluidos no pueden aparecer en la nueva matriz ambiental y deben estar en el mismo orden). -->
-<!-- ```{r} -->
-<!-- mc_selecc <- mc_orig[rowSums(mc_orig)>2,] -->
-<!-- mc_ma_selecc <- alpha_div(mc_selecc) %>% select(N0) %>% rownames_to_column('hex_id') %>%  -->
-<!--   inner_join(env %>% rownames_to_column('hex_id'), by = 'hex_id') -->
-<!-- ``` -->
-<!-- Ahora seleccionaré las mismas columnas de variables de hábitats anteriores (`ESA`, `CH-BIO`, `GHH`). Notarás que la relación entre las variables de heterogeneidad de hábitat (`GHH`) y la riqueza se hace significativa en muchos casos, y la asociación que había entre riqueza y porcentaje de áreas construidas de la ESA se hace más significativa. -->
-<!-- ```{r} -->
-<!-- # La expresión regular '^N0|^ESA' selecciona las columnas que comienzan por 'N0' (riqueza) -->
-<!-- # y las columnas que comienzan por 'ESA' (variables de cobertura de la ESA) -->
-<!-- ggpairs(mc_ma_selecc %>% select(matches('^N0|^ESA')), labeller = label_wrap_gen(width=10)) +  -->
-<!--   theme(text = element_text(size = 6)) -->
-<!-- ggpairs(mc_ma_selecc %>% select(matches('^N0|^CH-BIO')), labeller = label_wrap_gen(width=10)) +  -->
-<!--   theme(text = element_text(size = 6)) -->
-<!-- ggpairs(mc_ma_selecc %>% select(matches('^N0|^GHH')), labeller = label_wrap_gen(width=10)) +  -->
-<!--   theme(text = element_text(size = 6)) -->
-<!-- ``` -->
-
 Riqueza de especies, estimación y comparación, “completitud de muestra”
 (existe en el diccionario) (Chao y Chiu, 2016)
 
 ``` r
-specpool(mc_orig)
+specpool(mi_fam)
 ```
 
-    ##     Species     chao  chao.se    jack1 jack1.se   jack2    boot  boot.se   n
-    ## All      44 48.86711 4.810544 50.95302 2.627995 52.9595 47.5182 1.590064 149
+    ##     Species     chao  chao.se   jack1 jack1.se    jack2     boot  boot.se  n
+    ## All      44 58.71622 12.14947 54.7027 4.488114 61.42943 48.78844 2.422899 37
 
 ``` r
-#COMPARAR ESTIMACIONES Y CURVAS DE ACUMULACIÓN ENTRE DISTINTOS GRUPOS
-#####REAPROVECHAR CON ANÁLISIS DE DIVERSIDAD TERMINADOS#####
-# grupos_upgma_k2 <- readRDS('grupos_upgma_k2.RDS')
-# table(grupos_upgma_k2)
-# grupos_ward_k3 <- readRDS('grupos_ward_k3.RDS')
-# table(grupos_ward_k3)
-##### FIN DE REAPROVECHAR CON ANÁLISIS DE DIVERSIDAD TERMINADOS#####
+specpool(mi_fam)[[1]]/specpool(mi_fam)[-c(3,5,8)]*100 #"Completitud", en porcentajes, según distintos estimadores
 ```
+
+    ##     Species     chao    jack1    jack2     boot        n
+    ## All     100 74.93671 80.43478 71.62691 90.18529 118.9189
+
+``` r
+# Si es cierto que, en torno al 80% de las poligonáceas de RD están registradas en GBIF,
+# la base de datos al menos para esta familia es representativa.
+ChaoSpecies(data.frame(V1 = c(nrow(mi_fam), as.numeric(colSums(mi_fam)))),
+            datatype = 'incidence_freq', k=10, conf=0.95)
+```
+
+    ## 
+    ## (1) BASIC DATA INFORMATION:
+    ## 
+    ##                                          Variable Value
+    ##     Number of observed species                  D    44
+    ##     Number of sampling units                    T    37
+    ##     Total number of incidences                  U   246
+    ##     Coverage estimate for entire dataset        C 0.956
+    ##     CV for entire dataset                      CV 0.874
+    ## 
+    ##                                                       Variable Value
+    ##     Cut-off point                                            k    10
+    ##     Total number of incidences in infrequent group    U_infreq   152
+    ##     Number of observed species for infrequent group   D_infreq    38
+    ##     Estimated sample coverage for infrequent group    C_infreq 0.929
+    ##     Estimated CV for infrequent group in ICE         CV_infreq 0.638
+    ##     Estimated CV1 for infrequent group in ICE-1     CV1_infreq 0.756
+    ##     Number of observed species for frequent group       D_freq     6
+    ## 
+    ##                            Q1 Q2 Q3 Q4 Q5 Q6 Q7 Q8 Q9 Q10
+    ##     Incidence freq. counts 11  4  5  3  3  6  0  2  1   3
+    ## 
+    ## 
+    ## (2) SPECIES RICHNESS ESTIMATORS TABLE:
+    ## 
+    ##                               Estimate   s.e. 95%Lower 95%Upper
+    ##     Homogeneous Model           46.901  2.076   44.823   54.229
+    ##     Chao2 (Chao, 1987)          58.716 12.149   47.582  104.458
+    ##     Chao2-bc                    54.703  8.658   46.664   86.996
+    ##     iChao2 (Chiu et al. 2014)   61.723  8.981   50.943   89.237
+    ##     ICE (Lee & Chao, 1994)      51.716  4.846   46.492   67.889
+    ##     ICE-1 (Lee & Chao, 1994)    53.676  6.537   46.909   76.182
+    ##     1st order jackknife         54.703  4.595   48.779   67.967
+    ##     2nd order jackknife         61.429  7.831   51.521   84.389
+    ## 
+    ## 
+    ## (3) DESCRIPTION OF ESTIMATORS/MODELS:
+    ## 
+    ## Homogeneous Model: This model assumes that all species have the same incidence or detection probabilities. See Eq. (3.2) of Lee and Chao (1994) or Eq. (12a) in Chao and Chiu (2016b).
+    ## 
+    ## Chao2 (Chao, 1987): This approach uses the frequencies of uniques and duplicates to estimate the number of undetected species; see Chao (1987) or Eq. (11a) in Chao and Chiu (2016b).
+    ##      
+    ## Chao2-bc: A bias-corrected form for the Chao2 estimator; see Chao (2005).
+    ##   
+    ## iChao2: An improved Chao2 estimator; see Chiu et al. (2014).
+    ## 
+    ## ICE (Incidence-based Coverage Estimator): A non-parametric estimator originally proposed by Lee and Chao (1994) in the context of capture-recapture data analysis. The observed species are separated as frequent and infrequent species groups; only data in the infrequent group are used to estimate the number of undetected species. The estimated CV for species in the infrequent group characterizes the degree of heterogeneity among species incidence probabilities. See Eq. (12b) of Chao and Chiu (2016b), which is an improved version of Eq. (3.18) in Lee and Chao (1994). This model is also called Model(h) in capture-recapture literature where h denotes "heterogeneity".
+    ## 
+    ## ICE-1: A modified ICE for highly-heterogeneous cases.
+    ## 
+    ## 1st order jackknife: It uses the frequency of uniques to estimate the number of undetected species; see Burnham and Overton (1978).
+    ## 
+    ## 2nd order jackknife: It uses the frequencies of uniques and duplicates to estimate the number of undetected species; see Burnham and Overton (1978).
+    ## 
+    ## 95% Confidence interval: A log-transformation is used for all estimators so that the lower bound of the resulting interval is at least the number of observed species. See Chao (1987).
+
+Ahora según grupos del método Ward.
+
+``` r
+# grupos_upgma <- readRDS('grupos_upgma.RDS')
+grupos_ward <- readRDS('grupos_ward.RDS')
+mi_fam_ward <- mi_fam %>%
+  mutate(g = grupos_ward) %>%
+  group_by(g) %>%
+  summarise_all(sum) %>%
+  select(-g) %>% 
+  mutate(N = nrow(mi_fam)) %>% 
+  relocate(N, .before = 1) %>% 
+  data.frame
+mi_fam_ward
+```
+
+    ##    N Coccuvif Antilept Coccdive CoccBrow Coccpube Coccjime Perspunc Coccflav
+    ## 1 37       19       10        9        2        8        1        6        0
+    ## 2 37        4        3        6        8        0        0        0        5
+    ## 3 37        1        1        3        0        1        0        5        0
+    ##   Leptdomi Leptdomi.1 Leptdomi.2 Cocccost Coccincr Coccwrig Coccpica Rumeacet
+    ## 1        4          5          4        5        2        4        0        0
+    ## 2        1          0          1        7        4        5        4        0
+    ## 3        1          1          1        1        4        5        2        1
+    ##   Rumecris Coccleon Coccceib Coccveno Coccleog Coccmicr Cocckrug Coccbuch
+    ## 1        0        1        3        2        6        1        4        5
+    ## 2        2        0        0        0        2        2        0        0
+    ## 3        4        0        3        0        2        0        0        3
+    ##   Coccfuer Coccnodo Coccpauc PolyL RumeL Perspens Pershydr Coccsama Persferr
+    ## 1        5        4        0     1     0        1        0        2        2
+    ## 2        1        0        2     0     3        0        1        0        0
+    ## 3        2        0        1     4     2        0        2        0        0
+    ##   Brunovat RuprMey Coccsubc Polypunc Perssege Persacum Coccswar Perslapa
+    ## 1        0       1        0        1        0        3        3        1
+    ## 2        0       0        1        0        0        0        0        0
+    ## 3        1       0        0        3        1        0        0        0
+    ##   Persglab Rumeobtu Coccobtu
+    ## 1        1        0        1
+    ## 2        0        2        0
+    ## 3        0        0        0
+
+``` r
+nasin_raref <- iNEXT::iNEXT(
+  x = t(mi_fam_ward),
+  q=0,
+  knots = 400,
+  datatype = 'incidence_freq')
+acumulacion_especies <- iNEXT::ggiNEXT(nasin_raref, type=1) +
+  theme_bw() +
+  theme(
+    text = element_text(size = 20),
+    panel.background = element_rect(fill = 'white', colour = 'black'),
+    panel.grid.major = element_line(colour = "grey", linetype = "dashed", size = 0.25)
+  ) +
+  ylab('Riqueza de especies') +
+  xlab('Número de sitios') +
+  scale_y_continuous(breaks = seq(0,80, length.out = 9)) +
+  scale_color_manual(values = brewer.pal(8, 'Set2')) +
+  scale_fill_manual(values = brewer.pal(8, 'Set2'))
+acumulacion_especies
+```
+
+![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-42-1.png)<!-- -->
 
 ## Ecología espacial
 

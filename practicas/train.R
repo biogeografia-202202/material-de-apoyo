@@ -10,7 +10,7 @@ my_train <- function(formula = NULL, data = NULL, num_variables = 3:7,
     method = metodo,
     preProcess = preproceso,
     tuneGrid = if(metodo == 'leapSeq') data.frame(nvmax = num_variables) else NULL,
-    na.action = na.exclude,
+    na.action = na.omit,
     trControl = trainControl(method = "cv", number = 3))
   return(stepmod)
 }
