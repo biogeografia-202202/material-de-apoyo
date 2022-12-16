@@ -142,7 +142,7 @@ library(tidyverse)
 library(tmap)
 library(kableExtra)
 gh_content <- 'https://raw.githubusercontent.com/'
-gh_zonal_stats <- 'https://github.com/geofis/zonal-statistics/raw/main/out/'
+gh_zonal_stats <- 'https://raw.githubusercontent.com/geofis/zonal-statistics/main/out/'
 repo_analisis <- 'biogeografia-master/scripts-de-analisis-BCI/master'
 repo_sem202202 <- 'biogeografia-202202/material-de-apoyo/master/practicas/'
 devtools::source_url(paste0(gh_content, repo_analisis, '/biodata/funciones.R'))
@@ -1284,19 +1284,12 @@ repo para poder citarlo apropiadamente.
 ``` r
 #Matriz ambiental
 tmpfile <- tempfile()
-download.file(paste0(gh_zonal_stats, 'all_sources_all_variables_res_', res, '.gpkg'), tmpfile)
-za <- st_read(tmpfile, optional = T)
-```
-
-    ## Reading layer `all_sources_all_variables_res_4' from data source 
-    ##   `/tmp/Rtmpd3HWIL/file3f81b16043b4da' using driver `GPKG'
-    ## Simple feature collection with 64 features and 142 fields
-    ## Geometry type: POLYGON
-    ## Dimension:     XY
-    ## Bounding box:  xmin: -72.12371 ymin: 17.2322 xmax: -68.21971 ymax: 20.2506
-    ## Geodetic CRS:  WGS 84
-
-``` r
+download.file(
+  url = paste0(gh_zonal_stats, 'list_with_all_sources_all_resolution.RDS'),
+  tmpfile, method = if(Sys.info()[['sysname']]=='Windows') 'curl' else 'libcurl')
+tmprds <- readRDS(tmpfile)
+za <- tmprds[[paste0('H3 resolution: ', res)]]
+unlink(tmpfile)
 # Las siguientes líneas están comentadas, porque producen muchos mapas. Descoméntalas y ejecútalas si quieres verlos
 # za %>% st_as_sf('geom') %>%
 #   pivot_longer(cols = -matches('base|hex_id|geom')) %>% 
@@ -1645,7 +1638,7 @@ Agrupar los hexágonos de la matriz ambiental.
 ```
 
     ## # A tibble: 5,032 × 5
-    ##    hex_id          grupos_upgma variable         valor                      geom
+    ##    hex_id          grupos_upgma variable         valor                  geometry
     ##    <chr>           <fct>        <chr>            <dbl>             <POLYGON [°]>
     ##  1 844cf25ffffffff 1            ESA Trees      31.9    ((-70.53184 19.95335, -7…
     ##  2 844cf25ffffffff 1            ESA Shrubland   0.0191 ((-70.53184 19.95335, -7…
@@ -1668,7 +1661,7 @@ Agrupar los hexágonos de la matriz ambiental.
 ```
 
     ## # A tibble: 5,032 × 5
-    ##    hex_id          grupos_ward variable          valor                      geom
+    ##    hex_id          grupos_ward variable          valor                  geometry
     ##    <chr>           <fct>       <chr>             <dbl>             <POLYGON [°]>
     ##  1 844cf25ffffffff 1           ESA Trees       31.9    ((-70.53184 19.95335, -7…
     ##  2 844cf25ffffffff 1           ESA Shrubland    0.0191 ((-70.53184 19.95335, -7…
@@ -6115,19 +6108,11 @@ repo para poder citarlo apropiadamente.
 ``` r
 #Matriz ambiental
 tmpfile <- tempfile()
-download.file(paste0(gh_zonal_stats, 'all_sources_all_variables_res_', res, '.gpkg'), tmpfile)
-za <- st_read(tmpfile, optional = T)
-```
-
-    ## Reading layer `all_sources_all_variables_res_4' from data source 
-    ##   `/tmp/Rtmpd3HWIL/file3f81b15ae500a6' using driver `GPKG'
-    ## Simple feature collection with 64 features and 142 fields
-    ## Geometry type: POLYGON
-    ## Dimension:     XY
-    ## Bounding box:  xmin: -72.12371 ymin: 17.2322 xmax: -68.21971 ymax: 20.2506
-    ## Geodetic CRS:  WGS 84
-
-``` r
+download.file(
+  url = paste0(gh_zonal_stats, 'list_with_all_sources_all_resolution.RDS'),
+  tmpfile, method = if(Sys.info()[['sysname']]=='Windows') 'curl' else 'libcurl')
+tmprds <- readRDS(tmpfile)
+za <- tmprds[[paste0('H3 resolution: ', res)]]
 # Las siguientes líneas están comentadas, porque producen muchos mapas. Descoméntalas y ejecútalas si quieres verlos
 # za %>% st_as_sf('geom') %>%
 #   pivot_longer(cols = -matches('base|hex_id|geom')) %>% 
@@ -7818,19 +7803,11 @@ repo para poder citarlo apropiadamente.
 ``` r
 #Matriz ambiental
 tmpfile <- tempfile()
-download.file(paste0(gh_zonal_stats, 'all_sources_all_variables_res_', res, '.gpkg'), tmpfile)
-za <- st_read(tmpfile, optional = T)
-```
-
-    ## Reading layer `all_sources_all_variables_res_4' from data source 
-    ##   `/tmp/Rtmpd3HWIL/file3f81b1487a26cc' using driver `GPKG'
-    ## Simple feature collection with 64 features and 142 fields
-    ## Geometry type: POLYGON
-    ## Dimension:     XY
-    ## Bounding box:  xmin: -72.12371 ymin: 17.2322 xmax: -68.21971 ymax: 20.2506
-    ## Geodetic CRS:  WGS 84
-
-``` r
+download.file(
+  url = paste0(gh_zonal_stats, 'list_with_all_sources_all_resolution.RDS'),
+  tmpfile, method = if(Sys.info()[['sysname']]=='Windows') 'curl' else 'libcurl')
+tmprds <- readRDS(tmpfile)
+za <- tmprds[[paste0('H3 resolution: ', res)]]
 # Las siguientes líneas están comentadas, porque producen muchos mapas. Descoméntalas y ejecútalas si quieres verlos
 # za %>% st_as_sf('geom') %>%
 #   pivot_longer(cols = -matches('base|hex_id|geom')) %>% 
@@ -11439,19 +11416,11 @@ repo para poder citarlo apropiadamente.
 ``` r
 #Matriz ambiental
 tmpfile <- tempfile()
-download.file(paste0(gh_zonal_stats, 'all_sources_all_variables_res_', res, '.gpkg'), tmpfile)
-za <- st_read(tmpfile, optional = T)
-```
-
-    ## Reading layer `all_sources_all_variables_res_5' from data source 
-    ##   `/tmp/Rtmpd3HWIL/file3f81b1143d3580' using driver `GPKG'
-    ## Simple feature collection with 335 features and 142 fields
-    ## Geometry type: POLYGON
-    ## Dimension:     XY
-    ## Bounding box:  xmin: -72.13564 ymin: 17.40413 xmax: -68.20998 ymax: 20.04043
-    ## Geodetic CRS:  WGS 84
-
-``` r
+download.file(
+  url = paste0(gh_zonal_stats, 'list_with_all_sources_all_resolution.RDS'),
+  tmpfile, method = if(Sys.info()[['sysname']]=='Windows') 'curl' else 'libcurl')
+tmprds <- readRDS(tmpfile)
+za <- tmprds[[paste0('H3 resolution: ', res)]]
 # Las siguientes líneas están comentadas, porque producen muchos mapas. Descoméntalas y ejecútalas si quieres verlos
 # za %>% st_as_sf('geom') %>%
 #   pivot_longer(cols = -matches('base|hex_id|geom')) %>% 

@@ -12,6 +12,7 @@ always_allow_html: true
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = T, cache=F, message=F, warning=F, fig.width=9)
+eval_for_knit <- TRUE
 ```
 
 # ¿Qué contiene la sección "Resultados"?
@@ -82,7 +83,7 @@ library(tidyverse)
 library(tmap)
 library(kableExtra)
 gh_content <- 'https://raw.githubusercontent.com/'
-gh_zonal_stats <- 'https://github.com/geofis/zonal-statistics/raw/main/out/'
+gh_zonal_stats <- 'https://raw.githubusercontent.com/geofis/zonal-statistics/main/out/'
 repo_analisis <- 'biogeografia-master/scripts-de-analisis-BCI/master'
 repo_sem202202 <- 'biogeografia-202202/material-de-apoyo/master/practicas/'
 devtools::source_url(paste0(gh_content, repo_analisis, '/biodata/funciones.R'))
@@ -177,8 +178,12 @@ Para aprender más sobre la fuente de estadística zonal de República Dominican
 ```{r, message=F, warning=F}
 #Matriz ambiental
 tmpfile <- tempfile()
-download.file(paste0(gh_zonal_stats, 'all_sources_all_variables_res_', res, '.gpkg'), tmpfile)
-za <- st_read(tmpfile, optional = T)
+download.file(
+  url = paste0(gh_zonal_stats, 'list_with_all_sources_all_resolution.RDS'),
+  tmpfile, method = if(Sys.info()[['sysname']]=='Windows') 'curl' else 'libcurl')
+tmprds <- readRDS(tmpfile)
+za <- tmprds[[paste0('H3 resolution: ', res)]]
+unlink(tmpfile)
 # Las siguientes líneas están comentadas, porque producen muchos mapas. Descoméntalas y ejecútalas si quieres verlos
 # za %>% st_as_sf('geom') %>%
 #   pivot_longer(cols = -matches('base|hex_id|geom')) %>% 
@@ -609,8 +614,11 @@ Para aprender más sobre la fuente de estadística zonal de República Dominican
 ```{r, message=F, warning=F}
 #Matriz ambiental
 tmpfile <- tempfile()
-download.file(paste0(gh_zonal_stats, 'all_sources_all_variables_res_', res, '.gpkg'), tmpfile)
-za <- st_read(tmpfile, optional = T)
+download.file(
+  url = paste0(gh_zonal_stats, 'list_with_all_sources_all_resolution.RDS'),
+  tmpfile, method = if(Sys.info()[['sysname']]=='Windows') 'curl' else 'libcurl')
+tmprds <- readRDS(tmpfile)
+za <- tmprds[[paste0('H3 resolution: ', res)]]
 # Las siguientes líneas están comentadas, porque producen muchos mapas. Descoméntalas y ejecútalas si quieres verlos
 # za %>% st_as_sf('geom') %>%
 #   pivot_longer(cols = -matches('base|hex_id|geom')) %>% 
@@ -810,8 +818,11 @@ Para aprender más sobre la fuente de estadística zonal de República Dominican
 ```{r, message=F, warning=F}
 #Matriz ambiental
 tmpfile <- tempfile()
-download.file(paste0(gh_zonal_stats, 'all_sources_all_variables_res_', res, '.gpkg'), tmpfile)
-za <- st_read(tmpfile, optional = T)
+download.file(
+  url = paste0(gh_zonal_stats, 'list_with_all_sources_all_resolution.RDS'),
+  tmpfile, method = if(Sys.info()[['sysname']]=='Windows') 'curl' else 'libcurl')
+tmprds <- readRDS(tmpfile)
+za <- tmprds[[paste0('H3 resolution: ', res)]]
 # Las siguientes líneas están comentadas, porque producen muchos mapas. Descoméntalas y ejecútalas si quieres verlos
 # za %>% st_as_sf('geom') %>%
 #   pivot_longer(cols = -matches('base|hex_id|geom')) %>% 
@@ -1087,8 +1098,11 @@ Para aprender más sobre la fuente de estadística zonal de República Dominican
 ```{r, message=F, warning=F}
 #Matriz ambiental
 tmpfile <- tempfile()
-download.file(paste0(gh_zonal_stats, 'all_sources_all_variables_res_', res, '.gpkg'), tmpfile)
-za <- st_read(tmpfile, optional = T)
+download.file(
+  url = paste0(gh_zonal_stats, 'list_with_all_sources_all_resolution.RDS'),
+  tmpfile, method = if(Sys.info()[['sysname']]=='Windows') 'curl' else 'libcurl')
+tmprds <- readRDS(tmpfile)
+za <- tmprds[[paste0('H3 resolution: ', res)]]
 # Las siguientes líneas están comentadas, porque producen muchos mapas. Descoméntalas y ejecútalas si quieres verlos
 # za %>% st_as_sf('geom') %>%
 #   pivot_longer(cols = -matches('base|hex_id|geom')) %>% 
