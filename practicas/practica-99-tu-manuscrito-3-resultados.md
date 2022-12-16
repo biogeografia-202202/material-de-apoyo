@@ -142,7 +142,8 @@ library(tidyverse)
 library(tmap)
 library(kableExtra)
 gh_content <- 'https://raw.githubusercontent.com/'
-gh_zonal_stats <- 'https://raw.githubusercontent.com/geofis/zonal-statistics/main/out/'
+gh_zonal_stats <- paste0(gh_content,
+                         'geofis/zonal-statistics/0b2e95aaee87bf326cf132d28f4bd15220bb4ec7/out/')
 repo_analisis <- 'biogeografia-master/scripts-de-analisis-BCI/master'
 repo_sem202202 <- 'biogeografia-202202/material-de-apoyo/master/practicas/'
 devtools::source_url(paste0(gh_content, repo_analisis, '/biodata/funciones.R'))
@@ -4968,7 +4969,8 @@ library(tidyverse)
 library(tmap)
 library(kableExtra)
 gh_content <- 'https://raw.githubusercontent.com/'
-gh_zonal_stats <- 'https://github.com/geofis/zonal-statistics/raw/main/out/'
+gh_zonal_stats <- paste0(gh_content,
+                         'geofis/zonal-statistics/0b2e95aaee87bf326cf132d28f4bd15220bb4ec7/out/')
 repo_analisis <- 'biogeografia-master/scripts-de-analisis-BCI/master'
 repo_sem202202 <- 'biogeografia-202202/material-de-apoyo/master/practicas/'
 devtools::source_url(paste0(gh_content, repo_analisis, '/biodata/funciones.R'))
@@ -6663,7 +6665,8 @@ library(tidyverse)
 library(tmap)
 library(kableExtra)
 gh_content <- 'https://raw.githubusercontent.com/'
-gh_zonal_stats <- 'https://github.com/geofis/zonal-statistics/raw/main/out/'
+gh_zonal_stats <- paste0(gh_content,
+                         'geofis/zonal-statistics/0b2e95aaee87bf326cf132d28f4bd15220bb4ec7/out/')
 repo_analisis <- 'biogeografia-master/scripts-de-analisis-BCI/master'
 repo_sem202202 <- 'biogeografia-202202/material-de-apoyo/master/practicas/'
 devtools::source_url(paste0(gh_content, repo_analisis, '/biodata/funciones.R'))
@@ -9394,7 +9397,8 @@ library(tidyverse)
 library(tmap)
 library(kableExtra)
 gh_content <- 'https://raw.githubusercontent.com/'
-gh_zonal_stats <- 'https://github.com/geofis/zonal-statistics/raw/main/out/'
+gh_zonal_stats <- paste0(gh_content,
+                         'geofis/zonal-statistics/0b2e95aaee87bf326cf132d28f4bd15220bb4ec7/out/')
 repo_analisis <- 'biogeografia-master/scripts-de-analisis-BCI/master'
 repo_sem202202 <- 'biogeografia-202202/material-de-apoyo/master/practicas/'
 devtools::source_url(paste0(gh_content, repo_analisis, '/biodata/funciones.R'))
