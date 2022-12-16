@@ -141,6 +141,9 @@ library(sf)
 library(tidyverse)
 library(tmap)
 library(kableExtra)
+library(foreach)
+library(leaps)
+library(caret)
 gh_content <- 'https://raw.githubusercontent.com/'
 gh_zonal_stats <- paste0(gh_content,
                          'geofis/zonal-statistics/0b2e95aaee87bf326cf132d28f4bd15220bb4ec7/out/')
@@ -4968,6 +4971,9 @@ library(sf)
 library(tidyverse)
 library(tmap)
 library(kableExtra)
+library(foreach)
+library(leaps)
+library(caret)
 gh_content <- 'https://raw.githubusercontent.com/'
 gh_zonal_stats <- paste0(gh_content,
                          'geofis/zonal-statistics/0b2e95aaee87bf326cf132d28f4bd15220bb4ec7/out/')
@@ -6664,6 +6670,9 @@ library(sf)
 library(tidyverse)
 library(tmap)
 library(kableExtra)
+library(foreach)
+library(leaps)
+library(caret)
 gh_content <- 'https://raw.githubusercontent.com/'
 gh_zonal_stats <- paste0(gh_content,
                          'geofis/zonal-statistics/0b2e95aaee87bf326cf132d28f4bd15220bb4ec7/out/')
@@ -9396,6 +9405,9 @@ library(sf)
 library(tidyverse)
 library(tmap)
 library(kableExtra)
+library(foreach)
+library(leaps)
+library(caret)
 gh_content <- 'https://raw.githubusercontent.com/'
 gh_zonal_stats <- paste0(gh_content,
                          'geofis/zonal-statistics/0b2e95aaee87bf326cf132d28f4bd15220bb4ec7/out/')
@@ -14571,7 +14583,8 @@ mi_fam_t_sf <- env_sf %>% select(hex_id) %>%
 lisamaps_mifam <- sapply(
   grep('geom', names(mi_fam_t_sf), invert = T, value = T),
   function(x) {
-    m <- lisamap(
+    tryCatch(
+    {m <- lisamap(
       objesp = mi_fam_t_sf[x],
       var = x,
       pesos = pesos_b,
@@ -14582,7 +14595,7 @@ lisamaps_mifam <- sapply(
       fuentedatos = '',
       titulomapa = paste0('Clusters LISA de "', x, '"'))
     # dev.new();print(m$grafico)
-    return(m$grafico)
+    return(m$grafico)}, error = function(e) e)
     }, simplify = F)
 lisamaps_mifam$leyenda <- gtable_filter(ggplot_gtable(ggplot_build(lisamaps_mifam[[1]] + theme(legend.position="bottom"))), "guide-box")
 grid.arrange(do.call('arrangeGrob', c(lisamaps_mifam[1:8], nrow = 3)), lisamaps_mifam$leyenda, heights=c(1.1, 0.1), nrow = 2)
