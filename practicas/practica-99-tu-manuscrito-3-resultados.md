@@ -1492,12 +1492,13 @@ estrategias adicionales: 1) Cambiar (preferiblemente, aumentar) el
 umbral de registros de presencia de especies raras; 2) Probar métodos
 “aproximadamente insesgados”, basados en remuestreos y permutaciones.
 
-Probaré lo segundo, pero te animo a que pruebes también la estrategia 1)
-(elegir un umbral diferente al que elegiste en primera instancia). Ten
-presente que todos los casos son diferentes. Al elegir un umbral (ya sea
-un valor mínimo o un rango)
+Probaré lo segundo, pero te animo a que pruebes también la estrategia 2)
+(probar métodos “aproximadamente insesgados”, basados en remuestreos y
+permutaciones). Ten presente que todos los casos son diferentes.
 
 ``` r
+# UPGMA
+if(interactive()) dev.new()
 cl_pvclust_upgma <-
         pvclust(t(mi_fam_t),
                 method.hclust = "average",
@@ -1529,6 +1530,7 @@ Ward, el resultado no mejora mucho, pero se sugieren menos grupos.
 
 ``` r
 # Ward
+if(interactive()) dev.new()
 cl_pvclust_ward <-
         pvclust(t(mi_fam_t),
                 method.hclust = "ward.D2",
@@ -4949,6 +4951,281 @@ mapa_upgma_v4
 
 ![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-21-2.png)<!-- -->
 
+### Especies con preferencia/fidelidad con grupos (clústers)
+
+Paquete `indicspecies`.
+
+``` r
+library(indicspecies)
+```
+
+Análisis de preferencia/fidelidad de especies con grupos (clusters),
+mediante el coeficiente de correlación biserial puntual.
+
+- UPGMA
+
+``` r
+phi_upgma <- multipatt(
+  mi_fam,
+  grupos_upgma,
+  func = "r.g",
+  max.order = 1,
+  control = how(nperm = 999))
+summary(phi_upgma)
+```
+
+    ## 
+    ##  Multilevel pattern analysis
+    ##  ---------------------------
+    ## 
+    ##  Association function: r.g
+    ##  Significance level (alpha): 0.05
+    ## 
+    ##  Total number of species: 44
+    ##  Selected number of species: 6 
+    ##  Number of species associated to 1 group: 6 
+    ##  Number of species associated to 2 groups: 0 
+    ## 
+    ##  List of species associated to each combination: 
+    ## 
+    ##  Group 1  #sps.  1 
+    ##           stat p.value    
+    ## Coccuvif 0.802   0.001 ***
+    ## 
+    ##  Group 2  #sps.  4 
+    ##           stat p.value  
+    ## Coccpica 0.535   0.027 *
+    ## Rumecris 0.535   0.032 *
+    ## Coccflav 0.482   0.017 *
+    ## RumeL    0.482   0.028 *
+    ## 
+    ##  Group 3  #sps.  1 
+    ##          stat p.value  
+    ## Coccnodo 0.48   0.031 *
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+``` r
+data.frame(abreviado = rownames(phi_upgma$sign)[which(phi_upgma$sign$p.value < 0.05)]) %>%
+  inner_join(df_equivalencias) %>%
+  arrange(abreviado) %>% 
+  kable(booktabs=T) %>%
+  kable_styling(latex_options = c("HOLD_position", "scale_down"))
+```
+
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+abreviado
+</th>
+<th style="text-align:left;">
+nombre_original
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Coccflav
+</td>
+<td style="text-align:left;">
+Coccoloba flavescens Jacq.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccnodo
+</td>
+<td style="text-align:left;">
+Coccoloba nodosa Lindau
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccpica
+</td>
+<td style="text-align:left;">
+Coccoloba picardae Urb.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccuvif
+</td>
+<td style="text-align:left;">
+Coccoloba uvifera (L.) L.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rumecris
+</td>
+<td style="text-align:left;">
+Rumex crispus L.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+RumeL
+</td>
+<td style="text-align:left;">
+Rumex L.
+</td>
+</tr>
+</tbody>
+</table>
+
+- Ward
+
+``` r
+phi_ward <- multipatt(
+  mi_fam,
+  grupos_ward,
+  func = "r.g",
+  max.order = 2,
+  control = how(nperm = 999))
+summary(phi_ward)
+```
+
+    ## 
+    ##  Multilevel pattern analysis
+    ##  ---------------------------
+    ## 
+    ##  Association function: r.g
+    ##  Significance level (alpha): 0.05
+    ## 
+    ##  Total number of species: 44
+    ##  Selected number of species: 10 
+    ##  Number of species associated to 1 group: 10 
+    ##  Number of species associated to 2 groups: 0 
+    ## 
+    ##  List of species associated to each combination: 
+    ## 
+    ##  Group 1  #sps.  1 
+    ##           stat p.value    
+    ## Coccuvif 0.646   0.001 ***
+    ## 
+    ##  Group 2  #sps.  2 
+    ##           stat p.value    
+    ## CoccBrow 0.714   0.001 ***
+    ## Coccflav 0.598   0.005 ** 
+    ## 
+    ##  Group 3  #sps.  7 
+    ##           stat p.value    
+    ## PolyL    0.709   0.001 ***
+    ## Perspunc 0.664   0.001 ***
+    ## Rumecris 0.603   0.002 ** 
+    ## Polypunc 0.579   0.009 ** 
+    ## Coccceib 0.486   0.020 *  
+    ## Coccwrig 0.477   0.041 *  
+    ## Coccbuch 0.408   0.033 *  
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+``` r
+data.frame(abreviado = rownames(phi_ward$sign)[which(phi_ward$sign$p.value < 0.05)]) %>%
+  inner_join(df_equivalencias) %>%
+  arrange(abreviado) %>% 
+  kable(booktabs=T) %>%
+  kable_styling(latex_options = c("HOLD_position", "scale_down"))
+```
+
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+abreviado
+</th>
+<th style="text-align:left;">
+nombre_original
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+CoccBrow
+</td>
+<td style="text-align:left;">
+Coccoloba P.Browne
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccbuch
+</td>
+<td style="text-align:left;">
+Coccoloba buchii O.Schmidt
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccceib
+</td>
+<td style="text-align:left;">
+Coccoloba ceibensis O.C.Schmidt
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccflav
+</td>
+<td style="text-align:left;">
+Coccoloba flavescens Jacq.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccuvif
+</td>
+<td style="text-align:left;">
+Coccoloba uvifera (L.) L.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Coccwrig
+</td>
+<td style="text-align:left;">
+Coccoloba wrightii Lindau
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Perspunc
+</td>
+<td style="text-align:left;">
+Persicaria punctata (Elliott) Small
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+PolyL
+</td>
+<td style="text-align:left;">
+Polygonum L.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Polypunc
+</td>
+<td style="text-align:left;">
+Polygonum punctatum Kit., 1864
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rumecris
+</td>
+<td style="text-align:left;">
+Rumex crispus L.
+</td>
+</tr>
+</tbody>
+</table>
+
 ## Técnicas de ordenación
 
 Me basaré en los scripts que comienzan por `to_` de este
@@ -6656,7 +6933,7 @@ arrows(0, 0,
 )
 ```
 
-![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-28-1.png)<!-- -->
+![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-31-1.png)<!-- -->
 
 ## Análisis de diversidad
 
@@ -9221,7 +9498,7 @@ ggpairs(riq_esa, labeller = label_wrap_gen(width=10)) +
   theme(text = element_text(size = 6))
 ```
 
-![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-38-1.png)<!-- -->
+![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-41-1.png)<!-- -->
 
 Correlación de la riqueza (`N0`) con las variables bioclimáticas de
 CHELSA. Nota que existe correlación de la riqueza con variables de
@@ -9233,7 +9510,7 @@ ggpairs(riq_chbio, labeller = label_wrap_gen(width=10)) +
   theme(text = element_text(size = 6))
 ```
 
-![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-39-1.png)<!-- -->
+![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-42-1.png)<!-- -->
 
 En cuanto a heterogeneidad de hábitat, existe asociación con la
 variables “correlación de hábitat”. Si investigas sobre esta variable
@@ -9250,7 +9527,7 @@ ggpairs(riq_ghh, labeller = label_wrap_gen(width=10)) +
   theme(text = element_text(size = 6))
 ```
 
-![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-40-1.png)<!-- -->
+![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-43-1.png)<!-- -->
 
 MUY IMPORTANTE: no te quedes sólo con estas variables, pues mis datos
 seguramente serán muy diferentes a los tuyos. Además, estoy
@@ -9399,7 +9676,7 @@ acumulacion_especies <- iNEXT::ggiNEXT(nasin_raref, type=1) +
 acumulacion_especies
 ```
 
-![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-42-1.png)<!-- -->
+![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-45-1.png)<!-- -->
 
 ## Ecología espacial
 
@@ -11639,7 +11916,7 @@ env_xy <- centroides %>% st_coordinates %>% as.data.frame
 plot(vecindad, coords = env_xy, add =T , col = 'red')
 ```
 
-![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-51-1.png)<!-- -->
+![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-54-1.png)<!-- -->
 
 Igualmente, será necesario una matriz de comunidad transformada
 “espacial”, con la cual hacer los cálculos de autocorrelación. En este
@@ -12332,7 +12609,7 @@ par(mfrow = dim_panel)
 suppressWarnings(invisible(lapply(auto_spp_hel, function(x) plot(x, main = x$var))))
 ```
 
-![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-52-1.png)<!-- -->
+![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-55-1.png)<!-- -->
 
 Ahora exploraré la autocorrelación de las variables ambientales. Entre
 estas, como verás, muchas están autocorrelacionadas, al tratarse de
@@ -14553,7 +14830,7 @@ suppressWarnings(invisible(lapply(prefijos_disponibles,
        })))
 ```
 
-![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-53-1.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-53-2.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-53-3.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-53-4.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-53-5.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-53-6.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-53-7.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-53-8.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-53-9.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-53-10.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-53-11.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-53-12.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-53-13.png)<!-- -->
+![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-56-1.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-56-2.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-56-3.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-56-4.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-56-5.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-56-6.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-56-7.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-56-8.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-56-9.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-56-10.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-56-11.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-56-12.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-56-13.png)<!-- -->
 
 I de Moran local, por medio de mapas LISA de *hotspots* y *coldspots*
 (los explico en el vídeo referido). Aquí descubirás los *hotspots* de
@@ -14629,7 +14906,7 @@ suppressWarnings(invisible(sapply(levels(lisamaps_amb_df[, 'lisamaps_amb_interva
        })))
 ```
 
-![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-54-1.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-54-2.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-54-3.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-54-4.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-54-5.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-54-6.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-54-7.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-54-8.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-54-9.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-54-10.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-54-11.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-54-12.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-54-13.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-54-14.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-54-15.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-54-16.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-54-17.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-54-18.png)<!-- -->
+![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-57-1.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-57-2.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-57-3.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-57-4.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-57-5.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-57-6.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-57-7.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-57-8.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-57-9.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-57-10.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-57-11.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-57-12.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-57-13.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-57-14.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-57-15.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-57-16.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-57-17.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-57-18.png)<!-- -->
 
 Finalmente, haré lo propio con los datos de la matriz de comunidad, para
 calcular la autocorrelación de los datos de incidencia a partir de la
@@ -14681,6 +14958,6 @@ suppressWarnings(invisible(sapply(levels(lisamaps_mifam_df[, 'lisamaps_mifam_int
        })))
 ```
 
-![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-55-1.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-55-2.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-55-3.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-55-4.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-55-5.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-55-6.png)<!-- -->
+![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-58-1.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-58-2.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-58-3.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-58-4.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-58-5.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-58-6.png)<!-- -->
 
 # Referencias

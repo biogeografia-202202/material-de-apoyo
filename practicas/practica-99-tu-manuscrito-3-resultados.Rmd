@@ -306,9 +306,11 @@ rect.hclust(
 
 Por los resultados obtenidos (muchos grupos sugeridos), tanto por el método UPGMA como por Ward, parecería interesante explorar dos estrategias adicionales: 1) Cambiar (preferiblemente, aumentar) el umbral de registros de presencia de especies raras; 2) Probar métodos "aproximadamente insesgados", basados en remuestreos y permutaciones.
 
-Probaré lo segundo, pero te animo a que pruebes también la estrategia 1) (elegir un umbral diferente al que elegiste en primera instancia). Ten presente que todos los casos son diferentes. Al elegir un umbral (ya sea un valor mínimo o un rango) 
+Probaré lo segundo, pero te animo a que pruebes también la estrategia 2) (probar métodos "aproximadamente insesgados", basados en remuestreos y permutaciones). Ten presente que todos los casos son diferentes.
 
 ```{r}
+# UPGMA
+if(interactive()) dev.new()
 cl_pvclust_upgma <-
         pvclust(t(mi_fam_t),
                 method.hclust = "average",
@@ -326,6 +328,7 @@ Para UPGMA nos sugiere que hay más de 6 grupos, y esto se debe al gran número 
 
 ```{r}
 # Ward
+if(interactive()) dev.new()
 cl_pvclust_ward <-
         pvclust(t(mi_fam_t),
                 method.hclust = "ward.D2",
@@ -508,6 +511,50 @@ mapa_upgma_v4 <- mapa_leaflet(
   variable = m_amb_upgma_ak$variable[4],
   titulo_leyenda = m_amb_upgma_ak$variable[4])
 mapa_upgma_v4
+```
+
+### Especies con preferencia/fidelidad con grupos (clústers)
+
+Paquete `indicspecies`.
+
+```{r}
+library(indicspecies)
+```
+
+Análisis de preferencia/fidelidad de especies con grupos (clusters), mediante el coeficiente de correlación biserial puntual.
+
+- UPGMA
+
+```{r}
+phi_upgma <- multipatt(
+  mi_fam,
+  grupos_upgma,
+  func = "r.g",
+  max.order = 1,
+  control = how(nperm = 999))
+summary(phi_upgma)
+data.frame(abreviado = rownames(phi_upgma$sign)[which(phi_upgma$sign$p.value < 0.05)]) %>%
+  inner_join(df_equivalencias) %>%
+  arrange(abreviado) %>% 
+  kable(booktabs=T) %>%
+  kable_styling(latex_options = c("HOLD_position", "scale_down"))
+```
+
+- Ward
+
+```{r} 
+phi_ward <- multipatt(
+  mi_fam,
+  grupos_ward,
+  func = "r.g",
+  max.order = 2,
+  control = how(nperm = 999))
+summary(phi_ward)
+data.frame(abreviado = rownames(phi_ward$sign)[which(phi_ward$sign$p.value < 0.05)]) %>%
+  inner_join(df_equivalencias) %>%
+  arrange(abreviado) %>% 
+  kable(booktabs=T) %>%
+  kable_styling(latex_options = c("HOLD_position", "scale_down"))
 ```
 
 ## Técnicas de ordenación
@@ -718,7 +765,7 @@ mi_fam_t_rda_sc1 <- scores(mi_fam_t_rda,
          scaling = escalado,
          display = "sp"
   )
-# text(mi_fam_t_rda, "species", col="red", cex=0.8, scaling="sp")
+text(mi_fam_t_rda, "species", col="red", cex=0.8, scaling=escalado)
 arrows(0, 0,
        mi_fam_t_rda_sc1[, 1] * 0.9,
        mi_fam_t_rda_sc1[, 2] * 0.9,
