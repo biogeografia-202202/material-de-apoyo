@@ -130,7 +130,15 @@ por la ruta del directorio donde tengas almacenados tus datos y tus
 scripts.
 
 ``` r
-# setwd('practicas/')
+if(interactive()) {
+  tryCatch(
+    setwd(dirname(rstudioapi::getSourceEditorContext()$path)),
+    error = function(e) {
+      cat('Probablemente ya el directorio de trabajo está fijado correctamente',
+          'o quizá el directorio no existe. Este fue el error devuelto:\n')
+      e
+    })
+}
 ```
 
 Cargar paquetes.
@@ -4960,7 +4968,15 @@ por la ruta del directorio donde tengas almacenados tus datos y tus
 scripts.
 
 ``` r
-# setwd('practicas/')
+if(interactive()) {
+  tryCatch(
+    setwd(dirname(rstudioapi::getSourceEditorContext()$path)),
+    error = function(e) {
+      cat('Probablemente ya el directorio de trabajo está fijado correctamente',
+          'o quizá el directorio no existe. Este fue el error devuelto:\n')
+      e
+    })
+}
 ```
 
 Cargar paquetes.
@@ -6630,7 +6646,7 @@ mi_fam_t_rda_sc1 <- scores(mi_fam_t_rda,
          scaling = escalado,
          display = "sp"
   )
-text(mi_fam_t_rda, "species", col="red", cex=0.8, scaling="sp")
+# text(mi_fam_t_rda, "species", col="red", cex=0.8, scaling="sp")
 arrows(0, 0,
        mi_fam_t_rda_sc1[, 1] * 0.9,
        mi_fam_t_rda_sc1[, 2] * 0.9,
@@ -6659,7 +6675,15 @@ por la ruta del directorio donde tengas almacenados tus datos y tus
 scripts.
 
 ``` r
-# setwd('practicas/')
+if(interactive()) {
+  tryCatch(
+    setwd(dirname(rstudioapi::getSourceEditorContext()$path)),
+    error = function(e) {
+      cat('Probablemente ya el directorio de trabajo está fijado correctamente',
+          'o quizá el directorio no existe. Este fue el error devuelto:\n')
+      e
+    })
+}
 ```
 
 Cargar paquetes.
@@ -9394,7 +9418,15 @@ por la ruta del directorio donde tengas almacenados tus datos y tus
 scripts.
 
 ``` r
-# setwd('practicas/')
+if(interactive()) {
+  tryCatch(
+    setwd(dirname(rstudioapi::getSourceEditorContext()$path)),
+    error = function(e) {
+      cat('Probablemente ya el directorio de trabajo está fijado correctamente',
+          'o quizá el directorio no existe. Este fue el error devuelto:\n')
+      e
+    })
+}
 ```
 
 Cargar paquetes.
@@ -11560,8 +11592,6 @@ env_sf <- za_sf %>%
   rownames_to_column('hex_id') %>% 
   left_join(riq_hex, by = 'hex_id')
 env_sp <- env_sf %>% as_Spatial
-centroides <- env_sf %>% st_centroid
-env_xy <- centroides %>% st_coordinates %>% as.data.frame
 (vecindad <- env_sp %>% poly2nb)
 ```
 
@@ -11570,6 +11600,21 @@ env_xy <- centroides %>% st_coordinates %>% as.data.frame
     ## Number of nonzero links: 1820 
     ## Percentage nonzero weights: 1.621742 
     ## Average number of links: 5.432836
+
+``` r
+islas <- which(card(vecindad)==0)
+if(length(islas) > 0) {
+  cat('\nHay islas, en concreto, la(s) fila(s)', islas, 'de env_sf\n')
+  env_sf <- env_sf[-islas, ]
+  env_sp <- env_sf %>% as_Spatial
+  (vecindad <- env_sp %>% poly2nb)
+  islas <- which(card(vecindad)==0)
+  cat('\nIsla(s) eliminada(s)\n')
+}
+if(length(islas) == 0) cat('No hay isla(s). Proseguir con el script')
+```
+
+    ## No hay isla(s). Proseguir con el script
 
 ``` r
 (pesos_b <- nb2listw(vecindad, style = 'B'))
@@ -11589,6 +11634,8 @@ env_xy <- centroides %>% st_coordinates %>% as.data.frame
 
 ``` r
 plot(env_sp)
+centroides <- env_sf %>% st_centroid
+env_xy <- centroides %>% st_coordinates %>% as.data.frame
 plot(vecindad, coords = env_xy, add =T , col = 'red')
 ```
 
@@ -12280,6 +12327,7 @@ print(auto_spp_hel, digits = 2, p.adj.method = 'holm')
 
 ``` r
 dim_panel <- rev(n2mfrow(ncol(mi_fam_t_all)))
+if(interactive()) dev.new()
 par(mfrow = dim_panel)
 suppressWarnings(invisible(lapply(auto_spp_hel, function(x) plot(x, main = x$var))))
 ```
@@ -14497,6 +14545,7 @@ prefijos_disponibles <- c('ESA', 'CGL', 'GSL', 'GHH', 'WCL', 'CH-BIO', 'G90', 'G
 suppressWarnings(invisible(lapply(prefijos_disponibles, 
        function(x) {
          dim_panel <- rev(n2mfrow(ncol(env_num %>% select(matches(paste0('^', x))))))
+         if(interactive()) dev.new()
          par(mfrow = dim_panel)
          suppressWarnings(invisible(lapply(
            auto_amb[grep(paste0('^', x), names(auto_amb), value=T)],
@@ -14542,9 +14591,10 @@ env_sf_num %>% tibble
 
 ``` r
 lisamaps_amb <- sapply(
-  grep('geom', names(env_sf_num %>% select(matches('^ESA'))), invert = T, value = T),
+  grep('geom', names(env_sf_num), invert = T, value = T),
   function(x) {
-    m <- lisamap(
+    tryCatch(
+      {m <- lisamap(
       objesp = env_sf_num[x],
       var = x,
       pesos = pesos_b,
@@ -14554,21 +14604,32 @@ lisamaps_amb <- sapply(
       tamanotitulo = 10,
       fuentedatos = '',
       titulomapa = paste0('Clusters LISA de "', x, '"'))
-    return(m$grafico)}, simplify = F)
-lisamaps_amb$leyenda <- gtable_filter(ggplot_gtable(ggplot_build(lisamaps_amb[[1]] + theme(legend.position="bottom"))), "guide-box")
-grid.arrange(do.call('arrangeGrob', c(lisamaps_amb[1:length(lisamaps_amb)], nrow = 3)),
-             lisamaps_amb$leyenda, heights=c(1.1, 0.1), nrow = 2)
+    return(m$grafico)}, error = function(e) e)
+    }, simplify = F)
+lisamaps_amb_rango <- seq_along(lisamaps_amb)
+lisamaps_amb_cortes <- unique(c(
+  min(lisamaps_amb_rango),
+  (lisamaps_amb_rango)[which(lisamaps_amb_rango%%8==0)],
+  max(lisamaps_amb_rango)))
+lisamaps_amb_intervalos <- cut(lisamaps_amb_rango, lisamaps_amb_cortes, include.lowest = T)
+lisamaps_amb_df <- data.frame(lisamaps_amb_rango, lisamaps_amb_intervalos)
+lisamaps_amb$leyenda <- gtable_filter(ggplot_gtable(ggplot_build(lisamaps_amb[[1]] + theme(legend.position = "bottom"))), "guide-box")
+suppressWarnings(invisible(sapply(levels(lisamaps_amb_df[, 'lisamaps_amb_intervalos']),
+       function(x) {
+         if(interactive()) dev.new()
+         grid.arrange(
+           do.call(
+             'arrangeGrob',
+             c(lisamaps_amb[
+               lisamaps_amb_df[
+                 lisamaps_amb_df$lisamaps_amb_intervalos==x, 'lisamaps_amb_rango', drop=T]
+               ], nrow = 3)),
+           lisamaps_amb$leyenda,
+           heights=c(1.1, 0.1), nrow = 2)
+       })))
 ```
 
-![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-54-1.png)<!-- -->
-
-¡¡¡IMPORTANTE!!! Sólo coloqué los mapas LISA de las variables con el
-prefijo `ESA`. Te toca hacer los demás mapas a ti, pues recuerda que hay
-una batería de variables adicionales, concretamente, todas estas . Para
-hacer los restantes mapas, ejecuta el mismo bloque anterior,
-sustituyendo `ESA` por la que corresponda, en la línea de
-`...select(matches('^OTROPREFIJO'))...` por ejemplo,
-`...select(matches('^CGL'))...`.
+![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-54-1.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-54-2.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-54-3.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-54-4.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-54-5.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-54-6.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-54-7.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-54-8.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-54-9.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-54-10.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-54-11.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-54-12.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-54-13.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-54-14.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-54-15.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-54-16.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-54-17.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-54-18.png)<!-- -->
 
 Finalmente, haré lo propio con los datos de la matriz de comunidad, para
 calcular la autocorrelación de los datos de incidencia a partir de la
@@ -14597,24 +14658,29 @@ lisamaps_mifam <- sapply(
     # dev.new();print(m$grafico)
     return(m$grafico)}, error = function(e) e)
     }, simplify = F)
-lisamaps_mifam$leyenda <- gtable_filter(ggplot_gtable(ggplot_build(lisamaps_mifam[[1]] + theme(legend.position="bottom"))), "guide-box")
-grid.arrange(do.call('arrangeGrob', c(lisamaps_mifam[1:8], nrow = 3)), lisamaps_mifam$leyenda, heights=c(1.1, 0.1), nrow = 2)
+lisamaps_mifam_rango <- seq_along(lisamaps_mifam)
+lisamaps_mifam_cortes <- unique(c(
+  min(lisamaps_mifam_rango),
+  (lisamaps_mifam_rango)[which(lisamaps_mifam_rango%%8==0)],
+  max(lisamaps_mifam_rango)))
+lisamaps_mifam_intervalos <- cut(lisamaps_mifam_rango, lisamaps_mifam_cortes, include.lowest = T)
+lisamaps_mifam_df <- data.frame(lisamaps_mifam_rango, lisamaps_mifam_intervalos)
+lisamaps_mifam$leyenda <- gtable_filter(ggplot_gtable(ggplot_build(lisamaps_mifam[[1]] + theme(legend.position = "bottom"))), "guide-box")
+suppressWarnings(invisible(sapply(levels(lisamaps_mifam_df[, 'lisamaps_mifam_intervalos']),
+       function(x) {
+         if(interactive()) dev.new()
+         grid.arrange(
+           do.call(
+             'arrangeGrob',
+             c(lisamaps_mifam[
+               lisamaps_mifam_df[
+                 lisamaps_mifam_df$lisamaps_mifam_intervalos==x, 'lisamaps_mifam_rango', drop=T]
+               ], nrow = 3)),
+           lisamaps_mifam$leyenda,
+           heights=c(1.1, 0.1), nrow = 2)
+       })))
 ```
 
-![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-55-1.png)<!-- -->
-
-¡¡¡IMPORTANTE!!! Fíjate en la última línea de código, donde pone
-`...c(lisamaps_mifam[1:8],...`. El 1:8 significa “representa desde la
-especie que ocupa la columna 1 hasta la que ocupa la columna 8. Sin
-embargo, hay más mapas que debo representar, en concreto 44. Por lo
-tanto, dependiendo del número de especies que tenga mi matriz de
-comunidad (lo puedes saber ejecutando
-`length(grep('leyenda', names(lisamaps_mifam), invert=T))` directamente
-en la consola), tendrás que repetir el código del bloque anterior varias
-veces, de 8 en 8, o si quieres de 12 en 12, o como te salga mejor; por
-ejemplo, en mi caso, yo debería repetirlo con
-`...c(lisamaps_mifam[9:16],...`, luego con
-`...c(lisamaps_mifam[17:24],...`, hasta llegar al número de especies
-disponibles.
+![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-55-1.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-55-2.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-55-3.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-55-4.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-55-5.png)<!-- -->![](practica-99-tu-manuscrito-3-resultados_files/figure-gfm/unnamed-chunk-55-6.png)<!-- -->
 
 # Referencias

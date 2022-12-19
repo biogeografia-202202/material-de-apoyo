@@ -99,6 +99,7 @@ library(countrycode)
 library(vegan)
 options(stringsAsFactors = FALSE)
 source_url('https://raw.githubusercontent.com/biogeografia-202202/material-de-apoyo/master/practicas/funciones.R')
+if (interactive()) setwd('practicas/')
 ```
 
 ### Descargar registros de GBIF
