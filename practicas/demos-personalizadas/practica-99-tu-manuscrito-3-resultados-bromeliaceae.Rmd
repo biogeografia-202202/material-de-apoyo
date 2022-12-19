@@ -1,0 +1,812 @@
+---
+author: José Ramón Martínez Batlle
+date: 26-11-2022
+output: github_document
+# bibliography: ../ref/biblio.bib
+# csl: ../ref/apa.csl
+editor_options: 
+  chunk_output_type: console
+always_allow_html: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = T, cache=F, message=F, warning=F, fig.width=9)
+eval_for_knit <- TRUE
+grupo <- 'Bromeliaceae'
+tecnicas <- 'análisis de agrupamiento y de ordenación'
+```
+
+---
+title: "Práctica 99. Resultados de tu manuscrito. `r grupo`, `r tecnicas`."
+---
+
+NOTA. Este cuaderno es una aplicación a datos de `r grupo` en GBIF, a partir de una simple adaptación del cuaderno general [practica-99-tu-manuscrito-3-resultados.md (basado en un análisis demostrativo de la familia Polygonaceae)](../practica-99-tu-manuscrito-3-resultados.md). Si comparas este archivo con el original, notarás que, básicamente, edité el nombre del archivo fuente de la matriz de comunidad (para adaptarlo a este grupo) y otros detalles menores. Por lo tanto, aunque el código y los gráficos sí se refieren a `r grupo`, probablemente el texto no.
+
+# ¿Qué contiene la sección "Resultados"?
+
+Te recomiendo releer las normas para autores/as del [Anuario de Investigaciones Científicas de la UASD](../docs/instrucciones-para-autores-anuario-investigaciones-cientificas-UASD.pdf) y adherirte a las especificaciones sobre la sección "Resultados" que allí se indican. Aunque en las referidas normas no se incluyen muchas pautas significativas, si escribieras para una revista específica, deberás considerar sus normas y recomendaciones de publicación. Además, te recomiendo que consultes la sección "Resultados" de algunos manuscritos publicados en el Anuario.
+
+En los resultados expones el contenido analítico central. Es "el qué" del manuscrito, en complemento de "el cómo" (metodología) y "el por qué" (introducción) de tu investigación. En los resultados muestras lo que encontraste luego de que colectaste (aunque en este caso, no fuiste al terreno) y analizaste, con tus métodos, los datos fuente.
+
+Algunas recomendaciones generales:
+
+- "Resultados" se supone que es la sección más corta del manuscrito, siempre que se usen apropiadamente los recursos gráficos, las tablas y la información suplementaria.
+
+- Comienza por realizar tus análisis. Necesitarás una matriz de comunidad y una ambiental. La de comunidad la habrás generado en la práctica 2; la ambiental explico cómo generarla en este mismo cuaderno (ver abajo). En general, la matriz ambiental la producirás mediante estadísticos zonales del territorio dominicano. Para aprender más sobre la fuente de estadística zonal de República Dominicana, que contiene un conjunto de más de 100 variables resumidas por celdas H3, visita [este repo](https://github.com/geofis/zonal-statistics). Debes visitar dicho repo para poder citarlo apropiadamente.
+
+- Cuando tengas análisis realizados, antes de comenzar a escribir, te recomiendo que escribas un guión de tu sección "Resultados". 
+
+- Guión en mano, redacta tu sección "Resultados", siguiendo también estos consejos:
+
+- En esta sección, se espera que presentes lo que has obtenido de manera "objetiva", evitando explicaciones, comentarios, opiniones, perspectivas o limitaciones. En teoría, tu redacción es "fría", lo cual no necesariamente significa que tenga que ser aburrida.
+
+- Esta es la sección por excelencia donde usarás *tablas y/o gráficos*. Lo más importante a tener en cuenta cuando los uses es que no debes duplicar el contenido que muestran dichos recursos en el texto. La tabla o gráfico son apoyos que te ayudarán a no entrar en densidades innecesarias dentro de los párrafos. Por lo tanto, si colocas una tabla o figura, no caigas en la tentación de describirla en párrafos de forma exhausitva. Estos recursos deben servir para apoyar el o los párrafos donde destacas los principales patrones encontrados.
+
+- *Importante también*: si insertas una tabla o gráfico, debes referirla en el texto (e.g. "ver figura X"). De nada sirve incluir una figura o una tabla si no la refieres, porque con ello estarás sugiriendo que dicho recurso era completamente prescindible.
+
+- El tiempo verbal preferido (por defecto) es el pasado, por ejemplo "..., donde se **encontró** una asociación significativa entre ... y ...". Sin embargo, hay excepciones, como por ejemplo, cuando te refieres a una tabla o una figura. Un caso típico es la expresión "tal como se muestra en la tabla 1", donde el verbo está conjugado en presente.
+
+A continuación, te pongo enlaces a referencias que considero útiles, sobre cómo redactar los resultados (algunas son generales, sobre artículos en general):
+
+-   [Breves pautas, en inglés](https://www.editage.com/insights/the-secret-to-writing-the-results-and-discussion-section-of-a-manuscript). Puedes usar el traductor [DeepL](https://www.deepl.com/translator), porque produce frases más naturales.
+
+Cinco guías, en inglés, que considero están bien elaboradas, sobre cómo redactar un artículo científico (consulta la sección sobre cómo redactar los *resultados* en cada una):
+
+-   [Demystifying the Journal Article](https://www.insidehighered.com/advice/2017/05/09/how-write-effective-journal-article-and-get-it-published-essay)
+
+-   [How to write a scientific manuscript for publication](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3626472/)
+
+-   [11 steps to structuring a science paper editors will take seriously](https://www.elsevier.com/connect/11-steps-to-structuring-a-science-paper-editors-will-take-seriously)
+
+-   [Cómo escribir un artículo científico por primera vez](https://www.sciencedirect.com/science/article/abs/pii/S1134593417300040) (necesitarás usar  [SciHub](https://sci-hub.se/) para descargarlo)
+
+- Una muy breve pero con consejos útiles: [Tips for writing the perfect IMRAD manuscript](https://www.editage.com/insights/tips-for-writing-the-perfect-imrad-manuscript)
+
+
+# Scripts de ejemplo
+
+Una nota, a título informativo. Cada una se las siguientes secciones (e.g. "Análisis de agrupamiento", "Ordenación restringida"), es reproducible de forma autónoma, es decir, sin dependencia de líneas de código anteriores. Esto siginifica que las dependencias de una sección se resuelven dentro de ella misma, sin dependencia de líneas anteriores.
+
+Por esta razón, varias secciones comparten texto y código común, pero sólo al inicio, porque al avanzar cada una se hace propia. Notarás, por lo tanto, que el texto "se repite a sí mismo" por esta razón; la otra opción que tenía era alojar el código común en un único archivo, pero entonces esto te obligaba a navegar por archivos separados, haciendo menos didáctico este cuaderno.
+
+## Análisis de agrupamiento
+
+Me basaré en los scripts que comienzan por `aa_` de este [repo](https://github.com/biogeografia-master/scripts-de-analisis-BCI), los cuales explico en los vídeos de "Análisis de agrupamiento" (del 13 al 16) de la lista de reproducción ["Ecología Numérica con R" de mi canal](https://www.youtube.com/playlist?list=PLDcT2n8UzsCRDqjqSeqHI1wsiNOqpYmsJ).
+
+> INICIA texto+código común entre secciones
+
+Fijar un directorio de trabajo no es recomendable, mejor trabaja por proyecto. En cualquier caso, si no quieres o no puedes crear un proyecto, usa la sentencia que verás abajo, cambiando `TU_DIRECTORIO` por la ruta del directorio donde tengas almacenados tus datos y tus scripts.
+
+```{r}
+if(interactive()) {
+  tryCatch(
+    setwd(dirname(rstudioapi::getSourceEditorContext()$path)),
+    error = function(e) {
+      cat('Probablemente ya el directorio de trabajo está fijado correctamente',
+          'o quizá el directorio no existe. Este fue el error devuelto:\n')
+      e
+    })
+}
+```
+
+Cargar paquetes.
+
+```{r}
+library(vegan)
+library(sf)
+library(tidyverse)
+library(tmap)
+library(kableExtra)
+library(foreach)
+library(leaps)
+library(caret)
+gh_content <- 'https://raw.githubusercontent.com/'
+gh_zonal_stats <- paste0(gh_content,
+                         'geofis/zonal-statistics/0b2e95aaee87bf326cf132d28f4bd15220bb4ec7/out/')
+repo_analisis <- 'biogeografia-master/scripts-de-analisis-BCI/master'
+repo_sem202202 <- 'biogeografia-202202/material-de-apoyo/master/practicas/'
+devtools::source_url(paste0(gh_content, repo_analisis, '/biodata/funciones.R'))
+devtools::source_url(paste0(gh_content, repo_sem202202, 'train.R'))
+devtools::source_url(paste0(gh_content, repo_sem202202, 'funciones.R'))
+```
+
+Carga tu matriz de comunidad, que habrás generado en la práctica 2, y elige un umbral para especies raras o rangos de registros de presencia para seleccionar especies en una nueva matriz de comunidad.
+
+```{r}
+res <- 5 #Resolución H3, puedes elegir entre 4, 5, 6 o 7, pero cuidado con valores >=6
+# IMPORTANTE: la resolución de las celdas H3, debe coincidir con la resolución
+# a la cual generaste tu matriz de comunidad. De lo contrario, obtendrás error. Si tu 
+# archivo RDS de matriz de comunidad se denomina "matriz_de_comunidad.RDS", y lo creaste
+# usando resolución 4, cámbiale el nombre a "matriz_de_comunidad_res_5.RDS". Recuerda,
+# puedes usar cualquier resolución, lo único importante es que las resolución usada en la
+# creación de la matriz de comunidad, debe ser la misma que en la ambiental.
+# Prueba distintas resoluciones, no te enfrasques en quedarte con la misma que
+# uso en este ejemplo. Prueba con resolución 5, por ejemplo.
+mc_orig <- readRDS('matriz_de_comunidad_bromeliaceae.RDS')
+nrow(mc_orig) #Número de filas, equivale a número de hexágonos con registros de presencia
+ncol(mc_orig)  #Número de columnas, equivale a número de especies, riqueza
+data.frame(Especies = names(mc_orig)) %>% 
+  kable(booktabs=T) %>%
+  kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
+  gsub(' NA ', '', .) #Lista de especies
+unique(word(names(mc_orig), 1, 1)) #Géneros representados
+table(word(names(mc_orig), 1, 1)) #Número de especies por género
+data.frame(`Número de hexágonos` = sort(colSums(mc_orig), decreasing = T), check.names = F) %>% 
+  kable(booktabs=T) %>%
+  kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
+  gsub(' NA ', '', .) # Número de hexágonos en los que está presente cada especie
+
+# Usa el vector anterior para determinar un umbral o rango de registros para filtrar tu matriz
+# ¿En cuántos hexágonos está cada especie? Filtra tus datos usando tu propio criterio.
+# Especies que aparecen en pocos hexágonos se consideran "raras". Por ejemplo, si una especie sólo
+# aparece en un hexágono en todo el país, es un "singleton", si en dos, "doubleton", y así.
+# Estas especies podrían contribuir a generar "ruido" en análisis posteriores, se recomienda excluirlas.
+# Elige un valor mínimo (representado por único número entero) o por un rango de enteros (e.g. de 10 a 20),
+# para seleccionar las especies que estén mejor representadas de acuerdo a tu criterio.
+# Por ejemplo, si usas el valor m, el script considerará a este valor como "el número mínimo de hexágonos
+# en los que está representada una especie, y creará una matriz de comunidad de especies seleccionadas
+# que están presentes en m hexágonos o más. Si eliges un rango, por ejemplo [m,n], el script generará
+# una matriz de comunidad que representadas un mínimo de m hexágonos y un máximo de n hexágonos.
+# (ambos extremos inclusive).
+en_cuantos_hex <- 2
+# Explicación: "en_cuantos_hex <- X", donde X es el número de hexágonos mínimo donde cada especie
+# debe estar presente. IMPORTANTE: elige TU PROPIO umbral.
+{if(length(en_cuantos_hex)==1) selector <- en_cuantos_hex:max(colSums(mc_orig)) else
+  if(length(en_cuantos_hex)==2)
+    selector <- min(en_cuantos_hex):max(en_cuantos_hex) else
+      stop('Debes indicar uno o dos valores numéricos')}
+selector
+mc_orig_seleccionadas <- mc_orig[, colSums(mc_orig) %in% selector]
+
+# Mínimo número de especies por hexágono
+data.frame(`Número de especies por hexágono` = sort(rowSums(mc_orig), decreasing = T), check.names = F) %>% 
+  kable(booktabs=T) %>%
+  kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
+  gsub(' NA ', '', .) # Número de hexágonos en los que está presente cada especie
+min_especies_por_hex <- 2
+# Explicación: "min_especies_por_hex <- Y", donde Y es el número mínimo (inclusive) de especies
+# que debe existir en cada hexágono. Por debajo de dicho valor, el hexágono es excluido.
+mi_fam <- mc_orig_seleccionadas[rowSums(mc_orig_seleccionadas)>=min_especies_por_hex, ]
+nrow(mi_fam)
+# mi_fam <- mc_orig_seleccionadas[!rowSums(mc_orig_seleccionadas)==0, ] #Elimina filas sin registros
+# rowSums(mi_fam) #Riqueza por hexágonos con especies seleccionadas. Comentado por extenso
+all(rowSums(mi_fam)>0) #Debe ser TRUE: todos los hexágonos tienen al menos 1 registro
+ncol(mi_fam) #Riqueza de especies
+# Usar nombres cortos o abreviados para las especies
+nombres_largos <- colnames(mi_fam)
+(colnames(mi_fam) <- make.cepnames(word(colnames(mi_fam), 1, 2)))
+(df_equivalencias <- data.frame(
+  nombre_original = nombres_largos,
+  abreviado = colnames(mi_fam)))
+```
+
+Transforma la matriz de comunidad. Este paso es importante, lo explico [aquí](https://www.youtube.com/watch?v=yQ10lp0-nHc&list=PLDcT2n8UzsCRDqjqSeqHI1wsiNOqpYmsJ&index=10)
+
+```{r}
+mi_fam_t <- decostand(mi_fam, 'hellinger') #Hellinger
+# Otras transformaciones posibles con datos de presencia/ausencia
+# mi_fam_t <- decostand(mi_fam, 'normalize') #Chord
+# mi_fam_t <- decostand(log1p(mi_fam), 'normalize') #Chord
+# mi_fam_t <- decostand(mi_fam, 'chi.square') #Chi-square
+```
+
+Genera la matriz ambiental a partir del archivo de estadística zonal por celdas H3 de República Dominicana, de acuerdo con la resolución que prefieras. Para el ejemplo, usé la resolución 5, pero puedes usar/probar con otra, para lo cual, sólo tendrías que cambiar el objeto `res <- X`, donde `X` puede ser un número cualquiera entre 4 y 7.
+
+Para aprender más sobre la fuente de estadística zonal de República Dominicana, que contiene un conjunto de más de 100 variables resumidas por celdas H3, visita [este repo](https://github.com/geofis/zonal-statistics). Debes visitar dicho repo para poder citarlo apropiadamente.
+
+```{r, message=F, warning=F}
+#Matriz ambiental
+tmpfile <- tempfile()
+download.file(
+  url = paste0(gh_zonal_stats, 'list_with_all_sources_all_resolution.RDS'),
+  tmpfile, method = if(Sys.info()[['sysname']]=='Windows') 'curl' else 'libcurl')
+tmprds <- readRDS(tmpfile)
+za <- tmprds[[paste0('H3 resolution: ', res)]]
+unlink(tmpfile)
+# Las siguientes líneas están comentadas, porque producen muchos mapas. Descoméntalas y ejecútalas si quieres verlos
+# za %>% st_as_sf('geom') %>%
+#   pivot_longer(cols = -matches('base|hex_id|geom')) %>% 
+#   tm_shape() + tm_fill(col = 'value') +
+#   tm_facets(by = 'name', free.scales = T)
+za_intermedia <- za %>%
+  st_drop_geometry() %>% 
+  select(-matches(c(' base'))) %>% 
+  column_to_rownames('hex_id')
+env <- za_intermedia[match(rownames(mi_fam), rownames(za_intermedia)), ]
+all(rownames(mi_fam) == rownames(env)) #Si es TRUE, sigue adelante
+```
+
+Se puede probar con un subconjunto de variables, generando una matriz ambiental que seleccione variables según el grupo al que pertenecen, con ayuda del prefijo.
+
+```{r}
+# env_selecionada <- env %>%
+#   st_drop_geometry() %>%
+#   dplyr::select(matches('^ESA '))
+# env_selecionada <- env %>%
+#   st_drop_geometry() %>%
+#   dplyr::select(matches('^G90-GEOM '))
+# env_selecionada <- env %>%
+#   st_drop_geometry() %>%
+#   dplyr::select(matches('^CH-BIO '))
+# env_selecionada <- env %>%
+#   st_drop_geometry() %>%
+#   dplyr::select(matches('^GHH '))
+# env_selecionada <- env %>%
+#   st_drop_geometry() %>%
+#   dplyr::select(matches('^GSL '))
+# env_selecionada <- env %>%
+#   st_drop_geometry() %>%
+#   dplyr::select(matches('^CGL '))
+```
+
+> FINALIZA texto+código común entre secciones
+
+### Clúster análisis usando distintos métodos. Interpretación y comparación de resultados
+
+> No olvides ejecutar la parte de código común y reutilizable situada arriba. Esta subsección necesita de objetos creados en líneas de código previas.
+
+A continuación, el **análisis de agrupamiento** propiamente. La parte más importante es generar un árbol, a partir de una matriz de distancias, que haga sentido desde el punto de vista de la comunidad y la distribución de las especies tal como se encuentran en GBIF. Primero cargaré paquetes específicos de esta técnica y generaré la matriz de distancias.
+
+```{r}
+library(broom)
+library(cluster)
+library(gclus)
+library(pvclust)
+mi_fam_d <- vegdist(mi_fam_t, "euc")
+```
+
+A continuación, generaré árboles usando distintos métodos, explicados en el [repo](https://github.com/biogeografia-master/scripts-de-analisis-BCI), y en los vídeos (13 a 16) de la lista mencionada arriba  ["Ecología Numérica con R" de mi canal](https://www.youtube.com/playlist?list=PLDcT2n8UzsCRDqjqSeqHI1wsiNOqpYmsJ).
+
+```{r, fig.width=9, fig.height=9, dpi=300}
+lista_cl <- list(
+        cl_single = hclust(mi_fam_d, method = 'single'),
+        cl_complete = hclust(mi_fam_d, method = 'complete'),
+        cl_upgma = hclust(mi_fam_d, method = 'average'),
+        cl_ward = hclust(mi_fam_d, method = 'ward.D2')
+)
+par(mfrow = c(2,2))
+invisible(map(names(lista_cl), function(x) plot(lista_cl[[x]], main = x, hang = -1, cex = 0.3)))
+par(mfrow = c(1,1))
+```
+
+A continuación, calcularé la distancia y la correlación cofenéticas. Se supone que el método con la mayor correlación cofenética explica mejor el agrupamiento de la comunidad. Consulta el vídeo y material de referencia. Normalmente, el método UPGMA obtiene la mayor correlación cofenética, pero esto se debe a que su procedimiento maximiza precisamente dicha métrica. No es recomendable conservar un único método de agrupamiento, normalmente es bueno usar al menos dos. Ward es muchas veces recomendado por basarse en procedimientos de cálculo muy distintos a los de UPGMA. Consulta referencias.
+
+```{r}
+map_df(lista_cl, function(x) {
+        coph_d <- cophenetic(x)
+        corr <- cor(mi_fam_d, coph_d)
+        return(corr)
+})
+```
+
+Ahora, calcularé las anchuras de silueta, una métrica que ayuda a determinar en cuántos grupos se organiza la comunidad. En el ejemplo, dado que muchas especies de Polygonaceae están ausentes en muchos hexágonos, es esperable que el procedimiento sugiera un número de grupos alto denominados (ver objeto impreso `n_grupos_optimos`). Considera la siguiente regla general: muchos grupos: el número ideal es 3 grupos, de 4 a 6 grupos es aceptable, 7 o más grupos se considera mucho y difícil de interpretar, es un resultado poco útil; 1 grupo es un resultado sin sentido.
+
+```{r}
+# UPGMA
+anch_sil_upgma <- calcular_anchuras_siluetas(
+        mc_orig = mi_fam, 
+        distancias = mi_fam_d, 
+        cluster = lista_cl$cl_upgma)
+anch_sil_upgma
+u_dend_reord <- reorder.hclust(lista_cl$cl_upgma, mi_fam_d)
+plot(u_dend_reord, hang = -1)
+rect.hclust(
+        tree = u_dend_reord,
+        k = anch_sil_upgma$n_grupos_optimo)
+```
+
+Método Ward.
+
+```{r}
+# Ward
+anch_sil_ward <- calcular_anchuras_siluetas(
+        mc_orig = mi_fam, 
+        distancias = mi_fam_d, 
+        cluster = lista_cl$cl_ward)
+anch_sil_ward
+w_dend_reord <- reorder.hclust(lista_cl$cl_ward, mi_fam_d)
+plot(w_dend_reord, hang = -1)
+rect.hclust(
+        tree = w_dend_reord,
+        k = anch_sil_ward$n_grupos_optimo)
+```
+
+EXPLORA TUS RESULTADOS (usa como referencia [practica-99-tu-manuscrito-3-resultados.md](../practica-99-tu-manuscrito-3-resultados.md) y el vídeo correspondiente a tu caso)
+
+```{r}
+# UPGMA
+if(interactive()) dev.new()
+cl_pvclust_upgma <-
+        pvclust(t(mi_fam_t),
+                method.hclust = "average",
+                method.dist = "euc",
+                iseed = 999, # Resultado reproducible
+                parallel = TRUE)
+# Añadir los valores de p
+plot(cl_pvclust_upgma, hang = -1)
+# Añadir rectángulos a los grupos significativos
+lines(cl_pvclust_upgma)
+pvrect(cl_pvclust_upgma, alpha = 0.90, border = 4)
+```
+
+EXPLORA TUS RESULTADOS (usa como referencia [practica-99-tu-manuscrito-3-resultados.md](../practica-99-tu-manuscrito-3-resultados.md) y el vídeo correspondiente a tu caso)
+
+```{r}
+# Ward
+if(interactive()) dev.new()
+cl_pvclust_ward <-
+        pvclust(t(mi_fam_t),
+                method.hclust = "ward.D2",
+                method.dist = "euc",
+                iseed = 999, # Resultado reproducible
+                parallel = TRUE)
+# Añadir los valores de p
+plot(cl_pvclust_ward, hang = -1)
+# Añadir rectángulos a los grupos significativos
+lines(cl_pvclust_ward)
+pvrect(cl_pvclust_ward, alpha = 0.91, border = 4)
+```
+
+Generaré agrupamientos y los exportaré a archivos, para reutilizarlos más adelante. Elegir un número de grupos no es tarea sencilla, por el momento probaré con el número de grupos `k` del siguiente bloque de código, el cual me permitirá caracterízar los distintos hábitats más fácilmente en función de las variables ambientales.
+
+```{r}
+k <- 3
+# UPGMA
+grupos_upgma <- as.factor(cutree(lista_cl$cl_upgma, k = k))
+set.seed(999);sample(grupos_upgma, 10) #¿A qué grupo pertenecen 10 hexágonos seleccionados al azar?
+table(grupos_upgma) #¿Cuántos hexágonos hay en cada grupo? ¡¡UPGMA NO HACE MUCHO SENTIDO!!
+plot(u_dend_reord, hang = -1)
+rect.hclust(tree = u_dend_reord, k = k)
+
+# Ward
+grupos_ward <- as.factor(cutree(lista_cl$cl_ward, k = k))
+set.seed(999);sample(grupos_ward, 10) #¿A qué grupo pertenecen 10 hexágonos seleccionados al azar?
+table(grupos_ward) #¿Cuántos hexágonos hay en cada grupo?
+plot(w_dend_reord, hang = -1)
+rect.hclust(tree = w_dend_reord, k = k)
+
+# Guardaré estos vectores en archivos para reutilizarlos en *scripts* posteriores: 
+saveRDS(grupos_upgma, 'grupos_upgma_bromeliaceae.RDS')
+saveRDS(grupos_ward, 'grupos_ward_bromeliaceae.RDS')
+```
+
+### Grupos (clústers), variables ambientales y mapas
+
+> No olvides ejecutar la parte de código común y reutilizable situada arriba. Esta subsección necesita de objetos creados en líneas de código previas.
+
+Apliquemos el análisis de agrupamiento a la matriz ambiental. La clave en este punto es que, si la matriz ambiental presenta patrones parecidos a los de la matriz de comunidad, significa que el agrupamiento utilizado hace sentido entre ambos conjuntos de datos (comunidad y hábitat) de forma consistente. Si ambos conjuntos de datos son consistentes, significa que existe algún grado de asociación.
+
+Cargar paquetes necesarios para esta subsección.
+
+```{r}
+library(RColorBrewer)
+library(leaflet)
+library(leaflet.extras)
+```
+
+Agrupar los hexágonos de la matriz ambiental.
+
+```{r}
+(m_amb_upgma <- env %>%
+   rownames_to_column('hex_id') %>% 
+   mutate(grupos_upgma) %>%
+   pivot_longer(-c(grupos_upgma, hex_id), names_to = "variable", values_to = "valor") %>% 
+   inner_join(za %>% select(hex_id)))
+
+(m_amb_ward <- env %>%
+    rownames_to_column('hex_id') %>% 
+    mutate(grupos_ward) %>%
+    pivot_longer(-c(grupos_ward, hex_id), names_to = "variable", values_to = "valor") %>% 
+    inner_join(za %>% select(hex_id)))
+```
+
+Evaluar efectos entre los grupos ("diferencias significativas") de los agrupamientos UPGMA y Ward. Al tratarse de 6 grupos, se utilizan las pruebas estadísticas ANOVA (evalúa homongeneidad de medias) y Kruskal-Wallis (evalúa homogeneidad de medianas). Las tablas están ordenadas en orden ascendente por la columna `p_valor_a`, que son los p-valores de la prueba ANOVA.
+
+```{r}
+# UPGMA
+m_amb_upgma_ak <- m_amb_upgma %>%
+  group_by(variable) %>%
+  summarise(
+    p_valor_a = tryCatch(oneway.test(valor ~ grupos_upgma)$p.value, error = function(e) NA),
+    p_valor_k = tryCatch(kruskal.test(valor ~ grupos_upgma)$p.value, error = function(e) NA)
+    ) %>%
+  arrange(p_valor_a)
+m_amb_upgma_ak %>%
+  kable(booktabs=T) %>%
+  kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
+  gsub(' NA ', '', .)
+
+# Ward
+m_amb_ward_ak <- m_amb_ward %>%
+  group_by(variable) %>%
+  summarise(
+    p_valor_a = tryCatch(oneway.test(valor ~ grupos_ward)$p.value, error = function(e) NA),
+    p_valor_k = tryCatch(kruskal.test(valor ~ grupos_ward)$p.value, error = function(e) NA)
+    ) %>%
+  arrange(p_valor_a)
+m_amb_ward_ak %>%
+  kable(booktabs=T) %>%
+  kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
+  gsub(' NA ', '', .)
+```
+
+EXPLORA TUS RESULTADOS (usa como referencia [practica-99-tu-manuscrito-3-resultados.md](../practica-99-tu-manuscrito-3-resultados.md) y el vídeo correspondiente a tu caso)
+
+
+```{r, fig.width=9, fig.height=12, dpi=300}
+remesas <- list(primera = colnames(env)[1:68], segunda = colnames(env)[69:136])
+map(1:2,
+    function(x) {
+      m_amb_upgma %>% 
+        filter(variable %in% remesas[[x]]) %>% 
+        group_by(variable) %>% 
+        ggplot() + aes(x = grupos_upgma, y = valor, fill = grupos_upgma) + 
+        geom_boxplot(lwd = 0.2) + 
+        scale_fill_brewer(palette = 'Set1') +
+        theme_bw(base_size=6) +
+        theme(legend.position="none") +
+        facet_wrap(~ variable, scales = 'free_y', ncol = 8)
+    })
+map(1:2,
+    function(x) {
+      m_amb_ward %>% 
+        filter(variable %in% remesas[[x]]) %>% 
+        group_by(variable) %>% 
+        ggplot() + aes(x = grupos_ward, y = valor, fill = grupos_ward) + 
+        geom_boxplot(lwd = 0.2) + 
+        scale_fill_brewer(palette = 'Set1') +
+        theme_bw(base_size=6) +
+        theme(legend.position="none") +
+        facet_wrap(~ variable, scales = 'free_y', ncol = 8)
+    })
+```
+
+En los diagramas de caja, notarás que, las variables que aparecen en las primeras filas de las tablas anteriores, son las mismas que presentan mayor variabilidad de las cajas. Sigo con el ejemplo de las variables `GFC-LOSS year 2020`, `ESA Open Water` y `G90-GEOM footslope`, y nota que las anchuras de sus cajas, sus bigotes y la posición de la mediana (línea interior de la caja), fluctúa mucho entre grupos.
+
+El objetivo de adjuntarle, a la matriz ambiental, el vector de agrupamiento generado a partir de datos de comunidad, consiste en caracterizar ambientalmente los hábitats de los subgrupos diferenciados según su composición. Observa los resultados de las pruebas estadísticas, de los diagramas de caja, EXPLORA TUS RESULTADOS (usa como referencia [practica-99-tu-manuscrito-3-resultados.md](../practica-99-tu-manuscrito-3-resultados.md) y el vídeo correspondiente a tu caso):
+
+1. Hábitat del grupo 1.
+
+2. Hábitat del grupo 2. 
+
+3. Hábitats del grupo 3.
+
+A continuación, muestro mapas de los dos agrupamientos, tanto UPGMA como Ward, y comparo con algunas de las variables que presentaron efecto. Usando la función `mapa_leaflet` este bloque genera un mapa interactivo que colorea los hexágonos en función del grupo al que fueron asignados de acuerdo al análisis de agrupamiento realizado a la matriz de comunidad por el método UPGMA. Te recomiendo que uses la función `mapa_leaflet`, especificando tu matriz ambiental, la variable que quieras representar y un título, para generar mapas de tus propias variables seleccionadas.
+
+```{r}
+m_amb_clusters_sf <- env %>%
+  rownames_to_column('hex_id') %>% 
+  mutate(
+    grupos_upgma = as.character(grupos_upgma),
+    grupos_ward = as.character(grupos_ward)) %>%
+  inner_join(za %>% select(hex_id)) %>%
+  st_as_sf()
+mapa_upgma <- mapa_leaflet(
+  mapa = m_amb_clusters_sf,
+  variable = 'grupos_upgma',
+  titulo_leyenda = paste0('UPGMA, k=', k))
+mapa_upgma
+```
+
+Ídem anterior, pero según Ward.
+
+```{r}
+mapa_ward <- mapa_leaflet(
+  mapa = m_amb_clusters_sf,
+  variable = 'grupos_ward',
+  titulo_leyenda = paste0('Ward, k=', k))
+mapa_ward
+```
+
+El siguiente bloque de código representa, cartográficamente, algunas variables que mostraron inhomogeneidad en las pruebas estadísticas, es decir, variables en las que parecía haber diferencias significativas entre hexágonos de distintos grupos. Las variables que mostraron diferencias significativas podrían ayudar a explicar la varianza de la composición de la comunidad.
+
+```{r}
+m_amb_ward_ak$variable[1:40]
+mapa_ward_v1 <- mapa_leaflet(
+  mapa = m_amb_clusters_sf,
+  variable = m_amb_ward_ak$variable[1],
+  titulo_leyenda = gsub('(.{1,25})(\\s|$)', '\\1<br>', m_amb_ward_ak$variable[1]))
+mapa_ward_v1
+mapa_ward_v2 <- mapa_leaflet(
+  mapa = m_amb_clusters_sf,
+  variable = m_amb_ward_ak$variable[2],
+  titulo_leyenda = gsub('(.{1,25})(\\s|$)', '\\1<br>', m_amb_ward_ak$variable[2]))
+mapa_ward_v2
+mapa_ward_v3 <- mapa_leaflet(
+  mapa = m_amb_clusters_sf,
+  variable = m_amb_ward_ak$variable[3],
+  titulo_leyenda = gsub('(.{1,25})(\\s|$)', '\\1<br>', m_amb_ward_ak$variable[3]))
+mapa_ward_v3
+mapa_ward_v6 <- mapa_leaflet(
+  mapa = m_amb_clusters_sf,
+  variable = m_amb_ward_ak$variable[6],
+  titulo_leyenda = gsub('(.{1,25})(\\s|$)', '\\1<br>', m_amb_ward_ak$variable[6]))
+mapa_ward_v6
+mapa_ward_v9 <- mapa_leaflet(
+  mapa = m_amb_clusters_sf,
+  variable = m_amb_ward_ak$variable[9],
+  titulo_leyenda = gsub('(.{1,25})(\\s|$)', '\\1<br>', m_amb_ward_ak$variable[9]))
+mapa_ward_v9
+mapa_ward_v21 <- mapa_leaflet(
+  mapa = m_amb_clusters_sf,
+  variable = m_amb_ward_ak$variable[21],
+  titulo_leyenda = gsub('(.{1,25})(\\s|$)', '\\1<br>', m_amb_ward_ak$variable[21]))
+mapa_ward_v21
+mapa_ward_v27 <- mapa_leaflet(
+  mapa = m_amb_clusters_sf,
+  variable = m_amb_ward_ak$variable[27],
+  titulo_leyenda = gsub('(.{1,25})(\\s|$)', '\\1<br>', m_amb_ward_ak$variable[27]))
+mapa_ward_v27
+mapa_ward_v34 <- mapa_leaflet(
+  mapa = m_amb_clusters_sf,
+  variable = m_amb_ward_ak$variable[34],
+  titulo_leyenda = gsub('(.{1,25})(\\s|$)', '\\1<br>', m_amb_ward_ak$variable[34]))
+mapa_ward_v34
+```
+
+### Especies con preferencia/fidelidad con grupos (clústers)
+
+Paquete `indicspecies`.
+
+```{r}
+library(indicspecies)
+```
+
+Análisis de preferencia/fidelidad de especies con grupos (clusters), mediante el coeficiente de correlación biserial puntual.
+
+- UPGMA
+
+```{r}
+# phi_upgma <- multipatt(
+#   mi_fam,
+#   grupos_upgma,
+#   func = "r.g",
+#   max.order = 1,
+#   control = how(nperm = 999))
+# summary(phi_upgma)
+# data.frame(abreviado = rownames(phi_upgma$sign)[which(phi_upgma$sign$p.value < 0.05)]) %>%
+#   inner_join(df_equivalencias) %>%
+#   arrange(abreviado) %>% 
+#   kable(booktabs=T) %>%
+#   kable_styling(latex_options = c("HOLD_position", "scale_down"))
+```
+
+- Ward
+
+```{r} 
+phi_ward <- multipatt(
+  mi_fam,
+  grupos_ward,
+  func = "r.g",
+  max.order = 2,
+  control = how(nperm = 999))
+summary(phi_ward)
+data.frame(abreviado = rownames(phi_ward$sign)[which(phi_ward$sign$p.value < 0.05)]) %>%
+  inner_join(df_equivalencias) %>%
+  arrange(abreviado) %>% 
+  kable(booktabs=T) %>%
+  kable_styling(latex_options = c("HOLD_position", "scale_down"))
+```
+
+EXPLORA TUS RESULTADOS (usa como referencia [practica-99-tu-manuscrito-3-resultados.md](../practica-99-tu-manuscrito-3-resultados.md) y el vídeo correspondiente a tu caso)
+
+## Técnicas de ordenación
+
+Me basaré en los scripts que comienzan por `to_` de este [repo](https://github.com/biogeografia-master/scripts-de-analisis-BCI), los cuales explico en los vídeos de "Técnicas de ordenación" de la lista de reproducción ["Ecología Numérica con R" de mi canal](https://www.youtube.com/playlist?list=PLDcT2n8UzsCRDqjqSeqHI1wsiNOqpYmsJ).
+
+### Ordenación restringida
+
+> INICIA texto+código común entre secciones
+
+Fijar un directorio de trabajo no es recomendable, mejor trabaja por proyecto. En cualquier caso, si no quieres o no puedes crear un proyecto, usa la sentencia que verás abajo, cambiando `TU_DIRECTORIO` por la ruta del directorio donde tengas almacenados tus datos y tus scripts.
+
+```{r}
+if(interactive()) {
+  tryCatch(
+    setwd(dirname(rstudioapi::getSourceEditorContext()$path)),
+    error = function(e) {
+      cat('Probablemente ya el directorio de trabajo está fijado correctamente',
+          'o quizá el directorio no existe. Este fue el error devuelto:\n')
+      e
+    })
+}
+```
+
+Cargar paquetes.
+
+```{r}
+library(vegan)
+library(sf)
+library(tidyverse)
+library(tmap)
+library(kableExtra)
+library(foreach)
+library(leaps)
+library(caret)
+gh_content <- 'https://raw.githubusercontent.com/'
+gh_zonal_stats <- paste0(gh_content,
+                         'geofis/zonal-statistics/0b2e95aaee87bf326cf132d28f4bd15220bb4ec7/out/')
+repo_analisis <- 'biogeografia-master/scripts-de-analisis-BCI/master'
+repo_sem202202 <- 'biogeografia-202202/material-de-apoyo/master/practicas/'
+devtools::source_url(paste0(gh_content, repo_analisis, '/biodata/funciones.R'))
+devtools::source_url(paste0(gh_content, repo_sem202202, 'train.R'))
+devtools::source_url(paste0(gh_content, repo_sem202202, 'funciones.R'))
+```
+
+Carga tu matriz de comunidad, que habrás generado en la práctica 2, y elige un umbral para especies raras o rangos de registros de presencia para seleccionar especies en una nueva matriz de comunidad.
+
+```{r}
+res <- 5 #Resolución H3, puedes elegir entre 4, 5, 6 o 7, pero cuidado con valores >=6
+# IMPORTANTE: la resolución de las celdas H3, debe coincidir con la resolución
+# a la cual generaste tu matriz de comunidad. De lo contrario, obtendrás error. Si tu 
+# archivo RDS de matriz de comunidad se denomina "matriz_de_comunidad.RDS", y lo creaste
+# usando resolución 4, cámbiale el nombre a "matriz_de_comunidad_res_5.RDS". Recuerda,
+# puedes usar cualquier resolución, lo único importante es que las resolución usada en la
+# creación de la matriz de comunidad, debe ser la misma que en la ambiental.
+mc_orig <- readRDS('matriz_de_comunidad_bromeliaceae.RDS')
+nrow(mc_orig) #Número de filas, equivale a número de hexágonos con registros de presencia
+ncol(mc_orig)  #Número de columnas, equivale a número de especies, riqueza
+data.frame(Especies = names(mc_orig)) %>% 
+  kable(booktabs=T) %>%
+  kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
+  gsub(' NA ', '', .) #Lista de especies
+unique(word(names(mc_orig), 1, 1)) #Géneros representados
+table(word(names(mc_orig), 1, 1)) #Número de especies por género
+data.frame(`Número de hexágonos` = sort(colSums(mc_orig), decreasing = T), check.names = F) %>% 
+  kable(booktabs=T) %>%
+  kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
+  gsub(' NA ', '', .) # Número de hexágonos en los que está presente cada especie
+
+# Usa el vector anterior para determinar un umbral o rango de registros para filtrar tu matriz
+# ¿En cuántos hexágonos está cada especie? Filtra tus datos usando tu propio criterio.
+# Especies que aparecen en pocos hexágonos se consideran "raras". Por ejemplo, si una especie sólo
+# aparece en un hexágono en todo el país, es un "singleton", si en dos, "doubleton", y así.
+# Estas especies podrían contribuir a generar "ruido" en análisis posteriores, se recomienda excluirlas.
+# Elige un valor mínimo (representado por único número entero) o por un rango de enteros (e.g. de 10 a 20),
+# para seleccionar las especies que estén mejor representadas de acuerdo a tu criterio.
+# Por ejemplo, si usas el valor m, el script considerará a este valor como "el número mínimo de hexágonos
+# en los que está representada una especie, y creará una matriz de comunidad de especies seleccionadas
+# que están presentes en m hexágonos o más. Si eliges un rango, por ejemplo [m,n], el script generará
+# una matriz de comunidad que representadas un mínimo de m hexágonos y un máximo de n hexágonos.
+# (ambos extremos inclusive).
+en_cuantos_hex <- 2
+# Explicación: "en_cuantos_hex <- X", donde X es el número de hexágonos mínimo donde cada especie
+# debe estar presente. IMPORTANTE: elige TU PROPIO umbral.
+{if(length(en_cuantos_hex)==1) selector <- en_cuantos_hex:max(colSums(mc_orig)) else
+  if(length(en_cuantos_hex)==2)
+    selector <- min(en_cuantos_hex):max(en_cuantos_hex) else
+      stop('Debes indicar uno o dos valores numéricos')}
+selector
+mc_orig_seleccionadas <- mc_orig[, colSums(mc_orig) %in% selector]
+
+# Mínimo número de especies por hexágono
+data.frame(`Número de especies por hexágono` = sort(rowSums(mc_orig), decreasing = T), check.names = F) %>% 
+  kable(booktabs=T) %>%
+  kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
+  gsub(' NA ', '', .) # Número de hexágonos en los que está presente cada especie
+min_especies_por_hex <- 2
+# Explicación: "min_especies_por_hex <- Y", donde Y es el número mínimo (inclusive) de especies
+# que debe existir en cada hexágono. Por debajo de dicho valor, el hexágono es excluido.
+mi_fam <- mc_orig_seleccionadas[rowSums(mc_orig_seleccionadas)>=min_especies_por_hex, ]
+nrow(mi_fam)
+# mi_fam <- mc_orig_seleccionadas[!rowSums(mc_orig_seleccionadas)==0, ] #Elimina filas sin registros
+# rowSums(mi_fam) #Riqueza por hexágonos con especies seleccionadas. Comentado por extenso
+all(rowSums(mi_fam)>0) #Debe ser TRUE: todos los hexágonos tienen al menos 1 registro
+ncol(mi_fam) #Riqueza de especies
+# Usar nombres cortos o abreviados para las especies
+nombres_largos <- colnames(mi_fam)
+(colnames(mi_fam) <- make.cepnames(word(colnames(mi_fam), 1, 2)))
+(df_equivalencias <- data.frame(
+  nombre_original = nombres_largos,
+  abreviado = colnames(mi_fam)))
+```
+
+Transforma la matriz de comunidad. Este paso es importante, lo explico [aquí](https://www.youtube.com/watch?v=yQ10lp0-nHc&list=PLDcT2n8UzsCRDqjqSeqHI1wsiNOqpYmsJ&index=10)
+
+```{r}
+mi_fam_t <- decostand(mi_fam, 'hellinger') #Hellinger
+# Otras transformaciones posibles con datos de presencia/ausencia
+# mi_fam_t <- decostand(mi_fam, 'normalize') #Chord
+# mi_fam_t <- decostand(log1p(mi_fam), 'normalize') #Chord
+# mi_fam_t <- decostand(mi_fam, 'chi.square') #Chi-square
+```
+
+Genera la matriz ambiental a partir del archivo de estadística zonal por celdas H3 de República Dominicana, de acuerdo con la resolución que prefieras. Para el ejemplo, usé la resolución 5, pero puedes usar/probar con otra, para lo cual, sólo tendrías que cambiar el objeto `res <- X`, donde `X` puede ser un número cualquiera entre 4 y 7.
+
+Para aprender más sobre la fuente de estadística zonal de República Dominicana, que contiene un conjunto de más de 100 variables resumidas por celdas H3, visita [este repo](https://github.com/geofis/zonal-statistics). Debes visitar dicho repo para poder citarlo apropiadamente.
+
+```{r, message=F, warning=F}
+#Matriz ambiental
+tmpfile <- tempfile()
+download.file(
+  url = paste0(gh_zonal_stats, 'list_with_all_sources_all_resolution.RDS'),
+  tmpfile, method = if(Sys.info()[['sysname']]=='Windows') 'curl' else 'libcurl')
+tmprds <- readRDS(tmpfile)
+za <- tmprds[[paste0('H3 resolution: ', res)]]
+# Las siguientes líneas están comentadas, porque producen muchos mapas. Descoméntalas y ejecútalas si quieres verlos
+# za %>% st_as_sf('geom') %>%
+#   pivot_longer(cols = -matches('base|hex_id|geom')) %>% 
+#   tm_shape() + tm_fill(col = 'value') +
+#   tm_facets(by = 'name', free.scales = T)
+za_intermedia <- za %>%
+  st_drop_geometry() %>% 
+  select(-matches(c(' base'))) %>% 
+  column_to_rownames('hex_id')
+env <- za_intermedia[match(rownames(mi_fam), rownames(za_intermedia)), ]
+all(rownames(mi_fam) == rownames(env)) #Si es TRUE, sigue adelante
+```
+
+Se puede probar con un subconjunto de variables, generando una matriz ambiental que seleccione variables según el grupo al que pertenecen, con ayuda del prefijo.
+
+```{r}
+# env_selecionada <- env %>%
+#   st_drop_geometry() %>%
+#   dplyr::select(matches('^ESA '))
+# env_selecionada <- env %>%
+#   st_drop_geometry() %>%
+#   dplyr::select(matches('^G90-GEOM '))
+# env_selecionada <- env %>%
+#   st_drop_geometry() %>%
+#   dplyr::select(matches('^CH-BIO '))
+# env_selecionada <- env %>%
+#   st_drop_geometry() %>%
+#   dplyr::select(matches('^GHH '))
+# env_selecionada <- env %>%
+#   st_drop_geometry() %>%
+#   dplyr::select(matches('^GSL '))
+# env_selecionada <- env %>%
+#   st_drop_geometry() %>%
+#   dplyr::select(matches('^CGL '))
+```
+
+> FINALIZA texto+código común entre secciones
+
+A continuación, el análisis de ordenación propiamente. La parte más importante es el entrenamiento: la función `train` del paquete `caret`, contenida en la función `my_train`, simplifica la selección de variables. Lo más importante: prueba con todas las variables primero, observa las variables que recomienda el modelo final (`print_my_train(mod)`) y ensaya varias combinaciones de subconjuntos de variables.
+
+```{r, fig.width=9, fig.height=9, dpi=300}
+mi_fam_t_sel <- mi_fam_t %>%
+  # select(matches('uvif|dive', ignore.case = T)) %>% #Serviría para filtrar la matriz de comunidad con esto
+  rename_all(~ paste('ESPECIE', .x))
+env_spp <- env %>% bind_cols(mi_fam_t_sel)
+spp <- paste0('`', grep('^ESPECIE', colnames(env_spp), value = T), '`', collapse = ' + ')
+my_formula <- as.formula(paste(spp, '~ .'))
+set.seed(1); mod <- my_train(
+  formula = my_formula, 
+  preproceso = 'scale',
+  data = env_spp %>%
+    # select(matches('^GSL |^ESA |^ESPECIE ')) %>% #Sólo GSL y ESA, pero se debe explorar con todas
+    select(matches('^ESA |^CH-BIO |^WCL |^G90-GEOM |^CGIAR-ELE |^ESPECIE ')) %>% #Sólo ESA y CH-BIO, pero se debe explorar con todas
+    select_all())
+print_my_train(mod)
+(covar <- grep(
+  pattern = '\\(Intercept\\)',
+  x = names(coef(mod$finalModel,unlist(mod$bestTune))),
+  invert = T, value = T))
+mi_fam_t_rda <- rda(mi_fam_t_sel %>% rename_all(~ gsub('^ESPECIE ', '', .)) ~ .,
+                    env %>% select_at(all_of(gsub('\\`', '', covar))), scale = T)
+summary(mi_fam_t_rda)
+RsquareAdj(mi_fam_t_rda)$adj.r.squared
+vif.cca(mi_fam_t_rda)
+escalado <- 1
+plot(mi_fam_t_rda,
+     scaling = escalado,
+     display = c("sp", "lc", "cn"),
+     main = paste("Triplot de RDA especies ~ var. GSL + ESA, escalamiento", escalado)
+)
+mi_fam_t_rda_sc1 <- scores(mi_fam_t_rda,
+         choices = 1:2,
+         scaling = escalado,
+         display = "sp"
+  )
+text(mi_fam_t_rda, "species", col="red", cex=0.8, scaling=escalado)
+arrows(0, 0,
+       mi_fam_t_rda_sc1[, 1] * 0.9,
+       mi_fam_t_rda_sc1[, 2] * 0.9,
+       length = 0,
+       lty = 1,
+       col = "red"
+)
+```
+
+# Referencias
+
