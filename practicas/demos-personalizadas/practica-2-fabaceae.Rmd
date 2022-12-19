@@ -1,0 +1,408 @@
+---
+title: "Práctica 2. Descargar y visualizar datos de GBIF con R y QGIS"
+author: José Ramón Martínez Batlle
+date: 11-10-2022
+output: github_document
+bibliography: ../ref/biblio.bib
+csl: ../ref/apa.csl
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = T, cache = F, out.width = '100%', dpi = 300)
+```
+
+# Fecha de entrega
+
+-   28 de octubre de 2022
+
+# Introducción
+
+GBIF, o "Infraestructura Mundial de Información en Biodiversidad", es una organización que proporciona datos de seres vivos abiertamente a cualquier persona [@gbiforg2022what]. En octubre de 2022, la base de datos disponía de más de 2000 millones de registros biológicos, más de 76000 conjuntos de datos, casi 2000 instituciones publicaban datos en ella y se había publicado casi 8000 artículos científicos. Indiscutiblemente, GBIF es una fuente a considerar en estudios de biodiversidad. Te propongo que en, esta asignación, aprendas formas básicas de acceder a este importante recurso.
+
+# Objetivos de aprendizaje
+
+Al terminar esta práctica deberías ser capaz de:
+
+-   Descargar registros de presencia desde GBIF usando R, generar un índice espacial, desplegar registros en mapas y construir una matriz de comunidad.
+
+-   Desplegar registros e índice espacial en QGIS.
+
+-   Citar apropiadamente los datos de GBIF.
+
+# Informe
+
+Entregarás tu informe en formato PDF, el cual podrás elaborar con tu procesador de texto favorito (por ejemplo, LibreOffice Writer, LaTeX, Word) o mediante entornos de desarrollo integrado (e.g. Atom, Visual Studio Code, Jupyter Notebooks, RMarkdown-RStudio). Características del documento:
+
+-   Número máximo de páginas: 10.
+
+-   En la primera página, deberás incluir nombre, matrícula, asignatura, nombre de la práctica, fecha.
+
+-   Para evitar la proliferación de tipografías y formatos, debes usar estilos, para lo cual te recomiendo utilizar plantillas. Hay muchos recursos en la web sobre cómo usar estilos (término de búsqueda recomendado: estilos en procesadores de texto).
+
+-   Debes incluir tu código informático en las respuestas de los ejercicios donde uses lenguajes de programación (e.g. R). El código debe ser incluido como texto, no como imagen.
+
+-   Realiza doble revisión de ortografía y gramática.
+
+-   Las páginas deben estar numeradas secuencialmente.
+
+-   Si aplica, incluir ilustraciones y tablas de apoyo (a ambas debes incluirles título, "*caption*"), así como lista de referencias bibliográficas.
+
+-   Puedes usar un apéndice para incluir información complementaria que no te quepa en las 10 páginas centrales.
+
+-   Podré solicitar los archivos fuente empleados para elaborar el PDF y los resultados intermedios generados en cada ejercicio.
+
+# Criterios de evaluación
+
+```{r, echo=F}
+library(kableExtra)
+criterios_eval <- data.frame(
+  Concepto = c('Redacción, que incluye organización de las ideas, gramática, ortografía', 'Presentación, que incluye uso apropiado de estilos, tablas y figuras (legibilidad, uso de *caption*), numeración de páginas'),
+  Porcentaje = c('60%', '40%')
+)
+kable(criterios_eval, format="markdown")
+```
+
+# ¿Qué necesitarás?
+
+-   Conexión a internet.
+
+-   Una PC con R. Tendrás que instalar, si no los tienes aún, los paquetes que verás en la subsección "Paquetes" a continuación.
+
+-   Archivo `rd.gpkg`, que debes descargar desde la [carpeta `data`, subcarpeta `d002` del repo de material de apoyo](https://github.com/biogeografia-202202/material-de-apoyo/tree/master/data/d002). IMPORTANTE: toma nota de la ruta en tu PC donde guardes este archivo, porque más adelante la necesitarás.
+
+-   Cuenta en GBIF.
+
+-   Cuenta en Zenodo (recomendado).
+
+# Ejercicios
+
+## Ejercicio 1. Descargar registros de presencia desde GBIF usando R, generar un índice espacial, desplegar registros en mapas y construir una matriz de comunidad.
+
+Necesitarás cargar paquetes primero (esto lo hace la función `library(PAQUETE)`) y luego descargar los datos. Si al cargar un paquete apareciera un error `Error in library(PAQUETE) : there is no package called ‘PAQUETE’`, deberás entonces instalarlo mediante el menú `Tools>Install packages`.
+
+### Paquetes
+
+```{r, message=F, warning=F}
+library(kableExtra)
+library(rgbif)
+library(terra)
+library(geodata)
+library(sf)
+library(h3jsr)
+library(tidyverse)
+library(units)
+library(devtools)
+library(CoordinateCleaner)
+library(countrycode)
+library(vegan)
+options(stringsAsFactors = FALSE)
+source_url('https://raw.githubusercontent.com/biogeografia-202202/material-de-apoyo/master/practicas/funciones.R')
+```
+
+### Descargar registros de GBIF
+
+El siguiente bloque descarga tus datos desde GBIF con la función `occ_data` (está en proceso de retiro, pero todavía funciona y permite descargas anónimas sin inconveniente). En el argumento `scientificName` sustituye `Polygonaceae` por tu grupo de organismos elegido. Comprueba que está bien escrito, y realiza una verificación cruzada, comparando los registros obtenidos por medio de R con los que devuelve la API web de GBIF.
+
+```{r}
+reg_pres <- occ_data(scientificName = 'Fabaceae',
+                   hasCoordinate = T,
+                   country = 'DO',
+                   limit = 100000)$data
+# Imprime en pantalla el número de registros:
+nrow(reg_pres)
+```
+
+Existe un camino alterno a lo anterior (importante: no uses las dos alternativas, elige sólo una), haciendo tu búsqueda directamente en la API web de GBIF, creando una *dataset*, y descargándolo con el código que te muestro en el siguiente bloque. Esta alternativa es rápida y cómoda, pero no te la recomiendo si, como verás a continuación, limpiaras tus datos. Por ejemplo, luego de descargar y revisar el *dataset*, podrías necesitar aplicar limpieza de coordenadas, quitar registros en los que la localidad es la de la colección y no el sitio de colecta, o quitar registros que caen en el mar. Si haces esto, tu *dataset* no será el mismo que creaste mediante descarga en la API web de GBIF, y no deberías citarlo como tal, sino más bien citar un *dataset* derivado (te lo explico en el siguiente ejercicio). En cualquier caso, sólo para que veas cómo se hace, si creas una descarga en la API web de GBIF, y obtienes su identificador (la última parte de la URL de descarga, por ejemplo, destacado en negrita, "gbif.org/occurrence/download/**0069667-220831081235567**", lo descargarías a R simplemente usando la función `occ_download_get`.
+
+```{r, eval=F}
+reg_pres <- occ_download_get('0069667-220831081235567') %>% 
+  occ_download_import()
+```
+
+Es buena idea quitar registros de presencia situados en colecciones o en su entorno, porque podrían sesgar tu muestra. No obstante, si tu muestra se reduce significativamente tras quitarlos (atención a los mensajes `Remove ## records`), entonces restablece el objeto `reg_pres` reejecutando el bloque de código anterior. En este ejemplo, no quitaré registros, porque mi número de registros es relativamente pequeño (en este punto, `r nrow(reg_pres)` registros) y porque prefiero controlar cómo quitarlos (por ejemplo, intersectando por el límite del país), pero si en tu caso tienes muchos, entonces quizá es buena idea usar el siguiente bloque.
+
+```{r, eval = F}
+reg_pres <- reg_pres %>% 
+  # Quitar registros en centroides de país y sus proximidades
+  cc_cen(lon = 'decimalLongitude', lat = 'decimalLatitude', buffer = 2000) %>%
+  # Quitar registros en colecciones y sus proximidades
+  cc_inst(lon = 'decimalLongitude', lat = 'decimalLatitude', buffer = 2000) %>%
+  # Quitar registros en mar/oceáno
+  cc_sea(lon = 'decimalLongitude', lat = 'decimalLatitude')
+# Imprime en pantalla el número de registros:
+nrow(reg_pres)
+```
+
+Realiza una tabla de frecuencias y un conteo básico de especies:
+
+```{r}
+table(reg_pres$species) %>% kable(col.names = c('Especie', 'N'), format="markdown")
+length(unique(reg_pres$acceptedScientificName))
+write.csv(x = table(reg_pres$species), file = 'registros_de_presencia_de_fabaceae_rd.csv', row.names = F)
+```
+
+### Carga la capa geográfica de RD
+
+Necesitarás el límite del país en un formato vectorial que R pueda leer. En este caso, cuentas con un archivo GeoPackage nombrado `rd.gpkg`. Descárgalo desde GitHub, ruta [`data/d002/rd.gpkg`](https://github.com/biogeografia-202202/material-de-apoyo/tree/master/data/d002).
+
+::: {#hello .greeting .message style="color: red;"} IMPORTANTE: controla el lugar donde descargas tu archivo `rd.gpkg`, y usa dicha ruta en la sentencia `st_read`. La ruta donde lo guardes seguramente no coincidirá con la ruta que verás dentro de la función `st_read`. :::
+
+```{r}
+rd <- st_read('../data/d002/rd.gpkg', layer = 'pais')
+# Otras capas disponibles: regiones, provincias, municipios
+plot(rd)
+# Necesitarás un área buffer extra para que los hexágonos cubran todo el país
+rd_extra <- st_buffer(rd, dist = set_units(2, km))
+plot(rd)
+plot(rd_extra, add = T)
+```
+
+### Celdas H3
+
+Un poco sobre H3. Es un sistema de indexación geoespacial que divide el mundo en celdas hexagonales. H3 es de código abierto bajo la licencia Apache 2. La H3 Core Library implementa el sistema de cuadrículas H3. Incluye funciones para convertir coordenadas de latitud y longitud a la celda H3 que las contiene, encontrar el centro de las celdas H3, encontrar la geometría de los límites de las celdas H3, encontrar los vecinos de las celdas H3, y más [@h32022introduction].
+
+Usarás el paquete `h3jsr` para crear un índice espacial basado en hexágonos de la biblioteca H3. Te recomiendo que elijas un tamaño de hexágono apropiado, siempre evitando colapsar la PC. El tamaño de hexágono es inversamente proporcional a la resolución H3 (argumento `res`) y, por lo tanto, a mayor resolución, mayor número de hexágonos. Si usas `res` mayor que 7, podrías estar demandando muchos recursos de memoria RAM y CPU. Además, resoluciones mayores a 6 no son útiles para el trabajo que realizarás en esta práctica.
+
+Elige un tamaño que se adapte bien a tus registros de presencia. Una clave es lograr un índice espacial en el que una cantidad considerable de los hexágonos (por ejemplo, el 30%) tenga al menos un registro.
+
+```{r}
+resolucion <- 5 # RECOMENDADO: menor o igual a 6
+ind_esp <- polygon_to_cells(rd_extra, res = resolucion, simple = FALSE)
+ind_esp <- cell_to_polygon(unlist(ind_esp$h3_addresses), simple = FALSE)
+plot(rd_extra)
+plot(as_Spatial(ind_esp), add = T)
+plot(rd, add=T)
+```
+
+Obtén ahora dos cuestiones básicas de los hexágonos:
+
+-   Imprime en pantalla el número de hexágonos.
+
+```{r}
+nrow(ind_esp)
+```
+
+-   Obtén sus centroides, para luego facilitar la colocación de etiquetas.
+
+```{r}
+ind_esp_centroides <- ind_esp %>%
+  st_centroid() %>%
+  mutate(lon = unlist(map(geometry, 1)), lat = unlist(map(geometry, 2)))
+```
+
+Una representación muy básica, sin simbología:
+
+```{r}
+plot(as_Spatial(ind_esp))
+plot(as_Spatial(ind_esp_centroides), add=T, cex = 0.2)
+```
+
+### Registros de presencia intersectados con celdas H3
+
+A partir de los registros de presencia, necesitarás crear un objeto espacial, para lo cual te auxiliarás de la función `st_as_sf` del paquete `sf`.
+
+```{r}
+reg_pres_sf <- st_as_sf(
+  x = reg_pres,
+  coords = c("decimalLongitude", "decimalLatitude"),
+  crs = 4326)
+```
+
+Una representación muy básica, sin simbología:
+
+```{r}
+plot(rd)
+plot(as_Spatial(ind_esp), add=T)
+plot(as_Spatial(reg_pres_sf), pch=16, col='green', add=T)
+```
+
+Intersecta tus registros de presencia con tu índice espacial, de manera que excluyas posibles registros con coordenadas erróneas.
+
+```{r}
+reg_pres_sf_ok <- reg_pres_sf %>%
+  st_intersection(st_union(ind_esp))
+reg_pres_sf_ok
+```
+
+Una representación muy básica, sin simbología:
+
+```{r}
+plot(rd)
+plot(as_Spatial(ind_esp), add=T)
+plot(as_Spatial(reg_pres_sf_ok), pch=16, col='green', add=T)
+```
+
+### Representación con `ggplot2`
+
+Los mapas anteriores simplemente representaban las geometrías, pero puedes hacer uno estilizado usando el paquete `ggplot2`.
+
+```{r}
+registros_presencia_rd_ggplot <- ggplot(data = rd) + # RD es la base, superpondremos capas
+  geom_sf(fill = 'antiquewhite1') + # La geometría base ya está colocada
+  geom_sf(data = ind_esp, fill = 'transparent') + # Esto añade el índice espacial estilizado
+  # geom_text(data = ind_esp_centroides, aes(lon, lat, label = h3_address), size = 1) + # Etiquetas H3
+  geom_sf(data = reg_pres_sf_ok, size = 2, fill = 'green', color = 'green', alpha = 0.5) + # Registros GBIF
+  theme(legend.position = "none") +
+  theme_bw()
+jpeg(filename = 'registros_presencia_rd_ggplot.jpg', width = 2500, height = 1250, res = 200)
+registros_presencia_rd_ggplot
+dev.off()
+```
+
+### Exportar archivos para visualizar en QGIS
+
+Con la función `st_write` del paquete `sf`, exporta los objetos espaciales a archivos de formato GeoPackage para visualizarlos en QGIS más tarde. No necesitarás exportar el límite del país, porque ya lo tienes en formato GeoPackage; sólo debes exportar los que has generado en R:
+
+1.  `reg_pres_sf_ok`, objeto espacial que contiene los registros depurados de presencia.
+
+2.  `ind_esp`, objeto que contiene el índice espacial mediante hexágonos.
+
+```{r, eval = F}
+st_write(reg_pres_sf_ok %>% select(-networkKeys), 'registros_depurados_de_presencia_fabaceae.gpkg', delete_dsn = T)
+st_write(ind_esp, 'indice_espacial_fabaceae.gpkg', delete_dsn = T)
+```
+
+Nota: verifica que los archivos se guardaron correctamente. Dado que no se especificó un directorio diferente, la ruta donde se guardarán será la misma donde se está ejecutando la sesión de R, la cual puedes consultar ejecutando `getwd()` en la consola interactiva.
+
+### Exportar archivos a formato R
+
+Como forma de garantizar la reproducibilidad de tu script, guarda los objetos referidos en el punto anterior a archivos de formato R.
+
+```{r}
+saveRDS(object = reg_pres_sf_ok, file = 'registros_depurados_de_presencia_fabaceae.RDS')
+saveRDS(ind_esp, 'indice_espacial_fabaceae.RDS')
+```
+
+### Matriz de comunidad
+
+Finalmente, construye una matriz de comunidad.
+
+```{r}
+mc <- reg_pres_sf_ok %>%
+  st_join(ind_esp) %>% 
+  select(acceptedScientificName, h3_address) %>% 
+  st_drop_geometry() %>% 
+  mutate(n = 1) %>% 
+  distinct() %>% #Matriz de presencia/ausencia
+  # group_by(h3_address, acceptedScientificName) %>%  summarise(n = sum(n)) %>% #Matriz con número de registros
+  pivot_wider(names_from = acceptedScientificName, values_from = n, values_fill = 0) %>% 
+  column_to_rownames('h3_address')
+# Extracto de la matriz
+set.seed(999)
+mc[sample(seq_len(nrow(mc)), 10), sample(seq_len(ncol(mc)), ifelse(ncol(mc)<3, ncol(mc), 3))] %>%
+  kable(format="markdown")
+```
+
+Exporta tu matriz de comunidad a un archivo de R, para usarla en análisis posteriores.
+
+```{r}
+saveRDS(object = mc, file = 'matriz_de_comunidad_fabaceae.RDS')
+```
+
+A partir de este punto, puedes responder a las siguientes preguntas:
+
+-   Imprime en pantalla tu lista de especies en orden alfabético:
+
+```{r}
+sort(colnames(mc)) %>% kable(col.names = 'Especie', format="markdown")
+```
+
+-   Número de sitios en la matriz:
+
+```{r}
+nrow(mc)
+```
+
+-   Riqueza numérica de especies (usando matriz de comunidad) por hexágonos (extractos):
+
+```{r}
+num_esp <- specnumber(mc)
+num_esp_l <- length(num_esp)
+set.seed(999)
+num_esp_muestra <- if(num_esp_l > 10) sample(seq_len(num_esp_l), 10) else seq_len(num_esp_l)
+specnumber(mc)[num_esp_muestra] %>% 
+  as.data.frame() %>% 
+  rownames_to_column() %>% 
+  kable(col.names = c('Hexágono', 'S'), format="markdown")
+#sort(specnumber(mc)) # Ordenados ascendentemente
+summary(specnumber(mc)) # Resumen estadístico
+```
+
+-   Riqueza numérica de toda la "comunidad":
+
+```{r}
+specnumber(colSums(mc))
+```
+
+-   Gráfico de mosaicos de la presencia de especie por hexágonos:
+
+```{r}
+pres_aus_sp_1 <- crear_grafico_mosaico_de_mc(mc[, 1:(358/2)], tam_rotulo = 6)
+pres_aus_sp_2 <- crear_grafico_mosaico_de_mc(mc[, (358/2+1):ncol(mc)], tam_rotulo = 6)
+jpeg('grafico_mosaico_fabaceae_1.jpg', width = 3000, height = 2000, res = 200)
+pres_aus_sp_1
+dev.off()
+jpeg('grafico_mosaico_fabaceae_2.jpg', width = 3000, height = 2000, res = 200)
+pres_aus_sp_2
+dev.off()
+```
+
+### A título informativo: diseños anidados
+
+La biblioteca H3 te ofrece herramientas para trabajar con diseños anidados. Puedes recuperar las celdas "hijas" de cualquier celda "madre" con pocas líneas de código.
+
+Un ejemplo usando una muestra:
+
+```{r}
+set.seed(100)
+muestra <- sample(seq_len(nrow(ind_esp)), 1)
+dir_muestra <- ind_esp[muestra, 'h3_address', drop=T]
+hijas_muestra <- get_children(h3_address = dir_muestra, res = resolucion + 1)
+hijas_muestra_sf <- cell_to_polygon(hijas_muestra)
+ggplot(hijas_muestra_sf) +
+  geom_sf() +
+  geom_sf(data = ind_esp[muestra,], fill = NA) +
+  theme(legend.position = "none") +
+  theme_bw()
+```
+
+Para toda República Dominicana:
+
+```{r}
+dir_rd <- ind_esp[, 'h3_address', drop=T]
+hijas_rd <- get_children(h3_address = dir_rd, res = resolucion + 1)
+hijas_rd_sf <- cell_to_polygon(hijas_rd)
+ggplot(hijas_rd_sf) +
+  geom_sf() +
+  geom_sf(data = ind_esp, fill = NA, color = 'red', lwd = 0.2) +
+  theme(legend.position = "none") +
+  theme_bw()
+```
+
+## Ejercicio 2. Desplegar registros e índice espacial en QGIS
+
+Ver demo en vídeo.
+
+## Ejercicio 3. Citar apropiadamente los datos de GBIF
+
+Existen varias manera de citar correctamente las fuentes en GBIF; te presento dos a continuación, para que elijas la que prefieras:
+
+1.  Usando el *dataset* derivado en R.
+
+2.  Citar usando la interfaz web de GBIF ([gbif.org](https://gbif.org)).
+
+Voy a explicarte sólamente cómo citar usando el *dataset* derivado en R. Primero es necesario crear una tabla con la que informar a GBIF qué fuentes se encuentran disponibles en la consulta que hiciste. En mi caso, busqué todas las Polygonaceae de RD que tuviesen coordenadas. GBIF consultó en su base de datos, y encontró varios registros de presencia pertenecientes a varios conjuntos.
+
+```{r, eval=F}
+conteos_conjunto <- reg_pres_sf_ok %>% count(datasetKey, sort=TRUE) 
+write.table(x = conteos_conjunto %>% st_drop_geometry(), file = "conteos_por_conjuntos_de_datos.txt",
+            col.names=FALSE, row.names=FALSE, sep=",")
+```
+
+El archivo `conteos_por_conjuntos_de_datos.txt` lo necesitarás para crear un registro persistente en GBIF, por lo que debes controlar dónde lo guardas en tu PC. La ruta `~/` significa "carpeta de usuario", por ejemplo `C:\Users\miusuario`. Ve a [esta ruta](https://www.gbif.org/derived-dataset/register) (necesitarás cuenta en GBIF). En el campo *Title* escribe un nombre que describa el conjunto de datos, por ejemplo, yo usé `Polygonaceae de RD hasta octubre 2022`. En el campo `URL of where derived dataset can be accessed` deberías colocar un repositorio persistente (por ejemplo, creado en Zenodo), donde alojes el conjunto de datos. De momento, escribe `https://gbif.org`, pero es importante que luego cambies dicha ruta por un DOI de Zenodo. En `Attach CSV file with dataset keys and occurrence counts`, presiona `Choose File` y sube el archivo `conteos_por_conjuntos_de_datos.txt`.
+
+Finalmente, descarga el BibTeX desde GBIF. Si lo alojas en Zotero, antes de usar la entrada como cita, asegúrate de editar en Zotero el campo `Autor` para que ponga "GBIF.org", y en el campo `Fecha` coloca el año de descarga. Por ejemplo, la cita de los datos derivados usados en este script de ejemplo es esta [@gbiforg2022polygonaceae]; verifica que en la lista de Referencias se construyó apropiadamente, con el campo `Autor` y `Fecha` tal como los definiste manualmente.
+
+# Referencias
