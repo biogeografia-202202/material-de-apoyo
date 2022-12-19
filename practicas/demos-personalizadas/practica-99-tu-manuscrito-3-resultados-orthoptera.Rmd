@@ -12,7 +12,7 @@ always_allow_html: true
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = T, cache=F, message=F, warning=F, fig.width=9)
 eval_for_knit <- TRUE
-grupo <- 'Formicidae'
+grupo <- 'Orthoptera'
 tecnicas <- 'análisis de agrupamiento'
 ```
 
@@ -113,7 +113,7 @@ devtools::source_url(paste0(gh_content, repo_sem202202, 'funciones.R'))
 Carga tu matriz de comunidad, que habrás generado en la práctica 2, y elige un umbral para especies raras o rangos de registros de presencia para seleccionar especies en una nueva matriz de comunidad.
 
 ```{r}
-res <- 5 #Resolución H3, puedes elegir entre 4, 5, 6 o 7, pero cuidado con valores >=6
+res <- 6 #Resolución H3, puedes elegir entre 4, 5, 6 o 7, pero cuidado con valores >=6
 # IMPORTANTE: la resolución de las celdas H3, debe coincidir con la resolución
 # a la cual generaste tu matriz de comunidad. De lo contrario, obtendrás error. Si tu 
 # archivo RDS de matriz de comunidad se denomina "matriz_de_comunidad.RDS", y lo creaste
@@ -122,7 +122,7 @@ res <- 5 #Resolución H3, puedes elegir entre 4, 5, 6 o 7, pero cuidado con valo
 # creación de la matriz de comunidad, debe ser la misma que en la ambiental.
 # Prueba distintas resoluciones, no te enfrasques en quedarte con la misma que
 # uso en este ejemplo. Prueba con resolución 5, por ejemplo.
-mc_orig <- readRDS('matriz_de_comunidad_formicidae.RDS')
+mc_orig <- readRDS('matriz_de_comunidad_orthoptera.RDS')
 nrow(mc_orig) #Número de filas, equivale a número de hexágonos con registros de presencia
 ncol(mc_orig)  #Número de columnas, equivale a número de especies, riqueza
 data.frame(Especies = names(mc_orig)) %>% 
@@ -148,7 +148,7 @@ data.frame(`Número de hexágonos` = sort(colSums(mc_orig), decreasing = T), che
 # que están presentes en m hexágonos o más. Si eliges un rango, por ejemplo [m,n], el script generará
 # una matriz de comunidad que representadas un mínimo de m hexágonos y un máximo de n hexágonos.
 # (ambos extremos inclusive).
-en_cuantos_hex <- 3
+en_cuantos_hex <- 2
 # Explicación: "en_cuantos_hex <- X", donde X es el número de hexágonos mínimo donde cada especie
 # debe estar presente. IMPORTANTE: elige TU PROPIO umbral.
 {if(length(en_cuantos_hex)==1) selector <- en_cuantos_hex:max(colSums(mc_orig)) else
@@ -163,7 +163,7 @@ data.frame(`Número de especies por hexágono` = sort(rowSums(mc_orig), decreasi
   kable(booktabs=T) %>%
   kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
   gsub(' NA ', '', .) # Número de hexágonos en los que está presente cada especie
-min_especies_por_hex <- 3
+min_especies_por_hex <- 2
 # Explicación: "min_especies_por_hex <- Y", donde Y es el número mínimo (inclusive) de especies
 # que debe existir en cada hexágono. Por debajo de dicho valor, el hexágono es excluido.
 mi_fam <- mc_orig_seleccionadas[rowSums(mc_orig_seleccionadas)>=min_especies_por_hex, ]
@@ -172,8 +172,6 @@ nrow(mi_fam)
 # rowSums(mi_fam) #Riqueza por hexágonos con especies seleccionadas. Comentado por extenso
 all(rowSums(mi_fam)>0) #Debe ser TRUE: todos los hexágonos tienen al menos 1 registro
 ncol(mi_fam) #Riqueza de especies
-# IMPORTANTE, quitar Formicidae. ¡¡Muchos nombres que habría que resolver si se quisiera publicar!!
-mi_fam <- mi_fam[, -grep('^Formicidae', colnames(mi_fam))]
 # Usar nombres cortos o abreviados para las especies
 nombres_largos <- colnames(mi_fam)
 (colnames(mi_fam) <- make.cepnames(word(colnames(mi_fam), 1, 2)))
@@ -356,7 +354,7 @@ k <- 3
 # UPGMA
 grupos_upgma <- as.factor(cutree(lista_cl$cl_upgma, k = k))
 set.seed(999);sample(grupos_upgma, 10) #¿A qué grupo pertenecen 10 hexágonos seleccionados al azar?
-table(grupos_upgma) #¿Cuántos hexágonos hay en cada grupo?
+table(grupos_upgma) #¿Cuántos hexágonos hay en cada grupo? #DESCARTAR UPGMA EN ANÁLISIS POSTERIORES
 plot(u_dend_reord, hang = -1)
 rect.hclust(tree = u_dend_reord, k = k)
 
@@ -368,8 +366,8 @@ plot(w_dend_reord, hang = -1)
 rect.hclust(tree = w_dend_reord, k = k)
 
 # Guardaré estos vectores en archivos para reutilizarlos en *scripts* posteriores: 
-saveRDS(grupos_upgma, 'grupos_upgma_formicidae.RDS')
-saveRDS(grupos_ward, 'grupos_ward_formicidae.RDS')
+saveRDS(grupos_upgma, 'grupos_upgma_orthoptera.RDS')
+saveRDS(grupos_ward, 'grupos_ward_orthoptera.RDS')
 ```
 
 ### Grupos (clústers), variables ambientales y mapas
@@ -389,11 +387,11 @@ library(leaflet.extras)
 Agrupar los hexágonos de la matriz ambiental.
 
 ```{r}
-(m_amb_upgma <- env %>%
-   rownames_to_column('hex_id') %>% 
-   mutate(grupos_upgma) %>%
-   pivot_longer(-c(grupos_upgma, hex_id), names_to = "variable", values_to = "valor") %>% 
-   inner_join(za %>% select(hex_id)))
+# (m_amb_upgma <- env %>%
+#    rownames_to_column('hex_id') %>% 
+#    mutate(grupos_upgma) %>%
+#    pivot_longer(-c(grupos_upgma, hex_id), names_to = "variable", values_to = "valor") %>% 
+#    inner_join(za %>% select(hex_id)))
 
 (m_amb_ward <- env %>%
     rownames_to_column('hex_id') %>% 
@@ -406,17 +404,17 @@ Evaluar efectos entre los grupos ("diferencias significativas") de los agrupamie
 
 ```{r}
 # UPGMA
-m_amb_upgma_ak <- m_amb_upgma %>%
-  group_by(variable) %>%
-  summarise(
-    p_valor_a = tryCatch(oneway.test(valor ~ grupos_upgma)$p.value, error = function(e) NA),
-    p_valor_k = tryCatch(kruskal.test(valor ~ grupos_upgma)$p.value, error = function(e) NA)
-    ) %>%
-  arrange(p_valor_a)
-m_amb_upgma_ak %>%
-  kable(booktabs=T) %>%
-  kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
-  gsub(' NA ', '', .)
+# m_amb_upgma_ak <- m_amb_upgma %>%
+#   group_by(variable) %>%
+#   summarise(
+#     p_valor_a = tryCatch(oneway.test(valor ~ grupos_upgma)$p.value, error = function(e) NA),
+#     p_valor_k = tryCatch(kruskal.test(valor ~ grupos_upgma)$p.value, error = function(e) NA)
+#     ) %>%
+#   arrange(p_valor_a)
+# m_amb_upgma_ak %>%
+#   kable(booktabs=T) %>%
+#   kable_styling(latex_options = c("HOLD_position", "scale_down")) %>%
+#   gsub(' NA ', '', .)
 
 # Ward
 m_amb_ward_ak <- m_amb_ward %>%
@@ -437,18 +435,18 @@ EXPLORA TUS RESULTADOS (usa como referencia [practica-99-tu-manuscrito-3-resulta
 
 ```{r, fig.width=9, fig.height=12, dpi=300}
 remesas <- list(primera = colnames(env)[1:68], segunda = colnames(env)[69:136])
-map(1:2,
-    function(x) {
-      m_amb_upgma %>% 
-        filter(variable %in% remesas[[x]]) %>% 
-        group_by(variable) %>% 
-        ggplot() + aes(x = grupos_upgma, y = valor, fill = grupos_upgma) + 
-        geom_boxplot(lwd = 0.2) + 
-        scale_fill_brewer(palette = 'Set1') +
-        theme_bw(base_size=6) +
-        theme(legend.position="none") +
-        facet_wrap(~ variable, scales = 'free_y', ncol = 8)
-    })
+# map(1:2,
+#     function(x) {
+#       m_amb_upgma %>% 
+#         filter(variable %in% remesas[[x]]) %>% 
+#         group_by(variable) %>% 
+#         ggplot() + aes(x = grupos_upgma, y = valor, fill = grupos_upgma) + 
+#         geom_boxplot(lwd = 0.2) + 
+#         scale_fill_brewer(palette = 'Set1') +
+#         theme_bw(base_size=6) +
+#         theme(legend.position="none") +
+#         facet_wrap(~ variable, scales = 'free_y', ncol = 8)
+#     })
 map(1:2,
     function(x) {
       m_amb_ward %>% 
@@ -479,15 +477,15 @@ A continuación, muestro mapas de los dos agrupamientos, tanto UPGMA como Ward, 
 m_amb_clusters_sf <- env %>%
   rownames_to_column('hex_id') %>% 
   mutate(
-    grupos_upgma = as.character(grupos_upgma),
+    # grupos_upgma = as.character(grupos_upgma),
     grupos_ward = as.character(grupos_ward)) %>%
   inner_join(za %>% select(hex_id)) %>%
   st_as_sf()
-mapa_upgma <- mapa_leaflet(
-  mapa = m_amb_clusters_sf,
-  variable = 'grupos_upgma',
-  titulo_leyenda = paste0('UPGMA, k=', k))
-mapa_upgma
+# mapa_upgma <- mapa_leaflet(
+#   mapa = m_amb_clusters_sf,
+#   variable = 'grupos_upgma',
+#   titulo_leyenda = paste0('UPGMA, k=', k))
+# mapa_upgma
 ```
 
 Ídem anterior, pero según Ward.
@@ -503,22 +501,32 @@ mapa_ward
 El siguiente bloque de código representa, cartográficamente, algunas variables que mostraron inhomogeneidad en las pruebas estadísticas, es decir, variables en las que parecía haber diferencias significativas entre hexágonos de distintos grupos. Las variables que mostraron diferencias significativas podrían ayudar a explicar la varianza de la composición de la comunidad.
 
 ```{r}
-m_amb_upgma_ak$variable[1:10]
-mapa_upgma_v1 <- mapa_leaflet(
+m_amb_ward_ak$variable[1:12]
+mapa_ward_v1 <- mapa_leaflet(
   mapa = m_amb_clusters_sf,
-  variable = m_amb_upgma_ak$variable[1],
-  titulo_leyenda = gsub('(.{1,25})(\\s|$)', '\\1<br>', m_amb_upgma_ak$variable[1]))
-mapa_upgma_v1
-mapa_upgma_v6 <- mapa_leaflet(
+  variable = m_amb_ward_ak$variable[1],
+  titulo_leyenda = gsub('(.{1,25})(\\s|$)', '\\1<br>', m_amb_ward_ak$variable[1]))
+mapa_ward_v1
+mapa_ward_v4 <- mapa_leaflet(
   mapa = m_amb_clusters_sf,
-  variable = m_amb_upgma_ak$variable[6],
-  titulo_leyenda = m_amb_upgma_ak$variable[6])
-mapa_upgma_v6
-mapa_upgma_v7 <- mapa_leaflet(
+  variable = m_amb_ward_ak$variable[4],
+  titulo_leyenda = m_amb_ward_ak$variable[4])
+mapa_ward_v4
+mapa_ward_v5 <- mapa_leaflet(
   mapa = m_amb_clusters_sf,
-  variable = m_amb_upgma_ak$variable[7],
-  titulo_leyenda = m_amb_upgma_ak$variable[7])
-mapa_upgma_v7
+  variable = m_amb_ward_ak$variable[5],
+  titulo_leyenda = m_amb_ward_ak$variable[5])
+mapa_ward_v5
+mapa_ward_v6 <- mapa_leaflet(
+  mapa = m_amb_clusters_sf,
+  variable = m_amb_ward_ak$variable[6],
+  titulo_leyenda = m_amb_ward_ak$variable[6])
+mapa_ward_v6
+mapa_ward_v11 <- mapa_leaflet(
+  mapa = m_amb_clusters_sf,
+  variable = m_amb_ward_ak$variable[11],
+  titulo_leyenda = m_amb_ward_ak$variable[11])
+mapa_ward_v11
 ```
 
 ### Especies con preferencia/fidelidad con grupos (clústers)
@@ -534,18 +542,18 @@ Análisis de preferencia/fidelidad de especies con grupos (clusters), mediante e
 - UPGMA
 
 ```{r}
-phi_upgma <- multipatt(
-  mi_fam,
-  grupos_upgma,
-  func = "r.g",
-  max.order = 1,
-  control = how(nperm = 999))
-summary(phi_upgma)
-data.frame(abreviado = rownames(phi_upgma$sign)[which(phi_upgma$sign$p.value < 0.05)]) %>%
-  inner_join(df_equivalencias) %>%
-  arrange(abreviado) %>% 
-  kable(booktabs=T) %>%
-  kable_styling(latex_options = c("HOLD_position", "scale_down"))
+# phi_upgma <- multipatt(
+#   mi_fam,
+#   grupos_upgma,
+#   func = "r.g",
+#   max.order = 1,
+#   control = how(nperm = 999))
+# summary(phi_upgma)
+# data.frame(abreviado = rownames(phi_upgma$sign)[which(phi_upgma$sign$p.value < 0.05)]) %>%
+#   inner_join(df_equivalencias) %>%
+#   arrange(abreviado) %>% 
+#   kable(booktabs=T) %>%
+#   kable_styling(latex_options = c("HOLD_position", "scale_down"))
 ```
 
 - Ward

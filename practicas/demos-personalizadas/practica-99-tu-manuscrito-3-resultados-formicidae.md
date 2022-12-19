@@ -6977,8 +6977,8 @@ NaN
 m_amb_ward_ak <- m_amb_ward %>%
   group_by(variable) %>%
   summarise(
-    p_valor_a = tryCatch(oneway.test(valor ~ grupos_upgma)$p.value, error = function(e) NA),
-    p_valor_k = tryCatch(kruskal.test(valor ~ grupos_upgma)$p.value, error = function(e) NA)
+    p_valor_a = tryCatch(oneway.test(valor ~ grupos_ward)$p.value, error = function(e) NA),
+    p_valor_k = tryCatch(kruskal.test(valor ~ grupos_ward)$p.value, error = function(e) NA)
     ) %>%
   arrange(p_valor_a)
 m_amb_ward_ak %>%
@@ -7004,475 +7004,13 @@ p_valor_k
 <tbody>
 <tr>
 <td style="text-align:left;">
-GSL Lower slope (flat)
-</td>
-<td style="text-align:right;">
-0.0000638
-</td>
-<td style="text-align:right;">
-0.5215512
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-G90-GEOM hollow
-</td>
-<td style="text-align:right;">
-0.0000910
-</td>
-<td style="text-align:right;">
-0.2782352
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-G90-GEOM footslope
-</td>
-<td style="text-align:right;">
-0.0000986
-</td>
-<td style="text-align:right;">
-0.4126007
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-G90-GEOM flat
-</td>
-<td style="text-align:right;">
-0.0001585
-</td>
-<td style="text-align:right;">
-0.6014785
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GFC-LOSS year 2015
-</td>
-<td style="text-align:right;">
-0.0002534
-</td>
-<td style="text-align:right;">
-0.1765847
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WCL bio16 Precipitation of wettest quarter
-</td>
-<td style="text-align:right;">
-0.0003233
-</td>
-<td style="text-align:right;">
-0.6322584
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CGL Herbaceous vegetation
-</td>
-<td style="text-align:right;">
-0.0003748
-</td>
-<td style="text-align:right;">
-0.0627359
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CGL Shrubs
-</td>
-<td style="text-align:right;">
-0.0005598
-</td>
-<td style="text-align:right;">
-0.3209458
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-G90-GEOM spur
-</td>
-<td style="text-align:right;">
-0.0009258
-</td>
-<td style="text-align:right;">
-0.5580692
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CGL Cultivated and managed vegetation / agriculture
-</td>
-<td style="text-align:right;">
-0.0013466
-</td>
-<td style="text-align:right;">
-0.2753200
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-OSM-DIST mean
-</td>
-<td style="text-align:right;">
-0.0016443
-</td>
-<td style="text-align:right;">
-0.1019632
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GFC-LOSS year 2014
-</td>
-<td style="text-align:right;">
-0.0018074
-</td>
-<td style="text-align:right;">
-0.0501322
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-ESA Cropland
-</td>
-<td style="text-align:right;">
-0.0021210
-</td>
-<td style="text-align:right;">
-0.5283008
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-G90 Compound Topographic Index
-</td>
-<td style="text-align:right;">
-0.0022237
-</td>
-<td style="text-align:right;">
-0.6003047
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GSL Upper slope (flat)
-</td>
-<td style="text-align:right;">
-0.0029147
-</td>
-<td style="text-align:right;">
-0.9369872
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-ESA Shrubland
-</td>
-<td style="text-align:right;">
-0.0034113
-</td>
-<td style="text-align:right;">
-0.2391886
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WCL bio15 Precipitation seasonality
-</td>
-<td style="text-align:right;">
-0.0052108
-</td>
-<td style="text-align:right;">
-0.1552054
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-G90-GEOM shoulder
-</td>
-<td style="text-align:right;">
-0.0068029
-</td>
-<td style="text-align:right;">
-0.3016129
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WCL bio18 Precipitation of warmest quarter
-</td>
-<td style="text-align:right;">
-0.0077124
-</td>
-<td style="text-align:right;">
-0.2757997
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GFC-LOSS year 2003
-</td>
-<td style="text-align:right;">
-0.0103843
-</td>
-<td style="text-align:right;">
-0.3419768
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-ESA Barren / sparse vegetation
-</td>
-<td style="text-align:right;">
-0.0126908
-</td>
-<td style="text-align:right;">
-0.6749135
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GFC-LOSS year 2001
-</td>
-<td style="text-align:right;">
-0.0153862
-</td>
-<td style="text-align:right;">
-0.0900660
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WCL bio12 Annual precipitation
-</td>
-<td style="text-align:right;">
-0.0169966
-</td>
-<td style="text-align:right;">
-0.6155524
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-G90 Vector Ruggedness Measure
-</td>
-<td style="text-align:right;">
-0.0199024
-</td>
-<td style="text-align:right;">
-0.6082244
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GFC-LOSS year 2013
-</td>
-<td style="text-align:right;">
-0.0271417
-</td>
-<td style="text-align:right;">
-0.3736089
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WCL bio07 Temperature annual range bio05-bio06
-</td>
-<td style="text-align:right;">
-0.0355846
-</td>
-<td style="text-align:right;">
-0.2151096
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CH-BIO bio13 precipitation amount of the wettest month
-</td>
-<td style="text-align:right;">
-0.0366891
-</td>
-<td style="text-align:right;">
-0.2964466
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GSL Peak/ridge
-</td>
-<td style="text-align:right;">
-0.0403253
-</td>
-<td style="text-align:right;">
-0.5902318
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WCL bio17 Precipitation of driest quarter
-</td>
-<td style="text-align:right;">
-0.0432218
-</td>
-<td style="text-align:right;">
-0.0708726
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GFC-LOSS year 2021
-</td>
-<td style="text-align:right;">
-0.0511609
-</td>
-<td style="text-align:right;">
-0.1232457
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GSL Upper slope (warm)
-</td>
-<td style="text-align:right;">
-0.0629404
-</td>
-<td style="text-align:right;">
-0.6324692
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CH-BIO bio04 temperature seasonality
-</td>
-<td style="text-align:right;">
-0.0690482
-</td>
-<td style="text-align:right;">
-0.0071428
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GFC-LOSS year 2010
-</td>
-<td style="text-align:right;">
-0.0829234
-</td>
-<td style="text-align:right;">
-0.0182745
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WCL bio14 Precipitation of driest month
-</td>
-<td style="text-align:right;">
-0.0839819
-</td>
-<td style="text-align:right;">
-0.1308474
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GHH mean_1km
-</td>
-<td style="text-align:right;">
-0.0846195
-</td>
-<td style="text-align:right;">
-0.3418070
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WCL bio04 Temperature seasonality Standard deviation times 100
-</td>
-<td style="text-align:right;">
-0.0872381
-</td>
-<td style="text-align:right;">
-0.0110224
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
 ESA Open water
 </td>
 <td style="text-align:right;">
-0.0899503
+0.0006141
 </td>
 <td style="text-align:right;">
-0.6906049
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GHH entropy_1km
-</td>
-<td style="text-align:right;">
-0.0904796
-</td>
-<td style="text-align:right;">
-0.2759727
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CH-BIO bio09 mean daily mean air temperatures of the driest quarter
-</td>
-<td style="text-align:right;">
-0.0935302
-</td>
-<td style="text-align:right;">
-0.2146990
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CH-BIO bio02 mean diurnal air temperature range
-</td>
-<td style="text-align:right;">
-0.0968300
-</td>
-<td style="text-align:right;">
-0.0587427
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CH-BIO bio17 mean monthly precipitation amount of the driest quarter
-</td>
-<td style="text-align:right;">
-0.1002592
-</td>
-<td style="text-align:right;">
-0.1802710
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CH-BIO bio07 annual range of air temperature
-</td>
-<td style="text-align:right;">
-0.1025986
-</td>
-<td style="text-align:right;">
-0.0191720
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-G90 Terrain Ruggedness Index
-</td>
-<td style="text-align:right;">
-0.1043144
-</td>
-<td style="text-align:right;">
-0.6709640
+0.0217425
 </td>
 </tr>
 <tr>
@@ -7480,65 +7018,10 @@ G90 Terrain Ruggedness Index
 CGL Herbaceous wetland
 </td>
 <td style="text-align:right;">
-0.1075900
+0.0025614
 </td>
 <td style="text-align:right;">
-0.2196138
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WCL bio09 Mean temperature of driest quarter
-</td>
-<td style="text-align:right;">
-0.1087270
-</td>
-<td style="text-align:right;">
-0.4809519
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CH-BIO bio14 precipitation amount of the driest month
-</td>
-<td style="text-align:right;">
-0.1121496
-</td>
-<td style="text-align:right;">
-0.1384190
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CH-BIO bio03 isothermality
-</td>
-<td style="text-align:right;">
-0.1185366
-</td>
-<td style="text-align:right;">
-0.9975085
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GSL Lower slope (warm)
-</td>
-<td style="text-align:right;">
-0.1196123
-</td>
-<td style="text-align:right;">
-0.3277699
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GHH uniformity_1km
-</td>
-<td style="text-align:right;">
-0.1201391
-</td>
-<td style="text-align:right;">
-0.2027968
+0.0022667
 </td>
 </tr>
 <tr>
@@ -7546,54 +7029,43 @@ GHH uniformity_1km
 CH-BIO bio05 mean daily maximum air temperature of the warmest month
 </td>
 <td style="text-align:right;">
-0.1208054
+0.0028384
 </td>
 <td style="text-align:right;">
-0.1145005
+0.0250827
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-G90-GEOM ridge
+WCL bio09 Mean temperature of driest quarter
 </td>
 <td style="text-align:right;">
-0.1348130
+0.0041095
 </td>
 <td style="text-align:right;">
-0.1185548
+0.0876885
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-G90 Stream Power Index
+CH-BIO bio09 mean daily mean air temperatures of the driest quarter
 </td>
 <td style="text-align:right;">
-0.1370987
+0.0064273
 </td>
 <td style="text-align:right;">
-0.0626139
+0.0128993
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-G90-GEOM valley
+WCL bio15 Precipitation seasonality
 </td>
 <td style="text-align:right;">
-0.1376842
+0.0067129
 </td>
 <td style="text-align:right;">
-0.1110379
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CH-BIO bio16 mean monthly precipitation amount of the wettest quarter
-</td>
-<td style="text-align:right;">
-0.1408157
-</td>
-<td style="text-align:right;">
-0.6106885
+0.1512302
 </td>
 </tr>
 <tr>
@@ -7601,65 +7073,21 @@ CH-BIO bio16 mean monthly precipitation amount of the wettest quarter
 CGL Open forest, not matching any of the other definitions
 </td>
 <td style="text-align:right;">
-0.1421981
+0.0104143
 </td>
 <td style="text-align:right;">
-0.0140444
+0.0110473
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-CH-BIO bio15 precipitation seasonality
+GHH uniformity_1km
 </td>
 <td style="text-align:right;">
-0.1448053
+0.0110733
 </td>
 <td style="text-align:right;">
-0.1800006
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-G90 Roughness
-</td>
-<td style="text-align:right;">
-0.1518941
-</td>
-<td style="text-align:right;">
-0.6709640
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WCL bio19 Precipitation of coldest quarter
-</td>
-<td style="text-align:right;">
-0.1585088
-</td>
-<td style="text-align:right;">
-0.1225310
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CGL Closed forest, mixed
-</td>
-<td style="text-align:right;">
-0.1587957
-</td>
-<td style="text-align:right;">
-0.2212845
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GHH variance_1km
-</td>
-<td style="text-align:right;">
-0.1608536
-</td>
-<td style="text-align:right;">
-0.4730873
+0.0441790
 </td>
 </tr>
 <tr>
@@ -7667,142 +7095,65 @@ GHH variance_1km
 WCL bio05 Max temperature of warmest month
 </td>
 <td style="text-align:right;">
-0.1713821
+0.0118805
 </td>
 <td style="text-align:right;">
-0.4259422
+0.1783660
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-GSL Lower slope
+CH-BIO bio04 temperature seasonality
 </td>
 <td style="text-align:right;">
-0.1715671
+0.0121076
 </td>
 <td style="text-align:right;">
-0.7277790
+0.0097471
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-CH-BIO bio19 mean monthly precipitation amount of the coldest quarter
+CH-BIO bio15 precipitation seasonality
 </td>
 <td style="text-align:right;">
-0.1806017
+0.0147271
 </td>
 <td style="text-align:right;">
-0.1674670
+0.0716122
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-G90 Slope
+CGL Closed forest, mixed
 </td>
 <td style="text-align:right;">
-0.1854463
+0.0148954
 </td>
 <td style="text-align:right;">
-0.7137731
+0.1276194
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-GP-CONSUNadj YEAR 2020 sum
+GHH entropy_1km
 </td>
 <td style="text-align:right;">
-0.1900431
+0.0179299
 </td>
 <td style="text-align:right;">
-0.3598890
+0.0651665
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-CGIAR-ELE mean
+CH-BIO bio14 precipitation amount of the driest month
 </td>
 <td style="text-align:right;">
-0.1955130
+0.0189542
 </td>
 <td style="text-align:right;">
-0.5323344
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CH-BIO bio10 mean daily mean air temperatures of the warmest quarter
-</td>
-<td style="text-align:right;">
-0.1992615
-</td>
-<td style="text-align:right;">
-0.6330757
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WCL bio10 Mean temperature of warmest quarter
-</td>
-<td style="text-align:right;">
-0.2010591
-</td>
-<td style="text-align:right;">
-0.6319444
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CH-BIO bio01 mean annual air temperature
-</td>
-<td style="text-align:right;">
-0.2380126
-</td>
-<td style="text-align:right;">
-0.5154512
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WCL bio06 Min temperature of coldest month
-</td>
-<td style="text-align:right;">
-0.2392572
-</td>
-<td style="text-align:right;">
-0.4917845
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CH-BIO bio06 mean daily minimum air temperature of the coldest month
-</td>
-<td style="text-align:right;">
-0.2403586
-</td>
-<td style="text-align:right;">
-0.4155452
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WCL bio01 Annual mean temperature
-</td>
-<td style="text-align:right;">
-0.2403660
-</td>
-<td style="text-align:right;">
-0.5717314
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WCL bio03 Isothermality bio02 div/bio07
-</td>
-<td style="text-align:right;">
-0.2496757
-</td>
-<td style="text-align:right;">
-0.0483304
+0.1429274
 </td>
 </tr>
 <tr>
@@ -7810,340 +7161,10 @@ WCL bio03 Isothermality bio02 div/bio07
 GHH maximum_1km
 </td>
 <td style="text-align:right;">
-0.2509303
+0.0203058
 </td>
 <td style="text-align:right;">
-0.4900771
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CGL Closed forest, deciduous broad leaf
-</td>
-<td style="text-align:right;">
-0.2579815
-</td>
-<td style="text-align:right;">
-0.7328991
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GHH simpson_1km
-</td>
-<td style="text-align:right;">
-0.2673502
-</td>
-<td style="text-align:right;">
-0.3972289
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-ESA Herbaceous wetland
-</td>
-<td style="text-align:right;">
-0.2745116
-</td>
-<td style="text-align:right;">
-0.5348796
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CGL Open forest, evergreen broad leaf
-</td>
-<td style="text-align:right;">
-0.2753835
-</td>
-<td style="text-align:right;">
-0.1643971
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GFC-LOSS year 2019
-</td>
-<td style="text-align:right;">
-0.2769879
-</td>
-<td style="text-align:right;">
-0.3880831
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GSL Peak/ridge (warm)
-</td>
-<td style="text-align:right;">
-0.2804340
-</td>
-<td style="text-align:right;">
-0.0710020
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CH-BIO bio11 mean daily mean air temperatures of the coldest quarter
-</td>
-<td style="text-align:right;">
-0.2809310
-</td>
-<td style="text-align:right;">
-0.4556270
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GHH shannon_1km
-</td>
-<td style="text-align:right;">
-0.2909055
-</td>
-<td style="text-align:right;">
-0.4007077
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WCL bio11 Mean temperature of coldest quarter
-</td>
-<td style="text-align:right;">
-0.3028366
-</td>
-<td style="text-align:right;">
-0.5215136
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-ESA Grassland
-</td>
-<td style="text-align:right;">
-0.3045900
-</td>
-<td style="text-align:right;">
-0.0250534
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-ESA Built-up
-</td>
-<td style="text-align:right;">
-0.3114767
-</td>
-<td style="text-align:right;">
-0.5875820
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CGL Permanent water bodies
-</td>
-<td style="text-align:right;">
-0.3120978
-</td>
-<td style="text-align:right;">
-0.1772687
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CH-BIO bio12 annual precipitation amount
-</td>
-<td style="text-align:right;">
-0.3273509
-</td>
-<td style="text-align:right;">
-0.4465069
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GSL Valley (narrow)
-</td>
-<td style="text-align:right;">
-0.3330360
-</td>
-<td style="text-align:right;">
-0.0535586
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CH-BIO bio08 mean daily mean air temperatures of the wettest quarter
-</td>
-<td style="text-align:right;">
-0.3340509
-</td>
-<td style="text-align:right;">
-0.4644467
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GSL Mountain/divide
-</td>
-<td style="text-align:right;">
-0.3430993
-</td>
-<td style="text-align:right;">
-0.8823141
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GHH coefficient_of_variation_1km
-</td>
-<td style="text-align:right;">
-0.3452174
-</td>
-<td style="text-align:right;">
-0.9489205
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GFC-LOSS year 2018
-</td>
-<td style="text-align:right;">
-0.3632250
-</td>
-<td style="text-align:right;">
-0.0620365
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GSL Upper slope
-</td>
-<td style="text-align:right;">
-0.3648774
-</td>
-<td style="text-align:right;">
-0.8007424
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WCL bio02 Mean diurnal range mean of monthly max temp - min temp
-</td>
-<td style="text-align:right;">
-0.3657309
-</td>
-<td style="text-align:right;">
-0.5423963
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CGL Closed forest, not matching any of the other definitions
-</td>
-<td style="text-align:right;">
-0.3669363
-</td>
-<td style="text-align:right;">
-0.4652798
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GHH standard_deviation_1km
-</td>
-<td style="text-align:right;">
-0.3814658
-</td>
-<td style="text-align:right;">
-0.5017568
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-G90 Topographic Position Index
-</td>
-<td style="text-align:right;">
-0.3880051
-</td>
-<td style="text-align:right;">
-0.5440551
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GHH range_1km
-</td>
-<td style="text-align:right;">
-0.3905109
-</td>
-<td style="text-align:right;">
-0.4966803
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GFC-LOSS year 2006
-</td>
-<td style="text-align:right;">
-0.3931800
-</td>
-<td style="text-align:right;">
-0.0961536
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-G90-GEOM pit
-</td>
-<td style="text-align:right;">
-0.3989901
-</td>
-<td style="text-align:right;">
-0.0635280
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WCL bio08 Mean temperature of wettest quarter
-</td>
-<td style="text-align:right;">
-0.4025585
-</td>
-<td style="text-align:right;">
-0.6445826
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CGL Urban / built up
-</td>
-<td style="text-align:right;">
-0.4134070
-</td>
-<td style="text-align:right;">
-0.4048209
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GFC-LOSS year 2016
-</td>
-<td style="text-align:right;">
-0.4186172
-</td>
-<td style="text-align:right;">
-0.8295036
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GFC-LOSS year 2011
-</td>
-<td style="text-align:right;">
-0.4194594
-</td>
-<td style="text-align:right;">
-0.1101565
+0.0540279
 </td>
 </tr>
 <tr>
@@ -8151,208 +7172,43 @@ GFC-LOSS year 2011
 GHH homogeneity_1km
 </td>
 <td style="text-align:right;">
-0.4202977
+0.0210880
 </td>
 <td style="text-align:right;">
-0.5543787
+0.0376125
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-CGL Open forest, deciduous broad leaf
+CH-BIO bio10 mean daily mean air temperatures of the warmest quarter
 </td>
 <td style="text-align:right;">
-0.4325066
+0.0219142
 </td>
 <td style="text-align:right;">
-0.6389775
+0.1197428
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-GFC-LOSS year 2009
+CH-BIO bio17 mean monthly precipitation amount of the driest quarter
 </td>
 <td style="text-align:right;">
-0.4405786
+0.0221328
 </td>
 <td style="text-align:right;">
-0.5857305
+0.1953871
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-GFC-LOSS year 2005
+ESA Shrubland
 </td>
 <td style="text-align:right;">
-0.4541160
+0.0223650
 </td>
 <td style="text-align:right;">
-0.7031532
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GFC-LOSS year 2002
-</td>
-<td style="text-align:right;">
-0.4761794
-</td>
-<td style="text-align:right;">
-0.5563839
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GFC-LOSS year 2020
-</td>
-<td style="text-align:right;">
-0.4876169
-</td>
-<td style="text-align:right;">
-0.5719113
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GFC-LOSS year 2007
-</td>
-<td style="text-align:right;">
-0.5135945
-</td>
-<td style="text-align:right;">
-0.8551956
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GFC-LOSS year 2004
-</td>
-<td style="text-align:right;">
-0.5156953
-</td>
-<td style="text-align:right;">
-0.2171827
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GHH contrast_1km
-</td>
-<td style="text-align:right;">
-0.5264719
-</td>
-<td style="text-align:right;">
-0.6654349
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GSL Valley
-</td>
-<td style="text-align:right;">
-0.5304885
-</td>
-<td style="text-align:right;">
-0.4273403
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GHH pielou_1km
-</td>
-<td style="text-align:right;">
-0.5336048
-</td>
-<td style="text-align:right;">
-0.6426785
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CGL Closed forest, evergreen broad leaf
-</td>
-<td style="text-align:right;">
-0.5415310
-</td>
-<td style="text-align:right;">
-0.6692093
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GFC-LOSS year 2008
-</td>
-<td style="text-align:right;">
-0.5490056
-</td>
-<td style="text-align:right;">
-0.2347592
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GFC-LOSS year 2012
-</td>
-<td style="text-align:right;">
-0.5715640
-</td>
-<td style="text-align:right;">
-0.7551118
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GHH correlation_1km
-</td>
-<td style="text-align:right;">
-0.5718429
-</td>
-<td style="text-align:right;">
-0.3964796
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GFC-PTC YEAR 2000 mean
-</td>
-<td style="text-align:right;">
-0.5775364
-</td>
-<td style="text-align:right;">
-0.9478544
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GHH dissimilarity_1km
-</td>
-<td style="text-align:right;">
-0.5804289
-</td>
-<td style="text-align:right;">
-0.5918090
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-G90-GEOM peak
-</td>
-<td style="text-align:right;">
-0.6704678
-</td>
-<td style="text-align:right;">
-0.2922978
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GFC-LOSS year 2017
-</td>
-<td style="text-align:right;">
-0.7367318
-</td>
-<td style="text-align:right;">
-0.9601386
+0.3688065
 </td>
 </tr>
 <tr>
@@ -8360,43 +7216,318 @@ GFC-LOSS year 2017
 ESA Trees
 </td>
 <td style="text-align:right;">
-0.7796226
+0.0225197
 </td>
 <td style="text-align:right;">
-0.9763019
+0.0197268
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-WCL bio13 Precipitation of wettest month
+GFC-LOSS year 2010
 </td>
 <td style="text-align:right;">
-0.7985614
+0.0229189
 </td>
 <td style="text-align:right;">
-0.9755483
+0.0130101
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-G90-GEOM slope
+GHH simpson_1km
 </td>
 <td style="text-align:right;">
-0.8408752
+0.0237133
 </td>
 <td style="text-align:right;">
-0.9944487
+0.0411984
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-CH-BIO bio18 mean monthly precipitation amount of the warmest quarter
+WCL bio10 Mean temperature of warmest quarter
 </td>
 <td style="text-align:right;">
-0.9951530
+0.0242122
 </td>
 <td style="text-align:right;">
-0.9863621
+0.3231375
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WCL bio17 Precipitation of driest quarter
+</td>
+<td style="text-align:right;">
+0.0248085
+</td>
+<td style="text-align:right;">
+0.1072539
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GSL Lower slope
+</td>
+<td style="text-align:right;">
+0.0287023
+</td>
+<td style="text-align:right;">
+0.4952351
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GHH shannon_1km
+</td>
+<td style="text-align:right;">
+0.0287025
+</td>
+<td style="text-align:right;">
+0.0340097
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2015
+</td>
+<td style="text-align:right;">
+0.0308222
+</td>
+<td style="text-align:right;">
+0.5779907
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GHH standard_deviation_1km
+</td>
+<td style="text-align:right;">
+0.0312568
+</td>
+<td style="text-align:right;">
+0.0083832
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GHH range_1km
+</td>
+<td style="text-align:right;">
+0.0312850
+</td>
+<td style="text-align:right;">
+0.0071103
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CGL Permanent water bodies
+</td>
+<td style="text-align:right;">
+0.0322905
+</td>
+<td style="text-align:right;">
+0.0014047
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GHH pielou_1km
+</td>
+<td style="text-align:right;">
+0.0338321
+</td>
+<td style="text-align:right;">
+0.0289929
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WCL bio04 Temperature seasonality Standard deviation times 100
+</td>
+<td style="text-align:right;">
+0.0340567
+</td>
+<td style="text-align:right;">
+0.0131882
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CH-BIO bio07 annual range of air temperature
+</td>
+<td style="text-align:right;">
+0.0371162
+</td>
+<td style="text-align:right;">
+0.0653415
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GHH dissimilarity_1km
+</td>
+<td style="text-align:right;">
+0.0377870
+</td>
+<td style="text-align:right;">
+0.0114687
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CGIAR-ELE mean
+</td>
+<td style="text-align:right;">
+0.0379993
+</td>
+<td style="text-align:right;">
+0.0987544
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-PTC YEAR 2000 mean
+</td>
+<td style="text-align:right;">
+0.0382943
+</td>
+<td style="text-align:right;">
+0.0196029
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WCL bio01 Annual mean temperature
+</td>
+<td style="text-align:right;">
+0.0440047
+</td>
+<td style="text-align:right;">
+0.2274885
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CH-BIO bio01 mean annual air temperature
+</td>
+<td style="text-align:right;">
+0.0455378
+</td>
+<td style="text-align:right;">
+0.1059355
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CH-BIO bio02 mean diurnal air temperature range
+</td>
+<td style="text-align:right;">
+0.0468699
+</td>
+<td style="text-align:right;">
+0.1339137
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CGL Closed forest, evergreen broad leaf
+</td>
+<td style="text-align:right;">
+0.0469315
+</td>
+<td style="text-align:right;">
+0.0572797
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+OSM-DIST mean
+</td>
+<td style="text-align:right;">
+0.0491493
+</td>
+<td style="text-align:right;">
+0.2172690
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ESA Herbaceous wetland
+</td>
+<td style="text-align:right;">
+0.0547843
+</td>
+<td style="text-align:right;">
+0.0330377
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GHH variance_1km
+</td>
+<td style="text-align:right;">
+0.0585211
+</td>
+<td style="text-align:right;">
+0.0083832
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GHH contrast_1km
+</td>
+<td style="text-align:right;">
+0.0605441
+</td>
+<td style="text-align:right;">
+0.0105792
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WCL bio06 Min temperature of coldest month
+</td>
+<td style="text-align:right;">
+0.0608574
+</td>
+<td style="text-align:right;">
+0.2689407
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GSL Lower slope (flat)
+</td>
+<td style="text-align:right;">
+0.0611941
+</td>
+<td style="text-align:right;">
+0.0488267
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GSL Cliff
+</td>
+<td style="text-align:right;">
+0.0732312
+</td>
+<td style="text-align:right;">
+0.5393770
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WCL bio14 Precipitation of driest month
+</td>
+<td style="text-align:right;">
+0.0779576
+</td>
+<td style="text-align:right;">
+0.1538477
 </td>
 </tr>
 <tr>
@@ -8404,10 +7535,890 @@ CH-BIO bio18 mean monthly precipitation amount of the warmest quarter
 CGL Bare / sparse vegetation
 </td>
 <td style="text-align:right;">
-NaN
+0.0783279
 </td>
 <td style="text-align:right;">
-0.8739663
+0.0635895
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CGL Closed forest, not matching any of the other definitions
+</td>
+<td style="text-align:right;">
+0.0788326
+</td>
+<td style="text-align:right;">
+0.0008792
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CH-BIO bio11 mean daily mean air temperatures of the coldest quarter
+</td>
+<td style="text-align:right;">
+0.0804536
+</td>
+<td style="text-align:right;">
+0.0682607
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CH-BIO bio19 mean monthly precipitation amount of the coldest quarter
+</td>
+<td style="text-align:right;">
+0.0804988
+</td>
+<td style="text-align:right;">
+0.1850348
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WCL bio11 Mean temperature of coldest quarter
+</td>
+<td style="text-align:right;">
+0.0852212
+</td>
+<td style="text-align:right;">
+0.1600590
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2011
+</td>
+<td style="text-align:right;">
+0.0885574
+</td>
+<td style="text-align:right;">
+0.1656339
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CGL Open forest, evergreen broad leaf
+</td>
+<td style="text-align:right;">
+0.0946796
+</td>
+<td style="text-align:right;">
+0.0375003
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GHH coefficient_of_variation_1km
+</td>
+<td style="text-align:right;">
+0.0995583
+</td>
+<td style="text-align:right;">
+0.0438611
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CH-BIO bio08 mean daily mean air temperatures of the wettest quarter
+</td>
+<td style="text-align:right;">
+0.1026867
+</td>
+<td style="text-align:right;">
+0.0995518
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2018
+</td>
+<td style="text-align:right;">
+0.1035004
+</td>
+<td style="text-align:right;">
+0.1280974
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2008
+</td>
+<td style="text-align:right;">
+0.1125068
+</td>
+<td style="text-align:right;">
+0.2730421
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WCL bio08 Mean temperature of wettest quarter
+</td>
+<td style="text-align:right;">
+0.1148396
+</td>
+<td style="text-align:right;">
+0.1635705
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WCL bio19 Precipitation of coldest quarter
+</td>
+<td style="text-align:right;">
+0.1157463
+</td>
+<td style="text-align:right;">
+0.1592309
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+G90-GEOM flat
+</td>
+<td style="text-align:right;">
+0.1193490
+</td>
+<td style="text-align:right;">
+0.0689918
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CGL Cultivated and managed vegetation / agriculture
+</td>
+<td style="text-align:right;">
+0.1220401
+</td>
+<td style="text-align:right;">
+0.2034268
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+G90 Topographic Position Index
+</td>
+<td style="text-align:right;">
+0.1248174
+</td>
+<td style="text-align:right;">
+0.1942212
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CGL Herbaceous vegetation
+</td>
+<td style="text-align:right;">
+0.1306089
+</td>
+<td style="text-align:right;">
+0.0442673
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CGL Closed forest, deciduous broad leaf
+</td>
+<td style="text-align:right;">
+0.1363381
+</td>
+<td style="text-align:right;">
+0.6389356
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GSL Lower slope (warm)
+</td>
+<td style="text-align:right;">
+0.1402395
+</td>
+<td style="text-align:right;">
+0.0352852
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WCL bio03 Isothermality bio02 div/bio07
+</td>
+<td style="text-align:right;">
+0.1430238
+</td>
+<td style="text-align:right;">
+0.1218797
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+G90-GEOM slope
+</td>
+<td style="text-align:right;">
+0.1443734
+</td>
+<td style="text-align:right;">
+0.1821052
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+G90-GEOM hollow
+</td>
+<td style="text-align:right;">
+0.1512751
+</td>
+<td style="text-align:right;">
+0.1146770
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GSL Mountain/divide
+</td>
+<td style="text-align:right;">
+0.1610491
+</td>
+<td style="text-align:right;">
+0.6359950
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CH-BIO bio06 mean daily minimum air temperature of the coldest month
+</td>
+<td style="text-align:right;">
+0.1682623
+</td>
+<td style="text-align:right;">
+0.0983203
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GSL Upper slope
+</td>
+<td style="text-align:right;">
+0.1755127
+</td>
+<td style="text-align:right;">
+0.5661163
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ESA Barren / sparse vegetation
+</td>
+<td style="text-align:right;">
+0.1770794
+</td>
+<td style="text-align:right;">
+0.5584518
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2014
+</td>
+<td style="text-align:right;">
+0.1832812
+</td>
+<td style="text-align:right;">
+0.1155099
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GSL Peak/ridge (warm)
+</td>
+<td style="text-align:right;">
+0.2139067
+</td>
+<td style="text-align:right;">
+0.1980773
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+G90-GEOM valley
+</td>
+<td style="text-align:right;">
+0.2143434
+</td>
+<td style="text-align:right;">
+0.1127327
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GSL Upper slope (warm)
+</td>
+<td style="text-align:right;">
+0.2250535
+</td>
+<td style="text-align:right;">
+0.1165439
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+G90-GEOM spur
+</td>
+<td style="text-align:right;">
+0.2340396
+</td>
+<td style="text-align:right;">
+0.2005045
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+G90 Compound Topographic Index
+</td>
+<td style="text-align:right;">
+0.2387598
+</td>
+<td style="text-align:right;">
+0.2133241
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2002
+</td>
+<td style="text-align:right;">
+0.2398515
+</td>
+<td style="text-align:right;">
+0.2791362
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CGL Open forest, deciduous broad leaf
+</td>
+<td style="text-align:right;">
+0.2710029
+</td>
+<td style="text-align:right;">
+0.4781670
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2006
+</td>
+<td style="text-align:right;">
+0.2794688
+</td>
+<td style="text-align:right;">
+0.2352358
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GSL Peak/ridge
+</td>
+<td style="text-align:right;">
+0.2935036
+</td>
+<td style="text-align:right;">
+0.1127236
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2005
+</td>
+<td style="text-align:right;">
+0.2956884
+</td>
+<td style="text-align:right;">
+0.7067311
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ESA Grassland
+</td>
+<td style="text-align:right;">
+0.3376294
+</td>
+<td style="text-align:right;">
+0.1272768
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+G90-GEOM ridge
+</td>
+<td style="text-align:right;">
+0.3602512
+</td>
+<td style="text-align:right;">
+0.1473723
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GHH mean_1km
+</td>
+<td style="text-align:right;">
+0.3640405
+</td>
+<td style="text-align:right;">
+0.4250379
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+G90 Slope
+</td>
+<td style="text-align:right;">
+0.3733778
+</td>
+<td style="text-align:right;">
+0.3521263
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+G90 Roughness
+</td>
+<td style="text-align:right;">
+0.3750334
+</td>
+<td style="text-align:right;">
+0.3596720
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+G90 Terrain Ruggedness Index
+</td>
+<td style="text-align:right;">
+0.3774500
+</td>
+<td style="text-align:right;">
+0.3596720
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CH-BIO bio03 isothermality
+</td>
+<td style="text-align:right;">
+0.3776072
+</td>
+<td style="text-align:right;">
+0.8514129
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CH-BIO bio12 annual precipitation amount
+</td>
+<td style="text-align:right;">
+0.3884668
+</td>
+<td style="text-align:right;">
+0.4953788
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+G90 Vector Ruggedness Measure
+</td>
+<td style="text-align:right;">
+0.3907733
+</td>
+<td style="text-align:right;">
+0.4374833
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2004
+</td>
+<td style="text-align:right;">
+0.3958010
+</td>
+<td style="text-align:right;">
+0.6954375
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2021
+</td>
+<td style="text-align:right;">
+0.4134500
+</td>
+<td style="text-align:right;">
+0.4698845
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2013
+</td>
+<td style="text-align:right;">
+0.4283420
+</td>
+<td style="text-align:right;">
+0.7313630
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CH-BIO bio13 precipitation amount of the wettest month
+</td>
+<td style="text-align:right;">
+0.4303758
+</td>
+<td style="text-align:right;">
+0.5351747
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CGL Shrubs
+</td>
+<td style="text-align:right;">
+0.4987502
+</td>
+<td style="text-align:right;">
+0.1517460
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ESA Cropland
+</td>
+<td style="text-align:right;">
+0.5233624
+</td>
+<td style="text-align:right;">
+0.5992353
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WCL bio12 Annual precipitation
+</td>
+<td style="text-align:right;">
+0.5393784
+</td>
+<td style="text-align:right;">
+0.5994097
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+G90-GEOM shoulder
+</td>
+<td style="text-align:right;">
+0.5522311
+</td>
+<td style="text-align:right;">
+0.4363558
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WCL bio07 Temperature annual range bio05-bio06
+</td>
+<td style="text-align:right;">
+0.5679036
+</td>
+<td style="text-align:right;">
+0.4224470
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2017
+</td>
+<td style="text-align:right;">
+0.5688516
+</td>
+<td style="text-align:right;">
+0.9291794
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2012
+</td>
+<td style="text-align:right;">
+0.5952176
+</td>
+<td style="text-align:right;">
+0.7758250
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+G90-GEOM pit
+</td>
+<td style="text-align:right;">
+0.6109037
+</td>
+<td style="text-align:right;">
+0.2476063
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GHH correlation_1km
+</td>
+<td style="text-align:right;">
+0.6143312
+</td>
+<td style="text-align:right;">
+0.7775110
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2020
+</td>
+<td style="text-align:right;">
+0.6163724
+</td>
+<td style="text-align:right;">
+0.8893017
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2003
+</td>
+<td style="text-align:right;">
+0.6239886
+</td>
+<td style="text-align:right;">
+0.6521087
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+G90-GEOM footslope
+</td>
+<td style="text-align:right;">
+0.6279777
+</td>
+<td style="text-align:right;">
+0.5678039
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GSL Valley (narrow)
+</td>
+<td style="text-align:right;">
+0.6339667
+</td>
+<td style="text-align:right;">
+0.0517176
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CH-BIO bio16 mean monthly precipitation amount of the wettest quarter
+</td>
+<td style="text-align:right;">
+0.6355861
+</td>
+<td style="text-align:right;">
+0.6635011
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GSL Upper slope (flat)
+</td>
+<td style="text-align:right;">
+0.6850645
+</td>
+<td style="text-align:right;">
+0.2304470
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GSL Valley
+</td>
+<td style="text-align:right;">
+0.6963013
+</td>
+<td style="text-align:right;">
+0.5889551
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2007
+</td>
+<td style="text-align:right;">
+0.7061321
+</td>
+<td style="text-align:right;">
+0.6703663
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WCL bio02 Mean diurnal range mean of monthly max temp - min temp
+</td>
+<td style="text-align:right;">
+0.7311829
+</td>
+<td style="text-align:right;">
+0.5208310
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2001
+</td>
+<td style="text-align:right;">
+0.7315733
+</td>
+<td style="text-align:right;">
+0.9472058
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2009
+</td>
+<td style="text-align:right;">
+0.7418346
+</td>
+<td style="text-align:right;">
+0.3288867
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CGL Urban / built up
+</td>
+<td style="text-align:right;">
+0.7428211
+</td>
+<td style="text-align:right;">
+0.5473612
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ESA Built-up
+</td>
+<td style="text-align:right;">
+0.7638647
+</td>
+<td style="text-align:right;">
+0.7164735
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WCL bio18 Precipitation of warmest quarter
+</td>
+<td style="text-align:right;">
+0.8156614
+</td>
+<td style="text-align:right;">
+0.8447133
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WCL bio16 Precipitation of wettest quarter
+</td>
+<td style="text-align:right;">
+0.8171378
+</td>
+<td style="text-align:right;">
+0.7282183
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GP-CONSUNadj YEAR 2020 sum
+</td>
+<td style="text-align:right;">
+0.8762911
+</td>
+<td style="text-align:right;">
+0.4490176
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+G90 Stream Power Index
+</td>
+<td style="text-align:right;">
+0.8872369
+</td>
+<td style="text-align:right;">
+0.3415102
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2019
+</td>
+<td style="text-align:right;">
+0.9321129
+</td>
+<td style="text-align:right;">
+0.4841732
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GFC-LOSS year 2016
+</td>
+<td style="text-align:right;">
+0.9743978
+</td>
+<td style="text-align:right;">
+0.9113082
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CH-BIO bio18 mean monthly precipitation amount of the warmest quarter
+</td>
+<td style="text-align:right;">
+0.9831041
+</td>
+<td style="text-align:right;">
+0.9626904
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+G90-GEOM peak
+</td>
+<td style="text-align:right;">
+0.9885399
+</td>
+<td style="text-align:right;">
+0.3348090
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+WCL bio13 Precipitation of wettest month
+</td>
+<td style="text-align:right;">
+0.9904681
+</td>
+<td style="text-align:right;">
+0.9848972
 </td>
 </tr>
 <tr>
@@ -8418,7 +8429,7 @@ CGL Closed forest, evergreen needle leaf
 NaN
 </td>
 <td style="text-align:right;">
-0.5188719
+0.1842046
 </td>
 </tr>
 <tr>
@@ -8429,7 +8440,7 @@ CGL Oceans, seas
 NaN
 </td>
 <td style="text-align:right;">
-0.0957073
+0.0057234
 </td>
 </tr>
 <tr>
@@ -8440,7 +8451,7 @@ CGL Open forest, evergreen needle leaf
 NaN
 </td>
 <td style="text-align:right;">
-0.9185989
+0.6444269
 </td>
 </tr>
 <tr>
@@ -8451,7 +8462,7 @@ CGL Open forest, mixed
 NaN
 </td>
 <td style="text-align:right;">
-0.3318284
+0.2425963
 </td>
 </tr>
 <tr>
@@ -8462,18 +8473,7 @@ ESA Mangroves
 NaN
 </td>
 <td style="text-align:right;">
-0.2594438
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-GSL Cliff
-</td>
-<td style="text-align:right;">
-NaN
-</td>
-<td style="text-align:right;">
-0.3400909
+0.0403934
 </td>
 </tr>
 <tr>
@@ -8484,7 +8484,7 @@ GSL Lower slope (cool)
 NaN
 </td>
 <td style="text-align:right;">
-0.8414782
+0.8310135
 </td>
 </tr>
 <tr>
@@ -8495,7 +8495,7 @@ GSL Upper slope (cool)
 NaN
 </td>
 <td style="text-align:right;">
-0.8414782
+0.8439100
 </td>
 </tr>
 </tbody>

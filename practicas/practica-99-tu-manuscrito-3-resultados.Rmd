@@ -415,8 +415,8 @@ m_amb_upgma_ak %>%
 m_amb_ward_ak <- m_amb_ward %>%
   group_by(variable) %>%
   summarise(
-    p_valor_a = tryCatch(oneway.test(valor ~ grupos_upgma)$p.value, error = function(e) NA),
-    p_valor_k = tryCatch(kruskal.test(valor ~ grupos_upgma)$p.value, error = function(e) NA)
+    p_valor_a = tryCatch(oneway.test(valor ~ grupos_ward)$p.value, error = function(e) NA),
+    p_valor_k = tryCatch(kruskal.test(valor ~ grupos_ward)$p.value, error = function(e) NA)
     ) %>%
   arrange(p_valor_a)
 m_amb_ward_ak %>%
