@@ -626,7 +626,7 @@ res <- 6 #Resolución H3, puedes elegir entre 4, 5, 6 o 7, pero cuidado con valo
 # usando resolución 4, cámbiale el nombre a "matriz_de_comunidad_res_5.RDS". Recuerda,
 # puedes usar cualquier resolución, lo único importante es que las resolución usada en la
 # creación de la matriz de comunidad, debe ser la misma que en la ambiental.
-mc_orig <- readRDS("matriz_de_comunidad_acanthaceae.RDS")
+mc_orig <- readRDS("matriz_de_comunidad_culicidae.RDS")
 nrow(mc_orig) #Número de filas, equivale a número de hexágonos con registros de presencia
 ncol(mc_orig)  #Número de columnas, equivale a número de especies, riqueza
 data.frame(Especies = names(mc_orig)) %>% 
@@ -851,8 +851,7 @@ ChaoSpecies(data.frame(V1 = c(nrow(mi_fam), as.numeric(colSums(mi_fam)))),
 Ahora según grupos del método Ward.
 
 ```{r}
-# grupos_upgma <- readRDS('grupos_upgma.RDS')
-grupos_ward <- readRDS('grupos_ward_acanthaceae.RDS')
+grupos_ward <- readRDS('grupos_ward_culicidae.RDS')
 mi_fam_ward <- mi_fam %>%
   mutate(g = grupos_ward) %>%
   group_by(g) %>%

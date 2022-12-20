@@ -3899,17 +3899,17 @@ res <- 6 #Resolución H3, puedes elegir entre 4, 5, 6 o 7, pero cuidado con valo
 # usando resolución 4, cámbiale el nombre a "matriz_de_comunidad_res_5.RDS". Recuerda,
 # puedes usar cualquier resolución, lo único importante es que las resolución usada en la
 # creación de la matriz de comunidad, debe ser la misma que en la ambiental.
-mc_orig <- readRDS("matriz_de_comunidad_acanthaceae.RDS")
+mc_orig <- readRDS("matriz_de_comunidad_culicidae.RDS")
 nrow(mc_orig) #Número de filas, equivale a número de hexágonos con registros de presencia
 ```
 
-    ## [1] 219
+    ## [1] 61
 
 ``` r
 ncol(mc_orig)  #Número de columnas, equivale a número de especies, riqueza
 ```
 
-    ## [1] 64
+    ## [1] 50
 
 ``` r
 data.frame(Especies = names(mc_orig)) %>% 
@@ -3929,322 +3929,252 @@ Especies
 <tbody>
 <tr>
 <td style="text-align:left;">
-Thunbergia grandiflora (Roxb. ex Rottler) Roxb.
+Psorophora ferox (Humboldt, 1819)
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Pachystachys lutea (Ruiz & Pav. ex Schult.) Nees
+Aedes albopictus (Skuse, 1894)
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Ruellia blechum L.
+Aedes aegypti (Linnaeus, 1762)
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Ruellia simplex Wright
+Toxorhynchites portoricensis (Röder, 1885)
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Thunbergia fragrans Roxb.
+Culicidae
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Thunbergia alata Bojer ex Sims
+Aedes albonotatus (Coquillett, 1906)
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Asystasia gangetica (L.) T.Anderson
+Aedes mediovittatus (Coquillett, 1906)
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Ruellia tuberosa L.
+Aedes pertinax Grabham, 1906
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Megaskepasma erythrochlamys Lindau
+Aedes scapularis (Rondani, 1848)
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Sanchezia oblonga Ruiz & Pav.
+Aedes tortilis (Theobald, 1903)
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Crossandra infundibuliformis (L.) Nees
+Anopheles albimanus Wiedemann, 1820
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Odontonema cuspidatum (Nees) Kuntze
+Anopheles grabhamii Theobald, 1901
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Graptophyllum pictum (L.) Griff.
+Culex atratus Theobald, 1901
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Avicennia germinans (L.) L.
+Culex corniger Theobald, 1903
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Thunbergia erecta (Benth.) T.Anderson
+Culex janitor Theobald, 1903
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Sanchezia parvibracteata Sprague & Hutch.
+Culex inhibitator Dyar & Knab, 1906
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Barleria lupulina Lindl.
+Culex nigripalpus Theobald, 1901
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Justicia comata (L.) Lam.
+Culex pilosus (Dyar & Knab, 1906)
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Justicia brandegeeana Wassh. & L.B.Sm.
+Culex secutor Theobald, 1901
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Justicia spinigera Urb. & Ekman
+Culex quinquefasciatus Say, 1823
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Hypoestes phyllostachya Baker
+Deinocerites cancer Theobald, 1901
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Pseuderanthemum carruthersii (Seem.) Guill.
+Orthopodomyia signifera (Coquillett, 1896)
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Acanthaceae
+Psorophora infinis (Dyar & Knab, 1906)
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Barleria L.
+Psorophora jamaicensis (Theobald, 1901)
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Sanchezia speciosa Leonard
+Uranotaenia lowii Theobald, 1901
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Dicliptera mucronata Urb.
+Wyeomyia mitchellii (Theobald, 1905)
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Justicia secunda Vahl
+Anopheles
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Oplonia spinosa (Jacq.) Raf.
+Culex Linnaeus, 1758
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Andrographis paniculata (Burm.f.) Wall.
+Deinocerites Theobald, 1901
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Barleriola solanifolia (L.) Oerst.
+Wyeomyia sororcula Dyar & Knab, 1906
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Justicia disparifolia Urb. & Ekman
+Aedes sollicitans (Walker, 1856)
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Barleriola inermis Urb. & Ekman
+Aedes taeniorhynchus (Wiedemann, 1821)
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Dyschoriste diffusa (Nees) Urb.
+Culex bahamensis Dyar & Knab, 1906
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Lepidagathis alopecuroidea (Vahl) R.Br. ex Griseb.
+Culex duplicator Dyar & Knab, 1909
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Hygrophila costata Nees
+Culex habilitator Dyar & Knab, 1906
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Oplonia microphylla (Lam.) Stearn
+Culex erraticus (Dyar & Knab, 1906)
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Oplonia Raf.
+Psorophora pygmaea (Theobald, 1903)
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Ruellia coccinea (L.) Vahl
+Psorophora insularia (Dyar & Knab, 1906)
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Justicia alsinoides Leonard
+Uranotaenia socialis Theobald, 1901
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Justicia mirabilioides Lam.
+Wyeomyia nigritubus Galindo & Carpenter, 1951
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Ruellia lepidota Urb.
+Toxorhynchites Theobald, 1901
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Stenandrium scabrosum Nees
+Psorophora johnstonii (Grabham, 1905)
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Eranthemum pulchellum Andr.
+Anopheles crucians Wiedemann, 1828
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Strobilanthes alternata (Burm.fil.) Moylan ex J.R.I.Wood
+Anopheles vestitipennis Dyar & Kanb
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Ruellia nudiflora var. insularis Leonard
+Culex antillummagnorum Dyar, 1928
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Ruellia nudiflora (Engelm. & Gray) Urb.
+Culex bisulcatus (Coquillett, 1906)
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Stenandrium tuberosum (L.) Urb.
+Culex coronator Dyar & Knab, 1906
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Ruellia domingensis Spreng. ex Nees
+Culiseta Felt, 1904
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Justicia sessilis Jacq.
+Culex malariager Poinar, 2005
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Justicia fulvicoma Cham. & Schltdl.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Thunbergia affinis S.Moore
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Ruellia malacosperma Greenm.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Justicia pectoralis Jacq.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Justicia abeggii Urb. & Ekman
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Ruellia geminiflora Kunth
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Justicia dumosa Alain
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Dicliptera obtusifolia Urb.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Justicia reptans Sw.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Justicia spinossisima Alain
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Justicia buchii Urb.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Oplonia acicularis (Sw.) Stearn
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Justicia periplocifolia Jacq.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Justicia nemorosa Sw.
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Andrographis paniculata (Burm.fil.) Nees
+Anopheles dominicanus Zavortink & Poinar, 2000
 </td>
 </tr>
 </tbody>
@@ -4254,29 +4184,21 @@ Andrographis paniculata (Burm.fil.) Nees
 unique(word(names(mc_orig), 1, 1)) #Géneros representados
 ```
 
-    ##  [1] "Thunbergia"      "Pachystachys"    "Ruellia"         "Asystasia"      
-    ##  [5] "Megaskepasma"    "Sanchezia"       "Crossandra"      "Odontonema"     
-    ##  [9] "Graptophyllum"   "Avicennia"       "Barleria"        "Justicia"       
-    ## [13] "Hypoestes"       "Pseuderanthemum" "Acanthaceae"     "Dicliptera"     
-    ## [17] "Oplonia"         "Andrographis"    "Barleriola"      "Dyschoriste"    
-    ## [21] "Lepidagathis"    "Hygrophila"      "Stenandrium"     "Eranthemum"     
-    ## [25] "Strobilanthes"
+    ##  [1] "Psorophora"     "Aedes"          "Toxorhynchites" "Culicidae"     
+    ##  [5] "Anopheles"      "Culex"          "Deinocerites"   "Orthopodomyia" 
+    ##  [9] "Uranotaenia"    "Wyeomyia"       "Culiseta"
 
 ``` r
 table(word(names(mc_orig), 1, 1)) #Número de especies por género
 ```
 
     ## 
-    ##     Acanthaceae    Andrographis       Asystasia       Avicennia        Barleria 
-    ##               1               2               1               1               2 
-    ##      Barleriola      Crossandra      Dicliptera     Dyschoriste      Eranthemum 
-    ##               2               1               2               1               1 
-    ##   Graptophyllum      Hygrophila       Hypoestes        Justicia    Lepidagathis 
-    ##               1               1               1              17               1 
-    ##    Megaskepasma      Odontonema         Oplonia    Pachystachys Pseuderanthemum 
-    ##               1               1               4               1               1 
-    ##         Ruellia       Sanchezia     Stenandrium   Strobilanthes      Thunbergia 
-    ##              10               3               2               1               5
+    ##          Aedes      Anopheles          Culex      Culicidae       Culiseta 
+    ##              9              6             17              1              1 
+    ##   Deinocerites  Orthopodomyia     Psorophora Toxorhynchites    Uranotaenia 
+    ##              2              1              6              2              2 
+    ##       Wyeomyia 
+    ##              3
 
 ``` r
 data.frame(`Número de hexágonos` = sort(colSums(mc_orig), decreasing = T), check.names = F) %>% 
@@ -4298,55 +4220,23 @@ Número de hexágonos
 <tbody>
 <tr>
 <td style="text-align:left;">
-Thunbergia alata Bojer ex Sims
+Wyeomyia mitchellii (Theobald, 1905)
 </td>
 <td style="text-align:right;">
-40
+21
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Ruellia simplex Wright
+Anopheles albimanus Wiedemann, 1820
 </td>
 <td style="text-align:right;">
-23
+14
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Ruellia tuberosa L.
-</td>
-<td style="text-align:right;">
-23
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Odontonema cuspidatum (Nees) Kuntze
-</td>
-<td style="text-align:right;">
-17
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Ruellia blechum L.
-</td>
-<td style="text-align:right;">
-16
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Thunbergia fragrans Roxb.
-</td>
-<td style="text-align:right;">
-15
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Lepidagathis alopecuroidea (Vahl) R.Br. ex Griseb.
+Aedes albonotatus (Coquillett, 1906)
 </td>
 <td style="text-align:right;">
 13
@@ -4354,7 +4244,7 @@ Lepidagathis alopecuroidea (Vahl) R.Br. ex Griseb.
 </tr>
 <tr>
 <td style="text-align:left;">
-Asystasia gangetica (L.) T.Anderson
+Aedes scapularis (Rondani, 1848)
 </td>
 <td style="text-align:right;">
 12
@@ -4362,39 +4252,31 @@ Asystasia gangetica (L.) T.Anderson
 </tr>
 <tr>
 <td style="text-align:left;">
-Thunbergia grandiflora (Roxb. ex Rottler) Roxb.
+Culex nigripalpus Theobald, 1901
 </td>
 <td style="text-align:right;">
-10
+12
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Hygrophila costata Nees
+Psorophora jamaicensis (Theobald, 1901)
 </td>
 <td style="text-align:right;">
-10
+11
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Avicennia germinans (L.) L.
+Wyeomyia sororcula Dyar & Knab, 1906
 </td>
 <td style="text-align:right;">
-9
+11
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Oplonia spinosa (Jacq.) Raf.
-</td>
-<td style="text-align:right;">
-9
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Dyschoriste diffusa (Nees) Urb.
+Aedes aegypti (Linnaeus, 1762)
 </td>
 <td style="text-align:right;">
 9
@@ -4402,7 +4284,7 @@ Dyschoriste diffusa (Nees) Urb.
 </tr>
 <tr>
 <td style="text-align:left;">
-Ruellia coccinea (L.) Vahl
+Aedes tortilis (Theobald, 1903)
 </td>
 <td style="text-align:right;">
 9
@@ -4410,7 +4292,7 @@ Ruellia coccinea (L.) Vahl
 </tr>
 <tr>
 <td style="text-align:left;">
-Stenandrium tuberosum (L.) Urb.
+Culex Linnaeus, 1758
 </td>
 <td style="text-align:right;">
 9
@@ -4418,7 +4300,7 @@ Stenandrium tuberosum (L.) Urb.
 </tr>
 <tr>
 <td style="text-align:left;">
-Crossandra infundibuliformis (L.) Nees
+Culex quinquefasciatus Say, 1823
 </td>
 <td style="text-align:right;">
 8
@@ -4426,7 +4308,7 @@ Crossandra infundibuliformis (L.) Nees
 </tr>
 <tr>
 <td style="text-align:left;">
-Justicia disparifolia Urb. & Ekman
+Toxorhynchites portoricensis (Röder, 1885)
 </td>
 <td style="text-align:right;">
 7
@@ -4434,7 +4316,23 @@ Justicia disparifolia Urb. & Ekman
 </tr>
 <tr>
 <td style="text-align:left;">
-Barleriola solanifolia (L.) Oerst.
+Aedes pertinax Grabham, 1906
+</td>
+<td style="text-align:right;">
+7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Anopheles grabhamii Theobald, 1901
+</td>
+<td style="text-align:right;">
+7
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Psorophora ferox (Humboldt, 1819)
 </td>
 <td style="text-align:right;">
 6
@@ -4442,15 +4340,7 @@ Barleriola solanifolia (L.) Oerst.
 </tr>
 <tr>
 <td style="text-align:left;">
-Ruellia domingensis Spreng. ex Nees
-</td>
-<td style="text-align:right;">
-6
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Pachystachys lutea (Ruiz & Pav. ex Schult.) Nees
+Culex atratus Theobald, 1901
 </td>
 <td style="text-align:right;">
 5
@@ -4458,7 +4348,7 @@ Pachystachys lutea (Ruiz & Pav. ex Schult.) Nees
 </tr>
 <tr>
 <td style="text-align:left;">
-Graptophyllum pictum (L.) Griff.
+Culex secutor Theobald, 1901
 </td>
 <td style="text-align:right;">
 5
@@ -4466,15 +4356,7 @@ Graptophyllum pictum (L.) Griff.
 </tr>
 <tr>
 <td style="text-align:left;">
-Barleriola inermis Urb. & Ekman
-</td>
-<td style="text-align:right;">
-5
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Barleria lupulina Lindl.
+Aedes albopictus (Skuse, 1894)
 </td>
 <td style="text-align:right;">
 4
@@ -4482,7 +4364,7 @@ Barleria lupulina Lindl.
 </tr>
 <tr>
 <td style="text-align:left;">
-Justicia brandegeeana Wassh. & L.B.Sm.
+Aedes mediovittatus (Coquillett, 1906)
 </td>
 <td style="text-align:right;">
 4
@@ -4490,7 +4372,7 @@ Justicia brandegeeana Wassh. & L.B.Sm.
 </tr>
 <tr>
 <td style="text-align:left;">
-Oplonia microphylla (Lam.) Stearn
+Culex inhibitator Dyar & Knab, 1906
 </td>
 <td style="text-align:right;">
 4
@@ -4498,7 +4380,23 @@ Oplonia microphylla (Lam.) Stearn
 </tr>
 <tr>
 <td style="text-align:left;">
-Megaskepasma erythrochlamys Lindau
+Culex duplicator Dyar & Knab, 1909
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Anopheles crucians Wiedemann, 1828
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Culicidae
 </td>
 <td style="text-align:right;">
 3
@@ -4506,7 +4404,7 @@ Megaskepasma erythrochlamys Lindau
 </tr>
 <tr>
 <td style="text-align:left;">
-Dicliptera mucronata Urb.
+Psorophora infinis (Dyar & Knab, 1906)
 </td>
 <td style="text-align:right;">
 3
@@ -4514,7 +4412,7 @@ Dicliptera mucronata Urb.
 </tr>
 <tr>
 <td style="text-align:left;">
-Justicia mirabilioides Lam.
+Aedes taeniorhynchus (Wiedemann, 1821)
 </td>
 <td style="text-align:right;">
 3
@@ -4522,15 +4420,7 @@ Justicia mirabilioides Lam.
 </tr>
 <tr>
 <td style="text-align:left;">
-Ruellia lepidota Urb.
-</td>
-<td style="text-align:right;">
-3
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Thunbergia erecta (Benth.) T.Anderson
+Culex corniger Theobald, 1903
 </td>
 <td style="text-align:right;">
 2
@@ -4538,7 +4428,7 @@ Thunbergia erecta (Benth.) T.Anderson
 </tr>
 <tr>
 <td style="text-align:left;">
-Sanchezia parvibracteata Sprague & Hutch.
+Culex pilosus (Dyar & Knab, 1906)
 </td>
 <td style="text-align:right;">
 2
@@ -4546,7 +4436,7 @@ Sanchezia parvibracteata Sprague & Hutch.
 </tr>
 <tr>
 <td style="text-align:left;">
-Justicia comata (L.) Lam.
+Deinocerites cancer Theobald, 1901
 </td>
 <td style="text-align:right;">
 2
@@ -4554,7 +4444,7 @@ Justicia comata (L.) Lam.
 </tr>
 <tr>
 <td style="text-align:left;">
-Justicia spinigera Urb. & Ekman
+Orthopodomyia signifera (Coquillett, 1896)
 </td>
 <td style="text-align:right;">
 2
@@ -4562,7 +4452,7 @@ Justicia spinigera Urb. & Ekman
 </tr>
 <tr>
 <td style="text-align:left;">
-Justicia alsinoides Leonard
+Uranotaenia lowii Theobald, 1901
 </td>
 <td style="text-align:right;">
 2
@@ -4570,7 +4460,7 @@ Justicia alsinoides Leonard
 </tr>
 <tr>
 <td style="text-align:left;">
-Ruellia nudiflora (Engelm. & Gray) Urb.
+Anopheles
 </td>
 <td style="text-align:right;">
 2
@@ -4578,7 +4468,7 @@ Ruellia nudiflora (Engelm. & Gray) Urb.
 </tr>
 <tr>
 <td style="text-align:left;">
-Justicia sessilis Jacq.
+Aedes sollicitans (Walker, 1856)
 </td>
 <td style="text-align:right;">
 2
@@ -4586,7 +4476,7 @@ Justicia sessilis Jacq.
 </tr>
 <tr>
 <td style="text-align:left;">
-Ruellia geminiflora Kunth
+Culex bahamensis Dyar & Knab, 1906
 </td>
 <td style="text-align:right;">
 2
@@ -4594,7 +4484,7 @@ Ruellia geminiflora Kunth
 </tr>
 <tr>
 <td style="text-align:left;">
-Justicia reptans Sw.
+Psorophora pygmaea (Theobald, 1903)
 </td>
 <td style="text-align:right;">
 2
@@ -4602,7 +4492,7 @@ Justicia reptans Sw.
 </tr>
 <tr>
 <td style="text-align:left;">
-Oplonia acicularis (Sw.) Stearn
+Uranotaenia socialis Theobald, 1901
 </td>
 <td style="text-align:right;">
 2
@@ -4610,7 +4500,15 @@ Oplonia acicularis (Sw.) Stearn
 </tr>
 <tr>
 <td style="text-align:left;">
-Sanchezia oblonga Ruiz & Pav.
+Toxorhynchites Theobald, 1901
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Culex janitor Theobald, 1903
 </td>
 <td style="text-align:right;">
 1
@@ -4618,7 +4516,7 @@ Sanchezia oblonga Ruiz & Pav.
 </tr>
 <tr>
 <td style="text-align:left;">
-Hypoestes phyllostachya Baker
+Deinocerites Theobald, 1901
 </td>
 <td style="text-align:right;">
 1
@@ -4626,7 +4524,7 @@ Hypoestes phyllostachya Baker
 </tr>
 <tr>
 <td style="text-align:left;">
-Pseuderanthemum carruthersii (Seem.) Guill.
+Culex habilitator Dyar & Knab, 1906
 </td>
 <td style="text-align:right;">
 1
@@ -4634,7 +4532,7 @@ Pseuderanthemum carruthersii (Seem.) Guill.
 </tr>
 <tr>
 <td style="text-align:left;">
-Acanthaceae
+Culex erraticus (Dyar & Knab, 1906)
 </td>
 <td style="text-align:right;">
 1
@@ -4642,7 +4540,7 @@ Acanthaceae
 </tr>
 <tr>
 <td style="text-align:left;">
-Barleria L.
+Psorophora insularia (Dyar & Knab, 1906)
 </td>
 <td style="text-align:right;">
 1
@@ -4650,7 +4548,7 @@ Barleria L.
 </tr>
 <tr>
 <td style="text-align:left;">
-Sanchezia speciosa Leonard
+Wyeomyia nigritubus Galindo & Carpenter, 1951
 </td>
 <td style="text-align:right;">
 1
@@ -4658,7 +4556,7 @@ Sanchezia speciosa Leonard
 </tr>
 <tr>
 <td style="text-align:left;">
-Justicia secunda Vahl
+Psorophora johnstonii (Grabham, 1905)
 </td>
 <td style="text-align:right;">
 1
@@ -4666,7 +4564,7 @@ Justicia secunda Vahl
 </tr>
 <tr>
 <td style="text-align:left;">
-Andrographis paniculata (Burm.f.) Wall.
+Anopheles vestitipennis Dyar & Kanb
 </td>
 <td style="text-align:right;">
 1
@@ -4674,7 +4572,7 @@ Andrographis paniculata (Burm.f.) Wall.
 </tr>
 <tr>
 <td style="text-align:left;">
-Oplonia Raf.
+Culex antillummagnorum Dyar, 1928
 </td>
 <td style="text-align:right;">
 1
@@ -4682,7 +4580,7 @@ Oplonia Raf.
 </tr>
 <tr>
 <td style="text-align:left;">
-Stenandrium scabrosum Nees
+Culex bisulcatus (Coquillett, 1906)
 </td>
 <td style="text-align:right;">
 1
@@ -4690,7 +4588,7 @@ Stenandrium scabrosum Nees
 </tr>
 <tr>
 <td style="text-align:left;">
-Eranthemum pulchellum Andr.
+Culex coronator Dyar & Knab, 1906
 </td>
 <td style="text-align:right;">
 1
@@ -4698,7 +4596,7 @@ Eranthemum pulchellum Andr.
 </tr>
 <tr>
 <td style="text-align:left;">
-Strobilanthes alternata (Burm.fil.) Moylan ex J.R.I.Wood
+Culiseta Felt, 1904
 </td>
 <td style="text-align:right;">
 1
@@ -4706,7 +4604,7 @@ Strobilanthes alternata (Burm.fil.) Moylan ex J.R.I.Wood
 </tr>
 <tr>
 <td style="text-align:left;">
-Ruellia nudiflora var. insularis Leonard
+Culex malariager Poinar, 2005
 </td>
 <td style="text-align:right;">
 1
@@ -4714,95 +4612,7 @@ Ruellia nudiflora var. insularis Leonard
 </tr>
 <tr>
 <td style="text-align:left;">
-Justicia fulvicoma Cham. & Schltdl.
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Thunbergia affinis S.Moore
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Ruellia malacosperma Greenm.
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Justicia pectoralis Jacq.
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Justicia abeggii Urb. & Ekman
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Justicia dumosa Alain
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Dicliptera obtusifolia Urb.
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Justicia spinossisima Alain
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Justicia buchii Urb.
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Justicia periplocifolia Jacq.
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Justicia nemorosa Sw.
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Andrographis paniculata (Burm.fil.) Nees
+Anopheles dominicanus Zavortink & Poinar, 2000
 </td>
 <td style="text-align:right;">
 1
@@ -4834,8 +4644,7 @@ en_cuantos_hex <- 2
 selector
 ```
 
-    ##  [1]  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26
-    ## [26] 27 28 29 30 31 32 33 34 35 36 37 38 39 40
+    ##  [1]  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21
 
 ``` r
 mc_orig_seleccionadas <- mc_orig[, colSums(mc_orig) %in% selector]
@@ -4860,7 +4669,95 @@ Número de especies por hexágono
 <tbody>
 <tr>
 <td style="text-align:left;">
-864cd5b47ffffff
+864cd42dfffffff
+</td>
+<td style="text-align:right;">
+31
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+864cd0937ffffff
+</td>
+<td style="text-align:right;">
+21
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+864cf318fffffff
+</td>
+<td style="text-align:right;">
+11
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+864cd0907ffffff
+</td>
+<td style="text-align:right;">
+11
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+864cd4207ffffff
+</td>
+<td style="text-align:right;">
+10
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+864c8989fffffff
+</td>
+<td style="text-align:right;">
+9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+864cf30cfffffff
+</td>
+<td style="text-align:right;">
+8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+864c8b947ffffff
+</td>
+<td style="text-align:right;">
+8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+864cd5127ffffff
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+864cf30d7ffffff
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+864cd4d8fffffff
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+864cf2257ffffff
 </td>
 <td style="text-align:right;">
 5
@@ -4868,7 +4765,7 @@ Número de especies por hexágono
 </tr>
 <tr>
 <td style="text-align:left;">
-864c8926fffffff
+864cf32a7ffffff
 </td>
 <td style="text-align:right;">
 5
@@ -4876,7 +4773,7 @@ Número de especies por hexágono
 </tr>
 <tr>
 <td style="text-align:left;">
-864cd4c97ffffff
+864c8b977ffffff
 </td>
 <td style="text-align:right;">
 5
@@ -4884,7 +4781,23 @@ Número de especies por hexágono
 </tr>
 <tr>
 <td style="text-align:left;">
-864c8994fffffff
+864cd4717ffffff
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+864cf3427ffffff
+</td>
+<td style="text-align:right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+864cf30dfffffff
 </td>
 <td style="text-align:right;">
 4
@@ -4892,7 +4805,7 @@ Número de especies por hexágono
 </tr>
 <tr>
 <td style="text-align:left;">
-864cf2407ffffff
+864cd4277ffffff
 </td>
 <td style="text-align:right;">
 4
@@ -4900,7 +4813,7 @@ Número de especies por hexágono
 </tr>
 <tr>
 <td style="text-align:left;">
-864cf241fffffff
+864cd468fffffff
 </td>
 <td style="text-align:right;">
 4
@@ -4908,39 +4821,7 @@ Número de especies por hexágono
 </tr>
 <tr>
 <td style="text-align:left;">
-864c898efffffff
-</td>
-<td style="text-align:right;">
-4
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd455fffffff
-</td>
-<td style="text-align:right;">
-4
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864c898d7ffffff
-</td>
-<td style="text-align:right;">
-4
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd665fffffff
-</td>
-<td style="text-align:right;">
-4
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd426fffffff
+864cf3707ffffff
 </td>
 <td style="text-align:right;">
 3
@@ -4948,71 +4829,7 @@ Número de especies por hexágono
 </tr>
 <tr>
 <td style="text-align:left;">
-864cc6cdfffffff
-</td>
-<td style="text-align:right;">
-3
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd42cfffffff
-</td>
-<td style="text-align:right;">
-3
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd452fffffff
-</td>
-<td style="text-align:right;">
-3
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864c893a7ffffff
-</td>
-<td style="text-align:right;">
-3
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd46cfffffff
-</td>
-<td style="text-align:right;">
-3
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864c8924fffffff
-</td>
-<td style="text-align:right;">
-3
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd41a7ffffff
-</td>
-<td style="text-align:right;">
-3
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd2937ffffff
-</td>
-<td style="text-align:right;">
-3
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd42c7ffffff
+864cd425fffffff
 </td>
 <td style="text-align:right;">
 3
@@ -5028,7 +4845,7 @@ Número de especies por hexágono
 </tr>
 <tr>
 <td style="text-align:left;">
-864cd4527ffffff
+864cd408fffffff
 </td>
 <td style="text-align:right;">
 3
@@ -5036,7 +4853,7 @@ Número de especies por hexágono
 </tr>
 <tr>
 <td style="text-align:left;">
-864cd4237ffffff
+864cd4c57ffffff
 </td>
 <td style="text-align:right;">
 3
@@ -5044,199 +4861,15 @@ Número de especies por hexágono
 </tr>
 <tr>
 <td style="text-align:left;">
-864cd465fffffff
+864c89ba7ffffff
 </td>
 <td style="text-align:right;">
 3
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd6217ffffff
-</td>
-<td style="text-align:right;">
-3
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd6977ffffff
-</td>
-<td style="text-align:right;">
-3
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd589fffffff
-</td>
-<td style="text-align:right;">
-3
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864c89aafffffff
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd4c9fffffff
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cc6007ffffff
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cc6117ffffff
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd4247ffffff
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cc6c57ffffff
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd5b77ffffff
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cf26c7ffffff
-</td>
-<td style="text-align:right;">
-2
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
 864cd42f7ffffff
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd5537ffffff
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd6507ffffff
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cc611fffffff
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd42dfffffff
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd4d2fffffff
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cc6ccfffffff
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864c89b07ffffff
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864c8930fffffff
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cf240fffffff
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd476fffffff
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd639fffffff
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd6387ffffff
 </td>
 <td style="text-align:right;">
 2
@@ -5252,7 +4885,7 @@ Número de especies por hexágono
 </tr>
 <tr>
 <td style="text-align:left;">
-864c8996fffffff
+864cf362fffffff
 </td>
 <td style="text-align:right;">
 2
@@ -5260,7 +4893,7 @@ Número de especies por hexágono
 </tr>
 <tr>
 <td style="text-align:left;">
-864cf3727ffffff
+864cf3627ffffff
 </td>
 <td style="text-align:right;">
 2
@@ -5268,7 +4901,7 @@ Número de especies por hexágono
 </tr>
 <tr>
 <td style="text-align:left;">
-864cc67afffffff
+864cf372fffffff
 </td>
 <td style="text-align:right;">
 2
@@ -5276,7 +4909,7 @@ Número de especies por hexágono
 </tr>
 <tr>
 <td style="text-align:left;">
-864cd4737ffffff
+866725bafffffff
 </td>
 <td style="text-align:right;">
 2
@@ -5284,7 +4917,7 @@ Número de especies por hexágono
 </tr>
 <tr>
 <td style="text-align:left;">
-864cf3227ffffff
+864cd42c7ffffff
 </td>
 <td style="text-align:right;">
 2
@@ -5292,250 +4925,10 @@ Número de especies por hexágono
 </tr>
 <tr>
 <td style="text-align:left;">
-864c89b6fffffff
+864cd4cdfffffff
 </td>
 <td style="text-align:right;">
 2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd5cdfffffff
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd692fffffff
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cf3457ffffff
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864c89c0fffffff
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd29afffffff
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864c89aa7ffffff
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864c890efffffff
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd4717ffffff
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd2917ffffff
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cf3427ffffff
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd0907ffffff
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd4c07ffffff
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cc6637ffffff
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd5b07ffffff
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd40a7ffffff
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd2d47ffffff
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd4837ffffff
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd66cfffffff
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd2997ffffff
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd6acfffffff
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd44b7ffffff
-</td>
-<td style="text-align:right;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd4547ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cf268fffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864c8949fffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd5117ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864c89a07ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864c89767ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd425fffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864c89947ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd4387ffffff
-</td>
-<td style="text-align:right;">
-1
 </td>
 </tr>
 <tr>
@@ -5543,7 +4936,39 @@ Número de especies por hexágono
 864cf26cfffffff
 </td>
 <td style="text-align:right;">
-1
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+864cd4d67ffffff
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+864cd4127ffffff
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+864cd4ce7ffffff
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+864cd488fffffff
+</td>
+<td style="text-align:right;">
+2
 </td>
 </tr>
 <tr>
@@ -5556,7 +4981,7 @@ Número de especies por hexágono
 </tr>
 <tr>
 <td style="text-align:left;">
-866725a27ffffff
+864cd6a17ffffff
 </td>
 <td style="text-align:right;">
 1
@@ -5564,7 +4989,7 @@ Número de especies por hexágono
 </tr>
 <tr>
 <td style="text-align:left;">
-864cd5b67ffffff
+864cd28a7ffffff
 </td>
 <td style="text-align:right;">
 1
@@ -5572,7 +4997,7 @@ Número de especies por hexágono
 </tr>
 <tr>
 <td style="text-align:left;">
-864cc64d7ffffff
+864cf26efffffff
 </td>
 <td style="text-align:right;">
 1
@@ -5580,7 +5005,7 @@ Número de especies por hexágono
 </tr>
 <tr>
 <td style="text-align:left;">
-864c89a0fffffff
+864c898efffffff
 </td>
 <td style="text-align:right;">
 1
@@ -5588,7 +5013,7 @@ Número de especies por hexágono
 </tr>
 <tr>
 <td style="text-align:left;">
-864cd092fffffff
+864cd091fffffff
 </td>
 <td style="text-align:right;">
 1
@@ -5596,7 +5021,7 @@ Número de especies por hexágono
 </tr>
 <tr>
 <td style="text-align:left;">
-86672534fffffff
+864c89a2fffffff
 </td>
 <td style="text-align:right;">
 1
@@ -5604,7 +5029,7 @@ Número de especies por hexágono
 </tr>
 <tr>
 <td style="text-align:left;">
-864cd09b7ffffff
+864cd4a2fffffff
 </td>
 <td style="text-align:right;">
 1
@@ -5612,7 +5037,7 @@ Número de especies por hexágono
 </tr>
 <tr>
 <td style="text-align:left;">
-864cf35afffffff
+864cd4257ffffff
 </td>
 <td style="text-align:right;">
 1
@@ -5620,7 +5045,7 @@ Número de especies por hexágono
 </tr>
 <tr>
 <td style="text-align:left;">
-864cc655fffffff
+864cd6c57ffffff
 </td>
 <td style="text-align:right;">
 1
@@ -5628,7 +5053,7 @@ Número de especies por hexágono
 </tr>
 <tr>
 <td style="text-align:left;">
-86672526fffffff
+864cd4487ffffff
 </td>
 <td style="text-align:right;">
 1
@@ -5636,7 +5061,7 @@ Número de especies por hexágono
 </tr>
 <tr>
 <td style="text-align:left;">
-864cd219fffffff
+864cd495fffffff
 </td>
 <td style="text-align:right;">
 1
@@ -5644,7 +5069,7 @@ Número de especies por hexágono
 </tr>
 <tr>
 <td style="text-align:left;">
-864cf3487ffffff
+864cd0927ffffff
 </td>
 <td style="text-align:right;">
 1
@@ -5652,7 +5077,7 @@ Número de especies por hexágono
 </tr>
 <tr>
 <td style="text-align:left;">
-864cf2417ffffff
+864cd5dafffffff
 </td>
 <td style="text-align:right;">
 1
@@ -5660,7 +5085,7 @@ Número de especies por hexágono
 </tr>
 <tr>
 <td style="text-align:left;">
-864cd4277ffffff
+864cd49afffffff
 </td>
 <td style="text-align:right;">
 1
@@ -5668,7 +5093,7 @@ Número de especies por hexágono
 </tr>
 <tr>
 <td style="text-align:left;">
-864cf26f7ffffff
+864cd4c0fffffff
 </td>
 <td style="text-align:right;">
 1
@@ -5676,7 +5101,7 @@ Número de especies por hexágono
 </tr>
 <tr>
 <td style="text-align:left;">
-864cf31b7ffffff
+864c8932fffffff
 </td>
 <td style="text-align:right;">
 1
@@ -5684,7 +5109,7 @@ Número de especies por hexágono
 </tr>
 <tr>
 <td style="text-align:left;">
-864cf24b7ffffff
+864cd4167ffffff
 </td>
 <td style="text-align:right;">
 1
@@ -5692,7 +5117,7 @@ Número de especies por hexágono
 </tr>
 <tr>
 <td style="text-align:left;">
-864c89167ffffff
+864cd476fffffff
 </td>
 <td style="text-align:right;">
 1
@@ -5700,7 +5125,7 @@ Número de especies por hexágono
 </tr>
 <tr>
 <td style="text-align:left;">
-864cf3197ffffff
+864cf269fffffff
 </td>
 <td style="text-align:right;">
 1
@@ -5708,7 +5133,7 @@ Número de especies por hexágono
 </tr>
 <tr>
 <td style="text-align:left;">
-864c89c67ffffff
+864c89b27ffffff
 </td>
 <td style="text-align:right;">
 1
@@ -5716,7 +5141,7 @@ Número de especies por hexágono
 </tr>
 <tr>
 <td style="text-align:left;">
-864c89867ffffff
+864c89317ffffff
 </td>
 <td style="text-align:right;">
 1
@@ -5724,887 +5149,7 @@ Número de especies por hexágono
 </tr>
 <tr>
 <td style="text-align:left;">
-864cf3707ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cf371fffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cf3737ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd645fffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd614fffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd5d57ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd45afffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864c8828fffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd4757ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864c8942fffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cf2697ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cc6557ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864c89a67ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd58efffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864c892b7ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864c89a47ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd09a7ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd451fffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd2d97ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864c89a37ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cf2447ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cf262fffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd2d67ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd6767ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864c89bafffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd5ce7ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd40cfffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864c8925fffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-866725b4fffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-866725867ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd456fffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd4567ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cf278fffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd4227ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd464fffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864c8978fffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd4aefffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd4647ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cf26d7ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cf20efffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cf205fffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd09afffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd446fffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd468fffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd6b97ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd5bb7ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864c89b4fffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cf34e7ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cf341fffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cc6527ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd676fffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cf248fffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd47b7ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cf352fffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd40efffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd4667ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864c894a7ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864c89a8fffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd4707ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd44efffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864c89307ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cc6567ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864c897a7ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd0d67ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd6a07ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd6b4fffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd4cd7ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd4507ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd4bb7ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd461fffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-866725947ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd42b7ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cc671fffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cc6717ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cc6617ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cc6d97ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd4047ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd494fffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd5d37ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd6b0fffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cf31afffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd4727ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cf32afffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd58d7ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cc6417ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd5b6fffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd0c37ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd47a7ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd469fffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd496fffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cf3207ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd4017ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cf3247ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864c8b32fffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd5c8fffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd0d97ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd2d4fffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd4d9fffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd2cdfffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864c8905fffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd4ca7ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864c882e7ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864c892efffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864c892d7ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd421fffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd580fffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd6ad7ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd512fffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd6ba7ffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd661fffffff
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cf265fffffff
+864c89b0fffffff
 </td>
 <td style="text-align:right;">
 1
@@ -6621,7 +5166,7 @@ mi_fam <- mc_orig_seleccionadas[rowSums(mc_orig_seleccionadas)>=min_especies_por
 nrow(mi_fam)
 ```
 
-    ## [1] 67
+    ## [1] 36
 
 ``` r
 # mi_fam <- mc_orig_seleccionadas[!rowSums(mc_orig_seleccionadas)==0, ] #Elimina filas sin registros
@@ -6635,7 +5180,7 @@ all(rowSums(mi_fam)>0) #Debe ser TRUE: todos los hexágonos tienen al menos 1 re
 ncol(mi_fam) #Riqueza de especies
 ```
 
-    ## [1] 39
+    ## [1] 36
 
 ``` r
 # Usar nombres cortos o abreviados para las especies
@@ -6643,13 +5188,14 @@ nombres_largos <- colnames(mi_fam)
 (colnames(mi_fam) <- make.cepnames(word(colnames(mi_fam), 1, 2)))
 ```
 
-    ##  [1] "Thungran" "Pachlute" "Ruelblec" "Ruelsimp" "Thunfrag" "Thunalat"
-    ##  [7] "Asysgang" "Rueltube" "Megaeryt" "Crosinfu" "Odoncusp" "Grappict"
-    ## [13] "Avicgerm" "Thunerec" "Sancparv" "Barllupu" "Justcoma" "Justbran"
-    ## [19] "Justspin" "Diclmucr" "Oplospin" "Barlsola" "Justdisp" "Barliner"
-    ## [25] "Dyscdiff" "Lepialop" "Hygrcost" "Oplomicr" "Ruelcocc" "Justalsi"
-    ## [31] "Justmira" "Ruellepi" "Ruelnudi" "Stentube" "Rueldomi" "Justsess"
-    ## [37] "Ruelgemi" "Justrept" "Oploacic"
+    ##  [1] "Psorfero"   "Aedealbo"   "Aedeaegy"   "Toxoport"   "NA."       
+    ##  [6] "Aedealbo.1" "Aedemedi"   "Aedepert"   "Aedescap"   "Aedetort"  
+    ## [11] "Anopalbi"   "Anopgrab"   "Culeatra"   "Culecorn"   "Culeinhi"  
+    ## [16] "Culenigr"   "Culepilo"   "Culesecu"   "Culequin"   "Deincanc"  
+    ## [21] "Orthsign"   "Psorinfi"   "Psorjama"   "Uranlowi"   "Wyeomitc"  
+    ## [26] "NA..1"      "CuleLinn"   "Wyeosoro"   "Aedesoll"   "Aedetaen"  
+    ## [31] "Culebaha"   "Culedupl"   "Psorpygm"   "Uransoci"   "ToxoTheo"  
+    ## [36] "Anopcruc"
 
 ``` r
 (df_equivalencias <- data.frame(
@@ -6657,46 +5203,43 @@ nombres_largos <- colnames(mi_fam)
   abreviado = colnames(mi_fam)))
 ```
 
-    ##                                       nombre_original abreviado
-    ## 1     Thunbergia grandiflora (Roxb. ex Rottler) Roxb.  Thungran
-    ## 2    Pachystachys lutea (Ruiz & Pav. ex Schult.) Nees  Pachlute
-    ## 3                                  Ruellia blechum L.  Ruelblec
-    ## 4                              Ruellia simplex Wright  Ruelsimp
-    ## 5                           Thunbergia fragrans Roxb.  Thunfrag
-    ## 6                      Thunbergia alata Bojer ex Sims  Thunalat
-    ## 7                 Asystasia gangetica (L.) T.Anderson  Asysgang
-    ## 8                                 Ruellia tuberosa L.  Rueltube
-    ## 9                  Megaskepasma erythrochlamys Lindau  Megaeryt
-    ## 10             Crossandra infundibuliformis (L.) Nees  Crosinfu
-    ## 11                Odontonema cuspidatum (Nees) Kuntze  Odoncusp
-    ## 12                   Graptophyllum pictum (L.) Griff.  Grappict
-    ## 13                        Avicennia germinans (L.) L.  Avicgerm
-    ## 14              Thunbergia erecta (Benth.) T.Anderson  Thunerec
-    ## 15          Sanchezia parvibracteata Sprague & Hutch.  Sancparv
-    ## 16                           Barleria lupulina Lindl.  Barllupu
-    ## 17                          Justicia comata (L.) Lam.  Justcoma
-    ## 18             Justicia brandegeeana Wassh. & L.B.Sm.  Justbran
-    ## 19                    Justicia spinigera Urb. & Ekman  Justspin
-    ## 20                          Dicliptera mucronata Urb.  Diclmucr
-    ## 21                       Oplonia spinosa (Jacq.) Raf.  Oplospin
-    ## 22                 Barleriola solanifolia (L.) Oerst.  Barlsola
-    ## 23                 Justicia disparifolia Urb. & Ekman  Justdisp
-    ## 24                    Barleriola inermis Urb. & Ekman  Barliner
-    ## 25                    Dyschoriste diffusa (Nees) Urb.  Dyscdiff
-    ## 26 Lepidagathis alopecuroidea (Vahl) R.Br. ex Griseb.  Lepialop
-    ## 27                            Hygrophila costata Nees  Hygrcost
-    ## 28                  Oplonia microphylla (Lam.) Stearn  Oplomicr
-    ## 29                         Ruellia coccinea (L.) Vahl  Ruelcocc
-    ## 30                        Justicia alsinoides Leonard  Justalsi
-    ## 31                        Justicia mirabilioides Lam.  Justmira
-    ## 32                              Ruellia lepidota Urb.  Ruellepi
-    ## 33            Ruellia nudiflora (Engelm. & Gray) Urb.  Ruelnudi
-    ## 34                    Stenandrium tuberosum (L.) Urb.  Stentube
-    ## 35                Ruellia domingensis Spreng. ex Nees  Rueldomi
-    ## 36                            Justicia sessilis Jacq.  Justsess
-    ## 37                          Ruellia geminiflora Kunth  Ruelgemi
-    ## 38                               Justicia reptans Sw.  Justrept
-    ## 39                    Oplonia acicularis (Sw.) Stearn  Oploacic
+    ##                               nombre_original  abreviado
+    ## 1           Psorophora ferox (Humboldt, 1819)   Psorfero
+    ## 2              Aedes albopictus (Skuse, 1894)   Aedealbo
+    ## 3              Aedes aegypti (Linnaeus, 1762)   Aedeaegy
+    ## 4  Toxorhynchites portoricensis (Röder, 1885)   Toxoport
+    ## 5                                   Culicidae        NA.
+    ## 6        Aedes albonotatus (Coquillett, 1906) Aedealbo.1
+    ## 7      Aedes mediovittatus (Coquillett, 1906)   Aedemedi
+    ## 8                Aedes pertinax Grabham, 1906   Aedepert
+    ## 9            Aedes scapularis (Rondani, 1848)   Aedescap
+    ## 10            Aedes tortilis (Theobald, 1903)   Aedetort
+    ## 11        Anopheles albimanus Wiedemann, 1820   Anopalbi
+    ## 12         Anopheles grabhamii Theobald, 1901   Anopgrab
+    ## 13               Culex atratus Theobald, 1901   Culeatra
+    ## 14              Culex corniger Theobald, 1903   Culecorn
+    ## 15        Culex inhibitator Dyar & Knab, 1906   Culeinhi
+    ## 16           Culex nigripalpus Theobald, 1901   Culenigr
+    ## 17          Culex pilosus (Dyar & Knab, 1906)   Culepilo
+    ## 18               Culex secutor Theobald, 1901   Culesecu
+    ## 19           Culex quinquefasciatus Say, 1823   Culequin
+    ## 20         Deinocerites cancer Theobald, 1901   Deincanc
+    ## 21 Orthopodomyia signifera (Coquillett, 1896)   Orthsign
+    ## 22     Psorophora infinis (Dyar & Knab, 1906)   Psorinfi
+    ## 23    Psorophora jamaicensis (Theobald, 1901)   Psorjama
+    ## 24           Uranotaenia lowii Theobald, 1901   Uranlowi
+    ## 25       Wyeomyia mitchellii (Theobald, 1905)   Wyeomitc
+    ## 26                                  Anopheles      NA..1
+    ## 27                       Culex Linnaeus, 1758   CuleLinn
+    ## 28       Wyeomyia sororcula Dyar & Knab, 1906   Wyeosoro
+    ## 29           Aedes sollicitans (Walker, 1856)   Aedesoll
+    ## 30     Aedes taeniorhynchus (Wiedemann, 1821)   Aedetaen
+    ## 31         Culex bahamensis Dyar & Knab, 1906   Culebaha
+    ## 32         Culex duplicator Dyar & Knab, 1909   Culedupl
+    ## 33        Psorophora pygmaea (Theobald, 1903)   Psorpygm
+    ## 34        Uranotaenia socialis Theobald, 1901   Uransoci
+    ## 35              Toxorhynchites Theobald, 1901   ToxoTheo
+    ## 36         Anopheles crucians Wiedemann, 1828   Anopcruc
 
 Transforma la matriz de comunidad. Este paso es importante, lo explico
 [aquí](https://www.youtube.com/watch?v=yQ10lp0-nHc&list=PLDcT2n8UzsCRDqjqSeqHI1wsiNOqpYmsJ&index=10)
@@ -6862,57 +5405,25 @@ E20
 <tbody>
 <tr>
 <td style="text-align:left;">
-864cf2407ffffff
+864cd42c7ffffff
 </td>
 <td style="text-align:right;">
-4
+2
 </td>
 <td style="text-align:right;">
-1.3862944
+0.6931472
 </td>
 <td style="text-align:right;">
-2.000000
+1.000000
 </td>
 <td style="text-align:right;">
-4
+2
 </td>
 <td style="text-align:right;">
-4
+2
 </td>
 <td style="text-align:right;">
-4
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864c898d7ffffff
-</td>
-<td style="text-align:right;">
-4
-</td>
-<td style="text-align:right;">
-1.3862944
-</td>
-<td style="text-align:right;">
-2.000000
-</td>
-<td style="text-align:right;">
-4
-</td>
-<td style="text-align:right;">
-4
-</td>
-<td style="text-align:right;">
-4
+2
 </td>
 <td style="text-align:right;">
 1
@@ -6926,25 +5437,25 @@ E20
 </tr>
 <tr>
 <td style="text-align:left;">
-864c8926fffffff
+864cd42e7ffffff
 </td>
 <td style="text-align:right;">
-5
+2
 </td>
 <td style="text-align:right;">
-1.6094379
+0.6931472
 </td>
 <td style="text-align:right;">
-2.321928
+1.000000
 </td>
 <td style="text-align:right;">
-5
+2
 </td>
 <td style="text-align:right;">
-5
+2
 </td>
 <td style="text-align:right;">
-5
+2
 </td>
 <td style="text-align:right;">
 1
@@ -6958,7 +5469,7 @@ E20
 </tr>
 <tr>
 <td style="text-align:left;">
-864cd426fffffff
+864cf3707ffffff
 </td>
 <td style="text-align:right;">
 3
@@ -6990,25 +5501,25 @@ E20
 </tr>
 <tr>
 <td style="text-align:left;">
-864cd2d47ffffff
+864cd0907ffffff
 </td>
 <td style="text-align:right;">
-2
+11
 </td>
 <td style="text-align:right;">
-0.6931472
+2.3978953
 </td>
 <td style="text-align:right;">
-1.000000
+3.459432
 </td>
 <td style="text-align:right;">
-2
+11
 </td>
 <td style="text-align:right;">
-2
+11
 </td>
 <td style="text-align:right;">
-2
+11
 </td>
 <td style="text-align:right;">
 1
@@ -7022,25 +5533,121 @@ E20
 </tr>
 <tr>
 <td style="text-align:left;">
-864cc6c57ffffff
+864cd5127ffffff
 </td>
 <td style="text-align:right;">
-2
+6
 </td>
 <td style="text-align:right;">
-0.6931472
+1.7917595
 </td>
 <td style="text-align:right;">
-1.000000
+2.584963
 </td>
 <td style="text-align:right;">
-2
+6
 </td>
 <td style="text-align:right;">
-2
+6
 </td>
 <td style="text-align:right;">
-2
+6
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+864c8989fffffff
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+2.1972246
+</td>
+<td style="text-align:right;">
+3.169925
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+864cf318fffffff
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+2.3978953
+</td>
+<td style="text-align:right;">
+3.459432
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+864cd425fffffff
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+1.0986123
+</td>
+<td style="text-align:right;">
+1.584963
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+3
 </td>
 <td style="text-align:right;">
 1
@@ -7057,54 +5664,22 @@ E20
 864cd42dfffffff
 </td>
 <td style="text-align:right;">
-2
+27
 </td>
 <td style="text-align:right;">
-0.6931472
+3.2958369
 </td>
 <td style="text-align:right;">
-1.000000
+4.754887
 </td>
 <td style="text-align:right;">
-2
+27
 </td>
 <td style="text-align:right;">
-2
+27
 </td>
 <td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cd42c7ffffff
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-1.0986123
-</td>
-<td style="text-align:right;">
-1.584963
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-3
+27
 </td>
 <td style="text-align:right;">
 1
@@ -7118,39 +5693,7 @@ E20
 </tr>
 <tr>
 <td style="text-align:left;">
-864c8924fffffff
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-1.0986123
-</td>
-<td style="text-align:right;">
-1.584963
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-3
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-864cc6637ffffff
+864cd424fffffff
 </td>
 <td style="text-align:right;">
 2
@@ -7230,7 +5773,327 @@ E20
 <tbody>
 <tr>
 <td style="text-align:left;">
-864cd5b47ffffff
+864cd42dfffffff
+</td>
+<td style="text-align:right;">
+27
+</td>
+<td style="text-align:right;">
+3.295837
+</td>
+<td style="text-align:right;">
+4.754887
+</td>
+<td style="text-align:right;">
+27
+</td>
+<td style="text-align:right;">
+27
+</td>
+<td style="text-align:right;">
+27
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+864cd0937ffffff
+</td>
+<td style="text-align:right;">
+21
+</td>
+<td style="text-align:right;">
+3.044522
+</td>
+<td style="text-align:right;">
+4.392317
+</td>
+<td style="text-align:right;">
+21
+</td>
+<td style="text-align:right;">
+21
+</td>
+<td style="text-align:right;">
+21
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+864cf318fffffff
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+2.397895
+</td>
+<td style="text-align:right;">
+3.459432
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+864cd0907ffffff
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+2.397895
+</td>
+<td style="text-align:right;">
+3.459432
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+864cd4207ffffff
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+2.302585
+</td>
+<td style="text-align:right;">
+3.321928
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+864c8989fffffff
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+2.197225
+</td>
+<td style="text-align:right;">
+3.169925
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+864c8b947ffffff
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+2.079442
+</td>
+<td style="text-align:right;">
+3.000000
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+864cd5127ffffff
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+1.791759
+</td>
+<td style="text-align:right;">
+2.584963
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+864cf30d7ffffff
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+1.791759
+</td>
+<td style="text-align:right;">
+2.584963
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+864cf30cfffffff
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+1.791759
+</td>
+<td style="text-align:right;">
+2.584963
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+864cf2257ffffff
 </td>
 <td style="text-align:right;">
 5
@@ -7262,7 +6125,7 @@ E20
 </tr>
 <tr>
 <td style="text-align:left;">
-864c8926fffffff
+864cf32a7ffffff
 </td>
 <td style="text-align:right;">
 5
@@ -7294,7 +6157,71 @@ E20
 </tr>
 <tr>
 <td style="text-align:left;">
-864cd4c97ffffff
+864c8b977ffffff
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+1.609438
+</td>
+<td style="text-align:right;">
+2.321928
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+864cd4717ffffff
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+1.609438
+</td>
+<td style="text-align:right;">
+2.321928
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+864cd4d8fffffff
 </td>
 <td style="text-align:right;">
 5
@@ -7445,15 +6372,15 @@ Riqueza de especies, estimación y comparación, “completitud de muestra”
 specpool(mi_fam)
 ```
 
-    ##     Species     chao  chao.se    jack1 jack1.se    jack2     boot  boot.se  n
-    ## All      38 40.95522 3.198908 43.91045 2.791484 43.99864 41.54321 1.809474 67
+    ##     Species     chao   chao.se    jack1 jack1.se    jack2     boot  boot.se  n
+    ## All      35 35.17677 0.4920385 36.94444  1.37493 28.74127 37.29941 2.406011 36
 
 ``` r
 specpool(mi_fam)[[1]]/specpool(mi_fam)[-c(3,5,8)]*100 #"Completitud", en porcentajes, según distintos estimadores
 ```
 
-    ##     Species     chao    jack1   jack2     boot        n
-    ## All     100 92.78426 86.53977 86.3663 91.47104 56.71642
+    ##     Species     chao    jack1    jack2     boot        n
+    ## All     100 99.49749 94.73684 121.7761 93.83526 97.22222
 
 ``` r
 # Si es cierto que, en torno al 80% de las poligonáceas de RD están registradas en GBIF,
@@ -7466,36 +6393,36 @@ ChaoSpecies(data.frame(V1 = c(nrow(mi_fam), as.numeric(colSums(mi_fam)))),
     ## (1) BASIC DATA INFORMATION:
     ## 
     ##                                          Variable Value
-    ##     Number of observed species                  D    38
-    ##     Number of sampling units                    T    67
-    ##     Total number of incidences                  U   168
-    ##     Coverage estimate for entire dataset        C 0.965
-    ##     CV for entire dataset                      CV 0.716
+    ##     Number of observed species                  D    35
+    ##     Number of sampling units                    T    36
+    ##     Total number of incidences                  U   193
+    ##     Coverage estimate for entire dataset        C 0.992
+    ##     CV for entire dataset                      CV 0.703
     ## 
     ##                                                       Variable Value
     ##     Cut-off point                                            k    10
-    ##     Total number of incidences in infrequent group    U_infreq   127
-    ##     Number of observed species for infrequent group   D_infreq    35
-    ##     Estimated sample coverage for infrequent group    C_infreq 0.954
-    ##     Estimated CV for infrequent group in ICE         CV_infreq 0.458
-    ##     Estimated CV1 for infrequent group in ICE-1     CV1_infreq 0.504
-    ##     Number of observed species for frequent group       D_freq     3
+    ##     Total number of incidences in infrequent group    U_infreq   115
+    ##     Number of observed species for infrequent group   D_infreq    29
+    ##     Estimated sample coverage for infrequent group    C_infreq 0.987
+    ##     Estimated CV for infrequent group in ICE         CV_infreq 0.446
+    ##     Estimated CV1 for infrequent group in ICE-1     CV1_infreq 0.464
+    ##     Number of observed species for frequent group       D_freq     6
     ## 
     ##                            Q1 Q2 Q3 Q4 Q5 Q6 Q7 Q8 Q9 Q10
-    ##     Incidence freq. counts  6  6 11  2  3  2  1  2  2   0
+    ##     Incidence freq. counts  2 11  2  5  1  3  1  2  1   1
     ## 
     ## 
     ## (2) SPECIES RICHNESS ESTIMATORS TABLE:
     ## 
     ##                               Estimate  s.e. 95%Lower 95%Upper
-    ##     Homogeneous Model           39.682 1.546   38.363   45.796
-    ##     Chao2 (Chao, 1987)          40.955 3.199   38.526   54.603
-    ##     Chao2-bc                    40.111 2.500   38.337   51.226
-    ##     iChao2 (Chiu et al. 2014)   40.955 3.199   38.526   54.603
-    ##     ICE (Lee & Chao, 1994)      41.003 2.513   38.720   50.520
-    ##     ICE-1 (Lee & Chao, 1994)    41.277 2.805   38.766   52.014
-    ##     1st order jackknife         43.910 3.425   40.059   54.970
-    ##     2nd order jackknife         43.999 5.866   39.204   67.878
+    ##     Homogeneous Model           35.389 0.721   35.036   39.253
+    ##     Chao2 (Chao, 1987)          35.177 0.492   35.010   38.169
+    ##     Chao2-bc                    35.081 0.333   35.003   37.263
+    ##     iChao2 (Chiu et al. 2014)   35.177 0.492   35.010   38.169
+    ##     ICE (Lee & Chao, 1994)      35.792 1.162   35.097   41.469
+    ##     ICE-1 (Lee & Chao, 1994)    35.826 1.213   35.101   41.753
+    ##     1st order jackknife         36.944 1.958   35.377   45.025
+    ##     2nd order jackknife         28.741 3.217   32.577   18.834
     ## 
     ## 
     ## (3) DESCRIPTION OF ESTIMATORS/MODELS:
@@ -7521,8 +6448,7 @@ ChaoSpecies(data.frame(V1 = c(nrow(mi_fam), as.numeric(colSums(mi_fam)))),
 Ahora según grupos del método Ward.
 
 ``` r
-# grupos_upgma <- readRDS('grupos_upgma.RDS')
-grupos_ward <- readRDS('grupos_ward_acanthaceae.RDS')
+grupos_ward <- readRDS('grupos_ward_culicidae.RDS')
 mi_fam_ward <- mi_fam %>%
   mutate(g = grupos_ward) %>%
   group_by(g) %>%
@@ -7534,26 +6460,26 @@ mi_fam_ward <- mi_fam %>%
 mi_fam_ward
 ```
 
-    ##    N Thungran Pachlute Ruelblec Ruelsimp Thunfrag Thunalat Asysgang Rueltube
-    ## 1 67        0        0        4        0        7       15        1        3
-    ## 2 67        7        2        1       11        1        3        5        1
-    ## 3 67        0        1        4        1        3        0        2        5
-    ##   Megaeryt Crosinfu Odoncusp Grappict Avicgerm Thunerec Sancparv Barllupu
-    ## 1        2        1        4        0        0        1        0        0
-    ## 2        0        5        0        3        1        0        0        1
-    ## 3        1        0        2        0        3        0        1        2
-    ##   Justcoma Justbran Justspin Diclmucr Oplospin Barlsola Justdisp Barliner
-    ## 1        0        0        0        0        0        0        1        0
-    ## 2        0        2        0        0        0        0        0        0
-    ## 3        1        1        1        2        5        3        4        2
-    ##   Dyscdiff Lepialop Hygrcost Oplomicr Ruelcocc Justalsi Justmira Ruellepi
-    ## 1        0        0        1        0        1        0        0        0
-    ## 2        1        0        0        1        0        0        0        0
-    ## 3        4        3        3        2        7        2        3        2
-    ##   Ruelnudi Stentube Rueldomi Justsess Ruelgemi Justrept Oploacic
-    ## 1        0        0        0        0        0        0        0
-    ## 2        0        0        0        0        0        0        0
-    ## 3        0        3        3        2        1        2        1
+    ##    N Psorfero Aedealbo Aedeaegy Toxoport NA. Aedealbo.1 Aedemedi Aedepert
+    ## 1 36        2        2        6        6   0          5        4        6
+    ## 2 36        0        0        0        0   0          7        0        0
+    ## 3 36        0        0        0        0   0          0        0        0
+    ##   Aedescap Aedetort Anopalbi Anopgrab Culeatra Culecorn Culeinhi Culenigr
+    ## 1       11        8        8        6        3        2        4       11
+    ## 2        0        0        1        1        2        0        0        0
+    ## 3        0        0        3        0        0        0        0        0
+    ##   Culepilo Culesecu Culequin Deincanc Orthsign Psorinfi Psorjama Uranlowi
+    ## 1        2        3        8        2        2        3       10        2
+    ## 2        0        1        0        0        0        0        0        0
+    ## 3        0        0        0        0        0        0        0        0
+    ##   Wyeomitc NA..1 CuleLinn Wyeosoro Aedesoll Aedetaen Culebaha Culedupl Psorpygm
+    ## 1       12     1        6        4        2        3        1        4        2
+    ## 2        9     0        3        7        0        0        0        0        0
+    ## 3        0     0        0        0        0        0        0        0        0
+    ##   Uransoci ToxoTheo Anopcruc
+    ## 1        2        1        1
+    ## 2        0        1        0
+    ## 3        0        0        3
 
 ``` r
 nasin_raref <- iNEXT::iNEXT(
